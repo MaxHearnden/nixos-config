@@ -194,9 +194,6 @@
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
   # ];
-  environment.systemPackages = with pkgs; [
-    gtk3
-  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -231,18 +228,6 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
 
-  services.hydra.enable = true;
-  services.hydra.hydraURL = "http://172.28.10.244:8080";
-  services.hydra.notificationSender = "hydra@example.com";
-  services.hydra.listenHost = "172.28.10.244";
-  services.hydra.port = 8080;
-  services.hydra.extraConfig = ''
-    binary_cache_secret_key_file = /etc/nix/storekey
-    max_output_size = 8000000000
-    Include /var/lib/hydra/gitea_authorisations.conf
-  '';
-  services.hydra.buildMachinesFiles = ["/machines"];
-  services.hydra.useSubstitutes = true;
   programs.steam.enable = true;
   services.zerotierone = {
     joinNetworks = [ "8056c2e21c3d4b0c" ];
@@ -287,47 +272,6 @@
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
   system.autoUpgrade.flake = "/etc/nixos";
-  networking.interfaces.enp1s0.ipv4.addresses = [{address = "192.168.2.1"; prefixLength = 24;}];
-  networking.interfaces.enp1s0.useDHCP = false;
-  services.dhcpd4.enable = true;
-  services.dhcpd4.interfaces = [ "enp1s0" ];
-  services.dhcpd4.machines = [
-    {
-      ethernetAddress = "d4:93:90:06:43:76";
-      hostName = "max-nixos-laptop";
-      ipAddress = "192.168.2.2";
-    }
-/*    {
-      ethernetAddress = "a0:36:9f:c3:d4:c1";
-      hostName = "max-nixos-workstation";
-      ipAddress = "192.168.2.1";
-    }*/
-  ];
-  services.dhcpd4.extraConfig = ''
-    option subnet-mask 255.255.255.0;
-    option broadcast-address 192.168.2.255;
-    subnet 192.168.2.0 netmask 255.255.255.0 {
-      range 192.168.2.10 192.168.2.250;
-    }
-  '';
-  services.nix-serve.enable = true;
-  services.nix-serve.openFirewall = true;
-  services.nix-serve.bindAddress = "192.168.2.1";
-  services.nix-serve.secretKeyFile = "/etc/nix/storekey";
-  services.gitea = {
-    enable = true;
-    database.type = "postgres";
-    settings.service.DISABLE_REGISTRATION = true;
-    httpAddress = "172.28.10.244";
-    domain = "172.28.10.244"
-    rootUrl = "http://172.28.10.244:3000";
-    settings.security.DISABLE_GIT_HOOKS=false;
-#    useWizard = true;
-  };
-/*    host max-nixos-workstation {
-      hardware ethernet a0:36:9f:c3:d4:c1;
-      fixed-address 192.168.2.1;
-    }*/
   services.xrdp.enable = true;
   services.xrdp.defaultWindowManager = "xmonad";
 #  android_sdk.accept_licence = true;
@@ -336,12 +280,6 @@
     source = "/machines";
   };
 
-  networking.nat = {
-    enable = true;
-    internalInterfaces = [ "ve-rednix" ];
-    externalInterface = "eno1";
-  };
-  networking.networkmanager.unmanaged = [ "interface-name:ve-rednix" ];
   #containers.RedNix.nixpkgs = inputs.nixpkgs-unstable;
   #containers.RedNix.config =
   #  { ... }: {
@@ -360,7 +298,6 @@
   #      pkgs.file
   #    ];
   #  };
-  services.ratbagd.enable = true;
   #services.mysql.enable = true;
   #services.mysql.package = pkgs.mysql80;
   #services.mysql.ensureUsers = [ {name = "max"; ensurePermissions = {"*.*" = "ALL PRIVILEGES";};} ];
