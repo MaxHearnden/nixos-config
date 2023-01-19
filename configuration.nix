@@ -155,7 +155,7 @@
       })
       vulnix
       w3m
-      watch-exec
+      watchexec
 #      wine
       winetricks
       #((wineWowPackages.full.override {sdlSupport = true; vkd3dSupport = true;}).overrideAttrs (_: {patches = [./attachment.cgi];}))
