@@ -143,7 +143,7 @@
       snis
       stack
       teams
-      texlive.combined.scheme-full
+      #texlive.combined.scheme-full
       thunderbird
       usbutils
       vdrift
