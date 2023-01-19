@@ -18,5 +18,6 @@
       specialArgs = {inherit inputs;};
       modules = [ ./workstation.nix ];
     };
+    hydraJobs = self.nixosConfigurations;
   };
 }
