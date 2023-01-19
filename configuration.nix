@@ -271,7 +271,7 @@
   security.doas.enable = true;
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
-  system.autoUpgrade.flake = "/etc/nixos";
+  #system.autoUpgrade.flake = "/etc/nixos";
   services.xrdp.enable = true;
   services.xrdp.defaultWindowManager = "xmonad";
 #  android_sdk.accept_licence = true;
@@ -279,6 +279,8 @@
   environment.etc."nix/machines" = {
     source = "/machines";
   };
+
+  systemd.services.nixosupgrade.requires = ["zerotierone.service"];
 
   #containers.RedNix.nixpkgs = inputs.nixpkgs-unstable;
   #containers.RedNix.config =
