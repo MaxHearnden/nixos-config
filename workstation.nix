@@ -1,5 +1,5 @@
 { config, pkgs, lib, ...}: {
-  imports = [./configuration.nix];
+  imports = [./configuration.nix ./hardware-configuration/workstation.nix];
   networking.hostName = "max-nixos-workstation";
   services.xserver.displayManager.gdm.autoSuspend = false;
   services.xserver.displayManager.sessionCommands = "xhost +SI:localuser:max";

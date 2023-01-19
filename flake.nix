@@ -18,6 +18,11 @@
       specialArgs = {inherit inputs;};
       modules = [ ./workstation.nix ];
     };
+    nixosConfigurations.max-nixos-dell = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = {inherit inputs;};
+      modules = [ ./dell.nix ];
+    };
     hydraJobs = builtins.mapAttrs (_: config: config.config.system.build.toplevel) self.nixosConfigurations;
   };
 }

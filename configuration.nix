@@ -5,6 +5,7 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
+  hardware.enableAllFirmware = true;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
