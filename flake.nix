@@ -18,6 +18,6 @@
       specialArgs = {inherit inputs;};
       modules = [ ./workstation.nix ];
     };
-    hydraJobs = self.nixosConfigurations;
+    hydraJobs = mapAttrs (_: config: config.config.system.build.toplevel) self.nixosConfigurations;
   };
 }
