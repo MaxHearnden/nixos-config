@@ -25,7 +25,6 @@
   nixpkgs.config.segger-jlink.acceptLicense = true;
   services.sshd.enable = true;
 
-  networking.hostName = "max-nixos-workstation"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -53,15 +52,9 @@
   # Enable the GNOME Desktop Environment.
 #  services.xserver.autorun = false;
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.autoSuspend = false;
   services.xserver.desktopManager.gnome.enable = true;
   services.xserver.windowManager.i3.enable = true;
   services.xserver.windowManager.xmonad.enable = true;
-  services.xserver.displayManager.sessionCommands = "xhost +SI:localuser:max";
-  networking.firewall.allowedUDPPorts = [ 25565 ];
-  networking.firewall.allowedTCPPorts = [ 25565 ];
-  networking.firewall.interfaces.ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 50000 3000 3389 ];
-  services.xserver.xrandrHeads = [ "HDMI-3" "HDMI-2" ];
   
 
   # Configure keymap in X11
@@ -89,9 +82,12 @@
       authenticator
       bc
       binutils
+      btop
       cabal2nix
       cabal-install
+      cargo-watch
       chromium
+      cifs-utils
       discord
       emacs
       file
@@ -99,10 +95,13 @@
       gdb
       gnome.ghex
       ghidra
+      giac-with-xcas
       gnome.gnome-tweaks
+      gimp
       gitFull
       git-cola
       golly
+      graphviz
       gtkterm
       #(pkgs.haskell-language-server.override {supportedGhcVersions = ["810" "90" "924" "94" "943"];})
       haskell-language-server
@@ -115,6 +114,7 @@
       lshw
       mercurial
       niv
+      nix-du
       nix-eval-jobs
       nix-prefetch
       nix-prefetch-scripts
@@ -122,10 +122,12 @@
       nmap
       node2nix
       nodejs
+      notepadqq
 #      (import inputs.obelisk {system = "x86_64-linux";}).command
       ocaml
       openocd
       ormolu
+      pioneer
       plover.dev
       prismlauncher
       #polymc
@@ -145,6 +147,7 @@
       usbutils
       vdrift
       vim
+      vlc
       (vscode-with-extensions.override {
         vscode = vscodium;
         vscodeExtensions = with vscode-extensions;
@@ -152,6 +155,7 @@
       })
       vulnix
       w3m
+      watch-exec
 #      wine
       winetricks
       #((wineWowPackages.full.override {sdlSupport = true; vkd3dSupport = true;}).overrideAttrs (_: {patches = [./attachment.cgi];}))
@@ -164,6 +168,7 @@
 #      (import (pkgs.fetchurl {url = "https://github.com/input-output-hk/haskell.nix/tarball/master";})).hix
       xorg.xhost
       segger-jlink
+      zgrviewer
     ];
   };
   programs.neovim.enable = true;
