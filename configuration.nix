@@ -314,6 +314,7 @@
     database.type = "postgres";
     settings.service.DISABLE_REGISTRATION = true;
     httpAddress = "172.28.10.244";
+    domain = "172.28.10.244"
     rootUrl = "http://172.28.10.244:3000";
     settings.security.DISABLE_GIT_HOOKS=false;
 #    useWizard = true;
