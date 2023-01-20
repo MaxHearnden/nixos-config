@@ -304,4 +304,6 @@
   #virtualisation.waydroid.enable = true;
   system.autoUpgrade.flake = "git+http://172.28.10.244:3000/zandoodle/nixos-config";
 
+  specialisation.nox.configuration.services.xserver.autorun = false;
+
 }
