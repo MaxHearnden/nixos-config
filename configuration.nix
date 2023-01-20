@@ -272,6 +272,7 @@
   security.doas.enable = true;
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = true;
+  system.autoUpgrade.dates = "17:45";
   #system.autoUpgrade.flake = "/etc/nixos";
   services.xrdp.enable = true;
   services.xrdp.defaultWindowManager = "xmonad";
