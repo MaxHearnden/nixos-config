@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
   imports = [ ./hardware-configuration/laptop.nix ./laptop.nix ./remote.nix ];
   boot.loader.grub.useOSProber = true;
   extraEntries = ''
