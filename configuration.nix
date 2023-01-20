@@ -279,7 +279,7 @@
 #  android_sdk.accept_licence = true;
   services.openssh.forwardX11 = true;
 
-  systemd.services.nixosupgrade.requires = ["zerotierone.service"];
+  systemd.services.nixos-upgrade.requires = ["zerotierone.service"];
 
   #containers.RedNix.nixpkgs = inputs.nixpkgs-unstable;
   #containers.RedNix.config =

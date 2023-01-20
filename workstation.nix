@@ -65,7 +65,7 @@
     settings.security.DISABLE_GIT_HOOKS=false;
   };
   services.ratbagd.enable = true;
-  systemd.services.nixosupgrade.requires = ["gitea.service"];
+  systemd.services.nixos-upgrade.requires = ["gitea.service"];
   environment.etc."nix/machines" = {
     source = "/machines";
   };
