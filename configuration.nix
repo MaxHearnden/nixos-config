@@ -306,5 +306,6 @@
   #services.mysql.package = pkgs.mysql80;
   #services.mysql.ensureUsers = [ {name = "max"; ensurePermissions = {"*.*" = "ALL PRIVILEGES";};} ];
   #virtualisation.waydroid.enable = true;
+  system.autoUpgrade.flake = "git+http://172.28.10.244:3000/zandoodle/nixos-config";
 
 }
