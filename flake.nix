@@ -12,18 +12,16 @@
   #};
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
   #inputs.nixpkgs-mipsel.url = "github:maxHearnden/nixpkgs/patch-1";
-  inputs.hardware-configuration.url = "file+file:///etc/nixos/hardware-configuration.nix";
-  inputs.hardware-configuration.flake = false;
-  outputs = { self, nixpkgs, hardware-configuration, ... }@inputs: {
+  outputs = { self, nixpkgs, ... }@inputs: {
     nixosConfigurations.max-nixos-workstation = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
-      modules = [ ./workstation.nix (import hardware-configuration) ];
+      modules = [ ./workstation.nix ];
     };
     nixosConfigurations.max-nixos-dell = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
-      modules = [ ./dell.nix (import hardware-configuration) ];
+      modules = [ ./dell.nix ];
     };
     hydraJobs = builtins.mapAttrs (_: config: config.config.system.build.toplevel) self.nixosConfigurations;
   };
