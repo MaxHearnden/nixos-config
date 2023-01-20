@@ -274,7 +274,7 @@
   system.autoUpgrade.allowReboot = true;
   system.autoUpgrade.dates = "17:45";
   #system.autoUpgrade.flake = "/etc/nixos";
-  system.autoUpgrade.flags = ["--update-input" "nixpkgs" "--refresh"];
+  system.autoUpgrade.flags = ["--update-input" "nixpkgs" "--refresh" "--no-write-lock-file"];
   services.xrdp.enable = true;
   services.xrdp.defaultWindowManager = "xmonad";
 #  android_sdk.accept_licence = true;
