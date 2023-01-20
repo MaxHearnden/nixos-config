@@ -8,7 +8,6 @@
     {
       systems = [ "riscv64-linux" "mips-linux" "mipsel-linux" "mips64-linux" "mips64el-linux" "aarch64-linux" "riscv32-linux" ];
       sshUser = "root";
-      sshKey = "/var/lib/hydra/queue-runner/.ssh/id_rsa";
       hostName = "172.28.10.244";
       maxJobs = 4;
       supportedFeatures = [ "kvm"
