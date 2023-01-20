@@ -300,6 +300,18 @@
         "type": "github"
       }
     },
+    "hardware-configuration": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-mzH7Qf9xgmtODZBW4MA4rf3dQa+iMnI9GUefTrrAR/w=",
+        "type": "file",
+        "url": "file:///etc/nixos/hardware-configuration.nix"
+      },
+      "original": {
+        "type": "file",
+        "url": "file:///etc/nixos/hardware-configuration.nix"
+      }
+    },
     "haskell-nix": {
       "inputs": {
         "HTTP": "HTTP",
@@ -737,6 +749,7 @@
     },
     "root": {
       "inputs": {
+        "hardware-configuration": "hardware-configuration",
         "haskell-nix": "haskell-nix",
         "nixpkgs": "nixpkgs_5"
       }
