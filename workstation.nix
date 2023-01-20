@@ -66,5 +66,8 @@
   };
   services.ratbagd.enable = true;
   systemd.services.nixosupgrade.requires = ["gitea.service"];
+  environment.etc."nix/machines" = {
+    source = "/machines";
+  };
 
 }

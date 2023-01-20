@@ -277,9 +277,6 @@
   services.xrdp.defaultWindowManager = "xmonad";
 #  android_sdk.accept_licence = true;
   services.openssh.forwardX11 = true;
-  environment.etc."nix/machines" = {
-    source = "/machines";
-  };
 
   systemd.services.nixosupgrade.requires = ["zerotierone.service"];
 
