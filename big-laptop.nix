@@ -1,5 +1,6 @@
 { pkgs, ... }: {
   imports = [ ./hardware-configuration/laptop.nix ./laptop.nix ./remote.nix ];
+  networking.hostName = "max-nixos-laptop";
   boot.loader.grub = {
     useOSProber = true;
     extraEntries = ''
