@@ -17,7 +17,7 @@
         "nixos-test"
       ];
     }
-  ]
+  ];
   nix.distributedBuilds = true;
 
 }
