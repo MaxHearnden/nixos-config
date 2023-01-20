@@ -114,6 +114,7 @@
       libreoffice-fresh
       lshw
       mercurial
+      mars-mips
       niv
       nix-du
       nix-eval-jobs
