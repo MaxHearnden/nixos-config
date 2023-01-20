@@ -306,4 +306,7 @@
 
   specialisation.nox.configuration.services.xserver.autorun = false;
 
+  services.kmscon.enable = true;
+  services.kmscon.extraOptions = "--xkb-layout gb";
+
 }
