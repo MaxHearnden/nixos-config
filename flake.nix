@@ -23,6 +23,11 @@
       specialArgs = {inherit inputs;};
       modules = [ ./dell.nix ];
     };
+    nixosConfigurations.max-nixos-chromebooksd2 = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = {inherit inputs;};
+      modules = [ ./chromebooksd2.nix ];
+    };
     hydraJobs = builtins.mapAttrs (_: config: config.config.system.build.toplevel) self.nixosConfigurations;
   };
 }
