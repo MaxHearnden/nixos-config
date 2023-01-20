@@ -73,12 +73,12 @@
   # hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.max = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "dialout" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       authenticator
       bc
