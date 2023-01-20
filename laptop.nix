@@ -1,3 +1,3 @@
 {...}: {
-  services.acpilight.enable = true;
+  hardware.acpilight.enable = true;
 }
