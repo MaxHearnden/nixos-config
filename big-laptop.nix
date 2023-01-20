@@ -10,7 +10,7 @@
     extraFiles."ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
   };
   hardware.tuxedo-keyboard.enable = true;
-  services.logind.libSwitch = "ignore";
+  services.logind.lidSwitch = "ignore";
   fileSystems."/mnt/ubuntu" = {
     device = "/dev/nvme1n1p1";
     fsType = "ext4";
