@@ -6,7 +6,7 @@
   };
   nix.buildMachines = [
     {
-      systems = [ "riscv64-linux" "mips-linux" "mipsel-linux" "mips64-linux" "mips64el-linux" "aarch64-linux" "riscv32-linux" ];
+      systems = [ "riscv64-linux" "mips-linux" "mipsel-linux" "mips64-linux" "mips64el-linux" "aarch64-linux" "riscv32-linux" "x86_64-linux" "i686-linux" ];
       sshUser = "root";
       hostName = "172.28.10.244";
       maxJobs = 4;
