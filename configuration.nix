@@ -318,7 +318,7 @@
 
   fileSystems."/home/max/h-drive" = {
     device = "//homes.lancs.ac.uk/04";
-    options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "mfsymlinks"];
+    options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "mfsymlinks" "nofail"];
     fsType = "cifs";
   };
 
