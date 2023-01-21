@@ -81,5 +81,9 @@
     };
   };
   services.samba.enable = true;
+  services.nfs.server = {
+    enable = true;
+    hostName = "172.28.10.244";
+  };
 
 }
