@@ -78,8 +78,8 @@
       "valid users" = "max";
       "inherit permissions" = true;
       "unix password sync" = true;
-    }
-  }
+    };
+  };
   services.samba.enable = true;
 
 }
