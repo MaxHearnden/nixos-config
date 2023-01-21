@@ -320,6 +320,6 @@
     device = "//homes.lancs.ac.uk/04";
     options = ["defaults" "uid=max" "gid=users" "creds=/root/lancaster-creds" "mfsymlinks"];
     fsType = "cifs";
-  }
+  };
 
 }
