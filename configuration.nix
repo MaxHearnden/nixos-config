@@ -179,6 +179,9 @@
       set mouse=a
       set shiftwidth=2
       set expandtab
+      inoremap {<CR> {<CR>}<Esc>ko
+      inoremap [<CR> [<CR>]<Esc>ko
+      inoremap (<CR> (<CR>)<Esc>ko
     '';
 #      lua vim.lsp.start ({name = 'haskell', cmd = {'${pkgs.haskell-language-server}'}, root_dir = vim.fs.dirname (vim.fs.find ({'hie.yaml'})[1])})
     packages.haskell = with pkgs.vimPlugins; {
