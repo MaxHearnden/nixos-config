@@ -275,7 +275,7 @@
   system.autoUpgrade.dates = "17:45";
   system.autoUpgrade.persistent = true;
   #system.autoUpgrade.flake = "/etc/nixos";
-  system.autoUpgrade.flags = ["--update-input" "nixpkgs" "--refresh" "--no-write-lock-file"];
+  system.autoUpgrade.flags = ["--update-input" "nixpkgs" "--update-input" "haskell-nix" "--refresh" "--no-write-lock-file"];
 #  android_sdk.accept_licence = true;
   services.openssh.forwardX11 = true;
 
