@@ -3,12 +3,6 @@
   networking.hostName = "max-nixos-laptop";
   boot.loader.grub = {
     useOSProber = true;
-    extraEntries = ''
-      menuentry "iPXE" {
-        chainloader @bootRoot@/ipxe.efi
-      }
-    '';
-    extraFiles."ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
   };
   hardware.tuxedo-keyboard.enable = true;
   services.logind.lidSwitch = "ignore";

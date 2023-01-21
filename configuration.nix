@@ -17,6 +17,12 @@
     version = 2;
     device = "nodev";
     efiSupport = true;
+    extraEntries = ''
+      menuentry "iPXE" {
+        chainloader @bootRoot@/ipxe.efi
+      }
+    '';
+    extraFiles."ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
   };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
