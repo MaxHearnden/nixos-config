@@ -313,6 +313,7 @@
   fileSystems."/home/max/shared" = {
     device = "//172.28.10.244/max";
     options = ["defaults" "credentials=/root/creds"];
+    fsType = "cifs";
   }
 
 }
