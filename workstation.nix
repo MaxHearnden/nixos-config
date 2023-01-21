@@ -28,7 +28,7 @@
   '';
   services.hydra.buildMachinesFiles = ["/machines"];
   services.hydra.useSubstitutes = true;
-  systemd.timers.hydra-update-gc-roots.timerConfig.Persistent = true
+  systemd.timers.hydra-update-gc-roots.timerConfig.Persistent = true;
   networking.interfaces.enp1s0.ipv4.addresses = [{address = "192.168.2.1"; prefixLength = 24;}];
   networking.interfaces.enp1s0.useDHCP = false;
   services.dhcpd4.enable = true;
