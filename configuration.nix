@@ -311,9 +311,9 @@
   services.kmscon.extraOptions = "--xkb-layout gb";
 
   fileSystems."/home/max/shared" = {
-    device = "//172.28.10.244/max";
-    options = ["defaults" "credentials=/root/creds" "uid=max" "gid=users" "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device" "nofail" "_netdev"];
-    fsType = "cifs";
+    device = "172.28.10.244:/Big/shared";
+    options = ["defaults" "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device" "nofail" "_netdev"];
+    fsType = "nfs";
   };
 
 }
