@@ -5,8 +5,7 @@
   services.xserver.displayManager.sessionCommands = "xhost +SI:localuser:max";
   networking.firewall.allowedUDPPorts = [ 25565 ];
   networking.firewall.allowedTCPPorts = [ 25565 ];
-  networking.firewall.interfaces.ztmjfp7kiq.allowedTCPPorts = [ 139 445 8080 8081 50000 3000 3389 2049 ];
-  networking.firewall.interfaces.ztmjfp7kiq.allowedUDPPorts = [ 137 138 ];
+  networking.firewall.interfaces.ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 50000 3000 3389 2049 ];
   services.xserver.xrandrHeads = [ "HDMI-3" "HDMI-2" ];
   users.users.max = {
     packages = with pkgs; [
@@ -71,16 +70,6 @@
     source = "/machines";
   };
 
-  services.samba.shares = {
-    max = {
-      path = "/Big/srv/samba/max";
-      "read only" = false;
-      "valid users" = "max";
-      "inherit permissions" = true;
-      "unix password sync" = true;
-    };
-  };
-  services.samba.enable = true;
   services.nfs.server = {
     enable = true;
     hostName = "172.28.10.244";
