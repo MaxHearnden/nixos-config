@@ -317,7 +317,7 @@
   };
 
   fileSystems."/home/max/h-drive" = {
-    device = "//homes.lancs.ac.uk/04";
+    device = "//homes.lancs.ac.uk/04/hearndem";
     options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "mfsymlinks" "nofail"];
     fsType = "cifs";
   };
