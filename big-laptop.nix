@@ -18,4 +18,7 @@
     options = [ "nofail" "ro" ];
   };
   services.xserver.videoDrivers = [ "nvidia" ];
+
+  #inprove compatibility with windows
+  time.hardwareClockInLocalTime = true;
 }
