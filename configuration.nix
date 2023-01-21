@@ -312,7 +312,7 @@
 
   fileSystems."/home/max/shared" = {
     device = "172.28.10.244:/Big/shared";
-    options = ["defaults" "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device" "x-systemd.after=zerotierone.service" "nofail" "_netdev"];
+    options = ["defaults" "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device" "x-systemd.after=zerotierone.service" "nofail"];
     fsType = "nfs";
   };
 
