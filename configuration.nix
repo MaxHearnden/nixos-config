@@ -312,7 +312,7 @@
 
   fileSystems."/home/max/shared" = {
     device = "//172.28.10.244/max";
-    options = ["defaults" "credentials=/root/creds" "uid=max" "gid=users"];
+    options = ["defaults" "credentials=/root/creds" "uid=max" "gid=users" "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device" "nofail"];
     fsType = "cifs";
   };
 
