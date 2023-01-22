@@ -142,6 +142,7 @@
       prismlauncher
       #polymc
       qemu
+      qtspim
       rWrapper
       rhythmbox
       rstudio
