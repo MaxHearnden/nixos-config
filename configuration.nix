@@ -335,6 +335,7 @@
     enable = true;
     libdefaults = {
       default_realm = "WORKSTATION";
+      ignore_acceptor_hostname = true;
     };
     realms = {
       WORKSTATION = {
