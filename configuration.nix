@@ -100,6 +100,7 @@
       file
       firefox
       pkgsCross.mipsel-linux-gnu.buildPackages.gcc
+      pkgsCross.mips64el-linux-gnuabi64.buildPackages.gcc
       gdb
       gnome.ghex
       ghidra
