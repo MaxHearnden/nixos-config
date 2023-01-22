@@ -99,6 +99,7 @@
       emacs
       file
       firefox
+      pkgsCross.mipsel-linux-gnu.buildPackages.gcc
       gdb
       gnome.ghex
       ghidra
