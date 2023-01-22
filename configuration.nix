@@ -152,7 +152,7 @@
       simutrans
       snis
       stack
-      teams
+      #teams
       #texlive.combined.scheme-full
       thunderbird
       usbutils
