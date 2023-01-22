@@ -75,7 +75,7 @@
     enable = true;
     hostName = "172.28.10.244";
     exports = ''
-      /Big/shared 172.28.0.0/16(mp=/Big,rw,sec=krb5)
+      /Big/shared max-nixos-*(mp=/Big,rw)
     '';
   };
   services.kerberos_server = {
