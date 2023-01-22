@@ -343,6 +343,9 @@
         ];
       };
     };
+    domain_realm = {
+      "max-nixos-workstation" = "WORKSTATION";
+    };
   };
 
 }
