@@ -21,8 +21,10 @@
   fileSystems."/nix" = {
     device = "/nix";
     fsType = "none";
-    options = ["remount" "bind" "noatime"];
+    options = ["bind"];
   };
+
+  boot.initrd.postMountCommands = "mount /mnt-root/nix -o remount,bind,noatime";
 
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/02A5-E2B4";
