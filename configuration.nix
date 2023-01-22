@@ -93,7 +93,7 @@
       cabal2nix
       cabal-install
       cargo-watch
-      chromium
+      ungoogled-chromium
       cifs-utils
       discord
       emacs
