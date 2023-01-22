@@ -18,6 +18,12 @@
       fsType = "f2fs";
     };
 
+  fileSystems."/nix" = {
+    device = "/nix";
+    fsType = "none";
+    options = ["remount" "bind" "noatime"];
+  };
+
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/02A5-E2B4";
       fsType = "vfat";
