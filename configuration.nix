@@ -321,7 +321,7 @@
 
   fileSystems."/home/max/shared" = {
     device = "172.28.10.244:/Big/shared";
-    options = ["defaults" "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device" "x-systemd.after=zerotierone.service" "nofail"];
+    options = ["defaults" "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device" "x-systemd.after=zerotierone.service" "nofail" "sec=krb5"];
     fsType = "nfs";
   };
 
@@ -329,6 +329,20 @@
     device = "//homes.lancs.ac.uk/04/hearndem";
     options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "mfsymlinks" "nofail"];
     fsType = "cifs";
+  };
+
+  krb5 = {
+    enable = true;
+    libdefaults = {
+      default_realm = "WORKSTATION";
+    };
+    realms = {
+      WORKSTATION = {
+        kdc = [
+          "172.28.10.244"
+        ];
+      };
+    };
   };
 
 }

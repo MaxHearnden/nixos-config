@@ -75,8 +75,21 @@
     enable = true;
     hostName = "172.28.10.244";
     exports = ''
-      /Big/shared 172.28.0.0/16(mp=/Big,rw)
+      /Big/shared 172.28.0.0/16(mp=/Big,rw,sec=krb5)
     '';
+  };
+  services.kerberos_server = {
+    enable = true;
+    realms."WORKSTATION" = {};
+  };
+
+  krb5 = {
+    realms = {
+      WORKSTATION = {
+        master_key_type = "aes256-cts";
+        supported_enctypes = "aes256-cts:normal aes128-cts:normal";
+      };
+    };
   };
 
 }
