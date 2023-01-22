@@ -13,6 +13,11 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
   #inputs.nixpkgs-mipsel.url = "github:maxHearnden/nixpkgs/patch-1";
   outputs = { self, nixpkgs, ... }@inputs: {
+    packages.x86_64-linux.default =
+      nixpkgs.legacyPackages.x86_64-linux.linkFarm "systems"
+        (builtins.attrValues
+          (builtins.mapAttrs (name: path: {inherit name path;}) self.hydraJobs)
+        );
     nixosConfigurations.max-nixos-workstation = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
