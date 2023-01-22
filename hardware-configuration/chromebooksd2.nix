@@ -26,6 +26,8 @@
 
   boot.initrd.postMountCommands = "mount /mnt-root/nix -o remount,bind,noatime";
 
+  boot.loader.grub.copyKernels = true;
+
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/02A5-E2B4";
       fsType = "vfat";
