@@ -18,6 +18,12 @@
       fsType = "btrfs";
       options = [ "defaults" "compress" ];
     };
+  
+  fileSystems."/nix" =
+    { device "/nix";
+      fsType = "none";
+      options = ["bind" "noatime"];
+    };
 
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/78E2-5673";

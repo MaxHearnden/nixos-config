@@ -33,7 +33,7 @@
   fileSystems."/nix" =
     { device = "/Big/nix";
       fsType = "none";
-      options = [ "bind" ];
+      options = [ "bind" "noatime" ];
     };
 
   swapDevices = [ ];
