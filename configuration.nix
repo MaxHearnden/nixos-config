@@ -346,6 +346,7 @@
     };
     domain_realm = {
       "172.28.10.244" = "WORKSTATION";
+      "max-nixos-workstation" = "WORKSTATION";
     };
   };
 
