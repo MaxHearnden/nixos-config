@@ -20,9 +20,9 @@
     };
   
   fileSystems."/nix" =
-    { device "/nix";
-      fsType = "none";
-      options = ["bind" "noatime"];
+    { device "/dev/disk/by-uuid/975fc2db-000d-4fe6-a201-14b000add5de";
+      fsType = "btrfs";
+      options = [ "defaults" "subvol=/nix" "noatime" ];
     };
 
   fileSystems."/boot/efi" =
