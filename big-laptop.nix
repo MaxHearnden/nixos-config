@@ -15,4 +15,5 @@
 
   #inprove compatibility with windows
   time.hardwareClockInLocalTime = true;
+  boot.extraModprobeConfig = "options iwlwifi 11n_disable=1";
 }
