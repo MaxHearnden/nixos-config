@@ -121,7 +121,9 @@
       htop
       jdk
       libreoffice-fresh
+      linux-manual
       lshw
+      man-pages
       mercurial
       mars-mips
       niv
