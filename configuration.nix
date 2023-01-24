@@ -102,6 +102,8 @@
       pkgsCross.mipsel-linux-gnu.buildPackages.gcc
       pkgsCross.mips64el-linux-gnuabi64.buildPackages.gcc
       gdb
+      pkgsCross.mipsel-linux-gnu.buildPackages.gdb
+      pkgsCross.mips64el-linux-gnu.buildPackages.gdb
       inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghcHEAD
       gnome.ghex
       ghidra
