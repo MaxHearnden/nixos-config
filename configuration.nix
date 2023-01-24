@@ -102,6 +102,7 @@
       pkgsCross.mipsel-linux-gnu.buildPackages.gcc
       pkgsCross.mips64el-linux-gnuabi64.buildPackages.gcc
       gdb
+      inputs.nixpkgs-unstable.pkgsCross.ghcjs.buildPackages.ghc
       gnome.ghex
       ghidra
       giac-with-xcas
