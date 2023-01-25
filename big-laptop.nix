@@ -11,7 +11,7 @@
     fsType = "ext4";
     options = [ "nofail" "ro" ];
   };
-  services.xserver.videoDrivers = [ "nvidia" ];
+  specialisation.nvidia.configuration.services.xserver.videoDrivers = [ "nvidia" ];
 
   #inprove compatibility with windows
   time.hardwareClockInLocalTime = true;
