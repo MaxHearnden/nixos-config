@@ -11,7 +11,10 @@
     fsType = "ext4";
     options = [ "nofail" "ro" ];
   };
-  specialisation.nvidia.configuration.services.xserver.videoDrivers = [ "nvidia" ];
+  specialisation.nvidia.configuration = {
+    services.xserver.videoDrivers = [ "nvidia" ];
+    system.autoUpgrade.flags = [ "-c" "nvidia" ];
+  };
 
   #inprove compatibility with windows
   time.hardwareClockInLocalTime = true;

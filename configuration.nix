@@ -30,6 +30,7 @@
 #  boot.kernelPackages = (import ./kgdb_kernel.nix).packages;
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.segger-jlink.acceptLicense = true;
+  nixpkgs.overlays = [ (_: _: {nixos-rebuild = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixos-rebuild;}) ];
   services.sshd.enable = true;
 
   # Pick only one of the below networking options.
@@ -322,7 +323,10 @@
   #virtualisation.waydroid.enable = true;
   system.autoUpgrade.flake = "git+http://172.28.10.244:3000/zandoodle/nixos-config";
 
-  specialisation.nox.configuration.services.xserver.autorun = false;
+  specialisation.nox.configuration = {
+    services.xserver.autorun = false;
+    system.autoUpgrade.flags = [ "-c" "nox" ];
+  };
 
   services.kmscon.enable = true;
   services.kmscon.extraOptions = "--xkb-layout gb";
