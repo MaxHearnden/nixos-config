@@ -88,7 +88,9 @@
     description = "A user to allow for ~shared instead of ~/shared";
     home = "/home/max/shared";
     isSystemUser = true;
+    group = "shared";
   };
+  users.groups.shared = {};
   users.users.max = {
     isNormalUser = true;
     extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
