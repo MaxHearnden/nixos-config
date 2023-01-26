@@ -31,7 +31,7 @@
 #  boot.kernelPackages = (import ./kgdb_kernel.nix).packages;
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.segger-jlink.acceptLicense = true;
-  nixpkgs.overlays = [ (_: _: {nixos-rebuild = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixos-rebuild;}) ];
+  #nixpkgs.overlays = [ (_: _: {nixos-rebuild = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixos-rebuild;}) ];
   services.sshd.enable = true;
 
   # Pick only one of the below networking options.
@@ -333,7 +333,7 @@
 
   specialisation.nox.configuration = {
     services.xserver.autorun = false;
-    system.autoUpgrade.flags = [ "-c" "nox" ];
+    #system.autoUpgrade.flags = [ "-c" "nox" ];
   };
 
   services.kmscon.enable = true;

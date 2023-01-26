@@ -13,7 +13,7 @@
   };
   specialisation.nvidia.configuration = {
     services.xserver.videoDrivers = [ "nvidia" ];
-    system.autoUpgrade.flags = [ "-c" "nvidia" ];
+    #system.autoUpgrade.flags = [ "-c" "nvidia" ];
     hardware.nvidia.prime.nvidiaBusId = "PCI:1:0:0";
     hardware.nvidia.prime.intelBusId = "PCI:0:2:0";
     hardware.nvidia.prime.sync.enable = true;
