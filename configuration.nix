@@ -124,8 +124,8 @@
       golly
       graphviz
       gtkterm
-      #(pkgs.haskell-language-server.override {supportedGhcVersions = ["810" "90" "924" "94" "943"];})
-      haskell-language-server
+      (haskell-language-server.override {supportedGhcVersions = ["810" "90" "94" "944"];})
+      #haskell-language-server
       hpack
       headsetcontrol
       inputs.haskell-nix.packages.x86_64-linux.hix
