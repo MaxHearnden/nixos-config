@@ -96,4 +96,6 @@
     options = ["x-systemd.after=nfs-server.service"];
   };
 
+  boot.tmpOnTmpfs = true;
+
 }
