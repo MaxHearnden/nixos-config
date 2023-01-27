@@ -108,11 +108,19 @@
       emacs
       file
       firefox
+      pkgsCross.aarch64-multiplatform.buildPackages.gcc
+      pkgsCross.arm7l-multiplatform.buildPackages.gcc
       pkgsCross.mipsel-linux-gnu.buildPackages.gcc
       pkgsCross.mips64el-linux-gnuabi64.buildPackages.gcc
+      pkgsCross.riscv32-linux-gnu.buildPackages.gcc
+      pkgsCross.riscv64-linux-gnu.buildPackages.gcc
       gdb
+      pkgsCross.aarch64-multiplatform.buildPackages.gdb
+      pkgsCross.arm7l-multiplatform.buildPackages.gdb
       pkgsCross.mipsel-linux-gnu.buildPackages.gdb
       pkgsCross.mips64el-linux-gnuabi64.buildPackages.gdb
+      pkgsCross.riscv32-linux-gnu.buildPackages.gdb
+      pkgsCross.riscv64-linux-gnu.buildPackages.gdb
       inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghcHEAD
       gnome.ghex
       ghidra
