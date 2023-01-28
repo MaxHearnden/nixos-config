@@ -84,13 +84,13 @@
   services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.extraUsers.shared = {
-    description = "A user to allow for ~shared instead of ~/shared";
+  users.extraUsers.sh = {
+    description = "A user to allow for ~sh instead of ~/shared";
     home = "/home/max/shared";
     isSystemUser = true;
-    group = "shared";
+    group = "sh";
   };
-  users.groups.shared = {};
+  users.groups.sh = {};
   users.users.max = {
     isNormalUser = true;
     extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
