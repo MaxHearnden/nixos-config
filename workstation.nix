@@ -146,7 +146,7 @@
   services.fossil = {
     enable = true;
     port = 3001;
-    baseurl = "http://172.28.10.244";
+    baseurl = "http://172.28.10.244:3001";
   };
 
 }
