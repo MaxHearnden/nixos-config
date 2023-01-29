@@ -132,7 +132,7 @@
       };
       "meta.sr.ht" = {
         origin = "http://172.28.10.244";
-      }
+      };
       mail.pgp-pubkey = "";
       mail.pgp-privkey = "";
       mail.pgp-key-id = "";
