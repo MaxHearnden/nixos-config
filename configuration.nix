@@ -109,6 +109,7 @@
       emacs
       file
       firefox
+      fossil
       pkgsCross.aarch64-multiplatform.buildPackages.gcc
       pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc
       pkgsCross.mipsel-linux-gnu.buildPackages.gcc
