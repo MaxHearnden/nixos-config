@@ -116,6 +116,7 @@
     };
     meta = {
       enable = true;
+      port = 5051;
     };
     postgresql.enable = true;
     settings = {
@@ -132,7 +133,7 @@
         origin = "http://172.28.10.244:5014";
       };
       "meta.sr.ht" = {
-        origin = "http://172.28.10.244:5000";
+        origin = "http://172.28.10.244:5001";
       };
       mail.pgp-pubkey = "";
       mail.pgp-privkey = "";
