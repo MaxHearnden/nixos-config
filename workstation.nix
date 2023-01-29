@@ -103,4 +103,8 @@
     hashTableSizeMB = 4096 * 4;
   };
 
+  services.sourcehut = {
+    enable = true;
+  };
+
 }
