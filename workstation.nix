@@ -103,45 +103,45 @@
     hashTableSizeMB = 4096 * 4;
   };
 
-  services.sourcehut = {
-    enable = true;
-    #git = {
-    #  enable = true;
-    #};
-    #hg = {
-    #  enable = true;
-    #};
-    hub = {
-      enable = true;
-    };
-    meta = {
-      enable = true;
-      port = 5051;
-    };
-    redis.enable = true;
-    postgresql.enable = true;
-    settings = {
-      "sr.ht" = {
-        environment = "production";
-        global-domain = "172.28.10.244";
-        origin = "http://172.28.10.244";
-        network-key = "/var/keys/srht-network-key";
-        service-key = "/var/keys/srht-service-key";
-      };
-      "hub.sr.ht" = {
-        oauth-client-id = "69dff40e2ff892af532c70c3a2f10ecd6f1264caa0981396f499b09c03103d87";
-        oauth-client-secret = "/var/keys/srht-hub-oauth-secret";
-        origin = "http://172.28.10.244:5014";
-      };
-      "meta.sr.ht" = {
-        origin = "http://172.28.10.244:5001";
-      };
-      mail.pgp-pubkey = "";
-      mail.pgp-privkey = "";
-      mail.pgp-key-id = "";
-      mail.smtp-from = "";
-      webhooks.private-key = "/var/keys/srht-webhooks-key";
-    };
-  };
+  #services.sourcehut = {
+  #  enable = true;
+  #  #git = {
+  #  #  enable = true;
+  #  #};
+  #  #hg = {
+  #  #  enable = true;
+  #  #};
+  #  hub = {
+  #    enable = true;
+  #  };
+  #  meta = {
+  #    enable = true;
+  #    port = 5051;
+  #  };
+  #  redis.enable = true;
+  #  postgresql.enable = true;
+  #  settings = {
+  #    "sr.ht" = {
+  #      environment = "production";
+  #      global-domain = "172.28.10.244";
+  #      origin = "http://172.28.10.244";
+  #      network-key = "/var/keys/srht-network-key";
+  #      service-key = "/var/keys/srht-service-key";
+  #    };
+  #    "hub.sr.ht" = {
+  #      oauth-client-id = "69dff40e2ff892af532c70c3a2f10ecd6f1264caa0981396f499b09c03103d87";
+  #      oauth-client-secret = "/var/keys/srht-hub-oauth-secret";
+  #      origin = "http://172.28.10.244:5014";
+  #    };
+  #    "meta.sr.ht" = {
+  #      origin = "http://172.28.10.244:5001";
+  #    };
+  #    mail.pgp-pubkey = "";
+  #    mail.pgp-privkey = "";
+  #    mail.pgp-key-id = "";
+  #    mail.smtp-from = "";
+  #    webhooks.private-key = "/var/keys/srht-webhooks-key";
+  #  };
+  #};
 
 }
