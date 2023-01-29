@@ -114,6 +114,9 @@
     hub = {
       enable = true;
     };
+    meta = {
+      enable = true;
+    }
     postgresql.enable = true;
     settings = {
       "sr.ht" = {
