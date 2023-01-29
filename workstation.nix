@@ -105,6 +105,16 @@
 
   services.sourcehut = {
     enable = true;
+    git = {
+      enable = true;
+    };
+    hg = {
+      enable = true;
+    };
+    hub = {
+      enable = true;
+    };
+    postgresql.enable = true;
   };
 
 }
