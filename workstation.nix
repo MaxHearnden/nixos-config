@@ -1,5 +1,5 @@
 { config, pkgs, lib, ...}: {
-  imports = [./configuration.nix ./hardware-configuration/workstation.nix];
+  imports = [./configuration.nix ./hardware-configuration/workstation.nix ./fossil-server.nix];
   networking.hostName = "max-nixos-workstation";
   services.xserver.displayManager.gdm.autoSuspend = false;
   services.xserver.displayManager.sessionCommands = "xhost +SI:localuser:max";
@@ -143,5 +143,10 @@
   #    webhooks.private-key = "/var/keys/srht-webhooks-key";
   #  };
   #};
+  services.fossil = {
+    enable = true;
+    port = 3001;
+    baseurl = "172.28.10.244";
+  };
 
 }
