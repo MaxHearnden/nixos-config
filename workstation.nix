@@ -127,6 +127,9 @@
         oauth-client-id = "69dff40e2ff892af532c70c3a2f10ecd6f1264caa0981396f499b09c03103d87";
         oauth-client-secret = "/var/keys/srht-hub-oauth-secret";
       };
+      "meta.sr.ht" = {
+        origin = "http://172.28.10.244";
+      }
       mail.pgp-pubkey = "";
       mail.pgp-privkey = "";
       mail.pgp-key-id = "";
