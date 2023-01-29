@@ -118,6 +118,7 @@
       enable = true;
       port = 5051;
     };
+    redis.enable = true;
     postgresql.enable = true;
     settings = {
       "sr.ht" = {
