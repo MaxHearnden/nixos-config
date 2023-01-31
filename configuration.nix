@@ -185,8 +185,12 @@
       vlc
       (vscode-with-extensions.override {
         vscode = vscodium;
-        vscodeExtensions = with vscode-extensions;
-        [matklad.rust-analyzer haskell.haskell justusadam.language-haskell];
+        vscodeExtensions = with vscode-extensions; [
+          matklad.rust-analyzer
+          haskell.haskell
+          justusadam.language-haskell
+          jnoortheen.nix-ide
+        ];
       })
       vulnix
       w3m
