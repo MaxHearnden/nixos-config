@@ -98,10 +98,10 @@
 
   boot.tmpOnTmpfs = true;
 
-  services.beesd.filesystems.big = {
-    spec = "UUID=0379ef59-faa8-424c-89a7-cedc93956adc";
-    hashTableSizeMB = 4096 * 4;
-  };
+  #services.beesd.filesystems.big = {
+  #  spec = "UUID=0379ef59-faa8-424c-89a7-cedc93956adc";
+  #  hashTableSizeMB = 4096 * 4;
+  #};
 
   #services.sourcehut = {
   #  enable = true;
