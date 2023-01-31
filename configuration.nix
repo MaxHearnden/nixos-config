@@ -105,6 +105,7 @@
       cargo-watch
       ungoogled-chromium
       cifs-utils
+      darcs
       discord
       emacs
       file
