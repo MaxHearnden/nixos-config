@@ -14,7 +14,7 @@
       config.nix.package.out
     ];
     script = ''
-      config="$(${config.programs.ssh.package} nix build git+http://172.28.10.244:3000/zandoodle/nixos-config#nixosConfigurations.${config.networking.hostName}.config.system.build.toplevel --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
+      config="$(${config.programs.ssh.package}/bin/ssh nix build git+http://172.28.10.244:3000/zandoodle/nixos-config#nixosConfigurations.${config.networking.hostName}.config.system.build.toplevel --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
       nix-env -p /nix/var/nix/profiles/system --set "$config"
       booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
       built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
