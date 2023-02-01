@@ -309,7 +309,7 @@
   ];*/
   nix.settings.auto-optimise-store = true;
   nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 7d";
+  nix.gc.options = "-d";
   nix.gc.persistent = true;
   nix.settings.substituters = lib.mkAfter [ "https://nixcache.reflex-frp.org" ];
   nix.settings.trusted-public-keys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
