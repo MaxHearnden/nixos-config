@@ -161,6 +161,7 @@
       ocaml
       openocd
       ormolu
+      pijul
       pioneer
       plover.dev
       prismlauncher
