@@ -167,6 +167,7 @@
       prismlauncher
       #polymc
       qemu
+      qpdfview
       qtspim
       rWrapper
       rhythmbox
