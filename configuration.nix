@@ -178,6 +178,7 @@
       simutrans
       snis
       stack
+      tea
       #teams
       #texlive.combined.scheme-full
       thunderbird
