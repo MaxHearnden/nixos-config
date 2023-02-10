@@ -96,7 +96,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
-      #inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.authenticator
+      inputs.nixpkgs-staging-next.legacyPackages.x86_64-linux.authenticator
       bc
       binutils
       btop
@@ -172,7 +172,7 @@
       rWrapper
       rhythmbox
       rstudio
-      #rustup
+      inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.rustup
       rust-analyzer
       simple-http-server
       simutrans
