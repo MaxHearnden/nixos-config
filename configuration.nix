@@ -172,7 +172,7 @@
       rWrapper
       rhythmbox
       rstudio
-      rustup
+      #rustup
       rust-analyzer
       simple-http-server
       simutrans
