@@ -397,4 +397,6 @@
     "172.28.12.138" = ["max-nixos-dell"];
   };
 
+  services.cachefilesd.enable = true;
+
 }
