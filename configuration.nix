@@ -224,6 +224,9 @@
       inoremap (<CR> (<CR>)<Esc>ko
     '';
 #      lua vim.lsp.start ({name = 'haskell', cmd = {'${pkgs.haskell-language-server}'}, root_dir = vim.fs.dirname (vim.fs.find ({'hie.yaml'})[1])})
+    packages.nix = with pkgs.vimPlugins; {
+      start = [vim-nix];
+    };
     packages.haskell = with pkgs.vimPlugins; {
       start = [ nvim-lspconfig ];
     };
