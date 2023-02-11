@@ -156,5 +156,8 @@
       };
     };
   };
+  fileSystems."/home/max/shared" = {
+    options = ["x-systemd.after=nfs-server.service" "x-systemd.requires=nfs-server.service"];
+  };
 
 }
