@@ -6,6 +6,7 @@
   networking.firewall.allowedUDPPorts = [ 25565 ];
   networking.firewall.allowedTCPPorts = [ 25565 ];
   networking.firewall.interfaces.ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 50000 3000 3389 2049 ];
+  networking.firewall.interfaces.ve-teams.allowedTCPPorts = [ 6000 ];
   services.xserver.xrandrHeads = [ "HDMI-3" "HDMI-2" ];
   users.users.max = {
     packages = with pkgs; [
