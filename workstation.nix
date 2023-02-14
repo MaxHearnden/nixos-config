@@ -156,5 +156,13 @@
       };
     };
   };
+  networking = {
+    nat = {
+      enable = true;
+      internalInterfaces = ["ve-+"];
+      externalInterface = "eth0";
+    };
+    networkmanager.unmanaged = ["interface-name:ve-*"];
+  };
 
 }
