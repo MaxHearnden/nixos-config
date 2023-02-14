@@ -160,7 +160,7 @@
     nat = {
       enable = true;
       internalInterfaces = ["ve-+"];
-      externalInterface = "eth0";
+      externalInterface = "eno1";
     };
     networkmanager.unmanaged = ["interface-name:ve-*"];
   };
