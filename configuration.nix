@@ -96,7 +96,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
-      inputs.nixpkgs-staging-next.legacyPackages.x86_64-linux.authenticator
+      inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.authenticator
       bc
       binutils
       btop
