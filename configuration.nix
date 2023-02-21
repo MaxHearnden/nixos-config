@@ -164,7 +164,7 @@
       pijul
       pioneer
       plover.dev
-      prismlauncher
+      inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.prismlauncher
       #polymc
       qemu
       qpdfview
