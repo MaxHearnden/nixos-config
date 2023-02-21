@@ -273,11 +273,11 @@
     "hackage": {
       "flake": false,
       "locked": {
-        "lastModified": 1676334366,
-        "narHash": "sha256-AbVDntOuXVOdcBzXuAENgH1kJlSuJYC2q09/2wqqWL0=",
+        "lastModified": 1676939329,
+        "narHash": "sha256-sH7er/Yo+/VQfHT8QGtf6yKCB4wXH583iRUeOx7mlK4=",
         "owner": "input-output-hk",
         "repo": "hackage.nix",
-        "rev": "d80cf18aa69e653f47592e722795184e37dc3ecd",
+        "rev": "7971bb5abcb89e4bdb5988714a946f4d6f6fc57e",
         "type": "github"
       },
       "original": {
@@ -315,11 +315,11 @@
         "tullia": "tullia"
       },
       "locked": {
-        "lastModified": 1676335861,
-        "narHash": "sha256-4MdVoq4OVkvpKwcxRjBbwb3R7bPYd1Eig4t/Pb6PhVM=",
+        "lastModified": 1676940699,
+        "narHash": "sha256-jlvZT0FD+ER8Uy0FVQYnuI9Xd5SAI/lr7s0lbDo3AMI=",
         "owner": "input-output-hk",
         "repo": "haskell.nix",
-        "rev": "c08075ef409f01be2ad76df11201858d56b0ceaf",
+        "rev": "ddfd2714040015fd9862fb0b92f35e4522bf75df",
         "type": "github"
       },
       "original": {
@@ -420,6 +420,26 @@
       "original": {
         "owner": "kristapsdz",
         "repo": "lowdown",
+        "type": "github"
+      }
+    },
+    "math104": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1677006699,
+        "narHash": "sha256-dJPQaKYsjxqAw2hX+RW7w6w3PiSpqcDw1rsUKaPkPrQ=",
+        "owner": "MaxHearnden",
+        "repo": "Math104",
+        "rev": "9ff8fe141aa520bb9c6a5cec0a60c70b56de6312",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MaxHearnden",
+        "repo": "Math104",
         "type": "github"
       }
     },
@@ -692,11 +712,11 @@
     },
     "nixpkgs-unstable_2": {
       "locked": {
-        "lastModified": 1676300157,
-        "narHash": "sha256-1HjRzfp6LOLfcj/HJHdVKWAkX9QRAouoh6AjzJiIerU=",
+        "lastModified": 1676885936,
+        "narHash": "sha256-ZRKb6zBfTvdCOXI7nGC1L9UWSU5ay2ltxg+f5UIzBOU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "545c7a31e5dedea4a6d372712a18e00ce097d462",
+        "rev": "b69883faca9542d135fa6bab7928ff1b233c167f",
         "type": "github"
       },
       "original": {
@@ -755,11 +775,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1676253841,
-        "narHash": "sha256-jhuI8Mmky8VCD45OoJEuF6HdPLFBwNrHA0ljjZ/zkfw=",
+        "lastModified": 1676895851,
+        "narHash": "sha256-xdhBKw2el790G+88tZYpRWlP9VjQC9OLR5Jx84VPe08=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "a45a8916243a7d27acc358f4fc18c4491f3eeca8",
+        "rev": "e19f25b587f15871d26442cfa1abe4418a815d7d",
         "type": "github"
       },
       "original": {
@@ -804,6 +824,7 @@
     "root": {
       "inputs": {
         "haskell-nix": "haskell-nix",
+        "math104": "math104",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-unstable": "nixpkgs-unstable_2"
       }
@@ -811,11 +832,11 @@
     "stackage": {
       "flake": false,
       "locked": {
-        "lastModified": 1676333459,
-        "narHash": "sha256-yq2W1FODS+aMcR9V1863Ei+GNrx0LSgL2yUb92cyKA4=",
+        "lastModified": 1676419864,
+        "narHash": "sha256-gRQ6ZPFkueFiM/s0Gwc+6MC32skzaR78/U0erS8pjd0=",
         "owner": "input-output-hk",
         "repo": "stackage.nix",
-        "rev": "4c3d141ddbd4711f2e432c57d39d86e6cc25dd7d",
+        "rev": "fcc80ab92acab030d0c7e7da0dacf0edd78af48e",
         "type": "github"
       },
       "original": {

@@ -169,7 +169,8 @@
       qemu
       qpdfview
       qtspim
-      rWrapper
+      # rWrapper
+      inputs.math104.packages.x86_64-linux.rEnv
       rhythmbox
       rstudio
       inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.rustup

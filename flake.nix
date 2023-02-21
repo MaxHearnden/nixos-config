@@ -12,6 +12,8 @@
   #};
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
   inputs.nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.math104.url = "github:MaxHearnden/Math104";
+  inputs.math104.inputs.nixpkgs.follows = "nixpkgs";
   #inputs.nixpkgs-mipsel.url = "github:maxHearnden/nixpkgs/patch-1";
   outputs = { self, nixpkgs, ... }@inputs: {
     packages.x86_64-linux.default =
