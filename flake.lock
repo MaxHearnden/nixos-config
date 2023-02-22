@@ -432,15 +432,15 @@
       "locked": {
         "lastModified": 1677006699,
         "narHash": "sha256-dJPQaKYsjxqAw2hX+RW7w6w3PiSpqcDw1rsUKaPkPrQ=",
-        "owner": "MaxHearnden",
-        "repo": "Math104",
+        "ref": "refs/heads/main",
         "rev": "9ff8fe141aa520bb9c6a5cec0a60c70b56de6312",
-        "type": "github"
+        "revCount": 5,
+        "type": "git",
+        "url": "http://172.28.10.244:3000/zandoodle/Math104"
       },
       "original": {
-        "owner": "MaxHearnden",
-        "repo": "Math104",
-        "type": "github"
+        "type": "git",
+        "url": "http://172.28.10.244:3000/zandoodle/Math104"
       }
     },
     "n2c": {
