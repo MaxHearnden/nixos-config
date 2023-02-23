@@ -324,7 +324,7 @@
   nix.gc.automatic = true;
   nix.gc.options = "-d";
   nix.gc.persistent = true;
-  nix.settings.substituters = lib.mkAfter [ "https://nixcache.reflex-frp.org" ];
+  # nix.settings.substituters = lib.mkAfter [ "https://nixcache.reflex-frp.org" ];
   nix.settings.trusted-public-keys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
   security.doas.enable = true;
   system.autoUpgrade.enable = true;
