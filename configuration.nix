@@ -172,7 +172,7 @@
       # rWrapper
       inputs.math104.packages.x86_64-linux.rEnv
       rhythmbox
-      (rstudio.override {R = inputs.math104.packages.x86_64-linux.rEnv;})
+      inputs.math104.packages.x86_64-linux.rstudioEnv
       inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.rustup
       rust-analyzer
       simple-http-server
