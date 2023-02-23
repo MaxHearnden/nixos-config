@@ -327,12 +327,12 @@
   # nix.settings.substituters = lib.mkAfter [ "https://nixcache.reflex-frp.org" ];
   nix.settings.trusted-public-keys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" ];
   security.doas.enable = true;
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.allowReboot = true;
-  system.autoUpgrade.dates = "17:45";
-  system.autoUpgrade.persistent = true;
+  #system.autoUpgrade.enable = true;
+  #system.autoUpgrade.allowReboot = true;
+  #system.autoUpgrade.dates = "17:45";
+  #system.autoUpgrade.persistent = true;
   #system.autoUpgrade.flake = "/etc/nixos";
-  system.autoUpgrade.flags = ["--recreate-lock-file" "--refresh" "--no-write-lock-file"];
+  #system.autoUpgrade.flags = ["--recreate-lock-file" "--refresh" "--no-write-lock-file"];
 #  android_sdk.accept_licence = true;
   services.openssh.forwardX11 = true;
 
@@ -360,7 +360,7 @@
   #services.mysql.package = pkgs.mysql80;
   #services.mysql.ensureUsers = [ {name = "max"; ensurePermissions = {"*.*" = "ALL PRIVILEGES";};} ];
   #virtualisation.waydroid.enable = true;
-  system.autoUpgrade.flake = "git+http://172.28.10.244:3000/zandoodle/nixos-config";
+  #system.autoUpgrade.flake = "git+http://172.28.10.244:3000/zandoodle/nixos-config";
 
   specialisation.nox.configuration = {
     services.xserver.autorun = false;
