@@ -8,7 +8,11 @@
     description = "NixOS Upgrade";
     restartIfChanged = false;
     unitConfig.X-StopOnRemoval = false;
-    serviceConfig.Type = "oneshot";
+    serviceConfig = {
+      Type = "oneshot";
+      RestartSec = 10;
+      Restart = "on-failure";
+    };
     path = with pkgs; [
       config.nix.package.out
     ];
@@ -24,8 +28,8 @@
         ${config.systemd.package}/bin/shutdown -r +1
       fi
     '';
-    after = [ "network-online.target" "zerotierone.service" "sys-devices.virtual-net-ztmjfp7kiq.device" ];
-    requires = [ "network-online.target" "zerotierone.service" "sys-devices.virtual-net-ztmjfp7kiq.device" ];
+    after = [ "network-online.target" "zerotierone.service" ];
+    requires = [ "network-online.target" "zerotierone.service" ];
     wantedBy = [ "default.target" ];
   };
   systemd.timers.nixos-upgrade = {
