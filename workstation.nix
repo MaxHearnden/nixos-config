@@ -172,7 +172,13 @@
     unitConfig.X-StopOnRemoval = false;
     serviceConfig.Type = "oneshot";
     path = with pkgs; [
+      coreutils
+      gnutar
+      xz.bin
+      gzip
+      gitMinimal
       config.nix.package.out
+      config.programs.ssh.package
     ];
     script = ''
       config-all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config) --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
