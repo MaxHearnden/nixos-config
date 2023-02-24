@@ -181,9 +181,9 @@
       config.programs.ssh.package
     ];
     script = ''
-      config-all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
-      nix-env -p /nix/var/nix/profiles/all --set "$config"
-      config="$(readlink -e $config/${config.networking.hostName})"
+      config_all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
+      nix-env -p /nix/var/nix/profiles/all --set "$config_all"
+      config="$(readlink -e $config_all/${config.networking.hostName})"
       nix-env -p /nix/var/nix/profiles/system --set "$config"
       booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
       built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
