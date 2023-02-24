@@ -181,7 +181,7 @@
       config.programs.ssh.package
     ];
     script = ''
-      config-all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config) --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
+      config-all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
       nix-env -p /nix/var/nix/profiles/all --set "$config"
       config="$(readlink -e $config/${config.networking.hostName})"
       nix-env -p /nix/var/nix/profiles/system --set "$config"
@@ -190,7 +190,7 @@
       if [ "''${booted}" = "''${built}" ]; then
         $config/bin/switch-to-configuration switch
       else
-        $config/bin/swithc-to-configuration boot
+        $config/bin/switch-to-configuration boot
       fi
     '';
     startAt = "17:45";
