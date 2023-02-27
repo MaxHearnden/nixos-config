@@ -191,7 +191,6 @@
         $config/bin/switch-to-configuration switch
       else
         $config/bin/switch-to-configuration boot
-        ${config.systemd.package}/bin/shutdown -r +1
       fi
     '';
     startAt = "17:45";
