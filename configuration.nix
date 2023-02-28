@@ -34,6 +34,7 @@
   #nixpkgs.overlays = [ (_: _: {nixos-rebuild = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixos-rebuild;}) ];
   services.sshd.enable = true;
   boot.kernelPackages = pkgs.linuxKernel.packageAliases.linux_latest;
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
