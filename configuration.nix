@@ -202,6 +202,12 @@
             version = "0.1.0";
             sha256 = "sha256-h5K2JTqRXIQBm+fgl0nE31E4lmiXXMGmgtKM6oG1gFc=";
           }
+          {
+            name = "vala";
+            publisher = "prince781";
+            version = "1.0.8";
+            sha256 = "sha256-IuIb7vLNiE3rzVHOsjInaYLzNYORbwabQq0bfaPLlqc=";
+          }
         ];
       })
       vulnix
