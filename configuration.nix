@@ -33,7 +33,7 @@
   nixpkgs.config.segger-jlink.acceptLicense = true;
   #nixpkgs.overlays = [ (_: _: {nixos-rebuild = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixos-rebuild;}) ];
   services.sshd.enable = true;
-  boot.kernelPackages = pkgs.linuxKernel.packageAliases.linux_latest;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
 
   # Pick only one of the below networking options.
