@@ -109,6 +109,7 @@
       cifs-utils
       darcs
       discord
+      dwarf-fortress
       emacs
       file
       firefox
