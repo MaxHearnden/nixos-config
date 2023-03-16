@@ -109,7 +109,7 @@
       cifs-utils
       darcs
       discord
-      inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.dwarf-fortress
+      dwarf-fortress
       emacs
       file
       firefox
