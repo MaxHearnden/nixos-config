@@ -27,7 +27,7 @@
     max_output_size = 8000000000
     Include /var/lib/hydra/gitea_authorisations.conf
   '';
-  services.hydra.buildMachinesFiles = ["/machines"];
+  services.hydra.buildMachinesFiles = ["/hydra-machines"];
   services.hydra.useSubstitutes = true;
   systemd.timers.hydra-update-gc-roots.timerConfig.Persistent = true;
   networking.interfaces.enp1s0.ipv4.addresses = [{address = "192.168.2.1"; prefixLength = 24;}];
@@ -202,5 +202,6 @@
       Persistent = true;
     };
   };
+  nix.distributedBuilds = true;
 
 }
