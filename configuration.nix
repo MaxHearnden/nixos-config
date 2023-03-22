@@ -127,6 +127,7 @@
       pkgsCross.mips64el-linux-gnuabi64.buildPackages.gdb
       pkgsCross.riscv32.buildPackages.gdb
       pkgsCross.riscv64.buildPackages.gdb
+      (haskellPackages.ghcWithPackages (pkgs: with pkgs; [statistics vector]))
       # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
       gnome.ghex
       ghidra
