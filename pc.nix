@@ -25,6 +25,7 @@
     }).linuxKernel.packages.linux_6_1;
     loader = {
       grub = {
+        useOSProber = true;
         gfxmodeEfi = "1920x1080,auto";
       };
     };
