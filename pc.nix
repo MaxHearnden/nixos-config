@@ -18,6 +18,7 @@
         allowUnfree = true;
       };
     }).linuxKernel.packages.linux_6_1;
+    tmpOnTmpfs = true;
   };
   networking = {
     hostName = "max-nixos-pc";
