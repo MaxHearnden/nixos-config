@@ -5,6 +5,11 @@
   ];
   services = {
     xserver = {
+      displayManager = {
+        gdm = {
+          autoSuspend = true;
+        };
+      };
       videoDrivers = [ "nvidia" ];
     };
   };
@@ -18,6 +23,11 @@
         allowUnfree = true;
       };
     }).linuxKernel.packages.linux_6_1;
+    loader = {
+      grub = {
+        gfxmodeEfi = "1920x1080,auto";
+      };
+    };
     tmpOnTmpfs = true;
   };
   networking = {
