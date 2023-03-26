@@ -21,8 +21,13 @@
       menuentry "iPXE" {
         chainloader @bootRoot@/ipxe.efi
       }
+
+      menuentry "memtest86+" {
+        chainloader @bootRoot@/memtest.efi
+      }
     '';
     extraFiles."ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
+    extraFiles."memtest.efi" = "${pkgs.memtest86plus}/memtest.efi";
   };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
