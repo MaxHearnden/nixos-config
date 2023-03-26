@@ -421,6 +421,7 @@
     "172.28.198.106" = ["max-nixos-laptop"];
     "172.28.156.146" = ["max-nixos-chromebooksd2"];
     "172.28.12.138" = ["max-nixos-dell"];
+    "172.28.13.156" = ["max-nixos-pc"];
   };
 
   services.cachefilesd.enable = true;
