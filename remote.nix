@@ -18,12 +18,13 @@
     ];
     script = ''
       config="$(${config.programs.ssh.package}/bin/ssh 172.28.10.244 readlink -e /nix/var/nix/profiles/all/${config.networking.hostName})"
-      nixos-rebuild boot --system $config
+      nix-env -p /nix/var/nix/profiles/system --set "$config"
       # booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
       # built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
       # if [ "''${booted}" = "''${built}" ]; then
       #   $config/bin/switch-to-configuration switch
       # else
+      $config/bin/switch-to-configuration boot
       # fi
     '';
     after = [ "network-online.target" "zerotierone.service" ];
