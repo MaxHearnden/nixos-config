@@ -38,7 +38,12 @@
   nixpkgs.config.segger-jlink.acceptLicense = true;
   #nixpkgs.overlays = [ (_: _: {nixos-rebuild = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixos-rebuild;}) ];
   services.sshd.enable = true;
-  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
+  boot.kernelPackages = (import inputs.nixpkgs-unstable {
+      localSystem = config.nixpkgs.localSystem;
+      config = {
+        allowUnfree = true;
+      };
+    }).linuxKernel.packageAliases.linux_latest;
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
 
   # Pick only one of the below networking options.
@@ -421,6 +426,7 @@
     "172.28.198.106" = ["max-nixos-laptop"];
     "172.28.156.146" = ["max-nixos-chromebooksd2"];
     "172.28.12.138" = ["max-nixos-dell"];
+    "172.28.13.156" = ["max-nixos-pc"];
   };
 
   services.cachefilesd.enable = true;
