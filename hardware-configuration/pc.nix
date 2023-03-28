@@ -16,13 +16,7 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/0f1d8d4e-fe7c-4ed1-96a3-8eabc2944f2c";
       fsType = "btrfs";
-      options = ["defaults" "compress"];
-    };
-  
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/0f1d8d4e-fe7c-4ed1-96a3-8eabc2944f2c";
-      fsType = "btrfs";
-      options = ["defaults" "noatime" "compress" "subvol=/nix"];
+      options = ["defaults" "compress" "noatime"];
     };
 
   fileSystems."/boot/efi" =
