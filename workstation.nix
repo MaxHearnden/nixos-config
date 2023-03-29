@@ -76,7 +76,7 @@
     enable = true;
     hostName = "172.28.10.244";
     exports = ''
-      /Big/shared -(mp=/Big,rw,all_squash,anonuid=1000,anongid=100,async) max-nixos-* max-guix-*
+      /Big/shared -mp=/Big,rw,all_squash,anonuid=1000,anongid=100,async max-nixos-* max-guix-*
     '';
   };
   services.kerberos_server = {
