@@ -424,6 +424,7 @@
     "172.28.12.138" = ["max-nixos-dell"];
     "172.28.13.156" = ["max-nixos-pc"];
     "172.28.11.61" = ["max-guix-chromebook"];
+    "172.28.128.58" = ["max-guix-dell"];
   };
 
   services.cachefilesd.enable = true;
