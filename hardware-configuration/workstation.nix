@@ -26,13 +26,13 @@
   fileSystems."/Big" =
     { device = "/dev/disk/by-uuid/0379ef59-faa8-424c-89a7-cedc93956adc";
       fsType = "btrfs";
-      options = [ "defaults" "compress" ];
+      options = [ "defaults" "compress=zstd" ];
     };
 
   fileSystems."/nix" =
     { device = "/dev/disk/by-uuid/0379ef59-faa8-424c-89a7-cedc93956adc";
       fsType = "btrfs";
-      options = [ "defaults" "subvol=/nix" "noatime" "compress" ];
+      options = [ "defaults" "subvol=/nix" "noatime" "compress=zstd" ];
     };
 
   swapDevices = [ ];
