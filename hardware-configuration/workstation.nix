@@ -14,8 +14,9 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/f4378000-8b2d-4596-9e5f-5865e7400a3c";
-      fsType = "f2fs";
+    { device = "/dev/disk/by-uuid/0379ef59-faa8-424c-89a7-cedc93956adc";
+      fsType = "btrfs";
+      options = [ "compress=zstd" "subvol=/root_backup" ];
     };
 
   fileSystems."/boot/efi" =
