@@ -30,6 +30,7 @@
       };
     };
     tmpOnTmpfs = true;
+    tmpOnTmpfsSize = "100%";
   };
   networking = {
     hostName = "max-nixos-pc";
