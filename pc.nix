@@ -7,7 +7,7 @@
     xserver = {
       displayManager = {
         gdm = {
-          autoSuspend = true;
+          autoSuspend = false;
         };
       };
       videoDrivers = [ "nvidia" ];
