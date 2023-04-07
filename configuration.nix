@@ -359,7 +359,7 @@
     }
   ];*/
   nix.settings.auto-optimise-store = true;
-  nix.gc.automatic = true;
+  nix.gc.automatic = false;
   nix.gc.options = "-d";
   nix.gc.persistent = true;
   # nix.settings.substituters = lib.mkAfter [ "https://nixcache.reflex-frp.org" ];
