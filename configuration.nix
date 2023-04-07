@@ -134,6 +134,7 @@
       pkgsCross.mips64el-linux-gnuabi64.buildPackages.gdb
       pkgsCross.riscv32.buildPackages.gdb
       pkgsCross.riscv64.buildPackages.gdb
+      gcc
       gettext
       (haskellPackages.ghcWithPackages (pkgs: with pkgs; [ aeson monoidal-containers optparse-applicative statistics vector yaml]))
       # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
