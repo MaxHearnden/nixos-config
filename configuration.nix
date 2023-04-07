@@ -103,6 +103,8 @@
     extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       ardour
+      autoconf
+      automake
       inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.authenticator
       bc
       binutils
@@ -132,7 +134,8 @@
       pkgsCross.mips64el-linux-gnuabi64.buildPackages.gdb
       pkgsCross.riscv32.buildPackages.gdb
       pkgsCross.riscv64.buildPackages.gdb
-      (haskellPackages.ghcWithPackages (pkgs: with pkgs; [statistics vector]))
+      gettext
+      (haskellPackages.ghcWithPackages (pkgs: with pkgs; [ aeson monoidal-containers optparse-applicative statistics vector yaml]))
       # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
       gnome.ghex
       ghidra
@@ -152,6 +155,7 @@
       htop
       jdk
       libreoffice-fresh
+      libtool
       linux-manual
       lshw
       man-pages
@@ -236,6 +240,20 @@
       segger-jlink
       zgrviewer
     ];
+  };
+  nix.registry.nixpkgs = {
+    from = {
+      id = "nixpkgs";
+      type = "indirect";
+    };
+    to = {
+      inputs.nixpkgs-unstable;
+    };
+  };
+  users.users.bjc = {
+    isNormalUser = true;
+    extraGroups = [ "dialout" "networkmanager" "plugdev" "video" ];
+    packages = config.users.users.max.packages;
   };
   programs.neovim.enable = true;
   programs.neovim.configure = {
