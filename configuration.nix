@@ -154,6 +154,7 @@
       inputs.haskell-nix.packages.x86_64-linux.hix
       htop
       jdk
+      libelf
       libreoffice-fresh
       libtool
       linux-manual
@@ -178,6 +179,7 @@
       pijul
       pioneer
       plover.dev
+      pkg-config
       inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.prismlauncher
       #polymc
       qemu
