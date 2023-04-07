@@ -249,7 +249,10 @@
       id = "nixpkgs";
       type = "indirect";
     };
-    to = inputs.nixpkgs-unstable;
+    to = {
+      path = inputs.nixpkgs-unstable;
+      type = "path";
+    };
   };
   users.users.bjc = {
     isNormalUser = true;
