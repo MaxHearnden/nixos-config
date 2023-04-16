@@ -244,21 +244,6 @@
       zgrviewer
     ];
   };
-  nix.registry.nixpkgs = {
-    from = {
-      id = "nixpkgs";
-      type = "indirect";
-    };
-    to = {
-      path = inputs.nixpkgs-unstable;
-      type = "path";
-    };
-  };
-  users.users.bjc = {
-    isNormalUser = true;
-    extraGroups = [ "dialout" "networkmanager" "plugdev" "video" ];
-    packages = config.users.users.max.packages;
-  };
   programs.neovim.enable = true;
   programs.neovim.configure = {
     customRC = ''
@@ -359,7 +344,7 @@
     }
   ];*/
   nix.settings.auto-optimise-store = true;
-  nix.gc.automatic = false;
+  nix.gc.automatic = true;
   nix.gc.options = "-d";
   nix.gc.persistent = true;
   # nix.settings.substituters = lib.mkAfter [ "https://nixcache.reflex-frp.org" ];
