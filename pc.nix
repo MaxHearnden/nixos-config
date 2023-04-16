@@ -35,4 +35,14 @@
   networking = {
     hostName = "max-nixos-pc";
   };
+  nix.buildMachines = [
+    {
+      systems = [ "x86_64-darwin" ];
+      sshUser = "max";
+      hostName = "172.28.13.156?remote-program=/home/max/ssh-mac";
+      maxJobs = 4;
+    }
+  ];
+  nix.distributedBuilds = true;
+
 }
