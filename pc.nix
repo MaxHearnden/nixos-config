@@ -38,6 +38,10 @@
   nix.buildMachines = [
     {
       systems = [ "x86_64-darwin" ];
+      supportedFeatures = [
+        "big-parallel"
+        "benchmark"
+      ];
       sshUser = "max";
       protocol = "ssh-ng";
       hostName = "172.28.13.156?remote-program=/home/max/ssh-mac-x86";
@@ -45,6 +49,10 @@
     }
     {
       systems = [ "aarch64-darwin" ];
+      supportedFeatures = [
+        "big-parallel"
+        "benchmark"
+      ];
       sshUser = "max";
       protocol = "ssh-ng";
       hostName = "172.28.13.156?remote-program=/home/max/ssh-mac";
