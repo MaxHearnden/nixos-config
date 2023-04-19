@@ -40,8 +40,15 @@
       systems = [ "x86_64-darwin" ];
       sshUser = "max";
       protocol = "ssh-ng";
-      hostName = "172.28.13.156?remote-program=/home/max/ssh-mac";
+      hostName = "172.28.13.156?remote-program=/home/max/ssh-mac-x86";
       maxJobs = 4;
+    }
+    {
+      systems = [ "aarch64-darwin" ];
+      sshUser = "max";
+      protocol = "ssh-ng";
+      hostName = "172.28.13.156?remote-program=/home/max/ssh-mac";
+      maxJobs = 8;
     }
   ];
   nix.distributedBuilds = true;
