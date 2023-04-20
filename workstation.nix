@@ -15,6 +15,18 @@
   };
   environment.systemPackages = with pkgs; [
     gtk3
+    (
+      pkgs.writeShellScriptBin "ssh-mac"
+      ''
+        exec ssh -a -x -C 172.28.31.224
+      ''
+    )
+    (
+      pkgs.writeShellScriptBin "ssh-mac-x86"
+      ''
+        exec ssh -a -x -C 172.28.226.152
+      ''
+    )
   ];
 
   services.hydra.enable = true;

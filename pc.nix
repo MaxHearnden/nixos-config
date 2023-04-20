@@ -35,31 +35,5 @@
   networking = {
     hostName = "max-nixos-pc";
   };
-  nix.buildMachines = [
-    {
-      systems = [ "x86_64-darwin" ];
-      supportedFeatures = [
-        "big-parallel"
-        "benchmark"
-      ];
-      sshUser = "max";
-      protocol = "ssh-ng";
-      hostName = "172.28.13.156?remote-program=/home/max/ssh-mac-x86";
-      maxJobs = 4;
-    }
-    {
-      systems = [ "aarch64-darwin" ];
-      supportedFeatures = [
-        "big-parallel"
-        "benchmark"
-      ];
-      sshUser = "max";
-      protocol = "ssh-ng";
-      hostName = "172.28.13.156?remote-program=/home/max/ssh-mac";
-      maxJobs = 8;
-    }
-  ];
-  nix.distributedBuilds = true;
-  nix.settings.builders-use-substitutes = true;
 
 }

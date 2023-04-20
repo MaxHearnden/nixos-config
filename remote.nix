@@ -4,6 +4,32 @@
     trusted-public-keys = ["max-nixos-workstation:Ds5AWfGPm6jRbVSjG4ht42MK++hhfFczQ4bJRhD9thI="];
     substituters = ["http://172.28.10.244:8080"];
   };
+  nix.buildMachines = [
+    {
+      systems = [ "x86_64-darwin" ];
+      supportedFeatures = [
+        "big-parallel"
+        "benchmark"
+      ];
+      sshUser = "max";
+      protocol = "ssh-ng";
+      hostName = "172.28.10.244?remote-program=/nix/var/nix/profiles/system/sw/bin/ssh-mac-x86";
+      maxJobs = 4;
+    }
+    {
+      systems = [ "aarch64-darwin" ];
+      supportedFeatures = [
+        "big-parallel"
+        "benchmark"
+      ];
+      sshUser = "max";
+      protocol = "ssh-ng";
+      hostName = "172.28.10.244?remote-program=/nix/var/nix/profiles/system/sw/bin/ssh-mac";
+      maxJobs = 8;
+    }
+  ];
+  nix.distributedBuilds = true;
+  nix.settings.builders-use-substitutes = true;
   systemd.services."nixos-upgrade" = {
     description = "NixOS Upgrade";
     restartIfChanged = false;
