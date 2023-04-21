@@ -18,13 +18,13 @@
     (
       pkgs.writeShellScriptBin "ssh-mac"
       ''
-        exec ssh -a -x -C 172.28.31.224
+        exec ssh -a -x -C max@172.28.31.224 /nix/var/nix/profiles/default/bin/nix-daemon "$@"
       ''
     )
     (
       pkgs.writeShellScriptBin "ssh-mac-x86"
       ''
-        exec ssh -a -x -C 172.28.226.152
+        exec ssh -a -x -C max@172.28.226.152 /nix/var/nix/profiles/default/bin/nix-daemon "$@"
       ''
     )
   ];

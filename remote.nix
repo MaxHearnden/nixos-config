@@ -13,7 +13,7 @@
       ];
       sshUser = "max";
       protocol = "ssh-ng";
-      hostName = "172.28.10.244?remote-program=/nix/var/nix/profiles/system/sw/bin/ssh-mac-x86";
+      hostName = "172.28.10.244?remote-program=/run/current-system/sw/bin/ssh-mac-x86";
       maxJobs = 4;
     }
     {
@@ -24,7 +24,7 @@
       ];
       sshUser = "max";
       protocol = "ssh-ng";
-      hostName = "172.28.10.244?remote-program=/nix/var/nix/profiles/system/sw/bin/ssh-mac";
+      hostName = "172.28.10.244?remote-program=/run/current-system/sw/bin/ssh-mac";
       maxJobs = 8;
     }
   ];
