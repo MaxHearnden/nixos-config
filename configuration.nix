@@ -44,8 +44,8 @@
   services.httpd = {
     enable = true;
     enablePHP = true;
-    documentRoot = "/srv/webserver/root";
     virtualHosts.localhost = {
+      documentRoot = "/srv/webserver/root";
       listenAddresses = [
         "127.0.0.1"
       ];
