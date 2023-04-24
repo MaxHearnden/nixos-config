@@ -371,6 +371,8 @@
   services.openssh.forwardX11 = true;
 
   systemd.services.nixos-upgrade.requires = ["zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device"];
+  systemd.services.httpd.requires = ["srv-webserver.mount"];
+  systemd.services.httpd.after = ["srv-webserver.mount"];
 
   #containers.RedNix.nixpkgs = inputs.nixpkgs-unstable;
   #containers.RedNix.config =
