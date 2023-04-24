@@ -40,6 +40,7 @@
   services.sshd.enable = true;
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
+  nix.package = pkgs.nix.overrideAttrs ({patches ? [], ...}: {patches = patches ++ [./8255.patch];});
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
