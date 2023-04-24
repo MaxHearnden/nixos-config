@@ -45,7 +45,7 @@
     enable = true;
     enablePHP = true;
     virtualHosts.localhost = {
-      documentRoot = "/srv/webserver/root";
+      documentRoot = "/srv/webserver/shared/root";
       listenAddresses = [
         "127.0.0.1"
       ];
@@ -53,6 +53,10 @@
         index = "index.php index.html";
       };
     };
+  };
+  users.users.wwwrun = {
+    home = "/srv/webserver";
+    createHome = true;
   };
 
   # Pick only one of the below networking options.
@@ -374,8 +378,8 @@
   services.openssh.forwardX11 = true;
 
   systemd.services.nixos-upgrade.requires = ["zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device"];
-  systemd.services.httpd.requires = ["srv-webserver.mount"];
-  systemd.services.httpd.after = ["srv-webserver.mount"];
+  systemd.services.httpd.requires = ["srv-webserver-shared.mount"];
+  systemd.services.httpd.after = ["srv-webserver-shared.mount"];
 
   #containers.RedNix.nixpkgs = inputs.nixpkgs-unstable;
   #containers.RedNix.config =
@@ -415,7 +419,7 @@
     fsType = "nfs";
   };
 
-  fileSystems."/srv/webserver" = {
+  fileSystems."/srv/webserver/shared" = {
     device = "172.28.10.244:/Big/shared/webserver";
     options = config.fileSystems."/home/max/shared".options;
     fsType = "nfs";
