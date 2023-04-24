@@ -49,6 +49,9 @@
       listenAddresses = [
         "127.0.0.1"
       ];
+      locations."/" = {
+        index = "index.php index.html";
+      };
     };
   };
 
