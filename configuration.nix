@@ -410,6 +410,12 @@
     fsType = "nfs";
   };
 
+  fileSystems."/srv/webserver" = {
+    device = "172.28.10.244:/Big/shared/webserver";
+    options = config.fileSystems."/home/max/shared".options;
+    fsType = "nfs";
+  };
+
   fileSystems."/home/max/h-drive" = {
     device = "//homes.lancs.ac.uk/04/hearndem";
     options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "mfsymlinks" "nofail"];
