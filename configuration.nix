@@ -41,6 +41,15 @@
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
   nix.package = pkgs.nix.overrideAttrs ({patches ? [], ...}: {patches = patches ++ [./8255.patch];});
+  services.httpd = {
+    enable = true;
+    enablePHP = true;
+    virtualHosts.localhost = {
+      listenAddresses = [
+        "127.0.0.1"
+      ];
+    };
+  };
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
