@@ -431,6 +431,12 @@
     fsType = "cifs";
   };
 
+  fileSystems."/home/max/scc130-website" = {
+    device = "//scc-student-web.lancs.ac.uk/hearndem";
+    options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "nofail"];
+    fsType = "cifs";
+  };
+
   krb5 = {
     enable = true;
     libdefaults = {
