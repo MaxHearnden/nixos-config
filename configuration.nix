@@ -411,7 +411,7 @@
     {
       name = "wwwrun";
       ensurePermissions = {
-        "*.*" == "ALL PRIVILEGES";
+        "*.*" = "ALL PRIVILEGES";
       };
     }
   ];
