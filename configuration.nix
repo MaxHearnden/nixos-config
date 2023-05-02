@@ -199,7 +199,7 @@
       pioneer
       plover.dev
       pkg-config
-      inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.prismlauncher
+      prismlauncher
       #polymc
       qemu
       qpdfview
