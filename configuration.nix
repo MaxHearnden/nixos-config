@@ -121,14 +121,11 @@
     extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       ardour
-      autoconf
-      automake
       inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.authenticator
       bc
       binutils
       btop
       cabal2nix
-      cabal-install
       cargo-watch
       ungoogled-chromium
       cifs-utils
@@ -153,7 +150,6 @@
       pkgsCross.riscv32.buildPackages.gdb
       pkgsCross.riscv64.buildPackages.gdb
       gcc
-      gettext
       (haskellPackages.ghcWithPackages (pkgs: with pkgs; [ aeson monoidal-containers optparse-applicative statistics vector yaml]))
       # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
       gnome.ghex
