@@ -233,6 +233,12 @@
             sha256 = "sha256-DjRQDSsVThJ6lOkkS4TROyPHQXOchhT6YqWWmeTtihQ=";
           }
           {
+            name = "sync-scroll";
+            publisher = "dqisme";
+            version = "1.3.1";
+            sha256 = "sha256-bw3W1XOuaQSwkxqc+YQugUU2iyEj39MB2IDX9FSkOVY=";
+          }
+          {
             name = "vala";
             publisher = "prince781";
             version = "1.0.8";
