@@ -44,6 +44,7 @@
   services.httpd = {
     enable = true;
     enablePHP = true;
+    phpPackage = pkgs.php82;
     virtualHosts.localhost = {
       documentRoot = "/srv/webserver/shared/root";
       listenAddresses = [
