@@ -11,7 +11,7 @@
         "big-parallel"
         "benchmark"
       ];
-      sshUser = "max";
+      sshUser = "root";
       protocol = "ssh-ng";
       hostName = "172.28.10.244?remote-program=/run/current-system/sw/bin/ssh-mac-x86";
       maxJobs = 4;
@@ -22,7 +22,7 @@
         "big-parallel"
         "benchmark"
       ];
-      sshUser = "max";
+      sshUser = "root";
       protocol = "ssh-ng";
       hostName = "172.28.10.244?remote-program=/run/current-system/sw/bin/ssh-mac";
       maxJobs = 8;
