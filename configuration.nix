@@ -41,24 +41,24 @@
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
   nix.nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
   nix.package = pkgs.nix.overrideAttrs ({patches ? [], ...}: {patches = patches ++ [./8255.patch];});
-  services.httpd = {
-    enable = true;
-    enablePHP = true;
-    phpPackage = pkgs.php82;
-    virtualHosts.localhost = {
-      documentRoot = "/srv/webserver/shared/root";
-      listenAddresses = [
-        "127.0.0.1"
-      ];
-      locations."/" = {
-        index = "index.php index.html";
-      };
-    };
-  };
-  users.users.wwwrun = {
-    home = "/srv/webserver";
-    createHome = true;
-  };
+  # services.httpd = {
+  #   enable = true;
+  #   enablePHP = true;
+  #   phpPackage = pkgs.php82;
+  #   virtualHosts.localhost = {
+  #     documentRoot = "/srv/webserver/shared/root";
+  #     listenAddresses = [
+  #       "127.0.0.1"
+  #     ];
+  #     locations."/" = {
+  #       index = "index.php index.html";
+  #     };
+  #   };
+  # };
+  # users.users.wwwrun = {
+  #   home = "/srv/webserver";
+  #   createHome = true;
+  # };
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -380,8 +380,8 @@
   services.openssh.forwardX11 = true;
 
   systemd.services.nixos-upgrade.requires = ["zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device"];
-  systemd.services.httpd.requires = ["srv-webserver-shared.mount"];
-  systemd.services.httpd.after = ["srv-webserver-shared.mount"];
+  # systemd.services.httpd.requires = ["srv-webserver-shared.mount"];
+  # systemd.services.httpd.after = ["srv-webserver-shared.mount"];
 
   #containers.RedNix.nixpkgs = inputs.nixpkgs-unstable;
   #containers.RedNix.config =
@@ -401,23 +401,23 @@
   #      pkgs.file
   #    ];
   #  };
-  services.mysql.enable = true;
-  services.mysql.package = pkgs.mysql80;
-  services.mysql.ensureUsers = [
-    {
-      name = "max";
-      ensurePermissions = {
-        "*.*" = "ALL PRIVILEGES";
-      };
-    }
-    {
-      name = "wwwrun";
-      ensurePermissions = {
-        "*.*" = "ALL PRIVILEGES";
-      };
-    }
-  ];
-  services.mysql.ensureDatabases = [ "books" ];
+  # services.mysql.enable = true;
+  # services.mysql.package = pkgs.mysql80;
+  # services.mysql.ensureUsers = [
+  #   {
+  #     name = "max";
+  #     ensurePermissions = {
+  #       "*.*" = "ALL PRIVILEGES";
+  #     };
+  #   }
+  #   {
+  #     name = "wwwrun";
+  #     ensurePermissions = {
+  #       "*.*" = "ALL PRIVILEGES";
+  #     };
+  #   }
+  # ];
+  # services.mysql.ensureDatabases = [ "books" ];
   #virtualisation.waydroid.enable = true;
   #system.autoUpgrade.flake = "git+http://172.28.10.244:3000/zandoodle/nixos-config";
 
@@ -435,11 +435,11 @@
     fsType = "nfs";
   };
 
-  fileSystems."/srv/webserver/shared" = {
-    device = "172.28.10.244:/Big/shared/webserver";
-    options = config.fileSystems."/home/max/shared".options;
-    fsType = "nfs";
-  };
+  # fileSystems."/srv/webserver/shared" = {
+  #   device = "172.28.10.244:/Big/shared/webserver";
+  #   options = config.fileSystems."/home/max/shared".options;
+  #   fsType = "nfs";
+  # };
 
   fileSystems."/home/max/h-drive" = {
     device = "//homes.lancs.ac.uk/04/hearndem";
@@ -447,11 +447,11 @@
     fsType = "cifs";
   };
 
-  fileSystems."/home/max/scc130-website" = {
-    device = "//scc-student-web.lancs.ac.uk/hearndem";
-    options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "nofail"];
-    fsType = "cifs";
-  };
+  # fileSystems."/home/max/scc130-website" = {
+  #   device = "//scc-student-web.lancs.ac.uk/hearndem";
+  #   options = ["defaults" "uid=max" "gid=users" "cred=/root/lancaster-creds" "nofail"];
+  #   fsType = "cifs";
+  # };
 
   krb5 = {
     enable = true;
