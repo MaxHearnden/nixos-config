@@ -110,6 +110,7 @@
   };
 
   boot.tmpOnTmpfs = true;
+  boot.tmpOnTmpfsSize = "100%";
 
   #services.beesd.filesystems.big = {
   #  spec = "UUID=0379ef59-faa8-424c-89a7-cedc93956adc";
