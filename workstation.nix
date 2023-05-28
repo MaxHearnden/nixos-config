@@ -86,9 +86,11 @@
 
   services.nfs.server = {
     enable = true;
-    hostName = "172.28.10.244";
+    hostName = "172.28.10.244,192.168.2.1";
     exports = ''
       /Big/shared -mp=/Big,rw,all_squash,anonuid=1000,anongid=100,async max-nixos-* max-guix-*
+      /Big/shared/riscv/star64_root 192.168.2.0/24(rw,no_root_squash,mp=/Big)
+      /nix 192.168.2.0/24(ro,no_root_squash)
     '';
   };
   services.kerberos_server = {
