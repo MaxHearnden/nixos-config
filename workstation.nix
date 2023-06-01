@@ -42,15 +42,25 @@
   services.hydra.buildMachinesFiles = ["/hydra-machines"];
   services.hydra.useSubstitutes = true;
   systemd.timers.hydra-update-gc-roots.timerConfig.Persistent = true;
-  networking.interfaces.enp1s0.ipv4.addresses = [{address = "192.168.2.1"; prefixLength = 24;}];
-  networking.interfaces.enp1s0.useDHCP = false;
-  services.dhcpd4.enable = true;
-  services.dhcpd4.interfaces = [ "enp1s0" ];
-  services.dhcpd4.machines = [
+  systemd.network.networks.enp1s0.ipv4.addresses = [{address = "192.168.2.1"; prefixLength = 24;}];
+  systemd.network.networks.enp1s0.useDHCP = false;
+  systemd.network.networks.enp1s0.networkConfig = {
+    DHCPServer = true;
+  };
+  systemd.network.networks.enp1s0.dhcpServerConfig = {
+    BootServerAddress = "192.168.2.1";
+    BootFilename = "bootfile";
+    EmitDNS = false;
+    PoolOffset = "10";
+    PoolSize = 240;
+  };
+  systemd.network.networks.enp1s0.dhcpServerStaticLeases = [
     {
-      ethernetAddress = "d4:93:90:06:43:76";
-      hostName = "max-nixos-laptop";
-      ipAddress = "192.168.2.2";
+      dhcpServerStaticLeaseConfig = {
+        ethernetAddress = "d4:93:90:06:43:76";
+        hostName = "max-nixos-laptop";
+        ipAddress = "192.168.2.2";
+      };
     }
 /*    {
       ethernetAddress = "a0:36:9f:c3:d4:c1";
@@ -58,13 +68,13 @@
       ipAddress = "192.168.2.1";
     }*/
   ];
-  services.dhcpd4.extraConfig = ''
-    option subnet-mask 255.255.255.0;
-    option broadcast-address 192.168.2.255;
-    subnet 192.168.2.0 netmask 255.255.255.0 {
-      range 192.168.2.10 192.168.2.250;
-    }
-  '';
+  # services.dhcpd4.extraConfig = ''
+  #   option subnet-mask 255.255.255.0;
+  #   option broadcast-address 192.168.2.255;
+  #   subnet 192.168.2.0 netmask 255.255.255.0 {
+  #     range 192.168.2.10 192.168.2.250;
+  #   }
+  # '';
   services.nix-serve.enable = true;
   services.nix-serve.openFirewall = true;
   services.nix-serve.bindAddress = "192.168.2.1";
@@ -72,11 +82,16 @@
   services.gitea = {
     enable = true;
     database.type = "postgres";
-    settings.service.DISABLE_REGISTRATION = true;
-    httpAddress = "172.28.10.244";
-    domain = "172.28.10.244";
-    rootUrl = "http://172.28.10.244:3000";
-    settings.security.DISABLE_GIT_HOOKS=false;
+    settings = {
+      security.DISABLE_GIT_HOOKS=false;
+      server = {
+        DOMAIN = "172.28.10.244";
+        HTTP_ADDR = "172.28.10.244"; 
+      };
+      service = {
+        DISABLE_REGISTRATION = true;
+      };
+    };
   };
   services.ratbagd.enable = true;
   systemd.services.nixos-upgrade.requires = ["gitea.service"];
@@ -111,8 +126,10 @@
     options = ["x-systemd.after=nfs-server.service"];
   };
 
-  boot.tmpOnTmpfs = true;
-  boot.tmpOnTmpfsSize = "100%";
+  boot.tmp = {
+    useTmpfs = true;
+    tmpfsSize = "100%";
+  };
 
   #services.beesd.filesystems.big = {
   #  spec = "UUID=0379ef59-faa8-424c-89a7-cedc93956adc";
@@ -165,13 +182,13 @@
     baseurl = "http://172.28.10.244:3001";
   };
 
-  services.snapper = {
-    configs = {
-      big = {
-        subvolume = "/Big";
-      };
-    };
-  };
+  # services.snapper = {
+  #   configs = {
+  #     big = {
+  #       subvolume = "/Big";
+  #     };
+  #   };
+  # };
   networking = {
     nat = {
       enable = true;

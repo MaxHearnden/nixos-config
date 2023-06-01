@@ -14,7 +14,6 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.grub = {
     enable = true;
-    version = 2;
     device = "nodev";
     efiSupport = true;
     extraEntries = ''
@@ -122,7 +121,7 @@
     extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       ardour
-      inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.authenticator
+      authenticator
       bc
       binutils
       btop
@@ -163,7 +162,7 @@
       graphviz
       gtkterm
       guile_3_0
-      (inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.haskell-language-server.override {supportedGhcVersions = ["90" "927" "944" "945"];})
+      (haskell-language-server.override {supportedGhcVersions = ["90" "927" "944" "945"];})
       hpack
       headsetcontrol
       inputs.haskell-nix.packages.x86_64-linux.hix
@@ -204,7 +203,7 @@
       inputs.math104.packages.x86_64-linux.rEnv
       rhythmbox
       inputs.math104.packages.x86_64-linux.rstudioEnv
-      inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.rustup
+      rustup
       rust-analyzer
       simple-http-server
       simutrans
@@ -377,7 +376,7 @@
   #system.autoUpgrade.flake = "/etc/nixos";
   #system.autoUpgrade.flags = ["--recreate-lock-file" "--refresh" "--no-write-lock-file"];
 #  android_sdk.accept_licence = true;
-  services.openssh.forwardX11 = true;
+  services.openssh.settings.X11Forwarding = true;
 
   systemd.services.nixos-upgrade.requires = ["zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device"];
   # systemd.services.httpd.requires = ["srv-webserver-shared.mount"];
