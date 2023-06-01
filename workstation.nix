@@ -42,24 +42,22 @@
   services.hydra.buildMachinesFiles = ["/hydra-machines"];
   services.hydra.useSubstitutes = true;
   systemd.timers.hydra-update-gc-roots.timerConfig.Persistent = true;
-  systemd.network.networks.enp1s0.ipv4.addresses = [{address = "192.168.2.1"; prefixLength = 24;}];
-  systemd.network.networks.enp1s0.useDHCP = false;
+  networking.interfaces.enp1s0.ipv4.addresses = [{address = "192.168.2.1"; prefixLength = 24;}];
+  networking.interfaces.enp1s0.useDHCP = false;
+  systemd.network.enable = true;
   systemd.network.networks.enp1s0.networkConfig = {
     DHCPServer = true;
   };
   systemd.network.networks.enp1s0.dhcpServerConfig = {
-    BootServerAddress = "192.168.2.1";
-    BootFilename = "bootfile";
     EmitDNS = false;
-    PoolOffset = "10";
+    PoolOffset = 10;
     PoolSize = 240;
   };
   systemd.network.networks.enp1s0.dhcpServerStaticLeases = [
     {
       dhcpServerStaticLeaseConfig = {
-        ethernetAddress = "d4:93:90:06:43:76";
-        hostName = "max-nixos-laptop";
-        ipAddress = "192.168.2.2";
+        MACAddress = "d4:93:90:06:43:76";
+        Address = "192.168.2.2";
       };
     }
 /*    {
