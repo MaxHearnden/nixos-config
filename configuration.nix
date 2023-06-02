@@ -334,6 +334,8 @@
     joinNetworks = [ "8056c2e21c3d4b0c" ];
     enable = true;
   };
+  services.gnome.games.enable = true;
+  services.gnome.core-developer-tools.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 /*  nix.buildMachines = [
     {
