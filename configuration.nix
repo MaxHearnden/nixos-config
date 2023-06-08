@@ -219,31 +219,16 @@
       vlc
       (vscode-with-extensions.override {
         vscode = vscodium;
-        vscodeExtensions = with vscode-extensions; [
-          matklad.rust-analyzer
-          haskell.haskell
-          justusadam.language-haskell
-          jnoortheen.nix-ide
-        ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          {
-            name = "autoconf";
-            publisher = "maelvalais";
-            version = "0.2.0";
-            sha256 = "sha256-DjRQDSsVThJ6lOkkS4TROyPHQXOchhT6YqWWmeTtihQ=";
-          }
-          {
-            name = "sync-scroll";
-            publisher = "dqisme";
-            version = "1.3.1";
-            sha256 = "sha256-bw3W1XOuaQSwkxqc+YQugUU2iyEj39MB2IDX9FSkOVY=";
-          }
-          {
-            name = "vala";
-            publisher = "prince781";
-            version = "1.0.8";
-            sha256 = "sha256-IuIb7vLNiE3rzVHOsjInaYLzNYORbwabQq0bfaPLlqc=";
-          }
-        ];
+        vscodeExtensions =
+          let exts = inputs.vscode-extensions.extensions.${system}.vscode-marketplace; in
+            builtins.attrValues {
+              inherit (exts.rust-lang) rust-analyzer;
+              inherit (exts.haskell) haskell;
+              inherit (exts.justusadam) language-haskell;
+              inherit (exts.jnoortheen) nix-ide;
+              inherit (exts.maelvalais) autoconf;
+              inherit (exts.prince781) vala;
+            };
       })
       vulnix
       w3m
