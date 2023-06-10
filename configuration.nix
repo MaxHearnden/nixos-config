@@ -279,6 +279,7 @@
   # ];
   environment.systemPackages = with pkgs; [
     gitFull
+    gnomeExtensions.backslide
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
