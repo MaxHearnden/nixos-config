@@ -118,7 +118,7 @@
   users.groups.sh = {};
   users.users.max = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "adbusers" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       ardour
       authenticator
@@ -469,5 +469,7 @@
   };
 
   services.cachefilesd.enable = true;
+
+  programs.adb.enable = true;
 
 }
