@@ -3,16 +3,6 @@
     ./remote.nix
     ./hardware-configuration/pc.nix
   ];
-  services = {
-    xserver = {
-      displayManager = {
-        gdm = {
-          autoSuspend = false;
-        };
-      };
-      videoDrivers = [ "nvidia" ];
-    };
-  };
   boot = {
     extraModulePackages = [
       config.boot.kernelPackages.rtl88x2bu
@@ -25,17 +15,27 @@
     # }).linuxKernel.packages.linux_6_1;
     loader = {
       grub = {
-        useOSProber = true;
         gfxmodeEfi = "1920x1080,auto";
+        useOSProber = true;
       };
     };
     tmp = {
-      useTmpfs = true;
       tmpfsSize = "100%";
+      useTmpfs = true;
     };
   };
   networking = {
     hostName = "max-nixos-pc";
+  };
+  services = {
+    xserver = {
+      displayManager = {
+        gdm = {
+          autoSuspend = false;
+        };
+      };
+      videoDrivers = [ "nvidia" ];
+    };
   };
 
 }
