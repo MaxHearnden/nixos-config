@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{pkgs, config, ...}:
 
 {
   imports = [./configuration.nix];
@@ -68,7 +68,9 @@
     };
     timers = {
       nixos-upgrade = {
-        Persistent = true;
+        timerConfig = {
+          Persistent = true;
+        };
       };
     };
   };

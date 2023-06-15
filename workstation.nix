@@ -1,5 +1,7 @@
+{ pkgs, config, ... }:
+
 {
-  imports = [./configuration.nix ./hardware-configurations/workstation.nix];
+  imports = [./configuration.nix ./hardware-configuration/workstation.nix];
   boot = {
     tmp = {
       tmpfsSize = "100%";
@@ -45,7 +47,9 @@
   };
   networking = {
     firewall = {
-      ztmjfp7kiq.allowedTCPPorts = [ 8080 3000 2049 ];
+      interfaces = {
+        ztmjfp7kiq.allowedTCPPorts = [ 8080 3000 2049 ];
+      };
     };
     hostName = "max-nixos-workstation";
   };
@@ -74,7 +78,7 @@
         max_output_size = 8000000000
         Include /var/lib/hydra/gitea_authorisations.conf
       '';
-      hydraUrl = "http://172.28.10.244:8080";
+      hydraURL = "http://172.28.10.244:8080";
       listenHost = "172.28.10.244";
       notificationSender = "hydra@example.com";
       port = 8080;
@@ -169,7 +173,7 @@
         unitConfig = {
           X-StopOnRemoval = false;
         };
-        wants = [ "network-online.target" "gitea.service" ]
+        wants = [ "network-online.target" "gitea.service" ];
       };
     };
     timers = {
