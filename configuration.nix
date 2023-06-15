@@ -202,6 +202,9 @@
         X11Forwarding = true;
       };
     };
+    sshd = {
+      enable = true;
+    };
     xserver = {
       desktopManager = {
         gnome = {
