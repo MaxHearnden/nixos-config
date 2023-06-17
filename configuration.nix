@@ -273,7 +273,6 @@
           ardour
           authenticator
           bc
-          binutils
           btop
           cabal2nix
           cargo-watch
@@ -299,7 +298,6 @@
           pkgsCross.mips64el-linux-gnuabi64.buildPackages.gdb
           pkgsCross.riscv32.buildPackages.gdb
           pkgsCross.riscv64.buildPackages.gdb
-          gcc
           (haskellPackages.ghcWithPackages (pkgs: with pkgs; [ aeson monoidal-containers optparse-applicative statistics vector yaml]))
           # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
           gnome.ghex
@@ -317,10 +315,7 @@
           headsetcontrol
           inputs.haskell-nix.packages.x86_64-linux.hix
           htop
-          jdk
-          libelf
           libreoffice-fresh
-          libtool
           linux-manual
           lshw
           man-pages
@@ -333,17 +328,14 @@
           nix-prefetch-scripts
           nix-top
           nmap
-          node2nix
           nodejs
           notepadqq
     #      (import inputs.obelisk {system = "x86_64-linux";}).command
           ocaml
-          openocd
           ormolu
           pijul
           pioneer
           plover.dev
-          pkg-config
           prismlauncher
           #polymc
           qemu
@@ -394,7 +386,6 @@
           yacas
     #      (import (pkgs.fetchurl {url = "https://github.com/input-output-hk/haskell.nix/tarball/master";})).hix
           xorg.xhost
-          segger-jlink
           zgrviewer
         ];
       };
