@@ -68,7 +68,6 @@
         "defaults"
         "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device"
         "x-systemd.after=zerotierone.service"
-        "x-systemd.before=user-1000.slice"
         "nofail"
         "fsc"
         "softreval"
