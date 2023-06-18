@@ -43,6 +43,11 @@
   console = {
     keyMap = "uk";
   };
+  documentation = {
+    dev = {
+      enable = true;
+    };
+  };
   environment = {
     systemPackages = with pkgs; [
       gitFull
@@ -275,6 +280,7 @@
           bc
           btop
           cabal2nix
+          cairo
           cargo-watch
           ungoogled-chromium
           cifs-utils
@@ -301,6 +307,7 @@
           (haskellPackages.ghcWithPackages (pkgs: with pkgs; [ aeson monoidal-containers optparse-applicative statistics vector yaml]))
           # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
           gnome.ghex
+          gtk4
           ghidra
           giac-with-xcas
           gnome.gnome-tweaks
@@ -315,6 +322,8 @@
           headsetcontrol
           inputs.haskell-nix.packages.x86_64-linux.hix
           htop
+          libsoup_3
+          libxml2
           libreoffice-fresh
           linux-manual
           lshw
@@ -333,6 +342,7 @@
     #      (import inputs.obelisk {system = "x86_64-linux";}).command
           ocaml
           ormolu
+          pango
           pijul
           pioneer
           plover.dev
