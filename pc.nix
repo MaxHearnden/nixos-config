@@ -35,6 +35,13 @@
         };
       };
       videoDrivers = [ "nvidia" ];
+      xrandrHeads = [
+        "HDMI-0"
+        {
+          output = "DVI-D-0";
+          primary = true;
+        }
+      ];
     };
   };
 
