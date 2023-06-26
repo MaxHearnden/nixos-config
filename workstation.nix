@@ -147,7 +147,7 @@
         script = ''
           exec ${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system
         '';
-        wantedBy = [ "default.target" ];
+        wantedBy = [ "multi-user.target" ];
       };
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
