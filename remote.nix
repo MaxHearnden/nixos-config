@@ -50,7 +50,7 @@
         requires = [ "network-online.target" "zerotierone.service" ];
         restartIfChanged = false;
         script = ''
-          config="$(${config.programs.ssh.package}/bin/ssh 172.28.10.244 readlink -e /nix/var/nix/profiles/all/${config.networking.hostName})"
+          config="$(${pkgs.curl}/bin/curl "http://172.28.10.244:8081/${config.networking.hostName}" -f)"
           nix-env -p /nix/var/nix/profiles/system --set "$config"
           # booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
           # built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
