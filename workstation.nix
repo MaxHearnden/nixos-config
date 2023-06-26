@@ -48,7 +48,7 @@
   networking = {
     firewall = {
       interfaces = {
-        ztmjfp7kiq.allowedTCPPorts = [ 8080 3000 2049 ];
+        ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
       };
     };
     hostName = "max-nixos-workstation";
