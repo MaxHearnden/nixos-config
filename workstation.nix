@@ -148,6 +148,12 @@
           exec ${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system
         '';
         wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Restart = "always";
+          User = "latest-system";
+          Group = "latest-system";
+          DynamicUser = true;
+        };
       };
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
