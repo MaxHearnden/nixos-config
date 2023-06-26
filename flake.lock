@@ -170,11 +170,11 @@
     "hackage": {
       "flake": false,
       "locked": {
-        "lastModified": 1686788838,
-        "narHash": "sha256-1a68kNzL3DD9DiBTFounFMzofxH9Rw58IqFvSRnkaFA=",
+        "lastModified": 1687739278,
+        "narHash": "sha256-Zdl0SDZgqX2i/T2acvAXzUMAspkiNZs2hr2d7Jqixk0=",
         "owner": "input-output-hk",
         "repo": "hackage.nix",
-        "rev": "d59ae0a635f1ca8a6c65180e2445d798c2df5e95",
+        "rev": "2ff1a1a36bcfffccecd363f62c29a30544235f9f",
         "type": "github"
       },
       "original": {
@@ -214,11 +214,11 @@
         "stackage": "stackage"
       },
       "locked": {
-        "lastModified": 1686802358,
-        "narHash": "sha256-/PTB/phUOCrfUQZ8v7XHWL69ewVmtZAKXbI4HtJ/sNA=",
+        "lastModified": 1687740716,
+        "narHash": "sha256-3dyXp3vM0hxB7lHrHridpn4dHX1MQXXEdSj5cufDAGY=",
         "owner": "input-output-hk",
         "repo": "haskell.nix",
-        "rev": "d3def950c4a3a8afbcdb8df33da51e9fc07d8833",
+        "rev": "f02f3d959189124f34b02912ac97a73cdc6a36bb",
         "type": "github"
       },
       "original": {
@@ -315,6 +315,26 @@
         "ref": "hkm/remote-iserv",
         "type": "git",
         "url": "https://gitlab.haskell.org/hamishmack/iserv-proxy.git"
+      }
+    },
+    "latest-system": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1687739093,
+        "narHash": "sha256-+79/8KKdeBib7SW6oZ5d1OguUdncFtj0c29qQSjZ9E0=",
+        "ref": "refs/heads/main",
+        "rev": "d59f24d70c7c11342051fa263ffb8ddbc412092c",
+        "revCount": 2,
+        "type": "git",
+        "url": "http://172.28.10.244:3000/zandoodle/latest-system"
+      },
+      "original": {
+        "type": "git",
+        "url": "http://172.28.10.244:3000/zandoodle/latest-system"
       }
     },
     "lowdown-src": {
@@ -520,11 +540,11 @@
     },
     "nixpkgs-unstable_2": {
       "locked": {
-        "lastModified": 1686592866,
-        "narHash": "sha256-riGg89eWhXJcPNrQGcSwTEEm7CGxWC06oSX44hajeMw=",
+        "lastModified": 1687502512,
+        "narHash": "sha256-dBL/01TayOSZYxtY4cMXuNCBk8UMLoqRZA+94xiFpJA=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0eeebd64de89e4163f4d3cf34ffe925a5cf67a05",
+        "rev": "3ae20aa58a6c0d1ca95c9b11f59a2d12eebc511f",
         "type": "github"
       },
       "original": {
@@ -536,11 +556,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1686736559,
-        "narHash": "sha256-YyUSVoOKIDAscTx7IZhF9x3qgZ9dPNF19fKk+4c5irc=",
+        "lastModified": 1687555006,
+        "narHash": "sha256-GD2Kqb/DXQBRJcHqkM2qFZqbVenyO7Co/80JHRMg2U0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ddf4688dc7aeb14e8a3c549cb6aa6337f187a884",
+        "rev": "33223d479ffde3d05ac16c6dff04ae43cc27e577",
         "type": "github"
       },
       "original": {
@@ -570,6 +590,7 @@
     "root": {
       "inputs": {
         "haskell-nix": "haskell-nix",
+        "latest-system": "latest-system",
         "math104": "math104",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable_2",
@@ -579,11 +600,11 @@
     "stackage": {
       "flake": false,
       "locked": {
-        "lastModified": 1686787811,
-        "narHash": "sha256-/FaBD6F4PQghlESTogzDtKEtozmiPS+VLuYwKnm7iYU=",
+        "lastModified": 1687738286,
+        "narHash": "sha256-PY8LL6drVRnXCTOaXI6GSyk5FHM1Snhem900wFTDM9c=",
         "owner": "input-output-hk",
         "repo": "stackage.nix",
-        "rev": "6e1b365f280f69f321d9f564c849e1912a16f7ea",
+        "rev": "1ec4320bc0c0e805b9accc3efec7a7db15f9d837",
         "type": "github"
       },
       "original": {
@@ -616,11 +637,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1686792204,
-        "narHash": "sha256-nuNalSaeb77kb1M1p9UnWE2/ckE6z25zLyKBb62Ykhs=",
+        "lastModified": 1687657802,
+        "narHash": "sha256-VLfCDWLgniXoKW8m+tKbm1cetTPYX58qvkt2+IBiUJs=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "b03bae8a54cd3a92d1458bd3a34132582539cd05",
+        "rev": "635856df7baed510c415466da914b12a2241324c",
         "type": "github"
       },
       "original": {
