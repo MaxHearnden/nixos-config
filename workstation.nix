@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, inputs, ... }:
 
 {
   imports = [./configuration.nix ./hardware-configuration/workstation.nix];
