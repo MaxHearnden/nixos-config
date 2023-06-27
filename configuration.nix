@@ -285,6 +285,7 @@
           ungoogled-chromium
           cifs-utils
           darcs
+          dbus
           discord
           dwarf-fortress
           emacs
