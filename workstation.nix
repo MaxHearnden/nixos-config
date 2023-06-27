@@ -153,6 +153,8 @@
           exec ${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system
         '';
         wantedBy = [ "multi-user.target" ];
+        after = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
         serviceConfig = {
           Restart = "always";
           User = "latest-system";
