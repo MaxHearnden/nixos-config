@@ -191,6 +191,11 @@
     cachefilesd = {
       enable = true;
     };
+    dbus = {
+      packages = [
+        inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
+      ];
+    };
     gnome = {
       core-developer-tools = {
         enable = true;
@@ -323,6 +328,7 @@
           headsetcontrol
           inputs.haskell-nix.packages.x86_64-linux.hix
           htop
+          inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
           libsoup_3
           libxml2
           libreoffice-fresh

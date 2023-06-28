@@ -16,6 +16,7 @@
   inputs.math104.inputs.nixpkgs.follows = "nixpkgs";
   inputs.latest-system.url = "git+http://172.28.10.244:3000/zandoodle/latest-system";
   inputs.latest-system.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.keyboard_mouse_emulate_on_raspberry.url = "git+http://172.28.10.244:3000/zandoodle/keyboard_mouse_emulate_on_raspberry";
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs-unstable";
   #inputs.nixpkgs-mipsel.url = "github:maxHearnden/nixpkgs/patch-1";
