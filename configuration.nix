@@ -81,6 +81,9 @@
     };
   };
   hardware = {
+    bluetooth = {
+      disabledPlugins = "input";
+    };
     enableAllFirmware = true;
   };
   i18n = {
