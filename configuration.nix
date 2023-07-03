@@ -82,7 +82,7 @@
   };
   hardware = {
     bluetooth = {
-      disabledPlugins = "input";
+      disabledPlugins = ["input"];
     };
     enableAllFirmware = true;
   };
