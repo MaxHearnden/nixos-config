@@ -326,7 +326,7 @@
           graphviz
           gtkterm
           guile_3_0
-          (haskell-language-server.override {supportedGhcVersions = ["90" "927" "944" "945"];})
+          # (haskell-language-server.override {supportedGhcVersions = ["90" "927" "944" "945"];})
           hpack
           headsetcontrol
           inputs.haskell-nix.packages.x86_64-linux.hix
