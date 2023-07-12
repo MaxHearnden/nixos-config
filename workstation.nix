@@ -59,14 +59,14 @@
     hostName = "max-nixos-workstation";
     interfaces = {
       enp1s0 = {
-        ipv4 = {
-          addresses = [
-            {
-              address = "192.168.2.1";
-              prefixLength = 24;
-            }
-          ];
-        };
+        # ipv4 = {
+        #   addresses = [
+        #     {
+        #       address = "192.168.2.1";
+        #       prefixLength = 24;
+        #     }
+        #   ];
+        # };
         useDHCP = false;
       };
     };
@@ -141,6 +141,7 @@
       enable = true;
       networks = {
         enp1s0 = {
+          address = ["192.168.2.1/24"];
           dhcpServerConfig = {
             EmitDNS = false;
             PoolOffset = 10;
