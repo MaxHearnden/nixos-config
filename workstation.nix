@@ -154,6 +154,7 @@
               };
             }
           ];
+          name = "enp1s0";
           networkConfig = {
             DHCPServer = true;
           };
