@@ -1,6 +1,7 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
+  imports = [ ./dev-environment.nix ];
   boot = {
     binfmt = {
       emulatedSystems = [
