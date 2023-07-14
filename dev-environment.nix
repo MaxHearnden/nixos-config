@@ -5,7 +5,7 @@
         packages = with pkgs; [
           (myEnvFun {
             name = "dev";
-            nativeBuildInputs = [
+            buildInputs = [
               autoconf
               automake
               bison
@@ -15,8 +15,7 @@
               meson
               pkg-config
               vala
-            ];
-            buildInputs = [
+            ] ++ [
               atk
               dbus
               cairo
