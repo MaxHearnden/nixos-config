@@ -26,7 +26,7 @@
               libgee
               libsoup
               libsoup_3
-              libxml
+              libxml2
               pango
               SDL2
             ];
