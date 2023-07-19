@@ -212,6 +212,9 @@
       enable = true;
       extraOptions = "--xkb-layout gb";
     };
+    ntp = {
+      enable = true;
+    };
     openssh = {
       settings = {
         X11Forwarding = true;
