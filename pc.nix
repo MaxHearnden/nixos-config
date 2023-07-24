@@ -4,9 +4,9 @@
     ./hardware-configuration/pc.nix
   ];
   boot = {
-    extraModulePackages = [
-      config.boot.kernelPackages.rtl88x2bu
-    ];
+    # extraModulePackages = [
+    #   config.boot.kernelPackages.rtl88x2bu
+    # ];
     # kernelPackages = lib.mkForce (import inputs.nixpkgs-unstable {
     #   localSystem = config.nixpkgs.localSystem;
     #   config = {
