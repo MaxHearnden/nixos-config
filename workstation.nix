@@ -70,6 +70,11 @@
         # useDHCP = false;
       };
     };
+    networkmanager = {
+      unmanaged = [
+        "enp1s0"
+      ];
+    };
   };
   services = {
     gitea = {
