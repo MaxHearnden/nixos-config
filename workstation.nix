@@ -140,7 +140,7 @@
     network = {
       enable = true;
       networks = {
-        10-enp1s0 = {
+        "10-enp1s0" = {
           address = ["192.168.2.1/24"];
           dhcpServerConfig = {
             EmitDNS = false;
