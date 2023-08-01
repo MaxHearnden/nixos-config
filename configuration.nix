@@ -220,6 +220,12 @@
         X11Forwarding = true;
       };
     };
+    printing = {
+      enable = true;
+      drivers = [
+        pkgs.cnijfilter2
+      ];
+    };
     sshd = {
       enable = true;
     };
