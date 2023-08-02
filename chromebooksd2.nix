@@ -15,6 +15,11 @@
   networking = {
     hostName = "max-nixos-chromebooksd2";
   };
+  nix = {
+    gc = {
+      automatic = lib.mkForce false;
+    };
+  };
   swapDevices = [
     {
       device = "/swapfile";
