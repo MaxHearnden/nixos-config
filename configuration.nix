@@ -376,6 +376,7 @@
           simple-http-server
           simutrans
           snis
+          sshfs
           stack
           tea
           #teams
