@@ -373,6 +373,7 @@
           inputs.math104.packages.x86_64-linux.rstudioEnv
           rustup
           rust-analyzer
+          scummvm
           simple-http-server
           simutrans
           snis
