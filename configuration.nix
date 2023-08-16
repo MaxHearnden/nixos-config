@@ -185,6 +185,9 @@
     steam = {
       enable = true;
     };
+    wireshark = {
+      enable = true;
+    };
   };
   security = {
     doas = {
@@ -290,7 +293,7 @@
     };
     users = {
       max = {
-        extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "adbusers" ];
+        extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "adbusers" "wireshark" ];
         isNormalUser = true;
         packages = with pkgs; [
           ardour
