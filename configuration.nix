@@ -310,6 +310,7 @@
           discord
           dwarf-fortress
           emacs
+          erlang
           file
           firefox
           fossil
