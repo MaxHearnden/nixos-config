@@ -371,7 +371,7 @@
           qemu
           qpdfview
           qtspim
-          # rWrapper
+          rebar3
           inputs.math104.packages.x86_64-linux.rEnv
           rhythmbox
           inputs.math104.packages.x86_64-linux.rstudioEnv
