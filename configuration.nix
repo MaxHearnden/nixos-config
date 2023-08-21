@@ -362,6 +362,7 @@
     #      (import inputs.obelisk {system = "x86_64-linux";}).command
           ocaml
           ormolu
+          p7zip
           pango
           pijul
           pioneer
