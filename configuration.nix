@@ -342,6 +342,7 @@
           inputs.haskell-nix.packages.x86_64-linux.hix
           htop
           inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
+          lfe
           libsoup_3
           libxml2
           libreoffice-fresh
