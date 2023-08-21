@@ -172,6 +172,11 @@
           };
         };
       };
+      wait-online = {
+        ignoredInterfaces = [
+          "enp1s0"
+        ];
+      };
     };
     services = {
       latest-system = {
