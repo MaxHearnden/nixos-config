@@ -159,6 +159,10 @@
     adb = {
       enable = true;
     };
+    java = {
+      binfmt = true;
+      enable = true;
+    };
     neovim = {
       configure = {
         customRC = ''
