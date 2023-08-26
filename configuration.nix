@@ -331,6 +331,7 @@
           # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
           gnome.ghex
           gtk4
+          github-cli
           ghidra
           giac-with-xcas
           gnome.gnome-tweaks
