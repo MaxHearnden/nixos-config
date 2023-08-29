@@ -241,9 +241,15 @@
         gnome = {
           enable = true;
         };
+        xterm = {
+          enable = true;
+        };
       };
       displayManager = {
         gdm = {
+          enable = true;
+        };
+        startx = {
           enable = true;
         };
       };
