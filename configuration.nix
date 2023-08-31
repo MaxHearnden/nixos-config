@@ -374,6 +374,7 @@
     #      (import inputs.obelisk {system = "x86_64-linux";}).command
           ocaml
           ormolu
+          oversteer
           p7zip
           pango
           pijul
