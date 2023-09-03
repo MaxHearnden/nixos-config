@@ -236,6 +236,12 @@
     sshd = {
       enable = true;
     };
+    udev = {
+      enable = true;
+      packages = [
+        pkgs.oversteer
+      ];
+    };
     xserver = {
       desktopManager = {
         gnome = {
