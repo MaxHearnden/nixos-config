@@ -237,7 +237,6 @@
       enable = true;
     };
     udev = {
-      enable = true;
       packages = [
         pkgs.oversteer
       ];
