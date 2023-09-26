@@ -397,6 +397,7 @@
           rustup
           rust-analyzer
           scummvm
+          shellcheck
           simple-http-server
           simutrans
           snis
