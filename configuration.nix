@@ -329,6 +329,7 @@
           file
           firefox
           fossil
+          gcc
           pkgsCross.aarch64-multiplatform.buildPackages.gcc
           pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc
           pkgsCross.riscv32.buildPackages.gcc
