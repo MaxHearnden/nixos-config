@@ -159,6 +159,9 @@
     adb = {
       enable = true;
     };
+    fish = {
+      enable = true;
+    };
     java = {
       binfmt = true;
       enable = true;
@@ -442,6 +445,7 @@
           xorg.xhost
           zgrviewer
         ];
+        shell = pkgs.fish;
       };
     };
   };
