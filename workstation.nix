@@ -3,11 +3,11 @@
 {
   imports = [./configuration.nix ./hardware-configuration/workstation.nix];
   boot = {
-    loader = {
-      grub = {
-        default = 3;
-      };
-    };
+    # loader = {
+    #   grub = {
+    #     default = 3;
+    #   };
+    # };
     tmp = {
       tmpfsSize = "100%";
     };
