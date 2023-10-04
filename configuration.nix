@@ -292,8 +292,7 @@
   };
   system = {
     extraDependencies = [
-      inputs.haskell-nix.inputs.nixpkgs
-      inputs.nixpkgs
+      ./.
     ];
     stateVersion = "23.05";
   };
@@ -405,6 +404,7 @@
           rust-analyzer
           scummvm
           shellcheck
+          signal-desktop
           simple-http-server
           simutrans
           snis
