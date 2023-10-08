@@ -63,15 +63,15 @@
     hostName = "max-nixos-workstation";
     interfaces = {
       enp1s0 = {
-        # ipv4 = {
-        #   addresses = [
-        #     {
-        #       address = "192.168.2.1";
-        #       prefixLength = 24;
-        #     }
-        #   ];
-        # };
-        # useDHCP = false;
+        ipv4 = {
+          addresses = [
+            {
+              address = "192.168.2.1";
+              prefixLength = 24;
+            }
+          ];
+        };
+        useDHCP = false;
       };
     };
     networkmanager = {
@@ -115,6 +115,35 @@
       enable = true;
       realms."WORKSTATION" = {};
     };
+    kea = {
+      dhcp4 = {
+        enable = true;
+        settings = {
+          interfaces-config = {
+            interfaces = [
+              "enp1s0"
+            ];
+          };
+          lease-database = {
+            name = "/var/lib/kea/dhcp4.leases";
+            persist = "true";
+            type = "memfile";
+          };
+          rebind-timer = 2000;
+          renew-timer = 1000;
+          subnet4 = [
+            {
+              pools = [
+                {
+                  pool = "192.168.2.10 = 192.168.2.240";
+                }
+              ];
+              subnet = "192.168.2.0/24";
+            }
+          ];
+        };
+      };
+    };
     nfs = {
       server = {
         enable = true;
@@ -146,38 +175,38 @@
     };
   };
   systemd = {
-    network = {
-      enable = true;
-      networks = {
-        "10-enp1s0" = {
-          address = ["192.168.2.1/24"];
-          dhcpServerConfig = {
-            EmitDNS = false;
-            PoolOffset = 10;
-            PoolSize = 240;
-          };
-          dhcpServerStaticLeases = [
-            {
-              dhcpServerStaticLeaseConfig = {
-                MACAddress = "d4:93:90:06:43:76";
-                Address = "192.168.2.2";
-              };
-            }
-          ];
-          matchConfig = {
-            Name = "enp1s0";
-          };
-          networkConfig = {
-            DHCPServer = true;
-          };
-        };
-      };
-      wait-online = {
-        ignoredInterfaces = [
-          "enp1s0"
-        ];
-      };
-    };
+    # network = {
+    #   enable = true;
+    #   networks = {
+    #     "10-enp1s0" = {
+    #       address = ["192.168.2.1/24"];
+    #       dhcpServerConfig = {
+    #         EmitDNS = false;
+    #         PoolOffset = 10;
+    #         PoolSize = 240;
+    #       };
+    #       dhcpServerStaticLeases = [
+    #         {
+    #           dhcpServerStaticLeaseConfig = {
+    #             MACAddress = "d4:93:90:06:43:76";
+    #             Address = "192.168.2.2";
+    #           };
+    #         }
+    #       ];
+    #       matchConfig = {
+    #         Name = "enp1s0";
+    #       };
+    #       networkConfig = {
+    #         DHCPServer = true;
+    #       };
+    #     };
+    #   };
+    #   wait-online = {
+    #     ignoredInterfaces = [
+    #       "enp1s0"
+    #     ];
+    #   };
+    # };
     services = {
       latest-system = {
         script = ''
@@ -208,16 +237,16 @@
         restartIfChanged = false;
         script = ''
           config_all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
-          nix-env -p /nix/var/nix/profiles/all --set "$config_all"
-          config="$(readlink -e $config_all/${config.networking.hostName})"
-          nix-env -p /nix/var/nix/profiles/system --set "$config"
-          booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
-          built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-          #if [ "''${booted}" = "''${built}" ]; then
-            $config/bin/switch-to-configuration switch
-          #else
-          #  $config/bin/switch-to-configuration boot
-          #fi
+          nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
+          config="$(readlink -e "''${config_all}/${config.networking.hostName}")"
+          nix-env -p /nix/var/nix/profiles/system --set "''${config}"
+          # booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+          # built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+          # if [ "''${booted}" = "''${built}" ]; then
+            "''${config}/bin/switch-to-configuration" switch
+          # else
+          #   $config/bin/switch-to-configuration boot
+          # fi
         '';
         startAt = "17:45";
         unitConfig = {
