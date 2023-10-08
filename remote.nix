@@ -51,13 +51,13 @@
         restartIfChanged = false;
         script = ''
           config="$(${pkgs.curl}/bin/curl "http://172.28.10.244:8081/${config.networking.hostName}" -f)"
-          nix-env -p /nix/var/nix/profiles/system --set "$config"
+          nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           # booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
           # built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
           # if [ "''${booted}" = "''${built}" ]; then
           #   $config/bin/switch-to-configuration switch
           # else
-          $config/bin/switch-to-configuration boot
+          "''${config}/bin/switch-to-configuration" boot
           # fi
         '';
         unitConfig = {
