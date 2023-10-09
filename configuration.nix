@@ -16,6 +16,10 @@
       ];
     };
     kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
+    extraModulePackages = [
+      config.boot.kernelPackages.rtl8812au
+      config.boot.kernelPackages.rtl88x2bu
+    ];
     loader = {
       efi = {
         canTouchEfiVariables = true;
