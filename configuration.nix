@@ -15,7 +15,7 @@
         "riscv64-linux"
       ];
     };
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_1;
+    kernelPackages = pkgs.linuxKernel.packageAliases.linux_latest;
     extraModulePackages = [
       config.boot.kernelPackages.rtl8812au
       config.boot.kernelPackages.rtl88x2bu
@@ -288,6 +288,21 @@
     };
   };
   specialisation.nox.configuration = {
+    services = {
+      xserver = {
+        autorun = false;
+      };
+    };
+  };
+  specialisation.stable-linux.configuration = {
+    boot = {
+      kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_6_1;
+    };
+  };
+  specialisation.stable-linux-nox.configuration = {
+    boot = {
+      kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_6_1;
+    };
     services = {
       xserver = {
         autorun = false;
