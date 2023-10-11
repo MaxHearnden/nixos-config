@@ -126,7 +126,7 @@
           };
           lease-database = {
             name = "/var/lib/kea/dhcp4.leases";
-            persist = "true";
+            persist = true;
             type = "memfile";
           };
           rebind-timer = 2000;
