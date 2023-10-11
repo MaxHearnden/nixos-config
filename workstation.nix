@@ -240,13 +240,13 @@
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
           config="$(readlink -e "''${config_all}/${config.networking.hostName}")"
           nix-env -p /nix/var/nix/profiles/system --set "''${config}"
-          # booted="$(${pkgs.coreutils}/bin/readlink /run/booted-system/{initrd,kernel,kernel-modules})"
-          # built="$(${pkgs.coreutils}/bin/readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-          # if [ "''${booted}" = "''${built}" ]; then
+          if [ "$1" = --specialisation ]
+          then
+            "''${config}/bin/switch-to-configuration" boot
+            "''${config}/specialisation/$2/switch-to-configuration" test
+          else
             "''${config}/bin/switch-to-configuration" switch
-          # else
-          #   $config/bin/switch-to-configuration boot
-          # fi
+          fi
         '';
         startAt = "17:45";
         unitConfig = {

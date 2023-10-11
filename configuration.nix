@@ -298,6 +298,13 @@
     boot = {
       kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_6_1;
     };
+    systemd = {
+      services = {
+        nixos-upgrade-all = {
+          scriptArgs = "--specialisation stable-linux";
+        };
+      };
+    };
   };
   specialisation.stable-linux-nox.configuration = {
     boot = {
@@ -306,6 +313,13 @@
     services = {
       xserver = {
         autorun = false;
+      };
+    };
+    systemd = {
+      services = {
+        nixos-upgrade-all = {
+          scriptArgs = "--specialisation stable-linux-nox";
+        };
       };
     };
   };
