@@ -424,6 +424,7 @@
           pijul
           pioneer
           plover.dev
+          powertop
           prismlauncher
           #polymc
           qemu
