@@ -59,18 +59,18 @@
     ];
   };
   fileSystems = {
-    # "/home/max/h-drive" = {
-    #   device = "//homes.lancs.ac.uk/04/hearndem";
-    #   fsType = "cifs";
-    #   options = [
-    #     "defaults"
-    #     "uid=max"
-    #     "gid=users"
-    #     "cred=/root/lancaster-creds"
-    #     "mfsymlinks"
-    #     "nofail"
-    #   ];
-    # };
+    "/home/max/h-drive" = {
+      device = "//homes.lancs.ac.uk/04/hearndem";
+      fsType = "cifs";
+      options = [
+        "defaults"
+        "uid=max"
+        "gid=users"
+        "cred=/root/lancaster-creds"
+        "mfsymlinks"
+        "nofail"
+      ];
+    };
     "/home/max/shared" = {
       device = "172.28.10.244:/Big/shared";
       fsType = "nfs";
