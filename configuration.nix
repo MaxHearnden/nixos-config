@@ -412,6 +412,7 @@
           nix-prefetch
           nix-prefetch-scripts
           nix-top
+          mixxx
           nmap
           nodejs
           notepadqq
