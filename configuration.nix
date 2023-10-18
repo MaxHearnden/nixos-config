@@ -90,6 +90,13 @@
       disabledPlugins = ["input"];
     };
     enableAllFirmware = true;
+    pulseaudio = {
+      extraConfig = ''
+        .nofail
+        unload-module module-suspend-on-idle
+        .fail
+      '';
+    };
   };
   i18n = {
     defaultLocale = "en_GB.utf8";
