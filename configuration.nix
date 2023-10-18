@@ -131,6 +131,7 @@
         patches = patches ++ [ ./8255.patch ];
       }
     );
+    registry.nixpkgs.flake = inputs.nixpkgs;
     settings = {
       auto-optimise-store = true;
       experimental-features = [
