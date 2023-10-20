@@ -254,6 +254,9 @@
     sshd = {
       enable = true;
     };
+    tailscale = {
+      enable = true;
+    };
     udev = {
       packages = [
         pkgs.oversteer
