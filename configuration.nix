@@ -373,6 +373,7 @@
           dbus
           discord
           dwarf-fortress
+          elinks
           emacs
           erlang
           file
