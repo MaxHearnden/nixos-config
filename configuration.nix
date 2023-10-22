@@ -477,6 +477,7 @@
                   inherit (exts.jnoortheen) nix-ide;
                   inherit (exts.maelvalais) autoconf;
                   inherit (exts.prince781) vala;
+                  inherit (exts.theumletteam) umlet;
                 };
           })
           vulnix
