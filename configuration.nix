@@ -461,6 +461,7 @@
           #teams
           #texlive.combined.scheme-full
           thunderbird
+          umlet
           usbutils
           vdrift
           vim
