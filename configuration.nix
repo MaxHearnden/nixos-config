@@ -441,6 +441,7 @@
           prismlauncher
           #polymc
           qemu
+          qlcplus
           qpdfview
           qtspim
           rebar3
