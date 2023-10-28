@@ -374,6 +374,8 @@
           discord
           dwarf-fortress
           elinks
+          elmPackages.elm
+          elm2nix
           emacs
           erlang
           file
