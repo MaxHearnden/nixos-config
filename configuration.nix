@@ -400,6 +400,7 @@
           gimp
           git-cola
           golly
+          gradle
           graphviz
           gtkterm
           guile_3_0
