@@ -465,6 +465,7 @@
           #teams
           #texlive.combined.scheme-full
           thunderbird
+          nodePackages.uglify-js
           umlet
           usbutils
           vdrift
