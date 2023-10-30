@@ -439,6 +439,7 @@
           pango
           pijul
           pioneer
+          plantuml
           plover.dev
           powertop
           prismlauncher
