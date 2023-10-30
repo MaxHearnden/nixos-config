@@ -463,6 +463,7 @@
           sshfs
           stack
           tea
+          teams-for-linux
           #teams
           #texlive.combined.scheme-full
           thunderbird
