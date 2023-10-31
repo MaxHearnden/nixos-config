@@ -420,7 +420,9 @@
           lshw
           man-pages
           mercurial
+          meson
           mars-mips
+          minja
           niv
           nix-du
           nix-eval-jobs
