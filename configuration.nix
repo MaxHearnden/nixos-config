@@ -430,7 +430,7 @@
           mercurial
           meson
           mars-mips
-          minja
+          ninja
           niv
           nix-du
           nix-eval-jobs
