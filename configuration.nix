@@ -212,6 +212,14 @@
     doas = {
       enable = true;
     };
+    wrappers = {
+      "mount.nfs" = {
+        source = "${pkgs.nfs-utils}/bin/mount.nfs";
+        user = "root";
+        group = "root";
+        setuid = true;
+      };
+    };
   };
   services = {
     cachefilesd = {
