@@ -372,6 +372,7 @@
           authenticator
           bc
           btop
+          cabal-install
           cabal2nix
           cairo
           cargo-watch
