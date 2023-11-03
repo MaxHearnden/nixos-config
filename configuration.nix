@@ -473,7 +473,7 @@
           sshfs
           stack
           tea
-          teams-for-linux
+          inputs.nixpkgs-unstable.x86_64-linux.legacyPackages.teams-for-linux
           #teams
           #texlive.combined.scheme-full
           thunderbird
