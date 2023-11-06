@@ -428,6 +428,7 @@
           linux-manual
           lshw
           man-pages
+          maven
           mercurial
           meson
           mars-mips
