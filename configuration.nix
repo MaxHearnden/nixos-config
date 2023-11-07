@@ -53,11 +53,6 @@
       enable = true;
     };
   };
-  environment = {
-    systemPackages = with pkgs; [
-      gitFull
-    ];
-  };
   fileSystems = {
     "/home/max/h-drive" = {
       device = "//homes.lancs.ac.uk/04/hearndem";
@@ -175,6 +170,17 @@
     };
     fish = {
       enable = true;
+    };
+    git = {
+      enable = true;
+      package = pkgs.gitFull;
+      config = {
+        core = {
+          excludesFile = pkgs.writeText "gitignore" ''
+            .virtfs_metadata
+          '';
+        };
+      };
     };
     java = {
       binfmt = true;
