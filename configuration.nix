@@ -68,6 +68,8 @@
         "gid=users"
         "cred=/root/lancaster-creds"
         "mfsymlinks"
+        "file_mode=0700"
+        "dir_mode=0700"
         "nofail"
       ];
     };
