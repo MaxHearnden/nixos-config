@@ -56,7 +56,7 @@
         ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
         enp1s0 = {
           allowedTCPPorts = [ 53 ];
-          allowedUDPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 69 ];
         };
       };
     };
