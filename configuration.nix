@@ -450,6 +450,8 @@
           nix-prefetch
           nix-prefetch-scripts
           nix-top
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.m2-mesoplanet
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.m2-planet
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.mescc-tools
           mixxx
           nmap
