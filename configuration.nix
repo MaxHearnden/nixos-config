@@ -450,7 +450,7 @@
           nix-prefetch
           nix-prefetch-scripts
           nix-top
-          inputs.nixpkgs.legacyPackages.i686-linux.minimal-bootstrap.mescc-tools
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.mescc-tools
           mixxx
           nmap
           nodejs
