@@ -223,9 +223,11 @@
     # };
     services = {
       latest-system = {
-        script = ''
-          exec ${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system
-        '';
+        serviceConfig = {
+          ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system";
+          CapabilityBoundingSet = null;
+          NoNewPrivileges = true;
+        };
         wantedBy = [ "multi-user.target" ];
         after = [ "network-online.target" ];
         requires = [ "network-online.target" ];
