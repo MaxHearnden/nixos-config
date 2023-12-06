@@ -166,9 +166,9 @@
     _1password-gui = {
       enable = true;
     };
-    adb = {
-      enable = true;
-    };
+    # adb = {
+    #   enable = true;
+    # };
     fish = {
       enable = true;
     };
