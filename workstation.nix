@@ -227,6 +227,12 @@
           ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system";
           CapabilityBoundingSet = null;
           NoNewPrivileges = true;
+          RestrictNamespaces = true;
+          RestrictAddressFamilies="AF_INET";
+          PrivateDevices = true;
+          UMask = "0077";
+          SystemCallFilter = "@system-service";
+          ReadOnlyPaths = "/nix/store /nix/var/nix/profiles/all";
         };
         wantedBy = [ "multi-user.target" ];
         after = [ "network-online.target" ];
