@@ -55,7 +55,7 @@
   };
   fileSystems = {
     "/" = {
-      options = "noatime";
+      options = [ "noatime" ];
     };
     "/home/max/h-drive" = {
       device = "//homes.lancs.ac.uk/04/hearndem";
