@@ -15,7 +15,7 @@
         "riscv64-linux"
       ];
     };
-    kernelPackages = pkgs.linuxKernel.packages.linux_6_5;
+    kernelPackages = pkgs.linuxKernel.packageAliases.linux_latest;
     extraModulePackages = [
       config.boot.kernelPackages.rtl8812au
       config.boot.kernelPackages.rtl88x2bu
