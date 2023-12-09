@@ -400,6 +400,29 @@
           RestrictNamespaces = "user net mnt ipc pid uts";
         };
       };
+      tailscaled = {
+        serviceConfig = {
+          UMask = "0077";
+          BindPaths = "/var/lib/tailscale /etc/resolv.conf /etc/ssl /etc/static/ssl";
+          User = "tailscale";
+          Group = "tailscale";
+          DeviceAllow = ["/dev/tun" "/dev/net/tun"];
+          AmbientCapabilities = "CAP_SYS_MODULE CAP_NET_RAW CAP_NET_ADMIN";
+          # ProtectKernelModules = true;
+          ProtectProc = [ "invisible" ];
+          SystemCallFilter = [ "@system-service" ];
+          PrivateDevices = lib.mkForce false;
+          PrivateUsers = lib.mkForce false;
+          ProtectKernelModules = lib.mkForce false;
+          ProtectKernelTunables = lib.mkForce false;
+        };
+        wants = [ "modprobe@tun.service" ];
+        after = [ "modprobe@tun.service" ];
+        confinement = {
+          enable = true;
+          packages = [ pkgs.tailscale ];
+        };
+      };
     };
     tmpfiles = {
       rules = [
@@ -422,10 +445,15 @@
         home = "/home/max/shared";
         isSystemUser = true;
       };
+      tailscale = {
+        isSystemUser = true;
+        group = "tailscale";
+      };
     };
     groups = {
       nix-gc = {};
       sh = {};
+      tailscale = {};
     };
     users = {
       max = {
