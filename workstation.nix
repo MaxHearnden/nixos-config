@@ -276,7 +276,7 @@
           RestrictRealtime = true;
           ProtectHome = true;
           PrivateUsers = true;
-          SystemCallFilter = "@system-service @resources @privileged";
+          SystemCallFilter = [ "@system-service" "~@resources" ];
           IPAddressAllow = [ "172.28.0.0/16" "192.168.2.0/24" ];
           IPAddressDeny = "any";
           UMask = 0077;
