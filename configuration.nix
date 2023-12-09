@@ -371,6 +371,7 @@
           erlang
           file
           firefox
+          firmware-manager
           fossil
           gcc
           pkgsCross.aarch64-multiplatform.buildPackages.gcc
