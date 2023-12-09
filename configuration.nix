@@ -330,11 +330,32 @@
     ];
     stateVersion = "23.05";
   };
+  systemd = {
+    services = {
+      nix-gc = {
+        serviceConfig = {
+          BindReadOnlyPaths = "/nix/var/nix/daemon-socket /nix/var/nix/profiles";
+        };
+        confinement = {
+          enable = true;
+        };
+      };
+    };
+    tmpfiles = {
+      rules = [
+        "A+ - - - - /nix/var/nix/profiles u:nix-gc:rwx"
+      ];
+    };
+  };
   time = {
     timeZone = "Europe/London";
   };
   users = {
     extraUsers = {
+      nix-gc = {
+        isSystemUser = true;
+        group = "nix-gc";
+      };
       sh = {
         description = "A user to allow for ~sh instead of ~/shared";
         group = "sh";
@@ -343,6 +364,7 @@
       };
     };
     groups = {
+      nix-gc = {};
       sh = {};
     };
     users = {
