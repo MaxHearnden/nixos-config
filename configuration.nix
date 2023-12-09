@@ -339,9 +339,28 @@
           User = "nix-gc";
           Group = "nix-gc";
           ProtectHome = "tmpfs";
+          NoNewPrivileges = true;
+          RestrictAddressFamilies = "AF_UNIX";
           Environment = "HOME=/home/nix-gc";
           # SetLoginEnvironment = false;
           RestrictNamespaces = true;
+          UMask = "0077";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          SystemCallArchitectures = "native";
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          MemoryDenyWriteExecute = true;
+          CapabilityBoundingSet = "";
+          RemoveIPC = true;
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictRealtime = true;
+          PrivateNetwork = true;
+          IPAddressDeny = "any";
+          # PrivateDevices = true;
         };
         confinement = {
           enable = true;
