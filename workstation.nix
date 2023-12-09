@@ -206,11 +206,11 @@
     services = {
       latest-system = {
         serviceConfig = {
-          ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system";
+          ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system-systemd --protocol activate";
           CapabilityBoundingSet = null;
           NoNewPrivileges = true;
           RestrictNamespaces = true;
-          RestrictAddressFamilies="AF_INET";
+          RestrictAddressFamilies = "none";
           # PrivateDevices = true;
           UMask = "0077";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
@@ -218,6 +218,7 @@
           SystemCallArchitectures = "native";
           ProtectClock = true;
           ProtectKernelLogs = true;
+          PrivateNetwork = true;
           MemoryDenyWriteExecute = true;
           RestrictSUIDSGID = true;
           ProtectHostname = true;
@@ -227,13 +228,12 @@
           ProtectProc = "invisible";
           ProcSubset = "pid";
           ProtectHome = true;
+          IPAddressDeny = "any";
+          RestrictNetworkInterfaces = "ztmjfp7kiq";
           # RootDirectory = "/var/empty";
           # MountAPIVFS = true;
           # RootEphemeral = true;
         };
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-online.target" ];
-        requires = [ "network-online.target" ];
         confinement = {
           enable = true;
         };
@@ -276,6 +276,19 @@
           X-StopOnRemoval = false;
         };
         wants = [ "network-online.target" "gitea.service" ];
+      };
+    };
+    sockets = {
+      latest-system = {
+        listenStreams = ["172.28.10.244:8081"];
+        socketConfig = {
+          BindToDevice = "ztmjfp7kiq";
+          IPAddressAllow = "172.28.0.0/16";
+          IPAddressDeny = "any";
+        };
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
       };
     };
     timers = {
