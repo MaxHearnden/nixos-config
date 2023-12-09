@@ -421,11 +421,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1687739093,
-        "narHash": "sha256-+79/8KKdeBib7SW6oZ5d1OguUdncFtj0c29qQSjZ9E0=",
+        "lastModified": 1702098212,
+        "narHash": "sha256-rqXlffiU3nQTGj7dVeeoHQbW8sA5HGR443yBFivfFCo=",
         "ref": "refs/heads/main",
-        "rev": "d59f24d70c7c11342051fa263ffb8ddbc412092c",
-        "revCount": 2,
+        "rev": "e297d679d4f28d97211cdfa4e300b8dc55fb3839",
+        "revCount": 4,
         "type": "git",
         "url": "http://172.28.10.244:3000/zandoodle/latest-system"
       },
