@@ -231,7 +231,7 @@
           RestrictAddressFamilies="AF_INET";
           # PrivateDevices = true;
           UMask = "0077";
-          SystemCallFilter = "@system-service";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           BindReadOnlyPaths = "/nix/var/nix/profiles/all";
           SystemCallArchitectures = "native";
           ProtectClock = true;
@@ -244,6 +244,7 @@
           RemoveIPC = true;
           ProtectProc = "invisible";
           ProcSubset = "pid";
+          ProtectHome = true;
           # RootDirectory = "/var/empty";
           # MountAPIVFS = true;
           # RootEphemeral = true;
