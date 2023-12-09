@@ -381,14 +381,23 @@
       };
       nix-daemon = {
         serviceConfig = {
-          CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_CHOWN";
-          RootDirectory = "/var/empty";
-          TemporaryFileSystem = "/";
-          BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
-          BindPaths = "/nix /root/.cache/nix /tmp";
-          MemoryDenyWriteExecute = true;
+          CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER";
+          ProtectSystem = "strict";
+          # RootDirectory = "/var/empty";
+          # TemporaryFileSystem = "/";
+          # BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
+          # BindPaths = "/nix /root/.cache/nix /tmp";
+          ReadWritePaths = "/nix /root/.cache/nix /tmp";
           RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
-          PrivateMounts = true;
+          # PrivateMounts = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SocketBindDeny = "any";
+          RestrictNamespaces = "user net mnt ipc pid uts";
         };
       };
     };
