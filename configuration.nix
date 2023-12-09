@@ -334,7 +334,14 @@
     services = {
       nix-gc = {
         serviceConfig = {
-          BindReadOnlyPaths = "/nix/var/nix/daemon-socket /nix/var/nix/profiles";
+          BindReadOnlyPaths = "/nix/var/nix/daemon-socket";
+          BindPaths = "/nix/var/nix/profiles";
+          User = "nix-gc";
+          Group = "nix-gc";
+          ProtectHome = "tmpfs";
+          Environment = "HOME=/home/nix-gc";
+          # SetLoginEnvironment = false;
+          RestrictNamespaces = true;
         };
         confinement = {
           enable = true;
@@ -343,7 +350,7 @@
     };
     tmpfiles = {
       rules = [
-        "A+ - - - - /nix/var/nix/profiles u:nix-gc:rwx"
+        "A+ /nix/var/nix/profiles - - - - u:nix-gc:rwx"
       ];
     };
   };
