@@ -498,16 +498,11 @@
         isSystemUser = true;
         group = "tailscale";
       };
-      zerotier = {
-        isSystemUser = true;
-        group = "zerotier";
-      };
     };
     groups = {
       nix-gc = {};
       sh = {};
       tailscale = {};
-      zerotier = {};
     };
     users = {
       max = {
