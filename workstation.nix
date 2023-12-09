@@ -229,19 +229,35 @@
           NoNewPrivileges = true;
           RestrictNamespaces = true;
           RestrictAddressFamilies="AF_INET";
-          PrivateDevices = true;
+          # PrivateDevices = true;
           UMask = "0077";
           SystemCallFilter = "@system-service";
-          ReadOnlyPaths = "/nix/store /nix/var/nix/profiles/all";
+          BindReadOnlyPaths = "/nix/var/nix/profiles/all";
+          SystemCallArchitectures = "native";
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RemoveIPC = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          # RootDirectory = "/var/empty";
+          # MountAPIVFS = true;
+          # RootEphemeral = true;
         };
         wantedBy = [ "multi-user.target" ];
         after = [ "network-online.target" ];
         requires = [ "network-online.target" ];
+        confinement = {
+          enable = true;
+        };
         serviceConfig = {
           Restart = "always";
           User = "latest-system";
           Group = "latest-system";
-          DynamicUser = true;
         };
       };
       nixos-upgrade-all = {
@@ -286,7 +302,12 @@
     };
   };
   users = {
+    groups.latest-system = {};
     users = {
+      latest-system = {
+        isSystemUser = true;
+        group = "latest-system";
+      };
       max = {
         packages = with pkgs; [
           piper
