@@ -1,4 +1,4 @@
-{ pkgs, config, inputs, ... }:
+{ lib, pkgs, config, inputs, ... }:
 
 {
   imports = [./configuration.nix ./hardware-configuration/workstation.nix];
@@ -154,6 +154,7 @@
     nix-serve = {
       bindAddress = "192.168.2.1";
       enable = true;
+      extraParams = "--listen 172.28.10.244:8080";
       openFirewall = true;
       secretKeyFile = "/etc/nix/storekey";
     };
@@ -243,6 +244,44 @@
           Group = "latest-system";
         };
       };
+      nix-serve = {
+        serviceConfig = {
+          Restart = "always";
+          CapabilityBoundingSet = null;
+          NoNewPrivileges = true;
+          RestrictNamespaces = true;
+          RestrictAddressFamilies = "AF_INET AF_UNIX";
+          RootDirectory = "/var/empty";
+          TemporaryFileSystem = "/";
+          PrivateTmp = true;
+          MountAPIVFS = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          BindReadOnlyPaths = "/nix/store";
+          PrivateDevices = true;
+          PrivateMounts = true;
+          ProtectSystem = false;
+          DynamicUser = lib.mkForce false;
+          RemoveIPC = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
+          ProtectKernelTunables = true;
+          RestrictRealtime = true;
+          ProtectHome = true;
+          PrivateUsers = true;
+          SystemCallFilter = "@system-service @resources @privileged";
+          IPAddressAllow = [ "172.28.0.0/16" "192.168.2.0/24" ];
+          IPAddressDeny = "any";
+          UMask = 0077;
+        };
+      };
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
@@ -300,7 +339,10 @@
     };
   };
   users = {
-    groups.latest-system = {};
+    groups = {
+      latest-system = {};
+      nix-serve = {};
+    };
     users = {
       latest-system = {
         isSystemUser = true;
@@ -310,6 +352,10 @@
         packages = with pkgs; [
           piper
         ];
+      };
+      nix-serve = {
+        isSystemUser = true;
+        group = "nix-serve";
       };
     };
   };
