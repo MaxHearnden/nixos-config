@@ -279,7 +279,7 @@
           SystemCallFilter = [ "@system-service" "~@resources" ];
           IPAddressAllow = [ "172.28.0.0/16" "192.168.2.0/24" ];
           IPAddressDeny = "any";
-          UMask = 0077;
+          UMask = "0077";
         };
       };
       nixos-upgrade-all = {
@@ -316,6 +316,39 @@
         };
         wants = [ "network-online.target" "gitea.service" ];
       };
+      # ntpd = {
+      #   serviceConfig = {
+      #     # CapabilityBoundingSet = "CAP_SYS_TIME CAP_NET_BIND_SERVICE";
+      #     # SystemCallFilter = [ "@system-service @clock" "~@resources" ];
+      #     BindPaths = "/var/lib/ntp";
+      #     BindReadOnlyPaths = "/etc /var/run/nscd"; #services /etc/localtime /etc/nsswitch.conf /etc/resolv.conf";
+      #     UMask = "0755";
+      #     DeviceAllow = "/dev/log";
+      #     ExecStart =
+      #       let cfg = config.services.ntp;
+      #           configFile = pkgs.writeText "ntp.conf" ''
+      #             driftfile /var/lib/ntp/ntp.drift
+
+      #             restrict default ${toString cfg.restrictDefault}
+      #             restrict -6 default ${toString cfg.restrictDefault}
+      #             restrict source ${toString cfg.restrictSource}
+
+      #             restrict 127.0.0.1
+      #             restrict -6 ::1
+
+      #             ${toString (map (server: "server " + server + " iburst\n") cfg.servers)}
+
+      #             ${cfg.extraConfig}
+      #           '';
+      #       in
+      #     # lib.mkForce "${pkgs.strace}/bin/strace -f ${pkgs.ntp}/bin/ntpd -g -c ${configFile} -u ntp:ntp";
+      #     lib.mkForce "${pkgs.coreutils}/bin/cat /proc/mounts";
+      #   };
+      #   preStart = lib.mkForce "";
+      #   confinement = {
+      #     enable = true;
+      #   };
+      # };
     };
     sockets = {
       latest-system = {
@@ -337,6 +370,11 @@
         };
       };
     };
+    # tmpfiles = {
+    #   rules = [
+    #     "d /var/lib/ntp 0755 ntp ntp"
+    #   ];
+    # };
   };
   users = {
     groups = {

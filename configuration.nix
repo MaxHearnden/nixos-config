@@ -366,6 +366,31 @@
           enable = true;
         };
       };
+      wpa_supplicant = {
+        serviceConfig = {
+          RootDirectory = "/var/empty";
+          TemporaryFileSystem = "/";
+          SystemCallArchitectures = "native";
+          NoNewPrivileges = true;
+          PrivateMounts = true;
+          MountAPIVFS = true;
+          BindReadOnlyPaths = "/nix/store /run/dbus/system_bus_socket";
+          RestrictNamespaces = true;
+          CapabilityBoundingSet = "CAP_NET_ADMIN";
+        };
+      };
+      nix-daemon = {
+        serviceConfig = {
+          CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_CHOWN";
+          RootDirectory = "/var/empty";
+          TemporaryFileSystem = "/";
+          BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
+          BindPaths = "/nix /root/.cache/nix /tmp";
+          MemoryDenyWriteExecute = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+          PrivateMounts = true;
+        };
+      };
     };
     tmpfiles = {
       rules = [
