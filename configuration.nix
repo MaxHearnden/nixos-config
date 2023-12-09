@@ -436,10 +436,46 @@
           packages = [ pkgs.tailscale ];
         };
       };
+      zerotierone = {
+        serviceConfig = {
+          UMask = "0077";
+          BindPaths = "/var/lib/zerotier-one /etc/passwd /etc/group /etc/resolv.conf /etc/ssl /etc/static/ssl";
+          DeviceAllow = ["/dev/tun" "/dev/net/tun"];
+          # ProtectKernelModules = true;
+          ProtectProc = [ "invisible" ];
+          SystemCallFilter = [ "@system-service" ];
+          PrivateDevices = lib.mkForce false;
+          PrivateUsers = lib.mkForce false;
+          NoNewPrivileges = true;
+          RestrictNamespaces = true;
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
+          RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          SystemCallArchitectures = "native";
+          MemoryDenyWriteExecute = true;
+          RestrictRealtime = true;
+          ProtectHome = true;
+          CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
+          ProcSubset = "pid";
+        };
+        wants = [ "modprobe@tun.service" ];
+        after = [ "modprobe@tun.service" ];
+        confinement = {
+          enable = true;
+          fullUnit = true;
+        };
+      };
     };
     tmpfiles = {
       rules = [
         "A+ /nix/var/nix/profiles - - - - u:nix-gc:rwx"
+        # "d /var/lib/zerotier-one 700 zerotier zerotier"
+        # "Z /var/lib/zerotier-one - zerotier zerotier"
+        # "d /var/lib/zerotier-one/networks.p 700 zerotier zerotier"
+        # "f /var/lib/zerotier-one/networks.p/8056c2e21c3d4b0c.conf 700 zerotier zerotier"
       ];
     };
   };
@@ -462,11 +498,16 @@
         isSystemUser = true;
         group = "tailscale";
       };
+      zerotier = {
+        isSystemUser = true;
+        group = "zerotier";
+      };
     };
     groups = {
       nix-gc = {};
       sh = {};
       tailscale = {};
+      zerotier = {};
     };
     users = {
       max = {
