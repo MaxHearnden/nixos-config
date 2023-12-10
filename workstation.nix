@@ -230,7 +230,6 @@
           ProcSubset = "pid";
           ProtectHome = true;
           IPAddressDeny = "any";
-          RestrictNetworkInterfaces = "ztmjfp7kiq";
           # RootDirectory = "/var/empty";
           # MountAPIVFS = true;
           # RootEphemeral = true;
@@ -238,6 +237,7 @@
         confinement = {
           enable = true;
         };
+        requires = [ "latest-system.socket" ];
         serviceConfig = {
           Restart = "always";
           User = "latest-system";
