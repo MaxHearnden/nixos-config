@@ -53,6 +53,11 @@
       enable = true;
     };
   };
+  environment = {
+    shellAliases = {
+      sda = "systemd-analyze security --no-pager";
+    };
+  };
   fileSystems = {
     "/" = {
       options = [ "noatime" ];
