@@ -383,6 +383,7 @@
         serviceConfig = {
           CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER";
           ProtectSystem = "strict";
+          BindPaths = "/dev/kvm";
           # RootDirectory = "/var/empty";
           # TemporaryFileSystem = "/";
           # BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
