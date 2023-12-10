@@ -451,7 +451,7 @@
           AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
           # ProtectKernelModules = true;
           ProtectProc = [ "invisible" ];
-          SystemCallFilter = [ "@system-service" ];
+          SystemCallFilter = [ "@system-service" "~@privileged" ];
           PrivateUsers = lib.mkForce false;
           NoNewPrivileges = true;
           RestrictNamespaces = true;
