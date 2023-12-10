@@ -409,16 +409,15 @@
       tailscaled = {
         serviceConfig = {
           UMask = "0077";
-          BindPaths = "/var/lib/tailscale";
+          BindPaths = "/var/lib/tailscale /dev/net/tun";
           BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
           User = "tailscale";
           Group = "tailscale";
-          DeviceAllow = ["/dev/tun" "/dev/net/tun"];
+          DeviceAllow = "/dev/net/tun";
           AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
           # ProtectKernelModules = true;
           ProtectProc = [ "invisible" ];
           SystemCallFilter = [ "@system-service" "~@privileged" ];
-          PrivateDevices = lib.mkForce false;
           PrivateUsers = lib.mkForce false;
           RemoveIPC = true;
           NoNewPrivileges = true;
@@ -446,14 +445,13 @@
       zerotierone = {
         serviceConfig = {
           UMask = "0077";
-          BindPaths = "/var/lib/zerotier-one";
+          BindPaths = "/var/lib/zerotier-one /dev/net/tun";
           BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
-          DeviceAllow = ["/dev/tun" "/dev/net/tun"];
+          DeviceAllow = "/dev/net/tun";
           AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
           # ProtectKernelModules = true;
           ProtectProc = [ "invisible" ];
           SystemCallFilter = [ "@system-service" ];
-          PrivateDevices = lib.mkForce false;
           PrivateUsers = lib.mkForce false;
           NoNewPrivileges = true;
           RestrictNamespaces = true;
@@ -485,7 +483,7 @@
     };
     tmpfiles = {
       rules = [
-        "A+ /nix/var/nix/profiles - - - - u:nix-gc:rwx"
+        "A+ /nix/var/nix/profiles - - - - u:nix-gc:rwx,d:u:nix-gc:rwx"
         "d /var/lib/zerotier-one 700 zerotierd zerotierd"
         "Z /var/lib/zerotier-one - zerotierd zerotierd"
         "d /var/lib/zerotier-one/networks.p 700 zerotierd zerotierd"
