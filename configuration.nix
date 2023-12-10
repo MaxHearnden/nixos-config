@@ -394,7 +394,7 @@
           # TemporaryFileSystem = "/";
           # BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
           # BindPaths = "/nix /root/.cache/nix /tmp";
-          ReadWritePaths = "/nix /root/.cache/nix /tmp";
+          ReadWritePaths = "/nix /tmp";
           RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
           SystemCallFilter = [ "@system-service @mount seccomp sethostname setdomainname" ];
           # PrivateMounts = true;
@@ -402,6 +402,7 @@
           PrivateDevices = true;
           ProtectClock = true;
           ProtectControlGroups = true;
+          ProtectHome = "read-only";
           ProtectKernelModules = true;
           SocketBindDeny = "any";
           RestrictNamespaces = "user net mnt ipc pid uts";
@@ -410,6 +411,9 @@
           RestrictNetworkInterfaces = "~tailscale0";
           IPAddressDeny = "127.0.0.1/8 172.28.0.0/24";
           RestrictRealtime = true;
+          CacheDirectory = "nix";
+          CacheDirectoryMode = "0700";
+          Environment = [ "XDG_CACHE_HOME=%C" ];
         };
       };
       tailscaled = {
