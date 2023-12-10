@@ -346,7 +346,6 @@
           ProtectHome = "tmpfs";
           NoNewPrivileges = true;
           RestrictAddressFamilies = "AF_UNIX";
-          Environment = "HOME=/home/nix-gc";
           # SetLoginEnvironment = false;
           RestrictNamespaces = true;
           UMask = "0077";
@@ -369,6 +368,9 @@
         };
         confinement = {
           enable = true;
+        };
+        environment = {
+          HOME = "/home/nix-gc";
         };
       };
       wpa_supplicant = {
