@@ -77,7 +77,7 @@
       options = [
         "defaults"
         "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device"
-        "x-systemd.after=zerotierone.service"
+        "x-systemd.requires=zerotierone.service"
         "nofail"
         "fsc"
         "softreval"
@@ -403,7 +403,8 @@
       tailscaled = {
         serviceConfig = {
           UMask = "0077";
-          BindPaths = "/var/lib/tailscale /etc/resolv.conf /etc/ssl /etc/static/ssl";
+          BindPaths = "/var/lib/tailscale";
+          BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
           User = "tailscale";
           Group = "tailscale";
           DeviceAllow = ["/dev/tun" "/dev/net/tun"];
@@ -439,7 +440,8 @@
       zerotierone = {
         serviceConfig = {
           UMask = "0077";
-          BindPaths = "/var/lib/zerotier-one /etc/resolv.conf /etc/ssl /etc/static/ssl";
+          BindPaths = "/var/lib/zerotier-one";
+          BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
           DeviceAllow = ["/dev/tun" "/dev/net/tun"];
           AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
           # ProtectKernelModules = true;
@@ -465,6 +467,7 @@
           ExecStartPre = lib.mkForce [];
           User = "zerotierd";
           Group = "zerotierd";
+          RemoveIPC = true;
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
