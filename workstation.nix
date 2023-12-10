@@ -299,7 +299,7 @@
         script = ''
           config_all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
-          systemctl restart latest-system.service
+          systemctl stop latest-system.service
           config="$(readlink -e "''${config_all}/${config.networking.hostName}")"
           nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           if [ "$1" = --specialisation ]
