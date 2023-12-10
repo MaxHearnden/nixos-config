@@ -441,6 +441,7 @@
           UMask = "0077";
           BindPaths = "/var/lib/zerotier-one /etc/passwd /etc/group /etc/resolv.conf /etc/ssl /etc/static/ssl";
           DeviceAllow = ["/dev/tun" "/dev/net/tun"];
+          AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
           # ProtectKernelModules = true;
           ProtectProc = [ "invisible" ];
           SystemCallFilter = [ "@system-service" ];
@@ -460,6 +461,10 @@
           ProtectHome = true;
           CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
           ProcSubset = "pid";
+          ExecStart = lib.mkForce "${config.services.zerotierone.package}/bin/zerotier-one -p${toString config.services.zerotierone.port} -U";
+          ExecStartPre = lib.mkForce [];
+          User = "zerotierd";
+          Group = "zerotierd";
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
@@ -472,11 +477,10 @@
     tmpfiles = {
       rules = [
         "A+ /nix/var/nix/profiles - - - - u:nix-gc:rwx"
-        # "d /var/lib/zerotier-one 700 zerotier zerotier"
-        # "Z /var/lib/zerotier-one - zerotier zerotier"
-        # "d /var/lib/zerotier-one/networks.p 700 zerotier zerotier"
-        # "f /var/lib/zerotier-one/networks.p/8056c2e21c3d4b0c.conf 700 zerotier zerotier"
-      ];
+        "d /var/lib/zerotier-one 700 zerotierd zerotierd"
+        "Z /var/lib/zerotier-one - zerotierd zerotierd"
+        "d /var/lib/zerotier-one/networks.p 700 zerotierd zerotierd"
+      ] ++ map (netId: "f /var/lib/zerotier-one/networks.p/${netId}.conf 700 zerotierd zerotierd") config.services.zerotierone.joinNetworks;
     };
   };
   time = {
@@ -498,11 +502,16 @@
         isSystemUser = true;
         group = "tailscale";
       };
+      zerotierd = {
+        isSystemUser = true;
+        group = "zerotierd";
+      };
     };
     groups = {
       nix-gc = {};
       sh = {};
       tailscale = {};
+      zerotierd = {};
     };
     users = {
       max = {
