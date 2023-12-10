@@ -439,7 +439,7 @@
       zerotierone = {
         serviceConfig = {
           UMask = "0077";
-          BindPaths = "/var/lib/zerotier-one /etc/passwd /etc/group /etc/resolv.conf /etc/ssl /etc/static/ssl";
+          BindPaths = "/var/lib/zerotier-one /etc/group /etc/resolv.conf /etc/ssl /etc/static/ssl";
           DeviceAllow = ["/dev/tun" "/dev/net/tun"];
           AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
           # ProtectKernelModules = true;
