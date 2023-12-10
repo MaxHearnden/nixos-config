@@ -257,7 +257,7 @@
           MountAPIVFS = true;
           ProtectProc = "invisible";
           ProcSubset = "pid";
-          BindReadOnlyPaths = "/nix/store";
+          BindReadOnlyPaths = "/bin/sh /nix/store /nix/var/nix/daemon-socket/socket";
           PrivateDevices = true;
           PrivateMounts = true;
           ProtectSystem = false;
