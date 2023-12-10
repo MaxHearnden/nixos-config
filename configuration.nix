@@ -396,6 +396,7 @@
           # BindPaths = "/nix /root/.cache/nix /tmp";
           ReadWritePaths = "/nix /root/.cache/nix /tmp";
           RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+          SystemCallFilter = [ "@system-service @mount seccomp sethostname setdomainname" ];
           # PrivateMounts = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
@@ -404,6 +405,11 @@
           ProtectKernelModules = true;
           SocketBindDeny = "any";
           RestrictNamespaces = "user net mnt ipc pid uts";
+          RestrictSUIDSGID = true;
+          IPAddressAllow = "172.28.10.244";
+          RestrictNetworkInterfaces = "~tailscale0";
+          IPAddressDeny = "127.0.0.1/8 172.28.0.0/24";
+          RestrictRealtime = true;
         };
       };
       tailscaled = {
