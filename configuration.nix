@@ -411,7 +411,7 @@
           RestrictSUIDSGID = true;
           IPAddressAllow = "172.28.10.244";
           RestrictNetworkInterfaces = "~tailscale0";
-          IPAddressDeny = "127.0.0.1/8 172.16.0.0/12 192.168.0.0/16 fd00::/8 169.254.0.0/16 fe80::/10";
+          IPAddressDeny = "127.0.0.1/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 fd00::/8 169.254.0.0/16 fe80::/10";
           RestrictRealtime = true;
           CacheDirectory = "nix";
           CacheDirectoryMode = "0700";
