@@ -373,19 +373,19 @@
           HOME = "/home/nix-gc";
         };
       };
-      wpa_supplicant = {
-        serviceConfig = {
-          RootDirectory = "/var/empty";
-          TemporaryFileSystem = "/";
-          SystemCallArchitectures = "native";
-          NoNewPrivileges = true;
-          PrivateMounts = true;
-          MountAPIVFS = true;
-          BindReadOnlyPaths = "/nix/store /run/dbus/system_bus_socket";
-          RestrictNamespaces = true;
-          CapabilityBoundingSet = "CAP_NET_ADMIN";
-        };
-      };
+      # wpa_supplicant = {
+      #   serviceConfig = {
+      #     RootDirectory = "/var/empty";
+      #     TemporaryFileSystem = "/";
+      #     SystemCallArchitectures = "native";
+      #     NoNewPrivileges = true;
+      #     PrivateMounts = true;
+      #     MountAPIVFS = true;
+      #     BindReadOnlyPaths = "/nix/store /run/dbus/system_bus_socket";
+      #     RestrictNamespaces = true;
+      #     CapabilityBoundingSet = "CAP_NET_ADMIN";
+      #   };
+      # };
       nix-daemon = {
         serviceConfig = {
           CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER";
