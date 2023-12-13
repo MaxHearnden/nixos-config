@@ -261,7 +261,7 @@
       enable = true;
       gc = {
         enable = true;
-        extraArgs = "-d";
+        extraArgs = [ "-d" ];
       };
     };
     kmscon = {
