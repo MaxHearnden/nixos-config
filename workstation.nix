@@ -61,6 +61,12 @@
       };
     };
     hostName = "max-nixos-workstation";
+    hosts =
+      lib.listToAttrs (
+        lib.genList (index:
+          lib.nameValuePair "192.168.2.1${toString (index + 1)}" [ "nixos-slot${toString (index + 1)}"]
+        ) 7
+      );
     interfaces = {
       enp1s0 = {
         ipv4 = {
@@ -124,7 +130,7 @@
             {
               pools = [
                 {
-                  pool = "192.168.2.10 - 192.168.2.240";
+                  pool = "192.168.2.20 - 192.168.2.240";
                 }
               ];
               subnet = "192.168.2.0/24";
@@ -133,6 +139,51 @@
                 {
                   name = "routers";
                   data = "192.168.2.1";
+                }
+              ];
+              reservations = [
+                {
+                  hw-address = "48:da:35:60:0e:19";
+                  ip-address = "192.168.2.10";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:18";
+                  hostname = "nixos-slot1";
+                  ip-address = "192.168.2.11";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:12";
+                  hostname = "nixos-slot2";
+                  ip-address = "192.168.2.12";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:16";
+                  hostname = "nixos-slot3";
+                  ip-address = "192.168.2.13";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:14";
+                  hostname = "nixos-slot4";
+                  ip-address = "192.168.2.14";
+                }
+                {
+                  hw-address = "56:44:6a:05:fd:90";
+                  hostname = "nixos-slot5";
+                  ip-address = "192.168.2.15";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:0e";
+                  hostname = "nixos-slot6";
+                  ip-address = "192.168.2.16";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:28";
+                  hostname = "nixos-slot7";
+                  ip-address = "192.168.2.17";
+                }
+                {
+                  hw-address = "36:a9:52:d4:e6:f8";
+                  ip-address = "192.168.2.18";
                 }
               ];
             }
