@@ -110,6 +110,20 @@
         };
       };
     };
+   hydra = {
+     buildMachinesFiles = ["/hydra-machines"];
+     enable = true;
+     extraConfig = ''
+       binary_cache_secret_key_file = /etc/nix/storekey
+       max_output_size = 8000000000
+       Include /var/lib/hydra/gitea_authorisations.conf
+     '';
+     hydraURL = "http://172.28.10.244:8080";
+     listenHost = "172.28.10.244";
+     notificationSender = "hydra@example.com";
+     port = 8080;
+     useSubstitutes = true;
+   };
     kea = {
       dhcp4 = {
         enable = true;
@@ -205,7 +219,6 @@
     nix-serve = {
       bindAddress = "192.168.2.1";
       enable = true;
-      extraParams = "--listen 172.28.10.244:8080";
       openFirewall = true;
       secretKeyFile = "/etc/nix/storekey";
     };
