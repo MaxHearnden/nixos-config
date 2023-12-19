@@ -28,7 +28,7 @@
     { device = "/dev/disk/by-uuid/23d34216-8396-41b9-ae01-290d9fbf1a6d";
       fsType = "btrfs";
       options = [ "nofail" "defaults" "compress=zstd" "subvol=/var/@guix" ];
-    }
+    };
 
   # swapDevices = [ { device = "/swapfile"; } ];
 
