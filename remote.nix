@@ -60,12 +60,12 @@
         wantedBy = [ "default.target" ];
       };
     };
-    timers = {
-      nixos-upgrade = {
-        timerConfig = {
-          Persistent = true;
-        };
-      };
-    };
+    # timers = {
+    #   nixos-upgrade = {
+    #     timerConfig = {
+    #       Persistent = true;
+    #     };
+    #   };
+    # };
   };
 }
