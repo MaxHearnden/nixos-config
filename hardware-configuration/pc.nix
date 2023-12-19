@@ -14,9 +14,9 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/0f1d8d4e-fe7c-4ed1-96a3-8eabc2944f2c";
+    { device = "/dev/disk/by-uuid/23d34216-8396-41b9-ae01-290d9fbf1a6d";
       fsType = "btrfs";
-      options = ["defaults" "compress=zstd"];
+      options = [ "defaults" "compress=zstd" "subvol=/@NixOS" ];
     };
 
   fileSystems."/boot/efi" =
@@ -24,7 +24,13 @@
       fsType = "vfat";
     };
 
-  swapDevices = [ { device = "/swapfile"; } ];
+  fileSystems."/var/guix" =
+    { device = "/dev/disk/by-uuid/23d34216-8396-41b9-ae01-290d9fbf1a6d";
+      fsType = "btrfs";
+      options = [ "defaults" "compress=zstd" "subvol=/var/@guix" ];
+    }
+
+  # swapDevices = [ { device = "/swapfile"; } ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
