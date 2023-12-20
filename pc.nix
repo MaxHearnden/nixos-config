@@ -17,7 +17,8 @@
       grub = {
         extraEntries = ''
           menuentry "Ubuntu" {
-            chainloader @bootRoot@/EFI/ubuntu/shimx64.efi
+            search --set root --fs-uuid A6CD-C355
+            chainloader /EFI/ubuntu/shimx64.efi
           }
         '';
         gfxmodeEfi = "1920x1080,auto";
