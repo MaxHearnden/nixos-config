@@ -16,7 +16,7 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/76463411-5c55-4708-bf63-7e3195776b57";
       fsType = "btrfs";
-      options = [ "compress=zstd", "subvol=/@NixOS" ];
+      options = [ "compress=zstd" "subvol=/@NixOS" ];
     };
 
   fileSystems."/boot/efi" =
