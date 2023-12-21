@@ -60,7 +60,7 @@
       interfaces = {
         ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
         enp1s0 = {
-          allowedTCPPorts = [ 53 ];
+          allowedTCPPorts = [ 5000 53 ];
           allowedUDPPorts = [ 53 69 ];
         };
       };
@@ -224,7 +224,7 @@
     nix-serve = {
       bindAddress = "192.168.2.1";
       enable = true;
-      openFirewall = true;
+      # openFirewall = true;
       secretKeyFile = "/etc/nix/storekey";
     };
     ratbagd = {
