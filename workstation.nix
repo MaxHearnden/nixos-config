@@ -38,6 +38,11 @@
     "/home/max/shared" = {
       options = ["x-systemd.after=nfs-server.service"];
     };
+    "/nexus" = {
+      device = "/dev/disk/by-uuid/76463411-5c55-4708-bf63-7e3195776b57";
+      fsType = "btrfs";
+      options = [ "nofail" "defaults" "compress=zstd" "nosuid" "nodev" "noatime" ];
+    };
   };
   krb5 = {
     realms = {
