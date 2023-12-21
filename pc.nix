@@ -41,6 +41,9 @@
     hostName = "max-nixos-pc";
   };
   services = {
+    ratbagd = {
+      enable = true;
+    };
     xserver = {
       displayManager = {
         gdm = {
