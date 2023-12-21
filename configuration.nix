@@ -165,6 +165,15 @@
       "172.28.11.61" = ["max-guix-chromebook"];
       "172.28.128.58" = ["max-guix-dell"];
     };
+    firewall = {
+      interfaces = {
+        ztmjfp7kiq = {
+          allowedTCPPorts = [
+            22 # ssh
+          ];
+        };
+      };
+    };
   };
   programs = {
     _1password = {
@@ -272,6 +281,7 @@
       enable = true;
     };
     openssh = {
+      openFirewall = false;
       settings = {
         X11Forwarding = true;
       };
