@@ -53,6 +53,7 @@
                 stream_buffer = "25%";
                 stream_compress = "zstd";
                 target = "ssh://172.28.10.244/nexus/snapshots/per-device/pc";
+                snapshot_dir = "/nexus/snapshots/btrbk";
               };
             };
           };
