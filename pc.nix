@@ -41,6 +41,20 @@
     hostName = "max-nixos-pc";
   };
   services = {
+    btrbk = {
+      instances = {
+        pc = {
+          settings = {
+            volume = {
+              "/nexus" = {
+                subvolume = "@NixOS";
+                target = "ssh://172.28.10.244/nexus/snapshots/per-device/pc";
+              };
+            };
+          };
+        };
+      };
+    };
     ratbagd = {
       enable = true;
     };
