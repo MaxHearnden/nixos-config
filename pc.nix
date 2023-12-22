@@ -48,11 +48,11 @@
       instances = {
         pc = {
           settings = {
+            target_preserve_min = "no";
+            target_preserve = "2w 6m";
+            snapshot_preserve = "14d 2w 3m";
+            snapshot_preserve_min = "2d";
             volume = {
-              target_preserve_min = "no";
-              target_preserve = "2w 6m";
-              snapshot_preserve = "14d 2w 3m";
-              snapshot_preserve_min = "2d";
               "/nexus" = {
                 subvolume = "@NixOS";
                 ssh_user = "btrbk";
@@ -71,7 +71,7 @@
           key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGMqC2ozMYl/Nh9vGcrsxuay0jSl+uOek3K4NMSQkgah btrbk@max-nixos-workstation";
           roles = [
             "receive"
-            "delete"
+            "delete" 
           ];
         }
       ];
