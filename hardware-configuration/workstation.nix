@@ -27,7 +27,7 @@
   fileSystems."/Big" =
     { device = "/dev/disk/by-uuid/0379ef59-faa8-424c-89a7-cedc93956adc";
       fsType = "btrfs";
-      options = [ "defaults" "compress=zstd" ];
+      options = [ "defaults" "compress=zstd" "noatime" ];
     };
 
   fileSystems."/nix" =
