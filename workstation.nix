@@ -104,7 +104,6 @@
         {
           key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEQQFWFgxHvO9V02h2V7Ylgiou9o745w08xBEddL7HA0 btrbk@max-nixos-pc";
           roles = [
-            "restrict-path /nexus/snapshots/per-device/pc"
             "receive"
           ];
         }
