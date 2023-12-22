@@ -49,6 +49,9 @@
               "/nexus" = {
                 subvolume = "@NixOS";
                 ssh_user = "btrbk";
+                send_compressed_data = "yes";
+                stream_buffer = "25%";
+                stream_compress = "zstd";
                 target = "ssh://172.28.10.244/nexus/snapshots/per-device/pc";
               };
             };
