@@ -66,6 +66,15 @@
           };
         };
       };
+      sshAccess = [
+        {
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGMqC2ozMYl/Nh9vGcrsxuay0jSl+uOek3K4NMSQkgah btrbk@max-nixos-workstation";
+          roles = [
+            "receive"
+            "delete"
+          ];
+        }
+      ];
     };
     ratbagd = {
       enable = true;

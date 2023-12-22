@@ -100,6 +100,31 @@
   };
   services = {
     btrbk = {
+      instances = {
+        workstation = {
+          settings = {
+            volume = {
+              target_preserve_min = "no";
+              target_preserve = "2w 6m";
+              snapshot_preserve = "14d 2w 3m";
+              snapshot_preserve_min = "2d";
+              ssh_user = "btrbk";
+              target = "ssh://172.28.13.156/nexus/backups/pc";
+              send_compressed_data = "yes";
+              stream_buffer = "25%";
+              stream_compress = "zstd";
+              "/nexus" = {
+                subvolume = "@NixOS";
+                snapshot_dir = "/nexus/snapshots/btrbk";
+              };
+              "/Big" = {
+                subvolume = "shared";
+                snapshot_dir = "/Big/snapshots/btrbk";
+              };
+            };
+          };
+        };
+      };
       sshAccess = [
         {
           key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEQQFWFgxHvO9V02h2V7Ylgiou9o745w08xBEddL7HA0 btrbk@max-nixos-pc";
