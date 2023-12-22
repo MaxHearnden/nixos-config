@@ -460,6 +460,11 @@
       nix-serve = {};
     };
     users = {
+      btrbk = {
+        packages = with pkgs; [
+          zstd
+        ];
+      };
       latest-system = {
         isSystemUser = true;
         group = "latest-system";

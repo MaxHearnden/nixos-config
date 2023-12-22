@@ -82,6 +82,11 @@
 
   users = {
     users = {
+      btrbk = {
+        packages = with pkgs; [
+          zstd
+        ];
+      };
       max = {
         packages = with pkgs; [
           piper
