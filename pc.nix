@@ -49,6 +49,10 @@
         pc = {
           settings = {
             volume = {
+              target_preserve_min = "no";
+              target_preserve = "2w 6m";
+              snapshot_preserve = "14d 2w 3m";
+              snapshot_preserve_min = "2d";
               "/nexus" = {
                 subvolume = "@NixOS";
                 ssh_user = "btrbk";
