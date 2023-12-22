@@ -61,4 +61,14 @@
     };
   };
 
+  users = {
+    users = {
+      max = {
+        packages = with pkgs; [
+          piper
+        ];
+      };
+    };
+  };
+
 }
