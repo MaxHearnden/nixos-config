@@ -1,4 +1,4 @@
-{ config, inputs, lib, ... }: {
+{ config, inputs, lib, pkgs, ... }: {
   imports = [
     ./remote.nix
     ./hardware-configuration/pc.nix
