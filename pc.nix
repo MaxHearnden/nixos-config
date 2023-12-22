@@ -48,6 +48,7 @@
             volume = {
               "/nexus" = {
                 subvolume = "@NixOS";
+                ssh_user = "btrbk";
                 target = "ssh://172.28.10.244/nexus/snapshots/per-device/pc";
               };
             };
