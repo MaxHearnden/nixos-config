@@ -108,7 +108,7 @@
             snapshot_preserve = "14d 2w 3m";
             snapshot_preserve_min = "2d";
             ssh_user = "btrbk";
-            target = "ssh://172.28.13.156/nexus/backups/pc";
+            target = "ssh://172.28.13.156/nexus/backups/workstation";
             send_compressed_data = "yes";
             stream_buffer = "25%";
             stream_compress = "zstd";
