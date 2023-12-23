@@ -65,14 +65,18 @@
               "ssh://172.28.10.244/nexus" = {
                 subvolume = "@NixOS";
                 target = "/nexus/backups/workstation";
-                snapshot_create = "no";
-                snapshot_preserve_min = "all";
+                snapshot_name = "@NixOS-for-pc";
+                snapshot_preserve = "";
+                snapshot_preserve_min = "latest";
+                incremental = "strict";
               };
               "ssh://172.28.10.244/Big" = {
                 subvolume = "shared";
                 target = "/nexus/backups/workstation";
-                snapshot_create = "no";
-                snapshot_preserve_min = "all";
+                snapshot_name = "shared-for-pc";
+                snapshot_preserve = "";
+                snapshot_preserve_min = "latest";
+                incremental = "strict";
               };
             };
           };
