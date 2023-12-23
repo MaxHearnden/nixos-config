@@ -31,6 +31,11 @@
     };
   };
   fileSystems = {
+    "/nix" = {
+      device = "/dev/disk/by-uuid/23d34216-8396-41b9-ae01-290d9fbf1a6d";
+      fsType = "btrfs";
+      options = [ "defaults" "compress=zstd" "nosuid" "nodev" "noatime" "subvol=/nix" ];
+    };
     "/nexus" = {
       device = "/dev/disk/by-uuid/23d34216-8396-41b9-ae01-290d9fbf1a6d";
       fsType = "btrfs";
