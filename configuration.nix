@@ -347,9 +347,6 @@
     };
   };
   system = {
-    extraDependencies = [
-      ./.
-    ];
     stateVersion = "23.05";
   };
   systemd = {
