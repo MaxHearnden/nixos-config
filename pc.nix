@@ -70,7 +70,7 @@
                   };
                 };
                 target = "/nexus/backups/workstation";
-                snapshot_preserve = "";
+                snapshot_preserve = "no";
                 snapshot_preserve_min = "latest";
                 incremental = "strict";
               };
@@ -81,7 +81,7 @@
                   };
                 };
                 target = "/nexus/backups/workstation";
-                snapshot_preserve = "";
+                snapshot_preserve = "no";
                 snapshot_preserve_min = "latest";
                 incremental = "strict";
               };
