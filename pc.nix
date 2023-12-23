@@ -76,7 +76,7 @@
                 };
                 target = "/nexus/backups/workstation";
                 snapshot_preserve = "1d";
-                snapshot_preserve_min = "no";
+                snapshot_preserve_min = "latest";
                 incremental = "strict";
               };
               "ssh://172.28.10.244/Big" = {
@@ -87,7 +87,7 @@
                 };
                 target = "/nexus/backups/workstation";
                 snapshot_preserve = "1d";
-                snapshot_preserve_min = "no";
+                snapshot_preserve_min = "latest";
                 incremental = "strict";
               };
             };
