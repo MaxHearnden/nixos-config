@@ -46,28 +46,6 @@
         zstd
       ];
       instances = {
-        workstation = {
-          settings = {
-            target_preserve_min = "no";
-            target_preserve = "2w 6m";
-            ssh_user = "btrbk";
-            send_compressed_data = "yes";
-            stream_buffer = "25%";
-            stream_compress = "zstd";
-            target = "/nexus/backups/workstation";
-            snapshot_preserve_min = "all";
-            snapshot_create = "no";
-            snapshot_dir = "snapshots/btrbk";
-            volume = {
-              "ssh://172.28.10.244/nexus" = {
-                subvolume = "@NixOS";
-              };
-              "ssh://172.28.10.244/Big" = {
-                subvolume = "shared";
-              };
-            };
-          };
-        };
         pc = {
           settings = {
             target_preserve_min = "no";
@@ -78,11 +56,23 @@
             stream_compress = "zstd";
             snapshot_preserve = "14d 2w 3m";
             snapshot_preserve_min = "2d";
-            snapshot_dir = "/nexus/snapshots/btrbk";
-            target = "ssh://172.28.10.244/Big/backups/pc";
+            snapshot_dir = "snapshots/btrbk";
             volume = {
               "/nexus" = {
+                target = "ssh://172.28.10.244/Big/backups/pc";
                 subvolume = "@NixOS";
+              };
+              "ssh://172.28.10.244/nexus" = {
+                subvolume = "@NixOS";
+                target = "/nexus/backups/workstation";
+                snapshot_create = "no";
+                snapshot_preserve_min = "all";
+              };
+              "ssh://172.28.10.244/Big" = {
+                subvolume = "shared";
+                target = "/nexus/backups/workstation";
+                snapshot_create = "no";
+                snapshot_preserve_min = "all";
               };
             };
           };
