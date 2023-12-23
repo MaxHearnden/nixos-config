@@ -57,6 +57,7 @@
             snapshot_preserve = "14d 2w 3m";
             snapshot_preserve_min = "2d";
             snapshot_dir = "snapshots/btrbk";
+            transaction_syslog = "user";
             volume = {
               "/nexus" = {
                 target = "ssh://172.28.10.244/Big/backups/pc";

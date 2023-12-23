@@ -116,6 +116,7 @@
             stream_buffer = "25%";
             stream_compress = "zstd";
             snapshot_dir = "snapshots/btrbk";
+            transaction_syslog = "user";
             volume = {
               "/nexus" = {
                 subvolume = "@NixOS";
