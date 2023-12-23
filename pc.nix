@@ -46,35 +46,57 @@
         zstd
       ];
       instances = {
+        workstation = {
+          settings = {
+            target_preserve_min = "no";
+            target_preserve = "2w 6m";
+            ssh_user = "btrbk";
+            send_compressed_data = "yes";
+            stream_buffer = "25%";
+            stream_compress = "zstd";
+            target = "/nexus/backups/workstation";
+            snapshot_preserve_min = "all";
+            snapshot_create = "no";
+            snapshot_dir = "snapshots/btrbk";
+            volume = {
+              "ssh://172.28.10.244/nexus" = {
+                subvolume = "@NixOS";
+              };
+              "ssh://172.28.10.244/Big" = {
+                subvolume = "shared";
+              };
+            };
+          };
+        };
         pc = {
           settings = {
             target_preserve_min = "no";
             target_preserve = "2w 6m";
+            ssh_user = "btrbk";
+            send_compressed_data = "yes";
+            stream_buffer = "25%";
+            stream_compress = "zstd";
             snapshot_preserve = "14d 2w 3m";
             snapshot_preserve_min = "2d";
+            snapshot_dir = "/nexus/snapshots/btrbk";
+            target = "ssh://172.28.10.244/Big/backups/pc";
             volume = {
               "/nexus" = {
                 subvolume = "@NixOS";
-                ssh_user = "btrbk";
-                send_compressed_data = "yes";
-                stream_buffer = "25%";
-                stream_compress = "zstd";
-                target = "ssh://172.28.10.244/Big/backups/pc";
-                snapshot_dir = "/nexus/snapshots/btrbk";
               };
             };
           };
         };
       };
-      sshAccess = [
-        {
-          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGMqC2ozMYl/Nh9vGcrsxuay0jSl+uOek3K4NMSQkgah btrbk@max-nixos-workstation";
-          roles = [
-            "receive"
-            "delete" 
-          ];
-        }
-      ];
+      # sshAccess = [
+      #   {
+      #     key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGMqC2ozMYl/Nh9vGcrsxuay0jSl+uOek3K4NMSQkgah btrbk@max-nixos-workstation";
+      #     roles = [
+      #       "receive"
+      #       "delete" 
+      #     ];
+      #   }
+      # ];
     };
     ratbagd = {
       enable = true;

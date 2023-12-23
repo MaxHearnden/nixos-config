@@ -106,23 +106,22 @@
       instances = {
         workstation = {
           settings = {
-            target_preserve_min = "no";
-            target_preserve = "2w 6m";
+            # target_preserve_min = "no";
+            # target_preserve = "2w 6m";
             snapshot_preserve = "14d 2w 3m";
             snapshot_preserve_min = "2d";
-            ssh_user = "btrbk";
-            target = "ssh://172.28.13.156/nexus/backups/workstation";
+            # ssh_user = "btrbk";
+            # target = "ssh://172.28.13.156/nexus/backups/workstation";
             send_compressed_data = "yes";
             stream_buffer = "25%";
             stream_compress = "zstd";
+            snapshot_dir = "snapshots/btrbk";
             volume = {
               "/nexus" = {
                 subvolume = "@NixOS";
-                snapshot_dir = "/nexus/snapshots/btrbk";
               };
               "/Big" = {
                 subvolume = "shared";
-                snapshot_dir = "/Big/snapshots/btrbk";
               };
             };
           };
@@ -134,6 +133,7 @@
           roles = [
             "receive"
             "delete"
+            "send"
           ];
         }
       ];
