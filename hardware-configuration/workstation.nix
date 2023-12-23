@@ -31,7 +31,7 @@
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/0379ef59-faa8-424c-89a7-cedc93956adc";
+    { device = "/dev/disk/by-uuid/76463411-5c55-4708-bf63-7e3195776b57";
       fsType = "btrfs";
       options = [ "defaults" "subvol=/nix" "noatime" "compress=zstd" ];
     };
