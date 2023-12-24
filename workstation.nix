@@ -137,6 +137,13 @@
             "source"
           ];
         }
+        {
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE6GaQD1sg32My+wRYROof6BrFX5XoFDe+f/aggoRUMR btrbk@max-nixos-chromebooksd2";
+          roles = [
+            "receive"
+            "delete"
+          ];
+        }
       ];
     };
     gitea = {
