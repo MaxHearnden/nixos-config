@@ -471,6 +471,8 @@
           IPAddressAllow = "172.28.0.0/16";
           IPAddressDeny = "any";
         };
+        requires = [ "zerotierone.service" ];
+        after = [ "zerotierone.service" ];
         wantedBy = [ "multi-user.target" ];
       };
     };
