@@ -21,7 +21,7 @@
         zstd
       ];
       instances = {
-        pc = {
+        chromebooksd2 = {
           settings = {
             target_preserve_min = "no";
             target_preserve = "2w 6m";
@@ -33,9 +33,9 @@
             snapshot_preserve_min = "2d";
             snapshot_dir = "snapshots/btrbk";
             transaction_syslog = "user";
-            target = "ssh://172.28.10.244/Big/backups/chromebooksd2";
             volume = {
               "/nexus" = {
+                target = "ssh://172.28.10.244/Big/backups/chromebooksd2";
                 subvolume = "@NixOS";
               };
             };
