@@ -46,7 +46,7 @@
   };
   swapDevices = [
     {
-      device = "/swapfile";
+      device = "/nexus/swapfile";
     }
   ];
 }
