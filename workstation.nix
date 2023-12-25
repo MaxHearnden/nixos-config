@@ -463,12 +463,10 @@
       latest-system = {
         listenStreams = ["172.28.10.244:8081"];
         socketConfig = {
-          BindToDevice = "ztmjfp7kiq";
+          FreeBind = true;
           IPAddressAllow = "172.28.0.0/16";
           IPAddressDeny = "any";
         };
-        requires = [ "zerotierone.service" ];
-        after = [ "zerotierone.service" ];
         wantedBy = [ "multi-user.target" ];
       };
     };
