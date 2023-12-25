@@ -16,7 +16,7 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/975fc2db-000d-4fe6-a201-14b000add5de";
       fsType = "btrfs";
-      options = [ "defaults" "compress=zstd" ];
+      options = [ "defaults" "compress=zstd" "subvol=@NixOS" ];
     };
   
   fileSystems."/nix" =
