@@ -106,17 +106,6 @@
       instances = {
         workstation = {
           settings = {
-            # target_preserve_min = "no";
-            # target_preserve = "2w 6m";
-            snapshot_preserve = "14d 2w 3m";
-            snapshot_preserve_min = "2d";
-            # ssh_user = "btrbk";
-            # target = "ssh://172.28.13.156/nexus/backups/workstation";
-            send_compressed_data = "yes";
-            stream_buffer = "25%";
-            stream_compress = "zstd";
-            snapshot_dir = "snapshots/btrbk";
-            transaction_syslog = "user";
             volume = {
               "/nexus" = {
                 subvolume = "@NixOS";
@@ -490,11 +479,15 @@
         };
       };
     };
-    # tmpfiles = {
-    #   rules = [
-    #     "d /var/lib/ntp 0755 ntp ntp"
-    #   ];
-    # };
+    tmpfiles = {
+      rules = [
+        "d /Big/snapshots/btrbk"
+        "d /Big/backups/pc"
+        "d /Big/backups/dell"
+        "d /Big/backups/chromebooksd2"
+        "d /Big/backups/laptop"
+      ];
+    };
   };
   users = {
     groups = {

@@ -53,21 +53,7 @@
       instances = {
         pc = {
           settings = {
-            target_preserve_min = "no";
-            target_preserve = "2w 6m";
-            ssh_user = "btrbk";
-            send_compressed_data = "yes";
-            stream_buffer = "25%";
-            stream_compress = "zstd";
-            snapshot_preserve = "14d 2w 3m";
-            snapshot_preserve_min = "2d";
-            snapshot_dir = "snapshots/btrbk";
-            transaction_syslog = "user";
             volume = {
-              "/nexus" = {
-                target = "ssh://172.28.10.244/Big/backups/pc";
-                subvolume = "@NixOS";
-              };
               "ssh://172.28.10.244/nexus" = {
                 subvolume = {
                   "@NixOS" = {

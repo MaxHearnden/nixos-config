@@ -34,6 +34,21 @@
       substituters = ["http://172.28.10.244:8080"];
     };
   };
+  services = {
+    btrbk = {
+      instances = {
+        ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
+          settings = {
+            volume = {
+              "/nexus" = {
+                target = "ssh://172.28.10.244/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+              };
+            };
+          };
+        };
+      };
+    };
+  };
   systemd = {
     services = {
       "nixos-upgrade" = {

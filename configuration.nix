@@ -247,6 +247,32 @@
     };
   };
   services = {
+    btrbk = {
+      extraPackages = with pkgs; [
+        zstd
+      ];
+      instances = {
+        ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
+          settings = {
+            target_preserve_min = "no";
+            target_preserve = "2w 6m";
+            ssh_user = "btrbk";
+            send_compressed_data = "yes";
+            stream_buffer = "25%";
+            stream_compress = "zstd";
+            snapshot_preserve = "14d 3m";
+            snapshot_preserve_min = "2d";
+            snapshot_dir = "snapshots/btrbk";
+            transaction_syslog = "user";
+            volume = {
+              "/nexus" = {
+                subvolume = "@NixOS";
+              };
+            };
+          };
+        };
+      };
+    };
     cachefilesd = {
       enable = true;
     };
@@ -509,6 +535,7 @@
     };
     tmpfiles = {
       rules = [
+        "d /nexus/snapshots/btrbk"
         "A+ /nix/var/nix/profiles - - - - u:nix-gc:rwx,d:u:nix-gc:rwx"
         "d /var/lib/zerotier-one 700 zerotierd zerotierd"
         "Z /var/lib/zerotier-one - zerotierd zerotierd"
