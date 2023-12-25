@@ -1,5 +1,7 @@
 {
   inputs.haskell-nix.url = "github:input-output-hk/haskell.nix";
+  inputs.haskell-nix.inputs.nixpkgs-2311.follows = "nixpkgs";
+  inputs.haskell-nix.inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
   inputs.keyboard_mouse_emulate_on_raspberry.url = "git+http://172.28.10.244:3000/zandoodle/keyboard_mouse_emulate_on_raspberry";
   inputs.keyboard_mouse_emulate_on_raspberry.inputs.nixpkgs.follows = "nixpkgs";
   inputs.latest-system.url = "git+http://172.28.10.244:3000/zandoodle/latest-system";
