@@ -311,9 +311,6 @@
     #   };
     # };
     services = {
-      btrbk-workstation = {
-        restartIfChanged = false;
-      };
       latest-system = {
         serviceConfig = {
           ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system-systemd --protocol activate";

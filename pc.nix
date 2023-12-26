@@ -116,14 +116,6 @@
     }
   ];
 
-  systemd = {
-    services = {
-      btrbk-pc = {
-        restartIfChanged = false;
-      };
-    };
-  };
-
   users = {
     users = {
       btrbk = {

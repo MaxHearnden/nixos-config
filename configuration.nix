@@ -377,6 +377,9 @@
   };
   systemd = {
     services = {
+      btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
+        restartIfChanged = false;
+      };
       nix-gc = {
         serviceConfig = {
           BindReadOnlyPaths = "/nix/var/nix/daemon-socket";
