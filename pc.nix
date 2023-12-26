@@ -63,6 +63,18 @@
         useDHCP = false;
       };
     };
+    nat = {
+      enable = true;
+      externalInterface = "eno1";
+      internalInterfaces = [
+        "enp1s0"
+      ];
+    };
+    networkmanager = {
+      unmanaged = [
+        "enp1s0"
+      ];
+    };
   };
   services = {
     btrbk = {
