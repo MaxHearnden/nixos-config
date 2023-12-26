@@ -44,6 +44,25 @@
   };
   networking = {
     hostName = "max-nixos-pc";
+    hosts =
+      lib.listToAttrs (
+        lib.genList (index:
+          lib.nameValuePair "192.168.2.1${toString (index + 1)}" [ "nixos-slot${toString (index + 1)}"]
+        ) 7
+      );
+    interfaces = {
+      net-dhcp = {
+        ipv4 = {
+          addresses = [
+            {
+              address = "192.168.2.1";
+              prefixLength = 24;
+            }
+          ];
+        };
+        useDHCP = false;
+      };
+    };
   };
   services = {
     btrbk = {
