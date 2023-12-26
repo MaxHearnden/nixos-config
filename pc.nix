@@ -109,6 +109,21 @@
       # ];
     };
   };
+  systemd = {
+    network = {
+      links = {
+        "10-net-dhcp" = {
+          linkConfig = {
+            Name = "net-dhcp";
+            NamePolicy = "";
+          };
+          matchConfig = {
+            MACAddress = "9c:eb:e8:0f:91:63";
+          };
+        };
+      };
+    };
+  };
 
   swapDevices = [
     {
