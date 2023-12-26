@@ -67,12 +67,12 @@
       enable = true;
       externalInterface = "eno1";
       internalInterfaces = [
-        "enp1s0"
+        "net-dhcp"
       ];
     };
     networkmanager = {
       unmanaged = [
-        "enp1s0"
+        "net-dhcp"
       ];
     };
   };
