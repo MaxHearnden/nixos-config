@@ -13,6 +13,14 @@
   };
   imports = [ ./remote.nix ./hardware-configuration/chromebooksd2.nix ./laptop.nix ];
   networking = {
+    firewall = {
+      interfaces = {
+        net-dhcp = {
+          allowedTCPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 ];
+        };
+      };
+    };
     hostName = "max-nixos-chromebooksd2";
     hosts =
       lib.listToAttrs (

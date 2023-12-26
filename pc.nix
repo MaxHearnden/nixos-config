@@ -43,6 +43,14 @@
     };
   };
   networking = {
+    firewall = {
+      interfaces = {
+        net-dhcp = {
+          allowedTCPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 ];
+        };
+      };
+    };
     hostName = "max-nixos-pc";
     hosts =
       lib.listToAttrs (
