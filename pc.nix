@@ -110,6 +110,12 @@
     };
   };
 
+  swapDevices = [
+    {
+      device = "/nexus/swapfile";
+    }
+  ];
+
   systemd = {
     services = {
       btrbk-pc = {
