@@ -46,7 +46,7 @@
     firewall = {
       interfaces = {
         net-dhcp = {
-          allowedTCPPorts = [ 53 ];
+          allowedTCPPorts = [ 5000 53 ];
           allowedUDPPorts = [ 53 ];
         };
       };
