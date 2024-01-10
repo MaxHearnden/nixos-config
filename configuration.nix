@@ -17,8 +17,8 @@
     };
     kernelPackages = pkgs.linuxKernel.packageAliases.linux_latest;
     extraModulePackages = [
-      config.boot.kernelPackages.rtl8812au
-      config.boot.kernelPackages.rtl88x2bu
+      # config.boot.kernelPackages.rtl8812au
+      # config.boot.kernelPackages.rtl88x2bu
     ];
     loader = {
       efi = {
