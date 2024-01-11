@@ -59,7 +59,7 @@
     firewall = {
       interfaces = {
         ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
-        enp1s0 = {
+        enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
           allowedUDPPorts = [ 53 69 ];
         };
@@ -73,7 +73,7 @@
         ) 7
       );
     interfaces = {
-      enp1s0 = {
+      enp2s0 = {
         ipv4 = {
           addresses = [
             {
@@ -89,12 +89,12 @@
       enable = true;
       externalInterface = "eno1";
       internalInterfaces = [
-        "enp1s0"
+        "enp2s0"
       ];
     };
     networkmanager = {
       unmanaged = [
-        "enp1s0"
+        "enp2s0"
       ];
     };
   };
@@ -171,7 +171,7 @@
         settings = {
           interfaces-config = {
             interfaces = [
-              "enp1s0"
+              "enp2s0"
             ];
           };
           lease-database = {
@@ -280,7 +280,7 @@
     # network = {
     #   enable = true;
     #   networks = {
-    #     "10-enp1s0" = {
+    #     "10-enp2s0" = {
     #       address = ["192.168.2.1/24"];
     #       dhcpServerConfig = {
     #         EmitDNS = false;
@@ -296,7 +296,7 @@
     #         }
     #       ];
     #       matchConfig = {
-    #         Name = "enp1s0";
+    #         Name = "enp2s0";
     #       };
     #       networkConfig = {
     #         DHCPServer = true;
@@ -305,7 +305,7 @@
     #   };
     #   wait-online = {
     #     ignoredInterfaces = [
-    #       "enp1s0"
+    #       "enp2s0"
     #     ];
     #   };
     # };
