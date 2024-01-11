@@ -273,7 +273,6 @@
         };
         sessionCommands = "xhost +SI:localuser:max";
       };
-      xrandrHeads = [ "HDMI-3" "HDMI-2" ];
     };
   };
   systemd = {
