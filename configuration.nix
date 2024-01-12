@@ -174,6 +174,9 @@
         };
       };
     };
+    nftables = {
+      enable = true;
+    };
   };
   programs = {
     _1password = {
