@@ -722,11 +722,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1705095863,
-        "narHash": "sha256-TbyZtzHQuooVq/jD5A7ImopVnd2UKQoiqP/R7WGtHZw=",
+        "lastModified": 1705097946,
+        "narHash": "sha256-jwaKqheGTwUMMdtDQcTKylA67Kj/lWpH444CnJK6nOQ=",
         "ref": "refs/heads/main",
-        "rev": "d447f9600a9bc85cb254475e8a3861c0aa645b7b",
-        "revCount": 1,
+        "rev": "e1e1201e35078dcb948933a28a45511be7b0042a",
+        "revCount": 2,
         "type": "git",
         "url": "http://172.28.10.244:3000/zandoodle/tobig"
       },
