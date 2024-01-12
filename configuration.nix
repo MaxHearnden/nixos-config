@@ -698,6 +698,7 @@
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.teams-for-linux
           #teams
           #texlive.combined.scheme-full
+          inputs.tobig.x86_64-linux.packages.default
           thunderbird
           nodePackages.uglify-js
           umlet
