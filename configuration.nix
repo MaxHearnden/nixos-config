@@ -136,7 +136,9 @@
         patches = patches ++ [ ./8255.patch ];
       }
     );
-    registry.nixpkgs.flake = inputs.nixpkgs;
+    registry = lib.mapAttrs (_: flake: {
+      inherit flake;
+    }) inputs;
     settings = {
       auto-optimise-store = true;
       experimental-features = [
