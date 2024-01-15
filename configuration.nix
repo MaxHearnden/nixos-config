@@ -600,6 +600,7 @@
           dbus
           discord
           dwarf-fortress
+          dynamips
           elinks
           elmPackages.elm
           elm2nix
