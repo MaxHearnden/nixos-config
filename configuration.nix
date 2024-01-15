@@ -627,7 +627,7 @@
           ghidra
           giac-with-xcas
           gnome.gnome-tweaks
-          gns3
+          gns3-gui
           gns3server
           gimp
           git-cola
