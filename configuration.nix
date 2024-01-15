@@ -628,7 +628,7 @@
           giac-with-xcas
           gnome.gnome-tweaks
           gns3-gui
-          gns3server
+          gns3-server
           gimp
           git-cola
           golly
