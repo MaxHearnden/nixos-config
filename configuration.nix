@@ -649,6 +649,7 @@
           libsoup_3
           libxml2
           libreoffice-fresh
+          libvirt
           linux-manual
           lshw
           man-pages
