@@ -59,6 +59,9 @@
     firewall = {
       interfaces = {
         ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
+        tailscale0 = {
+          allowedTCPPorts = [ 22 ];
+        };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
           allowedUDPPorts = [ 53 69 ];
