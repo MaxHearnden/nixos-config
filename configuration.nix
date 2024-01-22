@@ -652,7 +652,9 @@
           libvirt
           linux-manual
           lshw
-          man-pages
+          (man-pages.overrideAttrs ({patches ? [], ...}: {
+            patches = patches ++ [ ./fs-manpages.patch ];
+          }))
           maven
           mercurial
           meson
