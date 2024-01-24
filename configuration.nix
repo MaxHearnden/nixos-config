@@ -680,7 +680,9 @@
           pijul
           pioneer
           plantuml
-          plover.dev
+          (plover.dev.overrideAttrs {
+            src = inputs.plover;
+          })
           powertop
           prismlauncher
           #polymc
