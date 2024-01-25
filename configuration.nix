@@ -681,7 +681,6 @@
           pioneer
           plantuml
           (plover.dev.overrideAttrs {
-            version = inputs.plover.rev;
             src = inputs.plover;
           })
           powertop
