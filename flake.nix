@@ -14,10 +14,6 @@
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs-unstable";
   inputs.tobig.url = "git+http://172.28.10.244:3000/zandoodle/tobig";
   inputs.tobig.inputs.nixpkgs.follows = "nixpkgs";
-  inputs.plover = {
-    flake = false;
-    url = "github:openstenoproject/plover";
-  };
   outputs = { self, nixpkgs, ... }@inputs: {
     packages.x86_64-linux.default =
       nixpkgs.legacyPackages.x86_64-linux.linkFarm "systems"
