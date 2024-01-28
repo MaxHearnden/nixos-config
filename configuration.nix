@@ -190,6 +190,9 @@
     # adb = {
     #   enable = true;
     # };
+    command-not-found = {
+      enable = false;
+    };
     fish = {
       enable = true;
     };
@@ -230,6 +233,9 @@
       defaultEditor = true;
       enable = true;
       withNodeJs = true;
+    };
+    nix-index = {
+      enable = true;
     };
     steam = {
       enable = true;
