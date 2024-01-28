@@ -602,6 +602,7 @@
           cargo-watch
           ungoogled-chromium
           cifs-utils
+          comma
           darcs
           dbus
           discord
