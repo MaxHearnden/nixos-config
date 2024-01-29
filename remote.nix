@@ -51,7 +51,7 @@
   };
   systemd = {
     services = {
-      "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostname}" = {
+      "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
         wants = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
         after = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
       };
