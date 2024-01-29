@@ -51,6 +51,10 @@
   };
   systemd = {
     services = {
+      "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostname}" = {
+        wants = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
+        after = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
+      };
       "nixos-upgrade" = {
         after = [ "network-online.target" "zerotierone.service" ];
         description = "NixOS Upgrade";
