@@ -594,29 +594,19 @@
         packages = with pkgs; [
           ardour
           authenticator
-          bc
           btop
-          cabal-install
-          cabal2nix
-          cairo
           cargo-watch
           ungoogled-chromium
           cifs-utils
           comma
-          darcs
-          dbus
           discord
           dwarf-fortress
-          dynamips
           elinks
-          elmPackages.elm
-          elm2nix
           emacs
           erlang
           file
           firefox
           firmware-manager
-          fossil
           gcc
           pkgsCross.aarch64-multiplatform.buildPackages.gcc
           pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc
@@ -630,17 +620,7 @@
           (haskellPackages.ghcWithPackages (pkgs: with pkgs; [ aeson monoidal-containers optparse-applicative statistics vector yaml]))
           # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
           gnome.ghex
-          gtk4
-          github-cli
-          ghidra
-          giac-with-xcas
           gnome.gnome-tweaks
-          gns3-gui
-          gns3-server
-          gimp
-          git-cola
-          golly
-          gradle
           graphviz
           gtkterm
           guile_3_0
