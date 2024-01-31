@@ -21,6 +21,15 @@
         config = config.nixpkgs.config;
       };
       in unstable-unfree.linuxKernel.packageAliases.linux_latest;
+    kernelPatches = [
+      {
+        name = "Rust Support";
+        patch = null;
+        features = {
+          rust = true;
+        };
+      }
+    ];
     extraModulePackages = [
       # config.boot.kernelPackages.rtl8812au
       # config.boot.kernelPackages.rtl88x2bu
