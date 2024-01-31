@@ -15,7 +15,12 @@
         "riscv64-linux"
       ];
     };
-    kernelPackages = pkgs.linuxKernel.packageAliases.linux_latest;
+    kernelPackages =
+      let unstable-unfree = import inputs.nixpkgs-unstable {
+        system = config.nixpkgs.system;
+        config = config.nixpkgs.config;
+      };
+      in unstable-unfree.linuxKernel.packageAliases.linux_latest;
     extraModulePackages = [
       # config.boot.kernelPackages.rtl8812au
       # config.boot.kernelPackages.rtl88x2bu
@@ -141,6 +146,7 @@
     }) inputs;
     settings = {
       auto-optimise-store = true;
+      diff-hook = pkgs.diffoscope;
       experimental-features = [
         "nix-command"
         "flakes"
