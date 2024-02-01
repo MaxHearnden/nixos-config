@@ -71,6 +71,9 @@
     shellAliases = {
       sda = "systemd-analyze security --no-pager";
     };
+    sessionVariables = {
+      LINUX_DEV = config.boot.kernelPackages.kernel.dev;
+    };
   };
   fileSystems = {
     "/" = {
