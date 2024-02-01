@@ -136,6 +136,13 @@
             "delete"
           ];
         }
+        {
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ62a5GL8BnuwriNuk2TamZdnfxAiGTXLQOby88zS3Br btrbk@max-nixos-dell";
+          roles = [
+            "receive"
+            "delete"
+          ];
+        }
       ];
     };
     gitea = {
