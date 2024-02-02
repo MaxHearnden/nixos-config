@@ -726,6 +726,26 @@
         "type": "github"
       }
     },
+    "rename-exchange": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1706909092,
+        "narHash": "sha256-1pSR2elB3KYKyq3LrFmQhttPvgPlCQTLnZCfta3Q1JI=",
+        "ref": "refs/heads/main",
+        "rev": "ce851cdc279de6fecb9901427907705515392ced",
+        "revCount": 2,
+        "type": "git",
+        "url": "http://172.28.10.244:3000/zandoodle/rename-exchange"
+      },
+      "original": {
+        "type": "git",
+        "url": "http://172.28.10.244:3000/zandoodle/rename-exchange"
+      }
+    },
     "root": {
       "inputs": {
         "haskell-nix": "haskell-nix",
@@ -734,6 +754,7 @@
         "math104": "math104",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "rename-exchange": "rename-exchange",
         "tobig": "tobig",
         "vscode-extensions": "vscode-extensions"
       }
