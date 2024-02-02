@@ -111,10 +111,11 @@
           settings = {
             volume = {
               "/nexus" = {
-                subvolume = "@NixOS";
+                target = "/Big/backups/workstation";
               };
               "/Big" = {
                 subvolume = "shared";
+                target = "/nexus/backups/workstation";
               };
             };
           };
@@ -485,10 +486,14 @@
     tmpfiles = {
       rules = [
         "d /Big/snapshots/btrbk"
+        "v /Big/backups 700 btrbk btrbk"
         "d /Big/backups/pc"
         "d /Big/backups/dell"
         "d /Big/backups/chromebooksd2"
         "d /Big/backups/laptop"
+        "d /Big/backups/workstation"
+        "v /nexus/backups 700 btrbk btrbk"
+        "d /nexus/backups/workstation"
       ];
     };
   };
