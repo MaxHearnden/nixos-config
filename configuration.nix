@@ -284,7 +284,7 @@
         ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
           settings = {
             target_preserve_min = "no";
-            target_preserve = "2w 6m";
+            target_preserve = "6w 6m";
             ssh_user = "btrbk";
             send_compressed_data = "yes";
             stream_buffer = "25%";
