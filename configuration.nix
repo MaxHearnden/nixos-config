@@ -101,6 +101,7 @@
         "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device"
         "x-systemd.requires=zerotierone.service"
         "nofail"
+        "noatime"
         "fsc"
         "softreval"
         "async"
