@@ -288,6 +288,7 @@
             ssh_user = "btrbk";
             send_compressed_data = "yes";
             stream_buffer = "25%";
+            stream_buffer_remote = "25%";
             stream_compress = "zstd";
             snapshot_preserve = "14d 3m";
             snapshot_preserve_min = "2d";
