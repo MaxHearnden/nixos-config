@@ -570,7 +570,7 @@
     tmpfiles = {
       rules = [
         "d /nexus/snapshots/btrbk"
-        "A+ /nix/var/nix/profiles - - - - u:nix-gc:rwx,d:u:nix-gc:rwx"
+        "A /nix/var/nix/profiles - - - - u:nix-gc:rwx,d:u:nix-gc:rwx,m::rwx,d:m::rwx"
         "d /var/lib/zerotier-one 700 zerotierd zerotierd"
         "Z /var/lib/zerotier-one - zerotierd zerotierd"
         "d /var/lib/zerotier-one/networks.p 700 zerotierd zerotierd"
