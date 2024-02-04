@@ -37,16 +37,16 @@
       specialArgs = {inherit inputs;};
       modules = [ ./chromebooksd2.nix ];
     };
-    nixosConfigurations.max-nixos-laptop = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {inherit inputs;};
-      modules = [ ./big-laptop.nix ];
-    };
-    nixosConfigurations.max-nixos-pc = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = {inherit inputs;};
-      modules = [ ./pc.nix ];
-    };
+    # nixosConfigurations.max-nixos-laptop = nixpkgs.lib.nixosSystem {
+    #   system = "x86_64-linux";
+    #   specialArgs = {inherit inputs;};
+    #   modules = [ ./big-laptop.nix ];
+    # };
+    # nixosConfigurations.max-nixos-pc = nixpkgs.lib.nixosSystem {
+    #   system = "x86_64-linux";
+    #   specialArgs = {inherit inputs;};
+    #   modules = [ ./pc.nix ];
+    # };
     hydraJobs = builtins.mapAttrs (_: config: config.config.system.build.toplevel) self.nixosConfigurations;
   };
 }
