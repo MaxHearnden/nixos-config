@@ -761,6 +761,11 @@
       };
     };
   };
+  virtualisation = {
+    vswitch = {
+      package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.openvswitch;
+    };
+  };
   zramSwap = {
     algorithm = "zstd";
     enable = true;
