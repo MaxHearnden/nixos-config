@@ -695,6 +695,7 @@
           powertop
           prismlauncher
           #polymc
+          python3
           qemu
           qlcplus
           qpdfview
