@@ -662,6 +662,7 @@
           libvirt
           linux-manual
           lshw
+          lsof
           (man-pages.overrideAttrs ({patches ? [], ...}: {
             patches = patches ++ [ ./fs-manpages.patch ];
           }))
