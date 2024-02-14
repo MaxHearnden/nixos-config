@@ -2,6 +2,22 @@
 
 {
   imports = [./configuration.nix];
+  fileSystems = {
+    "/home/max/shared" = {
+      device = "172.28.10.244:/Big/shared";
+      fsType = "nfs";
+      options = [
+        "defaults"
+        "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device"
+        "x-systemd.requires=zerotierone.service"
+        "nofail"
+        "noatime"
+        "fsc"
+        "softreval"
+        "async"
+      ];
+    };
+  }
   nix = {
     buildMachines = [
       {
