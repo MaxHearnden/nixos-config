@@ -17,7 +17,7 @@
         "async"
       ];
     };
-  }
+  };
   nix = {
     buildMachines = [
       {
