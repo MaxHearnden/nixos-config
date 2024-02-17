@@ -82,9 +82,14 @@
         description = "NixOS Upgrade";
         serviceConfig = {
           AmbientCapabilities = "CAP_SYS_ADMIN";
+          CapabilityBoundingSet = "CAP_SYS_ADMIN";
+          NoNewPrivileges = true;
           Type = "oneshot";
-          BindPaths = "/nix/var/nix/profiles";
-          BindReadOnlyPaths = "/nix/var/nix/daemon-socket";
+          SystemCallArchitectures = "native";
+          BindPaths = "/nix/var/nix/profiles /boot";
+          BindReadOnlyPaths = "/nix/var/nix/daemon-socket /nix/store";
+          TemporaryFileSystem = "/";
+          RootDirectory = "/var/empty";
           RestartSec = 10;
           Restart = "on-failure";
           User = "nixos-upgrade";
