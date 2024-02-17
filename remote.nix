@@ -81,6 +81,7 @@
         after = [ "network-online.target" "zerotierone.service" ];
         description = "NixOS Upgrade";
         serviceConfig = {
+          AmbientCapabilities = "CAP_SYS_ADMIN";
           Type = "oneshot";
           BindPaths = "/nix/var/nix/profiles";
           BindReadOnlyPaths = "/nix/var/nix/daemon-socket";
