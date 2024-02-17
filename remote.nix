@@ -82,6 +82,8 @@
         description = "NixOS Upgrade";
         serviceConfig = {
           Type = "oneshot";
+          BindPaths = "/nix/var/nix/profiles";
+          BindReadOnlyPaths = "/nix/var/nix/daemon-socket";
           RestartSec = 10;
           Restart = "on-failure";
           User = "nixos-upgrade";
