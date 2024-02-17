@@ -17,6 +17,12 @@
         "async"
       ];
     };
+    "/boot/efi" = {
+      options = [
+        "uid=nixos-upgrade"
+        "gid=nixos-upgrade"
+      ];
+    };
   };
   nix = {
     buildMachines = [
@@ -78,6 +84,8 @@
           Type = "oneshot";
           RestartSec = 10;
           Restart = "on-failure";
+          User = "nixos-upgrade";
+          Group = "nixos-upgrade";
         };
         path = with pkgs; [
           config.nix.package.out
@@ -93,7 +101,16 @@
           X-StopOnRemoval = false;
         };
         wantedBy = [ "default.target" ];
+        confinement = {
+          enable = true;
+        };
       };
+    };
+    tmpfiles = {
+      rules = [
+        "a+ /nix/var/nix/profiles - - - - u:nixos-upgrade:rwx"
+        "A+ /boot - - - - u:nixos-upgrade:rwx,d:u:nixos-upgrade,m::rwx,d:m::rwx"
+      ];
     };
     # timers = {
     #   nixos-upgrade = {
@@ -102,5 +119,14 @@
     #     };
     #   };
     # };
+  };
+  users = {
+    groups.nixos-upgrade = {};
+    users = {
+      nixos-upgrade = {
+        group = "nixos-upgrade";
+        isSystemUser = true;
+      };
+    };
   };
 }
