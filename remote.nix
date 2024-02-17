@@ -103,9 +103,6 @@
           X-StopOnRemoval = false;
         };
         wantedBy = [ "default.target" ];
-        confinement = {
-          enable = true;
-        };
       };
     };
     tmpfiles = {
