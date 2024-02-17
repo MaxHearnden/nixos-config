@@ -109,7 +109,7 @@
     tmpfiles = {
       rules = [
         "a+ /nix/var/nix/profiles - - - - u:nixos-upgrade:rwx"
-        "A+ /boot - - - - u:nixos-upgrade:rwx,d:u:nixos-upgrade,m::rwx,d:m::rwx"
+        "A+ /boot - - - - u:nixos-upgrade:rwx,d:u:nixos-upgrade:rwx,m::rwx,d:m::rwx"
       ];
     };
     # timers = {
