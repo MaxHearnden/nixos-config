@@ -87,7 +87,7 @@
           Type = "oneshot";
           SystemCallArchitectures = "native";
           BindPaths = "/nix/var/nix/profiles /boot";
-          BindReadOnlyPaths = "/nix/var/nix/daemon-socket /nix/store /etc/NIXOS";
+          BindReadOnlyPaths = "/nix/var/nix/daemon-socket /nix/store /etc/NIXOS /run/blkid";
           TemporaryFileSystem = "/";
           RootDirectory = "/var/empty";
           RestartSec = 10;
