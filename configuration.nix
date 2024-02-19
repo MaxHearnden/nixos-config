@@ -750,6 +750,9 @@
     };
   };
   virtualisation = {
+    docker = {
+      enable = true;
+    };
     vswitch = {
       package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.openvswitch;
     };
