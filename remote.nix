@@ -82,6 +82,8 @@
         description = "NixOS Upgrade";
         serviceConfig = {
           AmbientCapabilities = "CAP_SYS_ADMIN";
+          CabapilityBoundingSet = "CAP_SYS_ADMIN";
+          NoNewPrivileges = true;
           Type = "oneshot";
           BindPaths = "/nix/var/nix/profiles";
           BindReadOnlyPaths = "/nix/var/nix/daemon-socket";
@@ -110,6 +112,7 @@
       rules = [
         "a+ /nix/var/nix/profiles - - - - u:nixos-upgrade:rwx"
         "A+ /boot - - - - u:nixos-upgrade:rwx,d:u:nixos-upgrade:rwx,m::rwx,d:m::rwx"
+        "d /run/nixos 755 nixos-upgrade nixos-upgrade"
       ];
     };
     # timers = {
