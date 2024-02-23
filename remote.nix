@@ -80,7 +80,7 @@
         '';
         serviceConfig = {
           BindPaths = "/run";
-          BindReadOnlyPaths = "/dev";
+          BindReadOnlyPaths = "/dev /sys";
         };
         confinement = {
           enable = true;
