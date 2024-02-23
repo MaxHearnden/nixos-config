@@ -124,7 +124,6 @@
           Restart = "on-failure";
           User = "nixos-upgrade";
           Group = "nixos-upgrade";
-          PrivateUsers = true;
           RemoveIPC = true;
           ProtectClock = true;
           ProtectKernelLogs = true;
