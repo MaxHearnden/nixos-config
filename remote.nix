@@ -76,11 +76,30 @@
       "blkid-cache" = {
         description = "Blkid entry cache service";
         script = ''
-          LIBBLKID_DEBUG=all ${pkgs.util-linux}/bin/blkid
+          ${pkgs.util-linux}/bin/blkid
         '';
         serviceConfig = {
-          BindPaths = "/run";
+          BindPaths = "/run/blkid";
           BindReadOnlyPaths = "/dev /sys";
+          User = "blkid-cache";
+          Group = "blkid-cache";
+          SupplementaryGroups = "disk";
+          NoNewPrivileges = true;
+          CapabilityBoundingSet = "";
+          PrivateUsers = true;
+          RemoveIPC = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          ProtectKernelTunables = true;
+          RestrictRealtime = true;
+          ProtectHome = true;
+          RestrictAddressFamilies = "AF_UNIX";
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
         };
         confinement = {
           enable = true;
@@ -95,8 +114,9 @@
         after = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         description = "NixOS Upgrade";
         serviceConfig = {
-          AmbientCapabilities = "CAP_SYS_ADMIN";
-          CabapilityBoundingSet = "CAP_SYS_ADMIN";
+          # AmbientCapabilities = "CAP_SYS_ADMIN";
+          # CabapilityBoundingSet = "CAP_SYS_ADMIN";
+          CapabilityBoundingSet = "";
           NoNewPrivileges = true;
           Type = "oneshot";
           BindPaths = "/nix/var/nix/profiles";
@@ -127,6 +147,7 @@
         "a+ /nix/var/nix/profiles - - - - u:nixos-upgrade:rwx"
         "A+ /boot - - - - u:nixos-upgrade:rwx,d:u:nixos-upgrade:rwx,m::rwx,d:m::rwx"
         "d /run/nixos 755 nixos-upgrade nixos-upgrade"
+        "d /run/blkid 755 blkid-cache blkid-cache"
       ];
     };
     # timers = {
@@ -140,6 +161,10 @@
   users = {
     groups.nixos-upgrade = {};
     users = {
+      blkid-cache = {
+        group = "blkid-cache";
+        extraGroups = [ "disk" ];
+      };
       nixos-upgrade = {
         group = "nixos-upgrade";
         isSystemUser = true;
