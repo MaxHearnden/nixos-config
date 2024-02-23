@@ -76,7 +76,7 @@
       "blkid-cache" = {
         description = "Blkid entry cache service";
         script = ''
-          ${pkgs.util-linux}/bin/blkid
+          LIBBLKID_DEBUG=all ${pkgs.util-linux}/bin/blkid
         '';
         serviceConfig = {
           BindPaths = "/run";
@@ -100,7 +100,7 @@
           NoNewPrivileges = true;
           Type = "oneshot";
           BindPaths = "/nix/var/nix/profiles";
-          BindReadOnlyPaths = "/nix/var/nix/daemon-socket";
+          BindReadOnlyPaths = "/nix/var/nix/daemon-socket /run/blkid";
           RestartSec = 10;
           Restart = "on-failure";
           User = "nixos-upgrade";
