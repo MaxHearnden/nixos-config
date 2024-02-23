@@ -96,7 +96,7 @@
           ProtectKernelTunables = true;
           RestrictRealtime = true;
           ProtectHome = true;
-          RestrictAddressFamilies = "AF_UNIX";
+          RestrictAddressFamilies = "";
           RestrictSUIDSGID = true;
           ProtectHostname = true;
           LockPersonality = true;
@@ -114,9 +114,8 @@
         after = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         description = "NixOS Upgrade";
         serviceConfig = {
-          # AmbientCapabilities = "CAP_SYS_ADMIN";
-          # CabapilityBoundingSet = "CAP_SYS_ADMIN";
-          CapabilityBoundingSet = "";
+          AmbientCapabilities = "CAP_SYS_ADMIN";
+          CapapilityBoundingSet = "CAP_SYS_ADMIN";
           NoNewPrivileges = true;
           Type = "oneshot";
           BindPaths = "/nix/var/nix/profiles";
@@ -125,6 +124,20 @@
           Restart = "on-failure";
           User = "nixos-upgrade";
           Group = "nixos-upgrade";
+          PrivateUsers = true;
+          RemoveIPC = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          ProtectKernelTunables = true;
+          RestrictRealtime = true;
+          ProtectHome = true;
+          RestrictAddressFamilies = "";
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
         };
         path = with pkgs; [
           config.nix.package.out
