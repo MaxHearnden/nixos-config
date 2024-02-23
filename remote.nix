@@ -164,6 +164,7 @@
       blkid-cache = {
         group = "blkid-cache";
         extraGroups = [ "disk" ];
+        isSystemUser = true;
       };
       nixos-upgrade = {
         group = "nixos-upgrade";
