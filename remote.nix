@@ -79,6 +79,7 @@
           ${pkgs.util-linux}/bin/blkid
         '';
         serviceConfig = {
+          Type = "oneshot";
           BindPaths = "/run/blkid";
           BindReadOnlyPaths = "/dev /sys";
           User = "blkid-cache";
@@ -96,10 +97,17 @@
           ProtectKernelTunables = true;
           RestrictRealtime = true;
           ProtectHome = true;
-          RestrictAddressFamilies = "";
+          RestrictAddressFamilies = "none";
           RestrictSUIDSGID = true;
           ProtectHostname = true;
           LockPersonality = true;
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          IPAddressDeny = "any";
+          RestrictNamespaces = true;
+          PrivateTmp = true;
+          PrivateNetwork = true;
+          ProtectProc = "invisible";
+          MemoryDenyWriteExecute = true;
         };
         confinement = {
           enable = true;
@@ -118,8 +126,6 @@
           CapabilityBoundingSet = "CAP_SYS_ADMIN";
           NoNewPrivileges = true;
           Type = "oneshot";
-          BindPaths = "/nix/var/nix/profiles";
-          BindReadOnlyPaths = "/nix/var/nix/daemon-socket /run/blkid";
           RestartSec = 10;
           Restart = "on-failure";
           User = "nixos-upgrade";
@@ -133,10 +139,17 @@
           ProtectKernelTunables = true;
           RestrictRealtime = true;
           ProtectHome = true;
-          RestrictAddressFamilies = "";
+          RestrictAddressFamilies = "AF_UNIX AF_INET";
           RestrictSUIDSGID = true;
           ProtectHostname = true;
           LockPersonality = true;
+          PrivateTmp = true;
+          RestrictNamespaces = true;
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          IPAddressDeny = "any";
+          IPAddressAllow = "172.28.10.244";
+          ProtectProc = "invisible";
+          MemoryDenyWriteExecute = true;
         };
         path = with pkgs; [
           config.nix.package.out
@@ -144,7 +157,6 @@
         requires = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         restartIfChanged = false;
         script = ''
-          ${pkgs.libcap}/bin/capsh --print
           config="$(${pkgs.curl}/bin/curl "http://172.28.10.244:8081/${config.networking.hostName}" -f)"
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           "''${config}/bin/switch-to-configuration" boot
