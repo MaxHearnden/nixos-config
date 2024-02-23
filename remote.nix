@@ -73,12 +73,26 @@
   };
   systemd = {
     services = {
+      "blkid-cache" = {
+        description = "Blkid entry cache service";
+        script = ''
+          ${pkgs.util-linux}/bin/blkid
+        '';
+        serviceConfig = {
+          BindPaths = "/run";
+          BindReadOnlyPaths = "/dev";
+        };
+        confinement = {
+          enable = true;
+          mode = "chroot-only";
+        };
+      };
       "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
         wants = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
         after = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
       };
       "nixos-upgrade" = {
-        after = [ "network-online.target" "zerotierone.service" ];
+        after = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         description = "NixOS Upgrade";
         serviceConfig = {
           AmbientCapabilities = "CAP_SYS_ADMIN";
@@ -95,7 +109,7 @@
         path = with pkgs; [
           config.nix.package.out
         ];
-        requires = [ "network-online.target" "zerotierone.service" ];
+        requires = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         restartIfChanged = false;
         script = ''
           config="$(${pkgs.curl}/bin/curl "http://172.28.10.244:8081/${config.networking.hostName}" -f)"
