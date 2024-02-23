@@ -159,7 +159,10 @@
     # };
   };
   users = {
-    groups.nixos-upgrade = {};
+    groups = {
+      blkid-cache = {};
+      nixos-upgrade = {};
+    };
     users = {
       blkid-cache = {
         group = "blkid-cache";
