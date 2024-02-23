@@ -145,6 +145,7 @@
         requires = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         restartIfChanged = false;
         script = ''
+          ${pkgs.util-linux}/bin/findmnt
           config="$(${pkgs.curl}/bin/curl "http://172.28.10.244:8081/${config.networking.hostName}" -f)"
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           "''${config}/bin/switch-to-configuration" boot
