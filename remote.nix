@@ -145,9 +145,10 @@
         requires = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         restartIfChanged = false;
         script = ''
+          ${pkgs.libcap}/bin/capsh --print
           config="$(${pkgs.curl}/bin/curl "http://172.28.10.244:8081/${config.networking.hostName}" -f)"
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
-          ${pkgs.strace}/bin/strace -Z -f "''${config}/bin/switch-to-configuration" boot
+          "''${config}/bin/switch-to-configuration" boot
         '';
         unitConfig = {
           X-StopOnRemoval = false;
