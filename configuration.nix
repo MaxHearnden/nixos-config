@@ -504,7 +504,7 @@
           RestrictNetworkInterfaces = "~tailscale0";
           # IPAddressDeny = "127.0.0.1/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 fd00::/8 169.254.0.0/16 fe80::/10 100.64.0.0/10";
           RestrictRealtime = true;
-          CacheDirectory = "nix";
+          CacheDirectory = "guix";
           CacheDirectoryMode = "0700";
           Environment = [ "XDG_CACHE_HOME=%C" ];
         };
