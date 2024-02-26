@@ -603,6 +603,7 @@
           cargo-watch
           ungoogled-chromium
           cifs-utils
+          ciscoPacketTracer8
           comma
           discord
           dwarf-fortress
