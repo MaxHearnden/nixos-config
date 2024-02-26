@@ -16,6 +16,8 @@
   inputs.tobig.inputs.nixpkgs.follows = "nixpkgs";
   inputs.rename-exchange.url = "git+http://172.28.10.244:3000/zandoodle/rename-exchange";
   inputs.rename-exchange.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.shh.url = "git+http://172.28.10.244:3000/zandoodle/shh-nix";
+  inputs.shh.inputs.nixpkgs.follows = "nixpkgs";
   outputs = { self, nixpkgs, ... }@inputs: {
     packages.x86_64-linux.default =
       nixpkgs.legacyPackages.x86_64-linux.linkFarm "systems"

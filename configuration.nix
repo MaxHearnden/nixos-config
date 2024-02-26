@@ -729,6 +729,7 @@
           signal-desktop
           simple-http-server
           simutrans
+          inputs.shh.packages.x86_64-linux.default
           snis
           sshfs
           stack
