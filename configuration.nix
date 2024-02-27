@@ -325,9 +325,6 @@
       enable = true;
       extraOptions = "--xkb-layout gb";
     };
-    ntp = {
-      enable = true;
-    };
     openssh = {
       openFirewall = false;
       settings = {
