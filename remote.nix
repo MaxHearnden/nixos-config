@@ -15,6 +15,7 @@
         "fsc"
         "softreval"
         "async"
+        "user"
       ];
     };
     "/boot/efi" = {
