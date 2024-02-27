@@ -254,6 +254,12 @@
       enable = true;
     };
     wrappers = {
+      "mount.cifs" = {
+        source = "${pkgs.cifs-utils}/bin/mount.cifs";
+        owner = "root";
+        group = "root";
+        setuid = true;
+      };
       "mount.nfs" = {
         source = "${pkgs.nfs-utils}/bin/mount.nfs";
         owner = "root";
@@ -518,7 +524,7 @@
           Group = "tailscale";
           DeviceAllow = "/dev/net/tun";
           AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
-          # ProtectKernelModules = true;
+          ProtectKernelModules = true;
           ProtectProc = [ "invisible" ];
           SystemCallFilter = [ "@system-service" "~@privileged" ];
           PrivateUsers = lib.mkForce false;
@@ -552,7 +558,7 @@
           BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
           DeviceAllow = "/dev/net/tun";
           AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
-          # ProtectKernelModules = true;
+          ProtectKernelModules = true;
           ProtectProc = [ "invisible" ];
           SystemCallFilter = [ "@system-service" "~@privileged" ];
           PrivateUsers = lib.mkForce false;
