@@ -495,6 +495,7 @@
           SystemCallFilter = [ "@system-service @mount seccomp sethostname setdomainname @pkey" ];
           # PrivateMounts = true;
           NoNewPrivileges = true;
+          LogsDirectory = "guix";
           PrivateDevices = true;
           ProtectClock = true;
           ProtectControlGroups = true;
