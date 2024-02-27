@@ -512,6 +512,15 @@
           Environment = [ "XDG_CACHE_HOME=%C" ];
         };
       };
+      nscd = {
+        CapabilityBoundingSet = "";
+        MemoryDenyWriteExecute = true;
+        SystemCallArchitectures = "native";
+        LockPersonality = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+      };
       tailscaled = {
         serviceConfig = {
           UMask = "0077";
