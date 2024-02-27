@@ -496,7 +496,6 @@
           # PrivateMounts = true;
           NoNewPrivileges = true;
           LogsDirectory = "guix";
-          ProtectHostname = true;
           PrivateDevices = true;
           ProtectClock = true;
           ProtectControlGroups = true;
