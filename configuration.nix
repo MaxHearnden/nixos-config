@@ -513,13 +513,15 @@
         };
       };
       nscd = {
-        CapabilityBoundingSet = "";
-        MemoryDenyWriteExecute = true;
-        SystemCallArchitectures = "native";
-        LockPersonality = true;
-        ProtectHostname = true;
-        ProtectClock = true;
-        SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        serviceConfig = {
+          CapabilityBoundingSet = "";
+          MemoryDenyWriteExecute = true;
+          SystemCallArchitectures = "native";
+          LockPersonality = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+        };
       };
       tailscaled = {
         serviceConfig = {
