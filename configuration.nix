@@ -522,6 +522,12 @@
           ProtectHostname = true;
           ProtectClock = true;
           SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          RestrictNamespaces = true;
+          ProtectKernelTunables = true;
+          RestrictRealtime = true;
         };
       };
       tailscaled = {
