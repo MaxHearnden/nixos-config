@@ -330,10 +330,12 @@
     # };
     services = {
       harmonia = {
+        after = [ "zerotierone.service" ];
         serviceConfig = {
           RestrictSUIDSGID = true;
           RemoveIPC = true;
         };
+        wants = [ "zerotierone.service" ];
       };
       latest-system = {
         serviceConfig = {
