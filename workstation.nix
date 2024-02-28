@@ -329,6 +329,12 @@
     #   };
     # };
     services = {
+      harmonia = {
+        serviceConfig = {
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+        };
+      };
       latest-system = {
         serviceConfig = {
           ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system-systemd --protocol activate";
