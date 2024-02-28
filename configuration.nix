@@ -527,7 +527,7 @@
       tailscaled = {
         serviceConfig = {
           UMask = "0077";
-          BindPaths = "/var/lib/tailscale /dev/net/tun";
+          BindPaths = "/dev/net/tun";
           BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
           User = "tailscale";
           Group = "tailscale";
