@@ -450,7 +450,7 @@
       # };
       nix-daemon = {
         serviceConfig = {
-          CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER";
+          CapabilityBoundingSet = "CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER";
           ProtectSystem = "strict";
           BindPaths = "/dev/kvm";
           DeviceAllow = "/dev/kvm";
