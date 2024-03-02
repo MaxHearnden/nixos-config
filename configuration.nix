@@ -530,6 +530,27 @@
           RestrictRealtime = true;
         };
       };
+      ovsdb = {
+        serviceConfig = {
+          User = "openvswitch";
+          Group = "openvswitch";
+          RuntimeDirectory = "openvswitch";
+          StateDirectory = "openvswitch";
+          StateDirectoryMode = "0700";
+          BindPaths = "%S/openvswitch:/var/db/openvswitch";
+          AmbientCapabilities = "CAP_IPC_LOCK";
+          UMask = "0027";
+          PrivateTmp = true;
+        };
+      };
+      ovs-vswitchd = {
+        serviceConfig = {
+          User = "openvswitch";
+          Group = "openvswitch";
+          RuntimeDirectory = "openvswitch";
+          AmbientCapabilities = "CAP_IPC_LOCK CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BROADCAST";
+        };
+      };
       tailscaled = {
         serviceConfig = {
           UMask = "0077";
@@ -630,6 +651,10 @@
         home = "/home/max/shared";
         isSystemUser = true;
       };
+      openvswitch = {
+        isSystemUser = true;
+        group = "openvswitch";
+      };
       tailscale = {
         isSystemUser = true;
         group = "tailscale";
@@ -642,7 +667,9 @@
     groups = {
       nix-gc = {};
       sh = {};
+      openvswitch = {};
       tailscale = {};
+      vfio = {};
       zerotierd = {};
     };
     users = {
