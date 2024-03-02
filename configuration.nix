@@ -406,8 +406,8 @@
         };
         serviceConfig = {
           BindPaths = ["/nexus/snapshots/btrbk"];
-          BindReadOnlyPaths = ["/nexus/@NixOS"];
-          PrivateUsers = true;
+          BindReadOnlyPaths = ["/nexus/@NixOS /etc/btrbk"];
+          PrivateUsers = lib.mkForce false;
           RestrictNamespaces = true;
           UMask = "0077";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
