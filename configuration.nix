@@ -174,6 +174,9 @@
         ztmjfp7kiq = {
           allowedTCPPorts = [
             22 # ssh
+            50505
+            50507
+            50509
           ];
         };
       };
