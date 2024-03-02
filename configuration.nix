@@ -401,6 +401,29 @@
     services = {
       "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
         restartIfChanged = false;
+        confinement = {
+          enable = true;
+        };
+        serviceConfig = {
+          BindPaths = ["/nexus/snapshots/btrbk"];
+          BindReadOnlyPaths = ["/nexus/@NixOS"];
+          PrivateUsers = true;
+          RestrictNamespaces = true;
+          UMask = "0077";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          MemoryDenyWriteExecute = true;
+          CapabilityBoundingSet = "CAP_SYS_ADMIN";
+          RemoveIPC = true;
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictRealtime = true;
+          IPAddressDeny = "any";
+        };
       };
       nix-gc = {
         serviceConfig = {

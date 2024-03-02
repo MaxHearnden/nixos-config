@@ -118,6 +118,10 @@
       "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
         wants = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
         after = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
+        serviceConfig = {
+          IPAddressAllow = "172.28.10.244";
+          RestrictAddressFamilies = "AF_INET AF_INET6";
+        };
       };
       "nixos-upgrade" = {
         after = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];

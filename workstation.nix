@@ -329,6 +329,13 @@
     #   };
     # };
     services = {
+      btrbk-workstation = {
+        serviceConfig = {
+          BindPaths = [ "/Big/snapshots/btrbk /Big/backups/workstation /nexus/backups/workstation" ];
+          BindReadOnlyPaths = ["/Big/shared"];
+          PrivateNetwork = true;
+        };
+      };
       harmonia = {
         after = [ "zerotierone.service" ];
         serviceConfig = {
