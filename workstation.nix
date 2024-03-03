@@ -169,6 +169,7 @@
       signKeyPath = "/etc/nix/storekey";
       settings = {
         bind = "172.28.10.244:8080";
+        priority = 50;
       };
     };
     # hydra = {
