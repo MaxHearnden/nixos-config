@@ -627,7 +627,7 @@
           BindPaths = "/var/lib/zerotier-one /dev/net/tun";
           BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
           DeviceAllow = "/dev/net/tun";
-          AmbientCapabilities = "CAP_NET_RAW CAP_NET_ADMIN";
+          AmbientCapabilities = "CAP_NET_ADMIN";
           ProtectKernelModules = true;
           ProtectProc = [ "invisible" ];
           SystemCallFilter = [ "@system-service" "~@privileged" ];
@@ -644,7 +644,7 @@
           MemoryDenyWriteExecute = true;
           RestrictRealtime = true;
           ProtectHome = true;
-          CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
+          CapabilityBoundingSet = "CAP_NET_ADMIN";
           ProcSubset = "pid";
           ExecStart = lib.mkForce "${config.services.zerotierone.package}/bin/zerotier-one -p${toString config.services.zerotierone.port} -U";
           ExecStartPre = lib.mkForce [];
