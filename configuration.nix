@@ -279,6 +279,7 @@
       instances = {
         ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
           settings = {
+            backend = "btrfs-progs";
             target_preserve_min = "no";
             target_preserve = "6w 6m";
             ssh_user = "btrbk";
@@ -398,23 +399,29 @@
     stateVersion = "23.05";
   };
   systemd = {
-    services = {
-      "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
+    services = let
+      short-name = lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName;
+    in {
+      "btrbk-${short-name}" = {
         restartIfChanged = false;
         confinement = {
           enable = true;
         };
         serviceConfig = {
-          BindPaths = ["/nexus/snapshots/btrbk"];
-          BindReadOnlyPaths = ["/nexus/@NixOS /etc/btrbk"];
+          BindPaths = ["/nexus"];
+          BindReadOnlyPaths = ["/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout ${config.environment.etc."btrbk/${short-name}.conf".source}:/etc/btrbk/${short-name}.conf"];
           PrivateUsers = lib.mkForce false;
           RestrictNamespaces = true;
           UMask = "0077";
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          SystemCallFilter = [ "@system-service" "~@resources" ];
           ProtectClock = true;
           ProtectKernelLogs = true;
           MemoryDenyWriteExecute = true;
-          CapabilityBoundingSet = "CAP_SYS_ADMIN";
+          CapabilityBoundingSet = [ "CAP_SYS_ADMIN CAP_FOWNER CAP_DAC_OVERRIDE" ];
+          AmbientCapabilities = [ "CAP_SYS_ADMIN CAP_FOWNER CAP_DAC_OVERRIDE" ];
+          SystemCallArchitectures = "native";
+          ProtectHome = true;
+          NoNewPrivileges = true;
           RemoveIPC = true;
           RestrictSUIDSGID = true;
           ProtectHostname = true;
@@ -423,6 +430,7 @@
           ProcSubset = "pid";
           RestrictRealtime = true;
           IPAddressDeny = "any";
+          StateDirectoryMode = "0700";
         };
       };
       nix-gc = {
@@ -654,7 +662,7 @@
     };
     tmpfiles = {
       rules = [
-        "d /nexus/snapshots/btrbk"
+        "d /nexus/snapshots/btrbk - btrbk btrbk"
         "A /nix/var/nix/profiles - - - - u:nix-gc:rwx,d:u:nix-gc:rwx,m::rwx,d:m::rwx"
         "d /var/lib/zerotier-one 700 zerotierd zerotierd"
         "Z /var/lib/zerotier-one - zerotierd zerotierd"

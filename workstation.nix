@@ -331,9 +331,11 @@
     services = {
       btrbk-workstation = {
         serviceConfig = {
-          BindPaths = [ "/Big/snapshots/btrbk /Big/backups/workstation /nexus/backups/workstation" ];
-          BindReadOnlyPaths = ["/Big/shared"];
+          BindPaths = [ "/Big" ];
           PrivateNetwork = true;
+          RestrictAddressFamilies = "AF_UNIX";
+          CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
+          AmbientCapabilities = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
         };
       };
       harmonia = {
@@ -545,15 +547,16 @@
     };
     tmpfiles = {
       rules = [
-        "d /Big/snapshots/btrbk"
+        "d /Big/snapshots/btrbk - btrbk btrbk"
         "v /Big/backups 700 btrbk btrbk"
         "d /Big/backups/pc"
         "d /Big/backups/dell"
         "d /Big/backups/chromebooksd2"
         "d /Big/backups/laptop"
-        "d /Big/backups/workstation"
+        "d /Big/backups/workstation - btrbk btrbk"
         "v /nexus/backups 700 btrbk btrbk"
-        "d /nexus/backups/workstation"
+        "d /nexus/backups/workstation - btrbk btrbk"
+        "a /Big/shared - - - - u:btrbk:rx"
       ];
     };
   };

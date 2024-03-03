@@ -62,6 +62,7 @@
       instances = {
         ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
           settings = {
+            backend_remote = "btrfs-progs-sudo";
             volume = {
               "/nexus" = {
                 target = "ssh://172.28.10.244/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
@@ -120,7 +121,7 @@
         after = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
         serviceConfig = {
           IPAddressAllow = "172.28.10.244";
-          RestrictAddressFamilies = "AF_INET AF_INET6";
+          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
         };
       };
       "nixos-upgrade" = {
