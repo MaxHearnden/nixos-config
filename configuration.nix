@@ -170,13 +170,16 @@
       "172.28.128.58" = ["max-guix-dell"];
     };
     firewall = {
+      allowedTCPPorts = [
+        # SimSig
+        50505
+        50507
+        50509
+      ];
       interfaces = {
         ztmjfp7kiq = {
           allowedTCPPorts = [
             22 # ssh
-            50505
-            50507
-            50509
           ];
         };
       };
