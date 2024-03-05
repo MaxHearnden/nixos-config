@@ -615,7 +615,6 @@
           RestrictRealtime = true;
           ProtectHome = true;
           CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
-          ProcSubset = "pid";
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
