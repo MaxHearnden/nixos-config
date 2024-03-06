@@ -286,6 +286,9 @@
     };
   };
   services = {
+    avahi = {
+      enable = false;
+    };
     btrbk = {
       extraPackages = with pkgs; [
         zstd
