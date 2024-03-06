@@ -617,6 +617,7 @@
           RestrictRealtime = true;
           ProtectHome = true;
           CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
+          RestrictInterfaces = "~ztmjfp7kiq";
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
@@ -655,6 +656,7 @@
           User = "zerotierd";
           Group = "zerotierd";
           RemoveIPC = true;
+          RestrictInterfaces = "~tailscale0";
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
