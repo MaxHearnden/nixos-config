@@ -1,3 +1,5 @@
+# Global configuration
+
 { config, pkgs, inputs, lib, ... }:
 
 {
@@ -412,7 +414,7 @@
         };
         serviceConfig = {
           BindPaths = ["/nexus"];
-          BindReadOnlyPaths = ["/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout ${config.environment.etc."btrbk/${short-name}.conf".source}:/etc/btrbk/${short-name}.conf"];
+          BindReadOnlyPaths = ["/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout ${config.environment.etc."btrbk/${short-name}.conf".source}:/etc/btrbk/${short-name}.conf /etc/passwd"];
           PrivateUsers = lib.mkForce false;
           RestrictNamespaces = true;
           UMask = "0077";
