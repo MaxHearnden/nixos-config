@@ -557,7 +557,7 @@
         "d /Big/backups/workstation - btrbk btrbk"
         "v /nexus/backups 700 btrbk btrbk"
         "d /nexus/backups/workstation - btrbk btrbk"
-        "a /Big/shared - - - - u:btrbk:rx"
+        "a /Big/shared - - - - u:btrbk:rx,g::,m::rx"
       ];
     };
   };
