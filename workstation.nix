@@ -349,6 +349,33 @@
     #   };
     # };
     services = {
+      "3proxy" = {
+        serviceConfig = {
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          DeviceAllow = "";
+          ProtectHome = true;
+          PrivateDevices = true;
+          IPAddressDeny = "any";
+          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
+          ProtectKernelModules = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          RestrictNamespaces = true;
+          CapabilityBoundingSet = "";
+          RestrictRealtime = true;
+          PrivateUsers = true;
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          LockPersonality = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6";
+          ProtectKernelTunables = true;
+          ProtectHostname = true;
+          MemoryDenyWriteExecute = true;
+          SystemCallArchitectures = "native";
+          UMask = "0077";
+        };
+      };
       btrbk-workstation = {
         serviceConfig = {
           BindPaths = [ "/Big" ];
