@@ -600,6 +600,7 @@
           Group = "openvswitch";
           RuntimeDirectory = "openvswitch";
           AmbientCapabilities = "CAP_IPC_LOCK CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BROADCAST";
+          CapabilityBoundingSet = "CAP_IPC_LOCK CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BROADCAST";
         };
       };
       tailscaled = {
