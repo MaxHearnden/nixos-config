@@ -386,12 +386,12 @@
         };
       };
       harmonia = {
-        after = [ "zerotierone.service" ];
+        wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
         serviceConfig = {
           RestrictSUIDSGID = true;
           RemoveIPC = true;
         };
-        wants = [ "zerotierone.service" ];
+        after = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
       };
       latest-system = {
         serviceConfig = {

@@ -116,8 +116,8 @@
         };
       };
       "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
-        wants = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
-        after = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
+        wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
+        after = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
         serviceConfig = {
           IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
