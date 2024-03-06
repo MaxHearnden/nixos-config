@@ -104,6 +104,25 @@
     };
   };
   services = {
+    _3proxy = {
+      enable = true;
+      services = [
+        {
+          type = "tcppm";
+          auth = [ "none" ];
+          bindPort = 3000;
+          bindAddress = "max-nixos-workstation-zerotier-6plane";
+          extraArguments = "3000 172.28.10.244 3000";
+        }
+        {
+          type = "tcppm";
+          auth = [ "none" ];
+          bindPort = 3000;
+          bindAddress = "max-nixos-workstation-zerotier-rfc4193";
+          extraArguments = "3000 172.28.10.244 3000";
+        }
+      ];
+    };
     btrbk = {
       extraPackages = [
         pkgs.zstd
@@ -156,7 +175,7 @@
           DISABLE_GIT_HOOKS = true;
         };
         server = {
-          DOMAIN = "172.28.10.244";
+          DOMAIN = "max-nixos-workstation-zerotier";
           HTTP_ADDR = "172.28.10.244";
         };
         service = {
@@ -168,7 +187,7 @@
       enable = true;
       signKeyPath = "/etc/nix/storekey";
       settings = {
-        bind = "172.28.10.244:8080";
+        bind = "max-nixos-workstation-zerotier:8080";
         priority = 50;
       };
     };
@@ -530,10 +549,11 @@
     };
     sockets = {
       latest-system = {
-        listenStreams = ["172.28.10.244:8081"];
+        listenStreams = ["172.28.10.244:8081" "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8081" "[fc9c:6b89:eec5:d88:e258::1]:8081"];
         socketConfig = {
+          BindToDevice = "ztmjfp7kiq";
           FreeBind = true;
-          IPAddressAllow = "172.28.0.0/16";
+          IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
           IPAddressDeny = "any";
         };
         wantedBy = [ "multi-user.target" ];
