@@ -448,11 +448,11 @@
         "rev": "0138cc1709fbb60b2f119ce7554427d5f9b8c0af",
         "revCount": 76,
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/keyboard_mouse_emulate_on_raspberry"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/keyboard_mouse_emulate_on_raspberry"
       },
       "original": {
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/keyboard_mouse_emulate_on_raspberry"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/keyboard_mouse_emulate_on_raspberry"
       }
     },
     "latest-system": {
@@ -462,17 +462,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1702098212,
-        "narHash": "sha256-rqXlffiU3nQTGj7dVeeoHQbW8sA5HGR443yBFivfFCo=",
+        "lastModified": 1706458611,
+        "narHash": "sha256-qaobomQB9bJNwVul8aUJ9Cv6V/UiIlb8hFtVDfUnwuE=",
         "ref": "refs/heads/main",
-        "rev": "e297d679d4f28d97211cdfa4e300b8dc55fb3839",
-        "revCount": 4,
+        "rev": "9f4baecbafb0dc58f2be7eda98b48f37aed8a3cf",
+        "revCount": 5,
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/latest-system"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/latest-system"
       },
       "original": {
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/latest-system"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/latest-system"
       }
     },
     "lowdown-src": {
@@ -504,11 +504,11 @@
         "rev": "9b04fd255c65bc4cf37cc9d5209027db28415025",
         "revCount": 11,
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/Math104"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/Math104"
       },
       "original": {
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/Math104"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/Math104"
       }
     },
     "nix": {
@@ -739,11 +739,11 @@
         "rev": "ce851cdc279de6fecb9901427907705515392ced",
         "revCount": 2,
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/rename-exchange"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/rename-exchange"
       },
       "original": {
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/rename-exchange"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/rename-exchange"
       }
     },
     "root": {
@@ -773,11 +773,11 @@
         "rev": "9020d4844372d4ccee0ea0c1438b6eae4424e46a",
         "revCount": 1,
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/shh-nix"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/shh-nix"
       },
       "original": {
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/shh-nix"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/shh-nix"
       }
     },
     "stackage": {
@@ -824,11 +824,11 @@
         "rev": "e1e1201e35078dcb948933a28a45511be7b0042a",
         "revCount": 2,
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/tobig"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/tobig"
       },
       "original": {
         "type": "git",
-        "url": "http://172.28.10.244:3000/zandoodle/tobig"
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/tobig"
       }
     },
     "vscode-extensions": {

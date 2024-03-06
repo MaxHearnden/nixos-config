@@ -46,14 +46,14 @@
       options = [ "nofail" "defaults" "compress=zstd" "nosuid" "nodev" "noatime" ];
     };
   };
-  krb5 = {
-    realms = {
-      WORKSTATION = {
-        master_key_type = "aes256-cts";
-        supported_enctypes = "aes256-cts:normal aes128-cts:normal";
-      };
-    };
-  };
+  # krb5 = {
+  #   realms = {
+  #     WORKSTATION = {
+  #       master_key_type = "aes256-cts";
+  #       supported_enctypes = "aes256-cts:normal aes128-cts:normal";
+  #     };
+  #   };
+  # };
   nix = {
     distributedBuilds = true;
   };
@@ -289,7 +289,7 @@
     nfs = {
       server = {
         enable = true;
-        hostName = "172.28.10.244,192.168.2.1";
+        hostName = "max-nixos-workstation-zerotier,192.168.2.1";
         exports = ''
           /Big/shared -mp=/Big,rw,all_squash,anonuid=1000,anongid=100,async max-nixos-* max-guix-*
           /Big/shared/riscv/star64_root 192.168.2.0/24(rw,no_root_squash,mp=/Big)
@@ -458,7 +458,7 @@
         ];
         restartIfChanged = false;
         script = ''
-          config_all="$(nix build git+http://172.28.10.244:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
+          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
           systemctl stop latest-system.service
           config="$(readlink -e "''${config_all}/${config.networking.hostName}")"

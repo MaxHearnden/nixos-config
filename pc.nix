@@ -93,7 +93,7 @@
         pc = {
           settings = {
             volume = {
-              "ssh://172.28.10.244/nexus" = {
+              "ssh://max-nixos-workstation-zerotier/nexus" = {
                 subvolume = {
                   "@NixOS" = {
                     snapshot_name = "@NixOS-for-pc";
@@ -104,7 +104,7 @@
                 snapshot_preserve_min = "latest";
                 incremental = "strict";
               };
-              "ssh://172.28.10.244/Big" = {
+              "ssh://max-nixos-workstation-zerotier/Big" = {
                 subvolume = {
                   "shared" = {
                     snapshot_name = "shared-for-pc";

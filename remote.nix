@@ -4,7 +4,7 @@
   imports = [./configuration.nix];
   fileSystems = {
     "/home/max/shared" = {
-      device = "172.28.10.244:/Big/shared";
+      device = "max-nixos-workstation-zerotier:/Big/shared";
       fsType = "nfs";
       options = [
         "defaults"
@@ -28,7 +28,7 @@
   nix = {
     buildMachines = [
       {
-        hostName = "172.28.10.244?remote-program=/run/current-system/sw/bin/ssh-mac-x86";
+        hostName = "max-nixos-workstation-zerotier?remote-program=/run/current-system/sw/bin/ssh-mac-x86";
         maxJobs = 4;
         protocol = "ssh-ng";
         sshUser = "root";
@@ -39,7 +39,7 @@
         systems = ["x86_64-darwin"];
       }
       {
-        hostName = "172.28.10.244?remote-program=/run/current-system/sw/bin/ssh-mac";
+        hostName = "max-nixos-workstation-zerotier?remote-program=/run/current-system/sw/bin/ssh-mac";
         maxJobs = 8;
         protocol = "ssh-ng";
         sshUser = "root";
@@ -54,7 +54,7 @@
     settings = {
       builders-use-substitutes = true;
       trusted-public-keys = ["max-nixos-workstation:Ds5AWfGPm6jRbVSjG4ht42MK++hhfFczQ4bJRhD9thI="];
-      substituters = ["http://172.28.10.244:8080"];
+      substituters = ["http://max-nixos-workstation-zerotier:8080"];
     };
   };
   services = {
@@ -65,7 +65,7 @@
             backend_remote = "btrfs-progs-sudo";
             volume = {
               "/nexus" = {
-                target = "ssh://172.28.10.244/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+                target = "ssh://max-nixos-workstation-zerotier/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
               };
             };
           };
@@ -82,7 +82,6 @@
         '';
         serviceConfig = {
           Type = "oneshot";
-          BindPaths = "/run/blkid";
           BindReadOnlyPaths = "/dev /sys";
           User = "blkid-cache";
           Group = "blkid-cache";
@@ -110,6 +109,7 @@
           PrivateNetwork = true;
           ProtectProc = "invisible";
           MemoryDenyWriteExecute = true;
+          RuntimeDirectory = "blkid";
         };
         confinement = {
           enable = true;
@@ -120,7 +120,7 @@
         wants = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
         after = [ "zerotierone.service" "sys-devices-virtual-new-ztmjfp7kiq.device" ];
         serviceConfig = {
-          IPAddressAllow = "172.28.10.244";
+          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
         };
       };
@@ -145,7 +145,7 @@
           ProtectKernelTunables = true;
           RestrictRealtime = true;
           ProtectHome = true;
-          RestrictAddressFamilies = "AF_UNIX AF_INET";
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
           RestrictSUIDSGID = true;
           ProtectHostname = true;
           LockPersonality = true;
@@ -153,7 +153,7 @@
           RestrictNamespaces = true;
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           IPAddressDeny = "any";
-          IPAddressAllow = "172.28.10.244";
+          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
           ProtectProc = "invisible";
           MemoryDenyWriteExecute = true;
         };
@@ -163,7 +163,7 @@
         requires = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         restartIfChanged = false;
         script = ''
-          config="$(${pkgs.curl}/bin/curl "http://172.28.10.244:8081/${config.networking.hostName}" -f)"
+          config="$(${pkgs.curl}/bin/curl "http://max-nixos-workstation-zerotier:8081/${config.networking.hostName}" -f)"
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           "''${config}/bin/switch-to-configuration" boot
         '';
@@ -178,7 +178,6 @@
         "a+ /nix/var/nix/profiles - - - - u:nixos-upgrade:rwx"
         "A+ /boot - - - - u:nixos-upgrade:rwx,d:u:nixos-upgrade:rwx,m::rwx,d:m::rwx"
         "d /run/nixos 755 nixos-upgrade nixos-upgrade"
-        "d /run/blkid 755 blkid-cache blkid-cache"
       ];
     };
     # timers = {

@@ -109,24 +109,24 @@
   i18n = {
     defaultLocale = "en_GB.utf8";
   };
-  krb5 = {
-    domain_realm = {
-      "172.28.10.244" = "WORKSTATION";
-      "max-nixos-workstation" = "WORKSTATION";
-    };
-    enable = true;
-    libdefaults = {
-      default_realm = "WORKSTATION";
-      ignore_acceptor_hostname = true;
-    };
-    realms = {
-      WORKSTATION = {
-        kdc = [
-          "172.28.10.244"
-        ];
-      };
-    };
-  };
+  # krb5 = {
+  #   domain_realm = {
+  #     "172.28.10.244" = "WORKSTATION";
+  #     "max-nixos-workstation" = "WORKSTATION";
+  #   };
+  #   enable = true;
+  #   libdefaults = {
+  #     default_realm = "WORKSTATION";
+  #     ignore_acceptor_hostname = true;
+  #   };
+  #   realms = {
+  #     WORKSTATION = {
+  #       kdc = [
+  #         "172.28.10.244"
+  #       ];
+  #     };
+  #   };
+  # };
   nix = {
     gc = {
       automatic = true;
@@ -423,7 +423,7 @@
         };
         serviceConfig = {
           BindPaths = ["/nexus"];
-          BindReadOnlyPaths = ["/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout ${config.environment.etc."btrbk/${short-name}.conf".source}:/etc/btrbk/${short-name}.conf /etc/passwd"];
+          BindReadOnlyPaths = ["/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout ${config.environment.etc."btrbk/${short-name}.conf".source}:/etc/btrbk/${short-name}.conf /etc/passwd /etc/hosts"];
           PrivateUsers = lib.mkForce false;
           RestrictNamespaces = true;
           UMask = "0077";
