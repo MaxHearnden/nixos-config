@@ -172,10 +172,10 @@
       # "172.28.198.106" = ["max-nixos-laptop"];
       "fd80:56c2:e21c:3d4b:0c99:93ba:b3a3:f197" = ["max-nixos-dell-zerotier-rfc4193" "max-nixos-dell-zerotier-ipv6" "max-nixos-dell-zerotier" "max-nixos-dell"];
       "fc9c:6b89:eeba:b3a3:f197:0000:0000:0001" = ["max-nixos-dell-zerotier-6plane" "max-nixos-dell-zerotier-ipv6" "max-nixos-dell-zerotier" "max-nixos-dell"];
-      "172.28.12.138" = ["max-nixos-dell-ipv4" "max-nixos-dell-zerotier" "max-nixos-dell"];
+      "172.28.12.138" = ["max-nixos-dell-zerotier-ipv4" "max-nixos-dell-zerotier" "max-nixos-dell"];
       "fd80:56c2:e21c:3d4b:0c99:93cb:a358:80d6" = ["max-nixos-pc-zerotier-rfc4193" "max-nixos-pc-zerotier-ipv6" "max-nixos-pc-zerotier" "max-nixos-pc"];
       "fc9c:6b89:eecb:a358:80d6:0000:0000:0001" = ["max-nixos-pc-zerotier-6plane" "max-nixos-pc-zerotier-ipv6" "max-nixos-pc-zerotier" "max-nixos-pc"];
-      "172.28.13.156" = ["max-nixos-pc-ipv4" "max-nixos-pc-zerotier" "max-nixos-pc"];
+      "172.28.13.156" = ["max-nixos-pc-zerotier-ipv4" "max-nixos-pc-zerotier" "max-nixos-pc"];
       "fd80:56c2:e21c:3d4b:0c99:9345:d31f:06d6" = ["max-guix-dell-zerotier-rfc4193" "max-guix-dell-zerotier-ipv6" "max-guix-dell-zerotier" "max-guix-dell"];
       "fc9c:6b89:ee45:d31f:06d6:0000:0000:0001" = ["max-guix-dell-zerotier-6plane" "max-guix-dell-zerotier-ipv6" "max-guix-dell-zerotier" "max-guix-dell"];
       "172.28.128.58" = ["max-guix-dell"];
