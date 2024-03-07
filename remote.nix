@@ -77,6 +77,7 @@
       "blkid-cache" = {
         description = "Blkid entry cache service";
         script = ''
+          ${pkgs.coreutils}/bin/rm -f /run/blkid/blkid.tab
           ${pkgs.util-linux}/bin/blkid
         '';
         serviceConfig = {
