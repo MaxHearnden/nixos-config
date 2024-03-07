@@ -586,6 +586,7 @@
           User = "openvswitch";
           Group = "openvswitch";
           RuntimeDirectory = "openvswitch";
+          RuntimeDirectoryPreserve = true;
           StateDirectory = "openvswitch";
           StateDirectoryMode = "0700";
           BindPaths = "%S/openvswitch:/var/db/openvswitch";
@@ -599,6 +600,7 @@
           User = "openvswitch";
           Group = "openvswitch";
           RuntimeDirectory = "openvswitch";
+          RuntimeDirectoryPreserve = true;
           AmbientCapabilities = "CAP_IPC_LOCK CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BROADCAST";
           CapabilityBoundingSet = "CAP_IPC_LOCK CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_NET_RAW CAP_NET_BROADCAST";
         };

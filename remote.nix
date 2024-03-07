@@ -84,6 +84,7 @@
           BindReadOnlyPaths = "/dev /sys";
           User = "blkid-cache";
           Group = "blkid-cache";
+          RuntimeDirectoryPreserve = true;
           SupplementaryGroups = "disk";
           NoNewPrivileges = true;
           CapabilityBoundingSet = "";
