@@ -244,6 +244,16 @@
   #     };
   #   };
   # };
+  systemd = {
+    services = {
+      btrbk-pc = {
+        serviceConfig = {
+          CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
+          AmbientCapabilities = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
+        };
+      };
+    };
+  };
 
   swapDevices = [
     {
