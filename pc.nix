@@ -249,6 +249,7 @@
     services = {
       btrbk-pc = {
         serviceConfig = {
+          RestrictSUIDSGID = lib.mkForce false;
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
         };

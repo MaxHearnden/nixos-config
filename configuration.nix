@@ -440,7 +440,6 @@
           ProtectHome = true;
           NoNewPrivileges = true;
           RemoveIPC = true;
-          RestrictSUIDSGID = true;
           ProtectHostname = true;
           LockPersonality = true;
           ProtectProc = "invisible";
