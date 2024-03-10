@@ -214,6 +214,7 @@
       enable = true;
     };
     xserver = {
+      enable = lib.mkForce false;
       displayManager = {
         gdm = {
           autoSuspend = false;
