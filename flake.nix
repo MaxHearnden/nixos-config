@@ -18,6 +18,8 @@
   inputs.rename-exchange.inputs.nixpkgs.follows = "nixpkgs";
   inputs.shh.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/shh-nix";
   inputs.shh.inputs.nixpkgs.follows = "nixpkgs";
+  inputs.nixos-kexec.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec";
+  inputs.nixos-kexec.inputs.nixpkgs.follows = "nixpkgs";
   outputs = { self, nixpkgs, ... }@inputs: {
     packages.x86_64-linux.default =
       nixpkgs.legacyPackages.x86_64-linux.linkFarm "systems"
