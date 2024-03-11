@@ -578,7 +578,6 @@
       latest-system = {
         listenStreams = ["172.28.10.244:8081" "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8081" "[fc9c:6b89:eec5:d88:e258::1]:8081"];
         socketConfig = {
-          BindToDevice = "ztmjfp7kiq";
           FreeBind = true;
           IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
           IPAddressDeny = "any";
