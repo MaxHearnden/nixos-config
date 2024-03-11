@@ -36,6 +36,11 @@
       # config.boot.kernelPackages.rtl8812au
       # config.boot.kernelPackages.rtl88x2bu
     ];
+    initrd = {
+      systemd = {
+        enable = true;
+      };
+    };
     loader = {
       efi = {
         canTouchEfiVariables = true;
