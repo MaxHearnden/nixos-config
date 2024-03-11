@@ -803,6 +803,7 @@
           nix-prefetch
           nix-prefetch-scripts
           nix-top
+          ./nixos-kexec
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
           mixxx
           nmap
