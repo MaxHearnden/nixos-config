@@ -549,6 +549,26 @@
         "type": "github"
       }
     },
+    "nixos-kexec": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1710199127,
+        "narHash": "sha256-eJ8Tfby+GrnQeaRE/gwNBY51rWFOxfG9VvzYz1uLonA=",
+        "ref": "refs/heads/main",
+        "rev": "817c7e567996fb23274737e46a71db6957d60478",
+        "revCount": 1,
+        "type": "git",
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec"
+      },
+      "original": {
+        "type": "git",
+        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1657693803,
@@ -752,6 +772,7 @@
         "keyboard_mouse_emulate_on_raspberry": "keyboard_mouse_emulate_on_raspberry",
         "latest-system": "latest-system",
         "math104": "math104",
+        "nixos-kexec": "nixos-kexec",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "rename-exchange": "rename-exchange",
