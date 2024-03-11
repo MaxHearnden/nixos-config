@@ -92,6 +92,7 @@
         "file_mode=0700"
         "dir_mode=0700"
         "nofail"
+        "x-systemd.automount"
       ];
     };
   };

@@ -10,6 +10,7 @@
         "defaults"
         "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device"
         "x-systemd.requires=zerotierone.service"
+        "x-systemd.automount"
         "nofail"
         "noatime"
         "fsc"

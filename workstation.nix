@@ -36,8 +36,8 @@
   };
   fileSystems = {
     "/home/max/shared" = {
-      device = "/Big/shared";
-      options = [ "bind" ];
+      device = config.fileSystems."/Big".device;
+      options = config.fileSystems."/Big".options ++ [ "subvol=/shared" ];
       # options = ["x-systemd.requires=nfs-server.service"];
     };
     "/nexus" = {
