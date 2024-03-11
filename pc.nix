@@ -22,7 +22,7 @@
           }
         '';
         gfxmodeEfi = "1920x1080,auto";
-        useOSProber = true;
+        # useOSProber = true;
       };
     };
     tmp = {
