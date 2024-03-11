@@ -381,8 +381,8 @@
           BindPaths = [ "/Big" ];
           PrivateNetwork = true;
           RestrictAddressFamilies = "AF_UNIX";
-          CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
-          AmbientCapabilities = [ "CAP_DAC_READ_SEARCH" "CAP_CHOWN" ];
+          CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
+          AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
         };
       };
       harmonia = {
