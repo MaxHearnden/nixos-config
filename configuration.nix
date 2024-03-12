@@ -78,7 +78,7 @@
     shellAliases = {
       sda = "systemd-analyze security --no-pager";
       rpush = "git pull --rebase && git push";
-      as-btrbk = "sudo setpriv --ambient-caps +dac_read_search,+chown,+fsetid,+setfcap,+sys_admin,+fowner,+dac_override --inh-caps +dac_read_search,+chwon,+fsetid,+setfcap,+sys_admin,+fowner,+dac_override --reuid btrbk --init-groups";
+      as-btrbk = "sudo setpriv --ambient-caps +dac_read_search,+chown,+fsetid,+setfcap,+sys_admin,+fowner,+dac_override --inh-caps +dac_read_search,+chown,+fsetid,+setfcap,+sys_admin,+fowner,+dac_override --reuid btrbk --init-groups";
     };
   };
   fileSystems = {
