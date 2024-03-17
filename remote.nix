@@ -87,6 +87,7 @@
           User = "blkid-cache";
           Group = "blkid-cache";
           RuntimeDirectoryPreserve = true;
+          SupplementaryGroups = "disk";
           NoNewPrivileges = true;
           CapabilityBoundingSet = "";
           PrivateUsers = true;
@@ -99,7 +100,6 @@
           ProtectKernelTunables = true;
           RestrictRealtime = true;
           ProtectHome = true;
-          ProtectSystem = "strict";
           RestrictAddressFamilies = "none";
           RestrictSUIDSGID = true;
           ProtectHostname = true;
