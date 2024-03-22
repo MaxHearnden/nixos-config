@@ -121,6 +121,13 @@
           bindAddress = "max-nixos-workstation-zerotier-rfc4193";
           extraArguments = "3000 172.28.10.244 3000";
         }
+        {
+          type = "tcppm";
+          auth = [ "none" ];
+          bindPort = 5000;
+          bindAddress = "192.168.2.1";
+          extraArguments = "5000 max-nixos-workstation-zerotier 8080";
+        }
       ];
     };
     btrbk = {
@@ -297,12 +304,12 @@
         '';
       };
     };
-    nix-serve = {
-      bindAddress = "192.168.2.1";
-      enable = true;
-      # openFirewall = true;
-      secretKeyFile = "/etc/nix/storekey";
-    };
+    # nix-serve = {
+    #   bindAddress = "192.168.2.1";
+    #   enable = true;
+    #   # openFirewall = true;
+    #   secretKeyFile = "/etc/nix/storekey";
+    # };
     ratbagd = {
       enable = true;
     };
@@ -432,44 +439,44 @@
           Group = "latest-system";
         };
       };
-      nix-serve = {
-        serviceConfig = {
-          Restart = "always";
-          CapabilityBoundingSet = null;
-          NoNewPrivileges = true;
-          RestrictNamespaces = true;
-          RestrictAddressFamilies = "AF_INET AF_UNIX";
-          RootDirectory = "/var/empty";
-          TemporaryFileSystem = "/";
-          PrivateTmp = true;
-          MountAPIVFS = true;
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          BindReadOnlyPaths = "/bin/sh /nix/store /nix/var/nix/daemon-socket/socket";
-          PrivateDevices = true;
-          PrivateMounts = true;
-          ProtectSystem = false;
-          DynamicUser = lib.mkForce false;
-          RemoveIPC = true;
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          SystemCallArchitectures = "native";
-          MemoryDenyWriteExecute = true;
-          RestrictSUIDSGID = true;
-          ProtectHostname = true;
-          LockPersonality = true;
-          ProtectKernelTunables = true;
-          RestrictRealtime = true;
-          ProtectHome = true;
-          PrivateUsers = true;
-          SystemCallFilter = [ "@system-service" "~@resources" ];
-          IPAddressAllow = [ "172.28.0.0/16" "192.168.2.0/24" ];
-          IPAddressDeny = "any";
-          UMask = "0077";
-        };
-      };
+      # nix-serve = {
+      #   serviceConfig = {
+      #     Restart = "always";
+      #     CapabilityBoundingSet = null;
+      #     NoNewPrivileges = true;
+      #     RestrictNamespaces = true;
+      #     RestrictAddressFamilies = "AF_INET AF_UNIX";
+      #     RootDirectory = "/var/empty";
+      #     TemporaryFileSystem = "/";
+      #     PrivateTmp = true;
+      #     MountAPIVFS = true;
+      #     ProtectProc = "invisible";
+      #     ProcSubset = "pid";
+      #     BindReadOnlyPaths = "/bin/sh /nix/store /nix/var/nix/daemon-socket/socket";
+      #     PrivateDevices = true;
+      #     PrivateMounts = true;
+      #     ProtectSystem = false;
+      #     DynamicUser = lib.mkForce false;
+      #     RemoveIPC = true;
+      #     ProtectClock = true;
+      #     ProtectKernelLogs = true;
+      #     ProtectControlGroups = true;
+      #     ProtectKernelModules = true;
+      #     SystemCallArchitectures = "native";
+      #     MemoryDenyWriteExecute = true;
+      #     RestrictSUIDSGID = true;
+      #     ProtectHostname = true;
+      #     LockPersonality = true;
+      #     ProtectKernelTunables = true;
+      #     RestrictRealtime = true;
+      #     ProtectHome = true;
+      #     PrivateUsers = true;
+      #     SystemCallFilter = [ "@system-service" "~@resources" ];
+      #     IPAddressAllow = [ "172.28.0.0/16" "192.168.2.0/24" ];
+      #     IPAddressDeny = "any";
+      #     UMask = "0077";
+      #   };
+      # };
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
@@ -610,7 +617,7 @@
   users = {
     groups = {
       latest-system = {};
-      nix-serve = {};
+      # nix-serve = {};
     };
     users = {
       btrbk = {
@@ -627,10 +634,10 @@
           piper
         ];
       };
-      nix-serve = {
-        isSystemUser = true;
-        group = "nix-serve";
-      };
+      # nix-serve = {
+      #   isSystemUser = true;
+      #   group = "nix-serve";
+      # };
     };
   };
 }
