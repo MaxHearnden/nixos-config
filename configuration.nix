@@ -98,6 +98,7 @@
         "dir_mode=0700"
         "nofail"
         "x-systemd.automount"
+        "x-systemd.idle-timeout=5m"
       ];
     };
   };

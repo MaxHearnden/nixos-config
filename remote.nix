@@ -11,6 +11,7 @@
         "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device"
         "x-systemd.requires=zerotierone.service"
         "x-systemd.automount"
+        "x-systemd.idle-timeout=5m"
         "nofail"
         "noatime"
         "fsc"
