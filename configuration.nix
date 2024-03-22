@@ -355,6 +355,18 @@
       enable = true;
       extraOptions = "--xkb-layout gb";
     };
+    mysql = {
+      enable = true;
+      package = pkgs.mariadb;
+      ensureUsers = [
+        {
+          name = "max";
+          ensurePermissions = {
+            "*.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
+    };
     openssh = {
       openFirewall = false;
       settings = {
