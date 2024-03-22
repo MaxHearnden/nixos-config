@@ -653,6 +653,7 @@
           ProtectHome = true;
           CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
           RestrictNetworkInterfaces = "~ztmjfp7kiq";
+          Environment = [ "TS_DEBUG_FIREWALL_MODE=nftables" ];
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
