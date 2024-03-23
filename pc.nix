@@ -219,7 +219,6 @@
           autoSuspend = false;
         };
       };
-      videoDrivers = [ "nvidia" ];
       # xrandrHeads = [
       #   "HDMI-0"
       #   {
