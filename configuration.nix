@@ -83,7 +83,7 @@
   };
   fileSystems = {
     "/" = {
-      options = [ "noatime" "user_subvol_rm_allowed" ];
+      options = [ "noatime" "user_subvol_rm_allowed" "nosuid" "nodev" ];
     };
     "/home/max/h-drive" = {
       device = "//homes.lancs.ac.uk/04/hearndem";
