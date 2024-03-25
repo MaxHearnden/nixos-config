@@ -244,6 +244,29 @@
   #   };
   # };
   systemd = {
+    network = {
+      netdevs = {
+        vlan2 = {
+          netdevConfig = {
+            Kind = "vlan";
+            Name = "eno1.2";
+          };
+          vlanConfig = {
+            id = 2;
+          };
+        };
+      };
+      networks = {
+        "10-eno1" = {
+          matchConfig = {
+            Name = "eno1";
+          };
+          networkConfig = {
+            vlan = "vlan2";
+          };
+        };
+      };
+    };
     services = {
       btrbk-pc = {
         serviceConfig = {
