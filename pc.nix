@@ -245,6 +245,7 @@
   # };
   systemd = {
     network = {
+      enable = true;
       netdevs = {
         vlan2 = {
           netdevConfig = {
