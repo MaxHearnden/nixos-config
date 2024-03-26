@@ -258,6 +258,20 @@
         };
       };
       networks = {
+        "10-eno1.2" = {
+          matchConfig = {
+            Name = "eno1.2";
+          };
+          networkConfig = {
+            DHCPServer = true;
+          };
+          address = "192.168.2.1/24";
+          dhcpServerConfig = {
+            EmitDNS = true;
+            PoolOffset = 20;
+            EmitRouter = true;
+          };
+        };
         "10-eno1" = {
           matchConfig = {
             Name = "eno1";
