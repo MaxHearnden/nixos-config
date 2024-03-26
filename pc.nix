@@ -262,7 +262,7 @@
           matchConfig = {
             Name = "eno1";
           };
-          vlan = ["vlan2"];
+          vlan = ["eno1.2"];
         };
       };
     };
