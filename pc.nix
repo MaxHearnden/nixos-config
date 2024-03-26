@@ -252,7 +252,7 @@
             Name = "eno1.2";
           };
           vlanConfig = {
-            id = 2;
+            Id = 2;
           };
         };
       };
@@ -262,7 +262,7 @@
             Name = "eno1";
           };
           networkConfig = {
-            vlan = "vlan2";
+            Vlan = "vlan2";
           };
         };
       };
