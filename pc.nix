@@ -76,6 +76,8 @@
     #     "net-dhcp"
     #   ];
     # };
+    networkmanager.enable = false;
+    useNetworkd = true;
     # networkmanager = {
     #   unmanaged = [
     #     "net-dhcp"
