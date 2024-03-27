@@ -43,14 +43,12 @@
     };
   };
   networking = {
-    # firewall = {
-    #   interfaces = {
-    #     net-dhcp = {
-    #       allowedTCPPorts = [ 5000 53 ];
-    #       allowedUDPPorts = [ 53 ];
-    #     };
-    #   };
-    # };
+    firewall = {
+      extraInputRules = ''
+        iifname "eno1.2" udp dport 67 meta nfproto ipv4 accept comment "kea4 server"
+        ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "eno1.2" accept comment "kea6 server"
+      '';
+    };
     hostName = "max-nixos-pc";
     # hosts =
     #   lib.listToAttrs (
@@ -129,87 +127,162 @@
       #   }
       # ];
     };
-    # kea = {
-    #   dhcp4 = {
-    #     enable = true;
-    #     settings = {
-    #       interfaces-config = {
-    #         interfaces = [
-    #           "net-dhcp"
-    #         ];
-    #       };
-    #       lease-database = {
-    #         name = "/var/lib/kea/dhcp4.leases";
-    #         persist = true;
-    #         type = "memfile";
-    #       };
-    #       rebind-timer = 2000;
-    #       renew-timer = 1000;
-    #       subnet4 = [
-    #         {
-    #           pools = [
-    #             {
-    #               pool = "192.168.2.20 - 192.168.2.240";
-    #             }
-    #           ];
-    #           subnet = "192.168.2.0/24";
+    kea = {
+      dhcp4 = {
+        enable = true;
+        settings = {
+          interfaces-config = {
+            interfaces = [
+              "eno1.2"
+            ];
+          };
+          lease-database = {
+            name = "/var/lib/kea/dhcp4.leases";
+            persist = true;
+            type = "memfile";
+          };
+          rebind-timer = 2000;
+          renew-timer = 1000;
+          subnet4 = [
+            {
+              pools = [
+                {
+                  pool = "192.168.2.20 - 192.168.2.240";
+                }
+              ];
+              subnet = "192.168.2.0/24";
 
-    #           option-data = [
-    #             {
-    #               name = "routers";
-    #               data = "192.168.2.1";
-    #             }
-    #           ];
-    #           reservations = [
-    #             {
-    #               hw-address = "48:da:35:60:0e:19";
-    #               ip-address = "192.168.2.10";
-    #             }
-    #             {
-    #               hw-address = "48:da:35:60:0e:18";
-    #               hostname = "nixos-slot1";
-    #               ip-address = "192.168.2.11";
-    #             }
-    #             {
-    #               hw-address = "48:da:35:60:0e:12";
-    #               hostname = "nixos-slot2";
-    #               ip-address = "192.168.2.12";
-    #             }
-    #             {
-    #               hw-address = "48:da:35:60:0e:16";
-    #               hostname = "nixos-slot3";
-    #               ip-address = "192.168.2.13";
-    #             }
-    #             {
-    #               hw-address = "48:da:35:60:0e:14";
-    #               hostname = "nixos-slot4";
-    #               ip-address = "192.168.2.14";
-    #             }
-    #             {
-    #               hw-address = "56:44:6a:05:fd:90";
-    #               hostname = "nixos-slot5";
-    #               ip-address = "192.168.2.15";
-    #             }
-    #             {
-    #               hw-address = "48:da:35:60:0e:0e";
-    #               hostname = "nixos-slot6";
-    #               ip-address = "192.168.2.16";
-    #             }
-    #             {
-    #               hw-address = "48:da:35:60:0e:28";
-    #               hostname = "nixos-slot7";
-    #               ip-address = "192.168.2.17";
-    #             }
-    #             {
-    #               hw-address = "36:a9:52:d4:e6:f8";
-    #               ip-address = "192.168.2.18";
-    #             }
-    #           ];
-    #         }
-    #       ];
-    #     };
-    #   };
-    # };
+              option-data = [
+                {
+                  name = "routers";
+                  data = "192.168.2.1";
+                }
+              ];
+              reservations = [
+                {
+                  hw-address = "48:da:35:60:0e:19";
+                  ip-address = "192.168.2.10";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:18";
+                  hostname = "nixos-slot1";
+                  ip-address = "192.168.2.11";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:12";
+                  hostname = "nixos-slot2";
+                  ip-address = "192.168.2.12";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:16";
+                  hostname = "nixos-slot3";
+                  ip-address = "192.168.2.13";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:14";
+                  hostname = "nixos-slot4";
+                  ip-address = "192.168.2.14";
+                }
+                {
+                  hw-address = "56:44:6a:05:fd:90";
+                  hostname = "nixos-slot5";
+                  ip-address = "192.168.2.15";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:0e";
+                  hostname = "nixos-slot6";
+                  ip-address = "192.168.2.16";
+                }
+                {
+                  hw-address = "48:da:35:60:0e:28";
+                  hostname = "nixos-slot7";
+                  ip-address = "192.168.2.17";
+                }
+                {
+                  hw-address = "36:a9:52:d4:e6:f8";
+                  ip-address = "192.168.2.18";
+                }
+              ];
+            }
+          ];
+        };
+      };
+      dhcp6 = {
+        enable = true;
+        settings = {
+          interfaces-config = {
+            interfaces = [
+              "eno1.2"
+            ];
+          };
+          lease-database = {
+            name = "/var/lib/kea/dhcp6.leases";
+            persist = true;
+            type = "memfile";
+          };
+          rebind-timer = 2000;
+          renew-timer = 1000;
+          subnet6 = [
+            {
+              id = 1;
+              pools = [
+                {
+                  pool = "fd80:1234::20 - fd80:1234:ffff:ffff:ffff:ffff:ffff:ffff";
+                }
+              ];
+              subnet = "fd80:1234::/32";
+              interface = "eno1.2";
+
+              reservations = [
+                {
+                  hw-address = "48:da:35:60:0e:19";
+                  ip-addresses = ["fd80:1234::10"];
+                }
+                {
+                  hw-address = "48:da:35:60:0e:18";
+                  hostname = "nixos-slot1";
+                  ip-addresses = ["fd80:1234::11"];
+                }
+                {
+                  hw-address = "48:da:35:60:0e:12";
+                  hostname = "nixos-slot2";
+                  ip-addresses = ["fd80:1234::12"];
+                }
+                {
+                  hw-address = "48:da:35:60:0e:16";
+                  hostname = "nixos-slot3";
+                  ip-addresses = ["fd80:1234::13"];
+                }
+                {
+                  hw-address = "48:da:35:60:0e:14";
+                  hostname = "nixos-slot4";
+                  ip-addresses = ["fd80:1234::14"];
+                }
+                {
+                  hw-address = "56:44:6a:05:fd:90";
+                  hostname = "nixos-slot5";
+                  ip-addresses = ["fd80:1234::15"];
+                }
+                {
+                  hw-address = "48:da:35:60:0e:0e";
+                  hostname = "nixos-slot6";
+                  ip-addresses = ["fd80:1234::16"];
+                }
+                {
+                  hw-address = "48:da:35:60:0e:28";
+                  hostname = "nixos-slot7";
+                  ip-addresses = ["fd80:1234::17"];
+                }
+                {
+                  hw-address = "36:a9:52:d4:e6:f8";
+                  ip-addresses = ["fd80:1234::18"];
+                }
+              ];
+            }
+          ];
+        };
+      };
+    };
     ratbagd = {
       enable = true;
     };
@@ -247,6 +320,15 @@
     network = {
       enable = true;
       netdevs = {
+        vlan1 = {
+          netdevConfig = {
+            Kind = "vlan";
+            Name = "eno1.1";
+          };
+          vlanConfig = {
+            Id = 1;
+          };
+        };
         vlan2 = {
           netdevConfig = {
             Kind = "vlan";
@@ -262,23 +344,49 @@
           matchConfig = {
             Name = "eno1.2";
           };
+          DHCP = "no";
           networkConfig = {
-            DHCPServer = true;
+            IPv6SendRA = true;
           };
-          address = "192.168.2.1/24";
-          dhcpServerConfig = {
-            EmitDNS = true;
-            PoolOffset = 20;
-            EmitRouter = true;
+          ipv6SendRAConfig = {
+            Managed = true;
+            RouterLifetimeSec = 0;
           };
+          ipv6Prefixes = [
+            {
+              ipv6PrefixConfig = {
+                Prefix = "fd80:1234::/32";
+              };
+            }
+          ];
+          # networkConfig = {
+          #   DHCPServer = true;
+          # };
+          address = [ "192.168.2.1/24" "fd80:1234::1/32" ];
+          # dhcpServerConfig = {
+          #   EmitDNS = true;
+          #   PoolOffset = 20;
+          #   EmitRouter = true;
+          # };
+        };
+        "10-eno1.1" ={
+          matchConfig = {
+            Name = "eno1.1";
+          };
+          DHCP = "yes";
         };
         "10-eno1" = {
           matchConfig = {
             Name = "eno1";
           };
-          vlan = ["eno1.2"];
+          DHCP = "no";
+          linkConfig = {
+            ARP = false;
+          };
+          vlan = ["eno1.1" "eno1.2"];
         };
       };
+      wait-online.enable = false;
     };
     services = {
       btrbk-pc = {
