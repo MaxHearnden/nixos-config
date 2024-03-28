@@ -69,13 +69,13 @@
     #     useDHCP = false;
     #   };
     # };
-    # nat = {
-    #   enable = true;
-    #   externalInterface = "eno1";
-    #   internalInterfaces = [
-    #     "net-dhcp"
-    #   ];
-    # };
+    nat = {
+      enable = true;
+      externalInterface = "eno1.1";
+      internalInterfaces = [
+        "eno1.2"
+      ];
+    };
     networkmanager.enable = false;
     useNetworkd = true;
     # networkmanager = {
