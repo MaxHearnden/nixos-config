@@ -424,8 +424,8 @@
   system = {
     extraDependencies = [
       # Prevent unnecicary gc and rebuild
-      pkgsCross.riscv32.buildPackages.gcc.info
-      pkgsCross.riscv64.buildPackages.gcc.info
+      pkgs.pkgsCross.riscv32.buildPackages.gcc.info
+      pkgs.pkgsCross.riscv64.buildPackages.gcc.info
     ];
     stateVersion = "23.05";
   };
