@@ -350,6 +350,9 @@
           networkConfig = {
             IPv6SendRA = true;
           };
+          linkConfig = {
+            ARP = true;
+          };
           ipv6SendRAConfig = {
             Managed = true;
             RouterLifetimeSec = 0;
@@ -374,6 +377,9 @@
         "10-eno1.1" ={
           matchConfig = {
             Name = "eno1.1";
+          };
+          linkConfig = {
+            ARP = true;
           };
           DHCP = "yes";
         };
