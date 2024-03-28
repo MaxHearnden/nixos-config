@@ -365,7 +365,7 @@
           ProtectHome = true;
           PrivateDevices = true;
           IPAddressDeny = "any";
-          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001 192.168.2.1";
+          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258/88 fc9c:6b89:eec5:0d88:e258:0000:0000:0001/40 192.168.2.1/24";
           ProtectKernelModules = true;
           ProtectClock = true;
           ProtectKernelLogs = true;
