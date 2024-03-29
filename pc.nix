@@ -44,9 +44,15 @@
   };
   networking = {
     firewall = {
+      interfaces = {
+        "eno1.2" = {
+          allowedTCPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 ];
+        };
+      };
       extraInputRules = ''
-        iifname "eno1.2" udp dport 67 meta nfproto ipv4 accept comment "kea4 server"
-        ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "eno1.2" accept comment "kea6 server"
+        iifname "eno1.2" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
+        ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "eno1.2" accept comment "dnsmasq"
       '';
     };
     hostName = "max-nixos-pc";
