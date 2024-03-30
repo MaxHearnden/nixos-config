@@ -142,6 +142,7 @@
         interface = [ "eno1.2" ];
         enable-ra = true;
         dhcp-range = [ "192.168.2.20,192.168.2.250" ];
+        selfmx = true;
       };
     };
     # kea = {
@@ -336,6 +337,18 @@
   systemd = {
     network = {
       enable = true;
+      links = {
+        "10-eno1" = {
+          matchConfig = {
+            MACAddress = "40:b0:76:de:79:dc";
+          };
+          linkConfig = {
+            GenericReceiveOffload = false;
+            GenericSegmentationOffload = false;
+            TCPSegmentationOffload = false;
+          };
+        };
+      };
       netdevs = {
         vlan1 = {
           netdevConfig = {
