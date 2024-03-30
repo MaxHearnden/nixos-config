@@ -141,7 +141,8 @@
         bind-dynamic = true;
         interface = [ "eno1.2" ];
         enable-ra = true;
-        dhcp-range = [ "192.168.2.20,192.168.2.250" ];
+        dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff" ];
+        domain = "localnet";
         selfmx = true;
       };
     };
@@ -396,7 +397,12 @@
           # networkConfig = {
           #   DHCPServer = true;
           # };
-          address = [ "192.168.2.1/24" "fd80:1234::1/32" ];
+          dns = [ "192.168.2.1" "fd80:1234::1" ];
+          domains = [ "localnet" ];
+          address = [ "192.168.2.1/24" "fd80:1234::1/64" ];
+          networkConfig = {
+            DNSDefaultRoute = false;
+          };
           # dhcpServerConfig = {
           #   EmitDNS = true;
           #   PoolOffset = 20;
