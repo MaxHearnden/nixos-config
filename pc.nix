@@ -145,6 +145,7 @@
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff" ];
         domain = "localnet";
         selfmx = true;
+        dhcp-option = "option:mtu, 9000";
       };
     };
     # kea = {
@@ -426,6 +427,7 @@
           };
           DHCP = "no";
           linkConfig = {
+            MTUBytes = "9000";
             ARP = false;
           };
           vlan = ["eno1.1" "eno1.2"];
