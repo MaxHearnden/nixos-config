@@ -835,6 +835,7 @@
           qpdfview
           qtspim
           rebar3
+          ripgrep
           inputs.rename-exchange.packages.x86_64-linux.default
           inputs.math104.packages.x86_64-linux.rEnv
           rfc
