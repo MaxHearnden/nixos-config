@@ -157,9 +157,11 @@
       experimental-features = [
         "nix-command"
         "flakes"
+        "cgroups"
       ];
       trusted-public-keys = [ "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI=" "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" "cache.ngi0.nixos.org-1:KqH5CBLNSyX184S9BKZJo1LxrxJ9ltnY2uAs5c/f1MA=" ];
       trusted-substituters = [ "https://cache.ngi0.nixos.org" "https://cache.iog.io" ];
+      use-cgroups = true;
     };
   };
   nixpkgs = {
@@ -514,6 +516,7 @@
       # };
       nix-daemon = {
         serviceConfig = {
+          Delegate = true;
           CapabilityBoundingSet = "CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER";
           ProtectSystem = "strict";
           BindPaths = "/dev/kvm";
@@ -529,11 +532,10 @@
           NoNewPrivileges = true;
           PrivateDevices = true;
           ProtectClock = true;
-          ProtectControlGroups = true;
           ProtectHome = "read-only";
           ProtectKernelModules = true;
           SocketBindDeny = "any";
-          RestrictNamespaces = "user net mnt ipc pid uts";
+          RestrictNamespaces = "user net mnt ipc pid uts cgroup";
           RestrictSUIDSGID = true;
           # IPAddressAllow = "172.28.10.244";
           RestrictNetworkInterfaces = "~tailscale0";
