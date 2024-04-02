@@ -12,6 +12,9 @@
       tmpfsSize = "100%";
     };
   };
+  console = {
+    enable = false;
+  };
   environment = {
     etc = {
       "nix/machines" = {
@@ -292,6 +295,9 @@
           ];
         };
       };
+    };
+    kmscon = {
+      enable = lib.mkForce false;
     };
     nfs = {
       server = {
