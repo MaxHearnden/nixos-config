@@ -9,7 +9,7 @@
   inputs.math104.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/Math104";
   inputs.math104.inputs.nixpkgs.follows = "nixpkgs";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-  inputs.nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+  inputs.nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable-small";
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs-unstable";
   inputs.tobig.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/tobig";
