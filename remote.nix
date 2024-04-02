@@ -133,6 +133,7 @@
         after = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         description = "NixOS Upgrade";
         serviceConfig = {
+          RemainAfterExit = true;
           AmbientCapabilities = "CAP_SYS_ADMIN";
           CapabilityBoundingSet = "CAP_SYS_ADMIN";
           NoNewPrivileges = true;
