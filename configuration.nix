@@ -900,6 +900,15 @@
     };
   };
   virtualisation = {
+    vmVariant = {
+      users = {
+        users = {
+          max = {
+            password = "nixos";
+          };
+        };
+      };
+    };
     vswitch = {
       package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.openvswitch;
     };
