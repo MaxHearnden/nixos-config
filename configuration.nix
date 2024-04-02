@@ -85,22 +85,22 @@
     "/" = {
       options = [ "noatime" "user_subvol_rm_allowed" "nosuid" "nodev" ];
     };
-    "/home/max/h-drive" = {
-      device = "//homes.lancs.ac.uk/04/hearndem";
-      fsType = "cifs";
-      options = [
-        "defaults"
-        "uid=max"
-        "gid=users"
-        "cred=/root/lancaster-creds"
-        "mfsymlinks"
-        "file_mode=0700"
-        "dir_mode=0700"
-        "nofail"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=5m"
-      ];
-    };
+    # "/home/max/h-drive" = {
+    #   device = "//homes.lancs.ac.uk/04/hearndem";
+    #   fsType = "cifs";
+    #   options = [
+    #     "defaults"
+    #     "uid=max"
+    #     "gid=users"
+    #     "cred=/root/lancaster-creds"
+    #     "mfsymlinks"
+    #     "file_mode=0700"
+    #     "dir_mode=0700"
+    #     "nofail"
+    #     "x-systemd.automount"
+    #     "x-systemd.idle-timeout=5m"
+    #   ];
+    # };
   };
   hardware = {
     bluetooth = {
