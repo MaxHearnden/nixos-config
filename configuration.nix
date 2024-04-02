@@ -344,13 +344,13 @@
         enable = true;
       };
     };
-    guix = {
-      enable = true;
-      gc = {
-        enable = true;
-        extraArgs = [ "-d" ];
-      };
-    };
+    # guix = {
+    #   enable = true;
+    #   gc = {
+    #     enable = true;
+    #     extraArgs = [ "-d" ];
+    #   };
+    # };
     kmscon = {
       enable = true;
       extraOptions = "--xkb-layout gb";
