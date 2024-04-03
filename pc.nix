@@ -77,6 +77,7 @@
     # };
     nat = {
       enable = true;
+      enableIPv6 = true;
       externalInterface = "eno1.1";
       internalInterfaces = [
         "eno1.2"
