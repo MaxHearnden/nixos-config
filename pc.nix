@@ -346,6 +346,8 @@
             MACAddress = "40:b0:76:de:79:dc";
           };
           linkConfig = {
+            NamePolicy = "keep kernel database onboard slot path";
+            AlternativeNamesPolicy = "database onboard slot path";
             GenericReceiveOffload = false;
             GenericSegmentationOffload = false;
             TCPSegmentationOffload = false;
