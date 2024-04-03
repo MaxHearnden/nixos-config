@@ -141,11 +141,10 @@
         bind-dynamic = true;
         interface = [ "eno1.2" ];
         enable-ra = true;
-        ra-param = "eno1.2,mtu:9000,0,0";
+        ra-param = "eno1.2,0,0";
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff" ];
         domain = "localnet";
         selfmx = true;
-        dhcp-option = "option:mtu, 9000";
       };
     };
     # kea = {
@@ -384,7 +383,6 @@
           #   IPv6SendRA = true;
           # };
           linkConfig = {
-            MTUBytes = "9000";
             ARP = true;
           };
           # ipv6SendRAConfig = {
@@ -429,7 +427,6 @@
           };
           DHCP = "no";
           linkConfig = {
-            MTUBytes = "9000";
             ARP = false;
           };
           vlan = ["eno1.1" "eno1.2"];
