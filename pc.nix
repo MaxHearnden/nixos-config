@@ -78,12 +78,30 @@
     nat = {
       enable = true;
       enableIPv6 = true;
-      externalInterface = "{ eno1.1, ztmjfp7kiq }";
+      externalInterface = "eno1.1";
       internalInterfaces = [
         "eno1.2"
       ];
     };
     networkmanager.enable = false;
+    nftables = {
+      tables = {
+        "nixos-nat" = {
+          content = ''
+            chain post {
+              iifname "eno1.2" oifname "ztmjfp7kiq" masquerade comment "from internal interfaces"
+            }
+          '';
+        };
+        "nixos-nat6" = {
+          content = ''
+            chain post {
+              iifname "eno1.2" oifname "ztmjfp7kiq" masquerade comment "from internal interfaces"
+            }
+          '';
+        };
+      };
+    };
     useNetworkd = true;
     # networkmanager = {
     #   unmanaged = [
