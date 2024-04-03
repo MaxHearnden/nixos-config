@@ -80,19 +80,19 @@
           lib.nameValuePair "192.168.2.1${toString (index + 1)}" [ "nixos-slot${toString (index + 1)}"]
         ) 7
       );
-    interfaces = {
-      enp2s0 = {
-        ipv4 = {
-          addresses = [
-            {
-              address = "192.168.2.1";
-              prefixLength = 24;
-            }
-          ];
-        };
-        useDHCP = false;
-      };
-    };
+    # interfaces = {
+    #   enp2s0 = {
+    #     ipv4 = {
+    #       addresses = [
+    #         {
+    #           address = "192.168.2.1";
+    #           prefixLength = 24;
+    #         }
+    #       ];
+    #     };
+    #     useDHCP = false;
+    #   };
+    # };
     nat = {
       enable = true;
       externalInterface = "eno1";
@@ -330,38 +330,23 @@
     };
   };
   systemd = {
-    # network = {
-    #   enable = true;
-    #   networks = {
-    #     "10-enp2s0" = {
-    #       address = ["192.168.2.1/24"];
-    #       dhcpServerConfig = {
-    #         EmitDNS = false;
-    #         PoolOffset = 10;
-    #         PoolSize = 240;
-    #       };
-    #       dhcpServerStaticLeases = [
-    #         {
-    #           dhcpServerStaticLeaseConfig = {
-    #             MACAddress = "d4:93:90:06:43:76";
-    #             Address = "192.168.2.2";
-    #           };
-    #         }
-    #       ];
-    #       matchConfig = {
-    #         Name = "enp2s0";
-    #       };
-    #       networkConfig = {
-    #         DHCPServer = true;
-    #       };
-    #     };
-    #   };
-    #   wait-online = {
-    #     ignoredInterfaces = [
-    #       "enp2s0"
-    #     ];
-    #   };
-    # };
+    network = {
+      enable = true;
+      networks = {
+        "10-enp2s0" = {
+          address = ["192.168.2.1/24"];
+          matchConfig = {
+            Name = "enp2s0";
+          };
+          DHCP = "no";
+        };
+      };
+      # wait-online = {
+      #   ignoredInterfaces = [
+      #     "enp2s0"
+      #   ];
+      # };
+    };
     services = {
       "3proxy" = {
         serviceConfig = {
