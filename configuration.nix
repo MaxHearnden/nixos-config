@@ -624,7 +624,7 @@
         serviceConfig = {
           UMask = "0077";
           BindPaths = "/dev/net/tun";
-          BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
+          BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl /run/dbus/system_bus_socket";
           User = "tailscale";
           Group = "tailscale";
           DeviceAllow = "/dev/net/tun";
@@ -648,7 +648,7 @@
           ProtectHome = true;
           CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
           RestrictNetworkInterfaces = "~ztmjfp7kiq";
-          Environment = [ "TS_DEBUG_FIREWALL_MODE=nftables" ];
+          Environment = [ "TS_DEBUG_FIREWALL_MODE=nftables" "DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket" ];
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
