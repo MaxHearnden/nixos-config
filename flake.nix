@@ -26,6 +26,14 @@
         (builtins.attrValues
           (builtins.mapAttrs (name: path: {inherit name path;}) self.hydraJobs)
         );
+    packages.x86_64-linux.vms =
+      nixpkgs.legacyPackages.x86_64-linux.symlinkJoin
+        {
+          name = "vms";
+          paths =
+            (builtins.attrValues
+              (builtins.mapAttrs (name: system: system.config.system.build.vm) self.nixosConfigurations));
+        };
     nixosConfigurations.max-nixos-workstation = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {inherit inputs;};
