@@ -338,16 +338,14 @@
           matchConfig = {
             Name = "enp2s0";
           };
+          linkConfig = {
+            RequiredForOnline = false;
+          };
           networkConfig = {
             ConfigureWithoutCarrier = true;
           };
           DHCP = "no";
         };
-      };
-      wait-online = {
-        ignoredInterfaces = [
-          "enp2s0"
-        ];
       };
     };
     services = {
