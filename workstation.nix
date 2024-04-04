@@ -344,11 +344,11 @@
           DHCP = "no";
         };
       };
-      # wait-online = {
-      #   ignoredInterfaces = [
-      #     "enp2s0"
-      #   ];
-      # };
+      wait-online = {
+        ignoredInterfaces = [
+          "enp2s0"
+        ];
+      };
     };
     services = {
       "3proxy" = {
