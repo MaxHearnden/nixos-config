@@ -338,6 +338,9 @@
           matchConfig = {
             Name = "enp2s0";
           };
+          networkConfig = {
+            ConfigureWithoutCarrier = true;
+          };
           DHCP = "no";
         };
       };
