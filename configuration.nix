@@ -598,16 +598,41 @@
       };
       ovsdb = {
         serviceConfig = {
-          User = "openvswitch";
+          AmbientCapabilities = "CAP_IPC_LOCK";
+          BindPaths = "%S/openvswitch:/var/db/openvswitch";
+          CapabilityBoundingSet = "CAP_IPC_LOCK";
           Group = "openvswitch";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateNetwork = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectControlGroups = true;
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = "AF_UNIX";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
           RuntimeDirectory = "openvswitch";
           RuntimeDirectoryPreserve = true;
           StateDirectory = "openvswitch";
           StateDirectoryMode = "0700";
-          BindPaths = "%S/openvswitch:/var/db/openvswitch";
-          AmbientCapabilities = "CAP_IPC_LOCK";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = "@system-service @debug";
           UMask = "0027";
-          PrivateTmp = true;
+          User = "openvswitch";
         };
       };
       ovs-vswitchd = {
