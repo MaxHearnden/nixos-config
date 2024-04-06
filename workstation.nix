@@ -347,6 +347,9 @@
           DHCP = "no";
         };
       };
+      wait-online = {
+        enable = false;
+      };
     };
     services = {
       "3proxy" = {
