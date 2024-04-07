@@ -324,6 +324,7 @@
               };
             };
           };
+          onCalendar = "daily UTC";
         };
       };
     };
