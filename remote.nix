@@ -162,6 +162,7 @@
           IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
           ProtectProc = "invisible";
           MemoryDenyWriteExecute = true;
+          RuntimeMaxSec = "1d";
         };
         path = with pkgs; [
           config.nix.package.out
