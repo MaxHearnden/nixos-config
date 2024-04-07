@@ -528,7 +528,9 @@
           # BindPaths = "/nix /root/.cache/nix /tmp";
           ReadWritePaths = "/nix /tmp";
           RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
-          SystemCallFilter = [ "@system-service @mount @sandbox sethostname setdomainname @pkey" ];
+          SystemCallFilter = [ "@system-service @mount @sandbox sethostname setdomainname" ];
+          SystemCallErrorNumber = "EPERM";
+          SystemCallLog = "~@system-service @mount @sandbox sethostname setdomainname";
           # PrivateMounts = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
