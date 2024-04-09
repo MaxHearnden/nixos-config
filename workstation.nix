@@ -40,6 +40,7 @@
   fileSystems = {
     "/home/max/shared" = {
       device = config.fileSystems."/Big".device;
+      fsType = "btrfs";
       options = config.fileSystems."/Big".options ++ [ "subvol=/shared" ];
       # options = ["x-systemd.requires=nfs-server.service"];
     };
