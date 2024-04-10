@@ -330,6 +330,9 @@
       };
     };
   };
+  system = {
+    includeBuildDependencies = true;
+  };
   systemd = {
     network = {
       enable = true;
