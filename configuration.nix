@@ -418,10 +418,10 @@
     };
   };
   specialisation.nox.configuration = {
-    services = {
-      xserver = {
-        autorun = false;
-      };
+    boot = {
+      kernelParams = [
+        "systemd.unit=multi-user.target"
+      ];
     };
   };
   system = {
