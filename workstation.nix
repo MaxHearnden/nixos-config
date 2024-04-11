@@ -330,6 +330,11 @@
       };
     };
   };
+  specialisation.nox.configuration = {
+    system = {
+      includeBuildDependencies = lib.mkForce false;
+    };
+  };
   system = {
     includeBuildDependencies = true;
   };
