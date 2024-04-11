@@ -50,10 +50,10 @@
           allowedUDPPorts = [ 53 ];
         };
       };
-      extraInputRules = ''
-        iifname "eno1.2" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
-        ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "eno1.2" accept comment "dnsmasq"
-      '';
+      # extraInputRules = ''
+      #   iifname "eno1.2" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
+      #   ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "eno1.2" accept comment "dnsmasq"
+      # '';
     };
     hostName = "max-nixos-pc";
     # hosts =
@@ -154,18 +154,18 @@
       #   }
       # ];
     };
-    dnsmasq = {
-      enable = true;
-      settings = {
-        bind-dynamic = true;
-        interface = [ "eno1.2" ];
-        enable-ra = true;
-        ra-param = "eno1.2,0,0";
-        dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff" ];
-        domain = "localnet";
-        selfmx = true;
-      };
-    };
+    # dnsmasq = {
+    #   enable = true;
+    #   settings = {
+    #     bind-dynamic = true;
+    #     interface = [ "eno1.2" ];
+    #     enable-ra = true;
+    #     ra-param = "eno1.2,0,0";
+    #     dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff" ];
+    #     domain = "localnet";
+    #     selfmx = true;
+    #   };
+    # };
     # kea = {
     #   dhcp4 = {
     #     enable = true;
