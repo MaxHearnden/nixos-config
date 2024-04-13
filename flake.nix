@@ -26,6 +26,12 @@
         (builtins.attrValues
           (builtins.mapAttrs (name: path: {inherit name path;}) self.hydraJobs)
         );
+    packages.x86_64-linux.systems-with-closure =
+      nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-closure" {} ''
+        mkdir $out
+        ln -s ${self.packages.x86_64-linux.default} $out/systems
+        ln -s ${nixpkgs.legacyPackages.x86_64-linux.closureInfo self.packages.x86_64-linux.default} $out/closure
+      '';
     packages.x86_64-linux.vms =
       nixpkgs.legacyPackages.x86_64-linux.symlinkJoin
         {

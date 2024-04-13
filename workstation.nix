@@ -330,14 +330,6 @@
       };
     };
   };
-  specialisation.nox.configuration = {
-    system = {
-      includeBuildDependencies = lib.mkForce false;
-    };
-  };
-  system = {
-    includeBuildDependencies = true;
-  };
   systemd = {
     network = {
       enable = true;
@@ -497,10 +489,10 @@
         ];
         restartIfChanged = false;
         script = ''
-          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
+          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config#systems-with-closure --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
           systemctl stop latest-system.service
-          config="$(readlink -e "''${config_all}/${config.networking.hostName}")"
+          config="$(readlink -e "''${config_all}/systems/${config.networking.hostName}")"
           nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           booted=$(readlink /run/booted-system/kernel /run/booted-system/kernel-modules /run/booted-system/initrd)
           current=$(readlink "''${config}/kernel" "''${config}/kernel-modules" "''${config}/initrd")
