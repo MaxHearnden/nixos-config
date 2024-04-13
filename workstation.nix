@@ -502,12 +502,20 @@
           systemctl stop latest-system.service
           config="$(readlink -e "''${config_all}/${config.networking.hostName}")"
           nix-env -p /nix/var/nix/profiles/system --set "''${config}"
-          if [ "$1" = --specialisation ]
+          booted=$(readlink /run/booted-system/kernel /run/booted-system/kernel-modules /run/booted-system/initrd)
+          current=$(readlink "''${config}/kernel" "''${config}/kernel-modules" "''${config}/initrd")
+          if [ "''${booted}" != "''${current}" ]
           then
             "''${config}/bin/switch-to-configuration" boot
-            "''${config}/specialisation/$2/switch-to-configuration" test
+            ${inputs.nixos-kexec.packages.x86_64-linux.default}/bin/nixos-kexec
           else
-            "''${config}/bin/switch-to-configuration" switch
+            if [ "$1" = --specialisation ]
+            then
+              "''${config}/bin/switch-to-configuration" boot
+              "''${config}/specialisation/$2/switch-to-configuration" test
+            else
+              "''${config}/bin/switch-to-configuration" switch
+            fi
           fi
         '';
         startAt = "17:45";
