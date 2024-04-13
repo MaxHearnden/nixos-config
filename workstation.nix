@@ -486,6 +486,8 @@
           config.nix.package.out
           config.programs.ssh.package
           systemd
+          kexec-tools
+          inputs.nixos-kexec.packages.x86_64-linux.default
         ];
         restartIfChanged = false;
         script = ''
@@ -499,7 +501,7 @@
           if [ "''${booted}" != "''${current}" ]
           then
             "''${config}/bin/switch-to-configuration" boot
-            ${inputs.nixos-kexec.packages.x86_64-linux.default}/bin/nixos-kexec
+            nixos-kexec
           else
             if [ "$1" = --specialisation ]
             then
