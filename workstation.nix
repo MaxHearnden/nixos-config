@@ -501,7 +501,7 @@
           if [ "''${booted}" != "''${current}" ]
           then
             "''${config}/bin/switch-to-configuration" boot
-            nixos-kexec
+            nixos-kexec --when "1 hour left"
           else
             if [ "$1" = --specialisation ]
             then
