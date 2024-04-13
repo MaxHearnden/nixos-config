@@ -407,7 +407,7 @@
           # PrivateDevices = true;
           UMask = "0077";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          BindReadOnlyPaths = "/nix/var/nix/profiles/all";
+          BindReadOnlyPaths = "/nix/var/nix/profiles/all/systems";
           SystemCallArchitectures = "native";
           ProtectClock = true;
           ProtectKernelLogs = true;
