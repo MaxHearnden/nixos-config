@@ -225,6 +225,9 @@
     };
     fish = {
       enable = true;
+      interactiveShellInit = ''
+        ${config.systemd.package}/bin/systemctl shutdown --when=show
+      '';
     };
     git = {
       enable = true;
