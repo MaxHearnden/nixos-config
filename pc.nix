@@ -13,6 +13,9 @@
     #     allowUnfree = true;
     #   };
     # }).linuxKernel.packages.linux_6_1;
+    kernelParams = [
+      "console=ttyS0,115200"
+    ];
     loader = {
       grub = {
         extraEntries = ''
