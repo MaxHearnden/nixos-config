@@ -24,12 +24,21 @@
         "fsc"
         "softreval"
         "async"
+        "nodev"
+        "nosuid"
       ];
     };
     "/boot" = {
       options = [
         "uid=nixos-upgrade"
         "gid=nixos-upgrade"
+        "umask=0077"
+        "nosuid"
+        "nodev"
+        "noatime"
+        "noexec"
+        "x-systemd.automount"
+        "x-systemd.idle-timeout=10s"
       ];
     };
   };
