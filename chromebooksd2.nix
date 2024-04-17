@@ -4,7 +4,10 @@
   boot = {
     loader = {
       grub = {
-        efiInstallAsRemovable = true;
+        enable = lib.mkForce false;
+      };
+      systemd-boot = {
+        enable = true;
       };
       efi = {
         canTouchEfiVariables = lib.mkForce false;
