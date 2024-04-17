@@ -2,6 +2,13 @@
 
 {
   imports = [./configuration.nix];
+  boot = {
+    loader = {
+      efi = {
+        efiSysMountPoint = lib.mkForce "/boot";
+      };
+    };
+  };
   fileSystems = {
     "/home/max/shared" = {
       device = "max-nixos-workstation-zerotier:/Big/shared";
@@ -19,7 +26,7 @@
         "async"
       ];
     };
-    "/boot/efi" = {
+    "/boot" = {
       options = [
         "uid=nixos-upgrade"
         "gid=nixos-upgrade"

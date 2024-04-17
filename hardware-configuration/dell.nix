@@ -25,7 +25,7 @@
       options = [ "defaults" "subvol=/nix" "noatime" "compress=zstd" ];
     };
 
-  fileSystems."/boot/efi" =
+  fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/F5DE-4023";
       fsType = "vfat";
       options = [ "umask=077" ];

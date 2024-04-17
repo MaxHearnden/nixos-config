@@ -18,14 +18,20 @@
     ];
     loader = {
       grub = {
-        extraEntries = ''
-          menuentry "Ubuntu" {
-            search --set root --fs-uuid A6CD-C355
-            chainloader /EFI/ubuntu/shimx64.efi
-          }
-        '';
-        gfxmodeEfi = "1920x1080,auto";
-        # useOSProber = true;
+        enable = lib.mkForce false;
+      };
+      # grub = {
+      #   extraEntries = ''
+      #     menuentry "Ubuntu" {
+      #       search --set root --fs-uuid A6CD-C355
+      #       chainloader /EFI/ubuntu/shimx64.efi
+      #     }
+      #   '';
+      #   gfxmodeEfi = "1920x1080,auto";
+      #   # useOSProber = true;
+      # };
+      systemd-boot = {
+        enable = true;
       };
     };
     tmp = {

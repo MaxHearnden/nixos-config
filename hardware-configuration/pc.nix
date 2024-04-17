@@ -19,9 +19,10 @@
       options = [ "defaults" "compress=zstd" "subvol=/@NixOS" ];
     };
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/A6CD-C355";
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/B845-476C";
       fsType = "vfat";
+      options = [ "umask=077" ];
     };
 
   fileSystems."/var/guix" =
