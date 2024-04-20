@@ -12,9 +12,6 @@
       tmpfsSize = "100%";
     };
   };
-  console = {
-    enable = false;
-  };
   environment = {
     etc = {
       "nix/machines" = {
@@ -297,9 +294,6 @@
         };
       };
     };
-    kmscon = {
-      enable = lib.mkForce false;
-    };
     nfs = {
       server = {
         enable = true;
@@ -321,12 +315,11 @@
       enable = true;
     };
     xserver = {
-      autorun = false;
       displayManager = {
         gdm = {
           autoSuspend = false;
         };
-        sessionCommands = "xhost +SI:localuser:max";
+        # sessionCommands = "xhost +SI:localuser:max";
       };
     };
   };
