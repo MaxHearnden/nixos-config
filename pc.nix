@@ -335,6 +335,7 @@
       enable = true;
     };
     xserver = {
+      autorun = false;
       displayManager = {
         gdm = {
           autoSuspend = false;
