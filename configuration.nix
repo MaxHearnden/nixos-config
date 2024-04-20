@@ -244,9 +244,9 @@
       binfmt = true;
       enable = true;
     };
-    mininet = {
-      enable = true;
-    };
+    # mininet = {
+    #   enable = true;
+    # };
     neovim = {
       configure = {
         customRC = ''
