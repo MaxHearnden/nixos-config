@@ -52,18 +52,18 @@
     };
   };
   networking = {
-    firewall = {
-      interfaces = {
-        "eno1.2" = {
-          allowedTCPPorts = [ 53 ];
-          allowedUDPPorts = [ 53 ];
-        };
-      };
-      extraInputRules = ''
-        iifname "eno1.2" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
-        ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "eno1.2" accept comment "dnsmasq"
-      '';
-    };
+    # firewall = {
+    #   interfaces = {
+    #     "eno1.2" = {
+    #       allowedTCPPorts = [ 53 ];
+    #       allowedUDPPorts = [ 53 ];
+    #     };
+    #   };
+    #   extraInputRules = ''
+    #     iifname "eno1.2" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
+    #     ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "eno1.2" accept comment "dnsmasq"
+    #   '';
+    # };
     hostName = "max-nixos-pc";
     # hosts =
     #   lib.listToAttrs (
@@ -84,33 +84,33 @@
     #     useDHCP = false;
     #   };
     # };
-    nat = {
-      enable = true;
-      enableIPv6 = true;
-      externalInterface = "eno1.1";
-      internalInterfaces = [
-        "eno1.2"
-      ];
-    };
+    # nat = {
+    #   enable = true;
+    #   enableIPv6 = true;
+    #   externalInterface = "eno1.1";
+    #   internalInterfaces = [
+    #     "eno1.2"
+    #   ];
+    # };
     networkmanager.enable = false;
-    nftables = {
-      tables = {
-        "nixos-nat" = {
-          content = ''
-            chain post {
-              iifname "eno1.2" oifname "ztmjfp7kiq" masquerade comment "from internal interfaces"
-            }
-          '';
-        };
-        "nixos-nat6" = {
-          content = ''
-            chain post {
-              iifname "eno1.2" oifname "ztmjfp7kiq" masquerade comment "from internal interfaces"
-            }
-          '';
-        };
-      };
-    };
+    # nftables = {
+    #   tables = {
+    #     "nixos-nat" = {
+    #       content = ''
+    #         chain post {
+    #           iifname "eno1.2" oifname "ztmjfp7kiq" masquerade comment "from internal interfaces"
+    #         }
+    #       '';
+    #     };
+    #     "nixos-nat6" = {
+    #       content = ''
+    #         chain post {
+    #           iifname "eno1.2" oifname "ztmjfp7kiq" masquerade comment "from internal interfaces"
+    #         }
+    #       '';
+    #     };
+    #   };
+    # };
     useNetworkd = true;
     # networkmanager = {
     #   unmanaged = [
@@ -163,18 +163,18 @@
       #   }
       # ];
     };
-    dnsmasq = {
-      enable = true;
-      settings = {
-        bind-dynamic = true;
-        interface = [ "eno1.2" ];
-        enable-ra = true;
-        ra-param = "eno1.2,0,0";
-        dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff" ];
-        domain = "localnet";
-        selfmx = true;
-      };
-    };
+    # dnsmasq = {
+    #   enable = true;
+    #   settings = {
+    #     bind-dynamic = true;
+    #     interface = [ "eno1.2" ];
+    #     enable-ra = true;
+    #     ra-param = "eno1.2,0,0";
+    #     dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff" ];
+    #     domain = "localnet";
+    #     selfmx = true;
+    #   };
+    # };
     # kea = {
     #   dhcp4 = {
     #     enable = true;
@@ -382,84 +382,84 @@
           };
         };
       };
-      netdevs = {
-        vlan1 = {
-          netdevConfig = {
-            Kind = "vlan";
-            Name = "eno1.1";
-          };
-          vlanConfig = {
-            Id = 1;
-          };
-        };
-        vlan2 = {
-          netdevConfig = {
-            Kind = "vlan";
-            Name = "eno1.2";
-          };
-          vlanConfig = {
-            Id = 2;
-          };
-        };
-      };
+      # netdevs = {
+      #   vlan1 = {
+      #     netdevConfig = {
+      #       Kind = "vlan";
+      #       Name = "eno1.1";
+      #     };
+      #     vlanConfig = {
+      #       Id = 1;
+      #     };
+      #   };
+      #   vlan2 = {
+      #     netdevConfig = {
+      #       Kind = "vlan";
+      #       Name = "eno1.2";
+      #     };
+      #     vlanConfig = {
+      #       Id = 2;
+      #     };
+      #   };
+      # };
       networks = {
-        "10-eno1.2" = {
-          matchConfig = {
-            Name = "eno1.2";
-          };
-          DHCP = "no";
-          # networkConfig = {
-          #   IPv6SendRA = true;
-          # };
-          linkConfig = {
-            ARP = true;
-          };
-          # ipv6SendRAConfig = {
-          #   Managed = true;
-          #   OtherInformation = true;
-          #   RouterLifetimeSec = 0;
-          # };
-          # ipv6Prefixes = [
-          #   {
-          #     ipv6PrefixConfig = {
-          #       Prefix = "fd80:1234::/32";
-          #     };
-          #   }
-          # ];
-          # networkConfig = {
-          #   DHCPServer = true;
-          # };
-          dns = [ "192.168.2.1" "fd80:1234::1" ];
-          domains = [ "localnet" ];
-          address = [ "192.168.2.1/24" "fd80:1234::1/64" ];
-          networkConfig = {
-            DNSDefaultRoute = false;
-          };
-          # dhcpServerConfig = {
-          #   EmitDNS = true;
-          #   PoolOffset = 20;
-          #   EmitRouter = true;
-          # };
-        };
-        "10-eno1.1" ={
-          matchConfig = {
-            Name = "eno1.1";
-          };
-          linkConfig = {
-            ARP = true;
-          };
-          DHCP = "yes";
-        };
-        "10-eno1" = {
-          matchConfig = {
-            Name = "eno1";
-          };
-          DHCP = "no";
-          linkConfig = {
-            ARP = false;
-          };
-          vlan = ["eno1.1" "eno1.2"];
-        };
+        # "10-eno1.2" = {
+        #   matchConfig = {
+        #     Name = "eno1.2";
+        #   };
+        #   DHCP = "no";
+        #   # networkConfig = {
+        #   #   IPv6SendRA = true;
+        #   # };
+        #   linkConfig = {
+        #     ARP = true;
+        #   };
+        #   # ipv6SendRAConfig = {
+        #   #   Managed = true;
+        #   #   OtherInformation = true;
+        #   #   RouterLifetimeSec = 0;
+        #   # };
+        #   # ipv6Prefixes = [
+        #   #   {
+        #   #     ipv6PrefixConfig = {
+        #   #       Prefix = "fd80:1234::/32";
+        #   #     };
+        #   #   }
+        #   # ];
+        #   # networkConfig = {
+        #   #   DHCPServer = true;
+        #   # };
+        #   dns = [ "192.168.2.1" "fd80:1234::1" ];
+        #   domains = [ "localnet" ];
+        #   address = [ "192.168.2.1/24" "fd80:1234::1/64" ];
+        #   networkConfig = {
+        #     DNSDefaultRoute = false;
+        #   };
+        #   # dhcpServerConfig = {
+        #   #   EmitDNS = true;
+        #   #   PoolOffset = 20;
+        #   #   EmitRouter = true;
+        #   # };
+        # };
+        # "10-eno1.1" ={
+        #   matchConfig = {
+        #     Name = "eno1.1";
+        #   };
+        #   linkConfig = {
+        #     ARP = true;
+        #   };
+        #   DHCP = "yes";
+        # };
+        # "10-eno1" = {
+        #   matchConfig = {
+        #     Name = "eno1";
+        #   };
+        #   DHCP = "no";
+        #   linkConfig = {
+        #     ARP = false;
+        #   };
+        #   vlan = ["eno1.1" "eno1.2"];
+        # };
       };
       wait-online.enable = true;
     };
