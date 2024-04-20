@@ -3,6 +3,11 @@
 {
   imports = [./configuration.nix ./hardware-configuration/workstation.nix];
   boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+      };
+    };
     # loader = {
     #   grub = {
     #     default = 3;

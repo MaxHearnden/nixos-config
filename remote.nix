@@ -2,13 +2,6 @@
 
 {
   imports = [./configuration.nix];
-  boot = {
-    loader = {
-      efi = {
-        efiSysMountPoint = lib.mkForce "/boot";
-      };
-    };
-  };
   fileSystems = {
     "/home/max/shared" = {
       device = "max-nixos-workstation-zerotier:/Big/shared";
@@ -32,13 +25,6 @@
       options = [
         "uid=nixos-upgrade"
         "gid=nixos-upgrade"
-        "umask=0077"
-        "nosuid"
-        "nodev"
-        "noatime"
-        "noexec"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=10s"
       ];
     };
   };

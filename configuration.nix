@@ -44,26 +44,26 @@
     loader = {
       efi = {
         canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot/efi";
+        efiSysMountPoint = "/boot";
       };
-      grub = {
-        device = "nodev";
-        efiSupport = true;
-        enable = true;
-        extraEntries = ''
-          menuentry "iPXE" {
-            chainloader @bootRoot@/ipxe.efi
-          }
+      # grub = {
+      #   device = "nodev";
+      #   efiSupport = true;
+      #   enable = true;
+      #   extraEntries = ''
+      #     menuentry "iPXE" {
+      #       chainloader @bootRoot@/ipxe.efi
+      #     }
 
-          menuentry "memtest86+" {
-            chainloader @bootRoot@/memtest.efi
-          }
-        '';
-        extraFiles = {
-          "ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
-          "memtest.efi" = "${pkgs.memtest86plus}/memtest.efi";
-        };
-      };
+      #     menuentry "memtest86+" {
+      #       chainloader @bootRoot@/memtest.efi
+      #     }
+      #   '';
+      #   extraFiles = {
+      #     "ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
+      #     "memtest.efi" = "${pkgs.memtest86plus}/memtest.efi";
+      #   };
+      # };
     };
   };
   console = {
@@ -84,6 +84,17 @@
   fileSystems = {
     "/" = {
       options = [ "noatime" "user_subvol_rm_allowed" "nosuid" "nodev" ];
+    };
+    "/boot" = {
+      options = [
+        "umask=0077"
+        "nosuid"
+        "nodev"
+        "noatime"
+        "noexec"
+        "x-systemd.automount"
+        "x-systemd.idle-timeout=10s"
+      ];
     };
     # "/home/max/h-drive" = {
     #   device = "//homes.lancs.ac.uk/04/hearndem";

@@ -19,8 +19,8 @@
       options = [ "compress=zstd" "subvol=/@NixOS" ];
     };
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/9AF6-12D3";
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/7564-4511";
       fsType = "vfat";
     };
 
