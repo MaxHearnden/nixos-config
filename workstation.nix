@@ -75,14 +75,18 @@
           allowedUDPPorts = [ 53 69 ];
         };
       };
+      extraInputRules = ''
+        iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
+        ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
+      '';
     };
     hostName = "max-nixos-workstation";
-    hosts =
-      lib.listToAttrs (
-        lib.genList (index:
-          lib.nameValuePair "192.168.2.1${toString (index + 1)}" [ "nixos-slot${toString (index + 1)}"]
-        ) 7
-      );
+    # hosts =
+    #   lib.listToAttrs (
+    #     lib.genList (index:
+    #       lib.nameValuePair "192.168.2.1${toString (index + 1)}" [ "nixos-slot${toString (index + 1)}"]
+    #     ) 7
+    #   );
     # interfaces = {
     #   enp2s0 = {
     #     ipv4 = {
@@ -186,7 +190,7 @@
         bind-dynamic = true;
         interface = [ "enp2s0" ];
         enable-ra = true;
-        ra-param = "eno2s0,0,0";
+        ra-param = "enp2s0,0,0";
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         domain = "localnet";
         selfmx = true;
@@ -345,15 +349,18 @@
       enable = true;
       networks = {
         "10-enp2s0" = {
-          address = ["192.168.2.1/24"];
+          address = ["192.168.2.1/24" "fd80:1234::1/64" "192.168.40.1/24"];
           matchConfig = {
             Name = "enp2s0";
           };
           linkConfig = {
             RequiredForOnline = false;
           };
+          domains = [ "localnet" ];
+          dns = [ "192.168.2.1" "fd80:1234::1" ];
           networkConfig = {
             ConfigureWithoutCarrier = true;
+            DNSDefaultRoute = false;
           };
           DHCP = "no";
         };
