@@ -83,8 +83,20 @@
   };
   fileSystems = {
     "/" = {
-      options = [ "noatime" "user_subvol_rm_allowed" "nosuid" "nodev" ];
+      options = [ "noatime" "user_subvol_rm_allowed" "nosuid" "nodev" "compress=zstd" "subvol=/@NixOS" "defaults" ];
     };
+    "/nexus" =
+      let root = config.fileSystems."/";
+      in {
+        inherit (root) device fsType;
+        options = (lib.filter (option: !lib.hasPrefix "subvol=" option) root.options) ++ [ "subvol=/" ];
+      };
+    "/nix" =
+      let root = config.fileSystems."/";
+      in {
+        inherit (root) device fsType;
+        options = (lib.filter (option: !lib.hasPrefix "subvol=" option) root.options) ++ [ "subvol=/nix" ];
+      };
     "/boot" = {
       options = [
         "umask=0077"

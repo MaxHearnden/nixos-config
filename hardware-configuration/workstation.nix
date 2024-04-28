@@ -16,7 +16,6 @@
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/76463411-5c55-4708-bf63-7e3195776b57";
       fsType = "btrfs";
-      options = [ "compress=zstd" "subvol=/@NixOS" ];
     };
 
   fileSystems."/boot" =
@@ -28,12 +27,6 @@
     { device = "/dev/disk/by-uuid/0379ef59-faa8-424c-89a7-cedc93956adc";
       fsType = "btrfs";
       options = [ "defaults" "compress=zstd" "noatime" "user_subvol_rm_allowed" "x-systemd.automount" ];
-    };
-
-  fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/76463411-5c55-4708-bf63-7e3195776b57";
-      fsType = "btrfs";
-      options = [ "defaults" "subvol=/nix" "noatime" "compress=zstd" ];
     };
 
   # swapDevices = [ { device = "/dev/disk/by-uuid/1ef934f7-1630-4889-8a13-8a2cbebebcc2"; } ];
