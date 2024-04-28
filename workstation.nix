@@ -513,8 +513,8 @@
           systemctl stop latest-system.service
           config="$(readlink -e "''${config_all}/systems/${config.networking.hostName}")"
           nix-env -p /nix/var/nix/profiles/system --set "''${config}"
-          booted=$(readlink /run/booted-system/kernel /run/booted-system/kernel-modules /run/booted-system/initrd)
-          current=$(readlink "''${config}/kernel" "''${config}/kernel-modules" "''${config}/initrd")
+          booted=$(readlink /run/booted-system/kernel /run/booted-system/kernel-modules)
+          current=$(readlink "''${config}/kernel" "''${config}/kernel-modules")
           if [ "''${booted}" != "''${current}" ]
           then
             "''${config}/bin/switch-to-configuration" boot
