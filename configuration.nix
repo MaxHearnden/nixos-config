@@ -912,6 +912,7 @@
           #teams
           #texlive.combined.scheme-full
           inputs.tobig.packages.x86_64-linux.default
+          tpm2-tools
           thunderbird
           nodePackages.uglify-js
           umlet
