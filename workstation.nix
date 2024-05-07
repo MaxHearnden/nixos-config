@@ -119,6 +119,14 @@
       ];
     };
   };
+  security = {
+    tpm2 = {
+      enable = true;
+      tctiEnvironment = {
+        enable = true;
+      };
+    };
+  };
   services = {
     _3proxy = {
       enable = true;
@@ -660,6 +668,7 @@
         group = "latest-system";
       };
       max = {
+        extraGroups = [ "tss" ];
         packages = with pkgs; [
           piper
         ];
