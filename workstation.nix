@@ -18,11 +18,17 @@
     };
   };
   environment = {
-    etc = {
-      "nix/machines" = {
-        source = "/machines";
+    etc =
+      lib.listToAttrs (map (file: {
+        name = "pcrlock.d/${file}";
+        value = {
+          source = "${inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.systemd.out}/lib/pcrlock.d/${file}";
+        };
+      }) [ "350-action-efi-application.pcrlock" "400-secureboot-separator.pcrlock.d" "500-separator.pcrlock.d" "700-action-efi-exit-boot-services.pcrlock.d" ]) // {
+        "nix/machines" = {
+          source = "/machines";
+        };
       };
-    };
     systemPackages = with pkgs; [
       gtk3
       (
