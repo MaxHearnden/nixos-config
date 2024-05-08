@@ -24,7 +24,13 @@
         value = {
           source = "${inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.systemd.out}/lib/pcrlock.d/${file}";
         };
-      }) [ "350-action-efi-application.pcrlock" "400-secureboot-separator.pcrlock.d" "500-separator.pcrlock.d" "700-action-efi-exit-boot-services.pcrlock.d" ]) // {
+      }) [ "400-secureboot-separator.pcrlock.d" "500-separator.pcrlock.d" "700-action-efi-exit-boot-services.pcrlock.d" ]) // 
+      lib.listToAttrs (map (file: {
+        name = "pcrlock.d/${file}";
+        value = {
+          source = "/run/booted-system/${file}";
+        };
+      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock" "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock" "720-kernel-initrd.pcrlock" ]) // {
         "nix/machines" = {
           source = "/machines";
         };

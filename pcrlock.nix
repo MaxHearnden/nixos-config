@@ -11,9 +11,11 @@
     # Lock command line
     initrd_suffix=$(basename $(readlink $out/initrd))
     initrd=$(basename $(dirname $(readlink $out/initrd)))
-    echo "initrd=\\efi\\nixos\\$initrd-$initrd_suffix.efi $(<$out/kernel-params)" | ${pcrlock} lock-kernel-cmdline /dev/stdin --pcrlock=$out/710-kernel-cmdline.pcrlock
+    kernel_params="initrd=\\efi\\nixos\\$initrd-$initrd_suffix.efi init=$out/init $(<$out/kernel-params)"
+    echo "$kernel_params"
+    ${pcrlock} lock-kernel-cmdline <(echo "$kernel_params") --pcrlock=$out/710-kernel-cmdline.pcrlock
     # Lock command line round two (Covers pcr 11)
-    sed 's/"pcr":9/"pcr":11/' <$out/710-kernel-cmdline.pcrlock >$out/705-kernel-cmdline.pcrlock
+    sed 's/"pcr":9/"pcr":12/' <$out/710-kernel-cmdline.pcrlock >$out/705-kernel-cmdline.pcrlock
     # Lock initrd
     ${pcrlock} lock-kernel-initrd $out/initrd --pcrlock=$out/720-kernel-initrd.pcrlock
   '';
