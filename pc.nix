@@ -40,6 +40,13 @@
     };
   };
   networking = {
+    firewall = {
+      interfaces = {
+        ztmjfp7kiq = {
+          allowedTCPPorts = [ 8080 9090 ];
+        };
+      };
+    };
     # firewall = {
     #   interfaces = {
     #     "eno1.2" = {
