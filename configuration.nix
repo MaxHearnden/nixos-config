@@ -938,6 +938,7 @@
           vulnix
           w3m
           watchexec
+          whatsapp-for-linux
     #      wine
           winetricks
           #((wineWowPackages.full.override {sdlSupport = true; vkd3dSupport = true;}).overrideAttrs (_: {patches = [./attachment.cgi];}))
