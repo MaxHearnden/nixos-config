@@ -3,7 +3,7 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
-  imports = [ ./dev-environment.nix ];
+  imports = [ ./dev-environment.nix ./pcrlock.nix ];
   boot = {
     binfmt = {
       emulatedSystems = [
