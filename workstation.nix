@@ -369,7 +369,7 @@
       enable = true;
       networks = {
         "10-enp2s0" = {
-          address = ["192.168.2.1/24" "fd80:1234::1/64" "192.168.40.1/24"];
+          address = ["192.168.2.1/24" "fd80:1234::1/64"];
           matchConfig = {
             Name = "enp2s0";
           };
