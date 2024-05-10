@@ -674,7 +674,6 @@
         group = "latest-system";
       };
       max = {
-        extraGroups = [ "tss" ];
         packages = with pkgs; [
           piper
         ];

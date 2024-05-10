@@ -13,5 +13,10 @@
   networking = {
     hostName = "max-nixos-dell";
   };
+  services = {
+    tcsd = {
+      enable = true;
+    };
+  };
   #boot.loader.grub.extraConfig = "badram 0x0000000099a09810,0xfffffffffffffff8";
 }

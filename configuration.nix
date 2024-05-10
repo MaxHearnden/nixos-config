@@ -799,7 +799,7 @@
     };
     users = {
       max = {
-        extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "adbusers" "wireshark" ];
+        extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "adbusers" "wireshark" "tss" ];
         isNormalUser = true;
         packages = with pkgs; [
           ardour

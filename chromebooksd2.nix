@@ -18,6 +18,11 @@
   networking = {
     hostName = "max-nixos-chromebooksd2";
   };
+  services = {
+    tcsd = {
+      enable = true;
+    };
+  };
   swapDevices = [
     {
       device = "/nexus/swapfile";
