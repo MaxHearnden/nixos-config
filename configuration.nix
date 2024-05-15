@@ -908,6 +908,7 @@
           snis
           sshfs
           stack
+          gnomeExtensions.systemd-status
           tea
           #teams
           #texlive.combined.scheme-full
