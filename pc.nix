@@ -39,6 +39,21 @@
       useTmpfs = true;
     };
   };
+  environment = {
+    etc =
+      lib.listToAttrs (map (file: {
+        name = "pcrlock.d/${file}";
+        value = {
+          source = "${inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.systemd.out}/lib/pcrlock.d/${file}";
+        };
+      }) [ "400-secureboot-separator.pcrlock.d" "500-separator.pcrlock.d" "700-action-efi-exit-boot-services.pcrlock.d" ]) // 
+      lib.listToAttrs (map (file: {
+        name = "pcrlock.d/${file}";
+        value = {
+          source = "/run/booted-system/${file}";
+        };
+      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock" "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock" "720-kernel-initrd.pcrlock" ]);
+  };
   networking = {
     firewall = {
       interfaces = {
@@ -112,6 +127,14 @@
     #     "net-dhcp"
     #   ];
     # };
+  };
+  security = {
+    tpm2 = {
+      enable = true;
+      tctiEnvironment = {
+        enable = true;
+      };
+    };
   };
   services = {
     _3proxy = {
