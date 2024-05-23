@@ -456,7 +456,7 @@
       pkgs.pkgsCross.riscv32.buildPackages.gcc.info
       pkgs.pkgsCross.riscv64.buildPackages.gcc.info
     ];
-    stateVersion = "23.05";
+    stateVersion = "23.11";
   };
   systemd = {
     services = let
