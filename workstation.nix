@@ -514,7 +514,6 @@
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
-        enable = false;
         path = with pkgs; [
           coreutils
           gnutar
