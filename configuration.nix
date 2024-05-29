@@ -911,6 +911,7 @@
           gnomeExtensions.systemd-status
           tea
           #teams
+          teams-for-linux
           #texlive.combined.scheme-full
           inputs.tobig.packages.x86_64-linux.default
           tpm2-tools
