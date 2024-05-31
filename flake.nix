@@ -1,6 +1,6 @@
 {
   inputs.haskell-nix.url = "github:input-output-hk/haskell.nix";
-  inputs.haskell-nix.inputs.nixpkgs-2311.follows = "nixpkgs";
+  inputs.haskell-nix.inputs.nixpkgs-2405.follows = "nixpkgs";
   inputs.haskell-nix.inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
   inputs.keyboard_mouse_emulate_on_raspberry.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/keyboard_mouse_emulate_on_raspberry";
   inputs.keyboard_mouse_emulate_on_raspberry.inputs.nixpkgs.follows = "nixpkgs";
@@ -8,7 +8,7 @@
   inputs.latest-system.inputs.nixpkgs.follows = "nixpkgs";
   inputs.math104.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/Math104";
   inputs.math104.inputs.nixpkgs.follows = "nixpkgs";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
   inputs.nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs-unstable";
