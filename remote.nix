@@ -209,6 +209,7 @@
       };
       nixos-upgrade = {
         group = "nixos-upgrade";
+        extraGroups = [ "disk" ];
         isSystemUser = true;
       };
     };
