@@ -327,9 +327,6 @@
       enable = false;
     };
     btrbk = {
-      extraPackages = with pkgs; [
-        zstd
-      ];
       instances = {
         ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
           settings = {
@@ -384,6 +381,9 @@
       enable = true;
       extraOptions = "--xkb-layout gb";
     };
+    libinput = {
+      enable = true;
+    };
     openssh = {
       openFirewall = false;
       settings = {
@@ -425,10 +425,6 @@
         };
       };
       enable = true;
-      layout = "gb";
-      libinput = {
-        enable = true;
-      };
       windowManager = {
         i3 = {
           enable = true;
@@ -436,6 +432,9 @@
         xmonad = {
           enable = true;
         };
+      };
+      xkb = {
+        layout = "gb";
       };
     };
     zerotierone = {
