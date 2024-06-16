@@ -157,9 +157,6 @@
       ];
     };
     btrbk = {
-      extraPackages = with pkgs; [
-        zstd
-      ];
       instances = {
         pc = {
           settings = {

@@ -161,9 +161,6 @@
       ];
     };
     btrbk = {
-      extraPackages = [
-        pkgs.zstd
-      ];
       instances = {
         workstation = {
           settings = {
