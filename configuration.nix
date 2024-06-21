@@ -814,6 +814,7 @@
           elinks
           emacs
           erlang
+          espup
           file
           firefox
           firmware-manager
