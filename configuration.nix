@@ -855,6 +855,7 @@
           (man-pages.overrideAttrs ({patches ? [], ...}: {
             patches = patches ++ [ ./fs-manpages.patch ];
           }))
+          man-pages-posix
           maven
           mercurial
           meson
