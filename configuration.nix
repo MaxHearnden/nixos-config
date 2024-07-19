@@ -176,7 +176,6 @@
     }) inputs;
     settings = {
       auto-optimise-store = true;
-      diff-hook = pkgs.diffoscope;
       experimental-features = [
         "nix-command"
         "flakes"
