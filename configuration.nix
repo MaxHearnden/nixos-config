@@ -905,6 +905,7 @@
           simple-http-server
           simutrans
           inputs.shh.packages.x86_64-linux.default
+          slirp4netns
           snis
           sshfs
           stack
