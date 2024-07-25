@@ -30,7 +30,7 @@
       nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-closure" {} ''
         mkdir $out
         ln -s ${self.packages.x86_64-linux.default} $out/systems
-        ln -s ${nixpkgs.legacyPackages.x86_64-linux.closureInfo {rootPaths = builtins.attrValues self.hydraJobs;}} $out/closure
+        ln -s ${nixpkgs.legacyPackages.x86_64-linux.closureInfo {rootPaths = map (drv: drv.drvPath) (builtins.attrValues self.hydraJobs);}} $out/closure
       '';
     packages.x86_64-linux.vms =
       nixpkgs.legacyPackages.x86_64-linux.symlinkJoin
