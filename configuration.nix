@@ -956,6 +956,9 @@
     };
   };
   virtualisation = {
+    podman = {
+      enable = true;
+    };
     vmVariant = {
       users = {
         users = {
