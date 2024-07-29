@@ -376,10 +376,6 @@
     #     extraArgs = [ "-d" ];
     #   };
     # };
-    kmscon = {
-      enable = true;
-      extraOptions = "--xkb-layout gb";
-    };
     libinput = {
       enable = true;
     };
