@@ -754,6 +754,20 @@
         "d /var/lib/zerotier-one/networks.p 700 zerotierd zerotierd"
       ] ++ map (netId: "f /var/lib/zerotier-one/networks.p/${netId}.conf 700 zerotierd zerotierd") config.services.zerotierone.joinNetworks;
     };
+    user = {
+      services = {
+        kodi-mount = {
+          unitConfig = {
+            ConditionUser = "max";
+          };
+          serviceConfig = {
+            ExecStart = "${lib.getExe pkgs.sshfs} 192.168.1.80:/ %h/kodi -o reconnect -f";
+            ExecStop = "/run/wrappers/bin/umount %h/kodi";
+            Type = "exec";
+          };
+        };
+      };
+    };
   };
   time = {
     timeZone = "Europe/London";
