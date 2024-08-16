@@ -17,12 +17,6 @@
         "riscv64-linux"
       ];
     };
-    kernelPackages =
-      let unstable-unfree = import inputs.nixpkgs-unstable {
-        system = config.nixpkgs.system;
-        config = config.nixpkgs.config;
-      };
-      in unstable-unfree.linuxKernel.packageAliases.linux_latest;
     kernelPatches = [
       {
         name = "Rust Support";
