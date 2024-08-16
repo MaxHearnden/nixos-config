@@ -17,19 +17,6 @@
         "riscv64-linux"
       ];
     };
-    kernelPatches = [
-      {
-        name = "Rust Support";
-        patch = null;
-        features = {
-          rust = true;
-        };
-      }
-    ];
-    extraModulePackages = [
-      # config.boot.kernelPackages.rtl8812au
-      # config.boot.kernelPackages.rtl88x2bu
-    ];
     initrd = {
       systemd = {
         enable = true;
