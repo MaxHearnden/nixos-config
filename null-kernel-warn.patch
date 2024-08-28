@@ -1,0 +1,12 @@
+diff --git a/fs/nfs/write.c b/fs/nfs/write.c
+index 75c1b3c7faea..e404ba976286 100644
+--- a/fs/nfs/write.c
++++ b/fs/nfs/write.c
+@@ -681,6 +681,7 @@ static int nfs_writepages_callback(struct folio *folio,
+ {
+ 	int ret;
+ 
++	pr_info("%s: %p\n", __func__, folio);
+ 	ret = nfs_do_writepage(folio, wbc, data);
+ 	if (ret != AOP_WRITEPAGE_ACTIVATE)
+ 		folio_unlock(folio);

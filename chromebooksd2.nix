@@ -2,6 +2,12 @@
 
 {
   boot = {
+    kernelPatches = [
+      {
+        name = "kernel-null-test";
+        patch = ./null-kernel-warn.patch;
+      }
+    ];
     loader = {
       grub = {
         enable = lib.mkForce false;
