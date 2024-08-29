@@ -1,5 +1,5 @@
 diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index 75c1b3c7faea..0052808e4bf1 100644
+index 75c1b3c7faea..3ff9754dc9c2 100644
 --- a/fs/nfs/write.c
 +++ b/fs/nfs/write.c
 @@ -174,6 +174,7 @@ nfs_cancel_remove_inode(struct nfs_page *req, struct inode *inode)
@@ -64,3 +64,12 @@ index 75c1b3c7faea..0052808e4bf1 100644
  	ret = nfs_do_writepage(folio, wbc, data);
  	if (ret != AOP_WRITEPAGE_ACTIVATE)
  		folio_unlock(folio);
+@@ -758,6 +766,8 @@ static void nfs_inode_add_request(struct nfs_page *req)
+ 	if (likely(!folio_test_swapcache(folio))) {
+ 		set_bit(PG_MAPPED, &req->wb_flags);
+ 		folio_set_private(folio);
++		pr_info("%s: req: %p\n", __func__, req);
++		BUG_ON((uintptr_t) req == 0x356);
+ 		folio->private = req;
+ 	}
+ 	spin_unlock(&mapping->i_private_lock);
