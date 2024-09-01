@@ -1,14 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   boot = {
-    # kernelPatches = [
-    #   {
-    #     name = "kernel-null-test";
-    #     patch = ./null-kernel-warn.patch;
-    #   }
-    # ];
-    extraModulePackages = [(import ./extern-nfs.nix {kernel = config.boot.kernelPackages.kernel;})];
     loader = {
       grub = {
         enable = lib.mkForce false;
