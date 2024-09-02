@@ -525,7 +525,7 @@
         ];
         restartIfChanged = false;
         script = ''
-          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config#systems-with-closure --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file)"
+          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config#systems-with-closure --no-link --print-out-paths --refresh --recreate-lock-file --no-write-lock-file --option store daemon)"
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
           systemctl stop latest-system.service
           config="$(readlink -e "''${config_all}/systems/${config.networking.hostName}")"
