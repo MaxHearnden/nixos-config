@@ -142,6 +142,8 @@
   #   };
   # };
   nix = {
+    daemonIOSchedClass = "idle";
+    daemonCPUSchedPolicy = "idle";
     gc = {
       automatic = true;
       options = "-d";
