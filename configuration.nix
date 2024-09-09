@@ -794,19 +794,16 @@
         extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "adbusers" "wireshark" "tss" ];
         isNormalUser = true;
         packages = with pkgs; [
-          ardour
           authenticator
           btop
           cargo-watch
           ungoogled-chromium
-          cifs-utils
           ciscoPacketTracer8
           comma
           discord
           dwarf-fortress
           elinks
           emacs
-          erlang
           espup
           file
           firefox
@@ -821,26 +818,14 @@
           pkgsCross.armv7l-hf-multiplatform.buildPackages.gdb
           pkgsCross.riscv32.buildPackages.gdb
           pkgsCross.riscv64.buildPackages.gdb
-          (haskellPackages.ghcWithPackages (pkgs: with pkgs; [ aeson monoidal-containers optparse-applicative statistics vector yaml]))
-          # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.pkgsCross.ghcjs.buildPackages.haskell.compiler.ghc961
           gnome.ghex
           gnome.gnome-tweaks
           graphviz
           gtkterm
-          guile_3_0
-          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.guile-hall
-          # inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.guix
-          # (haskell-language-server.override {supportedGhcVersions = ["90" "927" "944" "945"];})
-          hpack
           headsetcontrol
-          inputs.haskell-nix.packages.x86_64-linux.hix
           htop
-          inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
-          lfe
-          libsoup_3
-          libxml2
+          # inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
           libreoffice-fresh
-          liburing
           libvirt
           linux-manual
           lshw
@@ -849,16 +834,7 @@
             patches = patches ++ [ ./fs-manpages.patch ];
           }))
           man-pages-posix
-          maven
-          mercurial
-          meson
-          mars-mips
-          ninja
-          niv
           nix-du
-          nix-eval-jobs
-          nix-prefetch
-          nix-prefetch-scripts
           nix-top
           inputs.nixos-kexec.packages.x86_64-linux.default
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
@@ -866,53 +842,40 @@
           nmap
           nodejs
           notepadqq
-    #      (import inputs.obelisk {system = "x86_64-linux";}).command
-          ocaml
-          ormolu
           oversteer
           p7zip
-          pango
-          pijul
           pioneer
-          plantuml
           plover.dev
           powertop
           prismlauncher
-          #polymc
           python3
           qemu
-          qlcplus
           qpdfview
-          qtspim
-          rebar3
           ripgrep
-          inputs.rename-exchange.packages.x86_64-linux.default
-          inputs.math104.packages.x86_64-linux.rEnv
-          rfc
+          # inputs.rename-exchange.packages.x86_64-linux.default
           rhythmbox
-          inputs.math104.packages.x86_64-linux.rstudioEnv
           rustup
-          rust-analyzer
+          # rust-analyzer
           scummvm
           shellcheck
           signal-desktop
-          simple-http-server
+          # simple-http-server
           simutrans
-          inputs.shh.packages.x86_64-linux.default
+          # inputs.shh.packages.x86_64-linux.default
           slirp4netns
           snis
           sshfs
-          stack
-          gnomeExtensions.systemd-status
+          # stack
+          # gnomeExtensions.systemd-status
           tea
           #teams
           teams-for-linux
           #texlive.combined.scheme-full
-          inputs.tobig.packages.x86_64-linux.default
+          # inputs.tobig.packages.x86_64-linux.default
           tpm2-tools
-          thunderbird
-          nodePackages.uglify-js
-          umlet
+          # thunderbird
+          # nodePackages.uglify-js
+          # umlet
           usbutils
           vdrift
           vim
@@ -932,7 +895,7 @@
                   inherit (exts.theumletteam) umlet;
                 };
           })
-          vulnix
+          # vulnix
           w3m
           watchexec
           whatsapp-for-linux
@@ -944,7 +907,7 @@
           wl-clipboard
           xclip
     #      xfel
-          yacas
+          # yacas
     #      (import (pkgs.fetchurl {url = "https://github.com/input-output-hk/haskell.nix/tarball/master";})).hix
           xorg.xhost
           zgrviewer
