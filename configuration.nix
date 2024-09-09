@@ -337,11 +337,6 @@
     cachefilesd = {
       enable = true;
     };
-    dbus = {
-      packages = [
-        inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
-      ];
-    };
     fwupd = {
       enable = true;
     };
