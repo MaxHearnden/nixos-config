@@ -14,7 +14,7 @@
         "x-systemd.idle-timeout=5m"
         "nofail"
         "noatime"
-        "nofsc"
+        "fsc"
         "softreval"
         "async"
         "nodev"
