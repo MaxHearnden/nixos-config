@@ -536,7 +536,6 @@
           ProtectClock = true;
           ProtectHome = "read-only";
           ProtectKernelModules = true;
-          SocketBindDeny = "any";
           RestrictNamespaces = "user net mnt ipc pid uts cgroup";
           RestrictSUIDSGID = true;
           # IPAddressAllow = "172.28.10.244";
