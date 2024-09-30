@@ -424,6 +424,7 @@
     };
   };
   system = {
+    configurationRevision = inputs.self.rev or "dirty";
     extraDependencies = [
       # Prevent unnecicary gc and rebuild
       pkgs.pkgsCross.riscv32.buildPackages.gcc.info
