@@ -80,7 +80,7 @@
       interfaces = {
         ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
         tailscale0 = {
-          allowedTCPPorts = [ 22 ];
+          allowedTCPPorts = [ 22 3000 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -157,6 +157,13 @@
           bindPort = 5000;
           bindAddress = "192.168.2.1";
           extraArguments = "5000 max-nixos-workstation-zerotier 8080";
+        }
+        {
+          type = "tcppm";
+          auth = [ "none" ];
+          bindPort = 3000;
+          bindAddress = "100.91.224.22";
+          extraArguments = "3000 172.28.10.244 3000";
         }
       ];
     };
@@ -395,7 +402,7 @@
           ProtectHome = true;
           PrivateDevices = true;
           IPAddressDeny = "any";
-          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258/88 fc9c:6b89:eec5:0d88:e258:0000:0000:0001/40 192.168.2.1/24";
+          IPAddressAllow = "100.109.29.126 172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258/88 fc9c:6b89:eec5:0d88:e258:0000:0000:0001/40 192.168.2.1/24";
           ProtectKernelModules = true;
           ProtectClock = true;
           ProtectKernelLogs = true;
