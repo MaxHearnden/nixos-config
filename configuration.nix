@@ -527,7 +527,7 @@
           # BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
           # BindPaths = "/nix /root/.cache/nix /tmp";
           ReadWritePaths = "/nix /tmp";
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+          RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
           SystemCallFilter = [ "@debug @system-service @mount @sandbox sethostname setdomainname" ];
           SystemCallErrorNumber = "ENOSYS";
           SystemCallLog = "~@system-service @mount @sandbox sethostname setdomainname";
