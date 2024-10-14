@@ -18,7 +18,7 @@
       fsType = "btrfs";
     };
 
-  fileSystems."/boot/efi" =
+  fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/BA86-F037";
       fsType = "vfat";
     };
