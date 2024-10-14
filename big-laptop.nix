@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   boot = {
@@ -8,6 +8,7 @@
         useOSProber = true;
       };
     };
+    kernelPackages = lib.mkForce pkgs.linuxPackages;
   };
   hardware = {
     nvidia = {
@@ -19,9 +20,9 @@
         };
       };
     };
-    # tuxedo-keyboard = {
-    #   enable = true;
-    # };
+    tuxedo-keyboard = {
+      enable = true;
+    };
   };
   imports = [ ./hardware-configuration/laptop.nix ./laptop.nix ./remote.nix ];
   networking = {
