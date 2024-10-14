@@ -19,9 +19,9 @@
         };
       };
     };
-    tuxedo-keyboard = {
-      enable = true;
-    };
+    # tuxedo-keyboard = {
+    #   enable = true;
+    # };
   };
   imports = [ ./hardware-configuration/laptop.nix ./laptop.nix ./remote.nix ];
   networking = {
