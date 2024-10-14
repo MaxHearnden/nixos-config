@@ -9,16 +9,6 @@
       };
     };
   };
-  fileSystems = {
-    "/mnt/ubuntu" = {
-      device = "/dev/nvme1n1p1";
-      fsType = "ext4";
-      options = [
-        "nofail"
-        "ro"
-      ];
-    };
-  };
   hardware = {
     nvidia = {
       prime = {
