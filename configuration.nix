@@ -183,6 +183,9 @@
       "fc9c:6b89:ee1a:7a70:b542:0000:0000:0001" = ["max-nixos-chromebooksd2-zerotier-6plane" "max-nixos-chromebooksd2-zerotier-ipv6" "max-nixos-chromebooksd2-zerotier" "max-nixos-chromebooksd2"];
       "fd80:56c2:e21c:3d4b:0c99:931a:7a70:b542" = ["max-nixos-chromebooksd2-zerotier-rfc4193" "max-nixos-chromebooksd2-zerotier-ipv6" "max-nixos-chromebooksd2-zerotier" "max-nixos-chromebooksd2"];
       "172.28.156.146" = ["max-nixos-chromebooksd2-zerotier-ipv4" "max-nixos-chromebooksd2-zerotier" "max-nixos-chromebooksd2"];
+      "fc9c:6b89:ee8e:d99a:c753:0000:0000:0001" = ["max-nixos-laptop-zerotier-6plane" "max-nixos-laptop-zerotier-ipv6" "max-nixos-laptop-zerotier" "max-nixos-laptop"];
+      "fd80:56c2:e21c:3d4b:0c99:938e:d99a:c753" = ["max-nixos-laptop-zerotier-rfc4193" "max-nixos-laptop-zerotier-ipv6" "max-nixos-laptop-zerotier" "max-nixos-laptop"];
+      "172.28.84.43" = ["max-nixos-laptop-zerotier-ipv4" "max-nixos-laptop-zerotier" "max-nixos-laptop"];
       "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258" = ["max-nixos-workstation-zerotier-rfc4193" "max-nixos-workstation-zerotier-ipv6" "max-nixos-workstation-zerotier" "max-nixos-workstation"];
       "fc9c:6b89:eec5:0d88:e258:0000:0000:0001" = ["max-nixos-workstation-zerotier-6plane" "max-nixos-workstation-zerotier-ipv6" "max-nixos-workstation-zerotier" "max-nixos-workstation"];
       "172.28.10.244" = ["max-nixos-workstation-zerotier-ipv4" "max-nixos-workstation-zerotier" "max-nixos-workstation"];
