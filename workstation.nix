@@ -206,6 +206,13 @@
             "delete"
           ];
         }
+        {
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHF5gDfzX8Dya6NMftSbyDgvyrO/lfxxJYjy9RD4kAJX btrbk@max-nixos-laptop";
+          roles = [
+            "receive"
+            "delete"
+          ];
+        }
       ];
     };
     dnsmasq = {
