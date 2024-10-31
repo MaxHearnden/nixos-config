@@ -129,6 +129,15 @@
           RestrictSUIDSGID = true;
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
           BindReadOnlyPaths = [ "/run/nscd" ];
+          OnFailure = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+          Alias = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+        };
+      };
+      "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
+        overrideStrategy = "asDropin";
+        serviceConfig = {
+          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} resume";
+          Restart = "on-failure";
         };
       };
       "nixos-upgrade" = {
