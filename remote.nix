@@ -129,8 +129,8 @@
           RestrictSUIDSGID = true;
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
           BindReadOnlyPaths = [ "/run/nscd" ];
-          OnFailure = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
-          Alias = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+          OnFailure = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
+          Alias = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
         };
       };
       "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
