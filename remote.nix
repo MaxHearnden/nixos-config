@@ -133,9 +133,7 @@
         unitConfig = {
           OnFailure = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
         };
-        installConfig = {
-          Alias = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
-        };
+        aliases = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
       };
       "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
         overrideStrategy = "asDropin";
