@@ -132,6 +132,8 @@
         };
         unitConfig = {
           OnFailure = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
+        };
+        installConfig = {
           Alias = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
         };
       };
