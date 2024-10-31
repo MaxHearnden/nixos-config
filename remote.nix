@@ -133,15 +133,20 @@
         unitConfig = {
           OnFailure = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
         };
-        aliases = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
       };
-      "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
-        overrideStrategy = "asDropin";
-        serviceConfig = {
-          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} resume";
-          Restart = "on-failure";
+      "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" =
+        let cfg = config.systemd.services."btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+        in {
+          inherit (cfg) wants after confinement restartIfChanged;
+          path = lib.mkForce cfg.path;
+          serviceConfig = lib.removeAttrs cfg.serviceConfig ["RootDirectory" "InaccessiblePaths" "ReadOnlyPaths" "RuntimeDirectory"] // {
+            ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.conf resume";
+            Restart = "on-failure";
+          };
+          unitConfig = cfg.unitConfig // {
+            OnFailure = [];
+          };
         };
-      };
       "nixos-upgrade" = {
         after = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
         description = "NixOS Upgrade";
