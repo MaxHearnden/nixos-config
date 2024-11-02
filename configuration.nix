@@ -840,6 +840,7 @@
           nmap
           nodejs
           notepadqq
+          octaveFull
           oversteer
           p7zip
           pioneer
