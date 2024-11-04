@@ -141,7 +141,7 @@
         path = with pkgs; [
           config.nix.package.out
         ];
-        requires = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
+        requires = [ "network-online.target" "zerotierone.service" ];
         restartIfChanged = false;
         script = ''
           config="$(${pkgs.curl}/bin/curl "http://max-nixos-workstation-zerotier:8081/${config.networking.hostName}" -f)"
