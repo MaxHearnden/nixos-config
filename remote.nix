@@ -78,49 +78,6 @@
   };
   systemd = {
     services = {
-      "blkid-cache" = {
-        description = "Blkid entry cache service";
-        script = ''
-          ${pkgs.coreutils}/bin/rm -f /run/blkid/blkid.tab
-          ${pkgs.util-linux}/bin/blkid
-        '';
-        serviceConfig = {
-          Type = "oneshot";
-          BindReadOnlyPaths = "/dev /sys";
-          User = "blkid-cache";
-          Group = "blkid-cache";
-          RuntimeDirectoryPreserve = true;
-          SupplementaryGroups = "disk";
-          NoNewPrivileges = true;
-          CapabilityBoundingSet = "";
-          PrivateUsers = true;
-          RemoveIPC = true;
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          SystemCallArchitectures = "native";
-          ProtectKernelTunables = true;
-          RestrictRealtime = true;
-          ProtectHome = true;
-          RestrictAddressFamilies = "none";
-          RestrictSUIDSGID = true;
-          ProtectHostname = true;
-          LockPersonality = true;
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          IPAddressDeny = "any";
-          RestrictNamespaces = true;
-          PrivateTmp = true;
-          PrivateNetwork = true;
-          ProtectProc = "invisible";
-          MemoryDenyWriteExecute = true;
-          RuntimeDirectory = "blkid";
-        };
-        confinement = {
-          enable = true;
-          mode = "chroot-only";
-        };
-      };
       "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
         wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
         after = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
@@ -148,7 +105,7 @@
           };
         };
       "nixos-upgrade" = {
-        after = [ "network-online.target" "zerotierone.service" "blkid-cache.service" ];
+        after = [ "network-online.target" "zerotierone.service" ];
         description = "NixOS Upgrade";
         serviceConfig = {
           AmbientCapabilities = "CAP_SYS_ADMIN";
@@ -179,6 +136,7 @@
           IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
           ProtectProc = "invisible";
           MemoryDenyWriteExecute = true;
+          OnSuccess = "nixos-upgrade-apply.service";
         };
         path = with pkgs; [
           config.nix.package.out
@@ -192,6 +150,38 @@
         '';
         unitConfig = {
           X-StopOnRemoval = false;
+        };
+      };
+      nixos-upgrade-apply = {
+        serviceConfig = {
+          ExecStart = "/nix/var/nix/profiles/system/bin/switch-to-configuration switch";
+          AmbientCapabilities = "CAP_SYS_ADMIN";
+          CapabilityBoundingSet = "CAP_SYS_ADMIN";
+          NoNewPrivileges = true;
+          Type = "oneshot";
+          RestartSec = 10;
+          Restart = "on-failure";
+          User = "nixos-upgrade";
+          Group = "nixos-upgrade";
+          RemoveIPC = true;
+          ProtectClock = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          SystemCallArchitectures = "native";
+          ProtectKernelTunables = true;
+          RestrictRealtime = true;
+          ProtectHome = true;
+          RestrictAddressFamilies = "AF_UNIX";
+          RestrictSUIDSGID = true;
+          ProtectHostname = true;
+          LockPersonality = true;
+          PrivateTmp = true;
+          RestrictNamespaces = true;
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          IPAddressDeny = "any";
+          ProtectProc = "invisible";
+          MemoryDenyWriteExecute = true;
         };
       };
     };
@@ -214,15 +204,15 @@
   };
   users = {
     groups = {
-      blkid-cache = {};
+      # blkid-cache = {};
       nixos-upgrade = {};
     };
     users = {
-      blkid-cache = {
-        group = "blkid-cache";
-        extraGroups = [ "disk" ];
-        isSystemUser = true;
-      };
+      # blkid-cache = {
+      #   group = "blkid-cache";
+      #   extraGroups = [ "disk" ];
+      #   isSystemUser = true;
+      # };
       nixos-upgrade = {
         group = "nixos-upgrade";
         extraGroups = [ "disk" ];
