@@ -160,7 +160,7 @@
           NoNewPrivileges = true;
           Type = "oneshot";
           RestartSec = 10;
-          Restart = "on-failure";
+          # Restart = "on-failure";
           User = "nixos-upgrade";
           Group = "nixos-upgrade";
           RemoveIPC = true;
