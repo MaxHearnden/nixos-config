@@ -60,6 +60,19 @@
       substituters = ["http://max-nixos-workstation-zerotier:8080"];
     };
   };
+  security = {
+    polkit = {
+      extraConfig = ''
+        // Allow nixos-upgrade-apply to stop and start systemd services
+        polkit.addRule(function(action, subject) {
+          if (subject.systemd_unit === "nixos-upgrade-apply.service") {
+            polkit.log("Polkit called by nixos-upgrade-apply with settings " + action + " and " + subject");
+          };
+        });
+      '';
+      debug = true;
+    };
+  };
   services = {
     btrbk = {
       instances = {
