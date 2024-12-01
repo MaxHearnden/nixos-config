@@ -5,7 +5,7 @@
   inputs.latest-system.inputs.nixpkgs.follows = "nixpkgs";
   # inputs.math104.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/Math104";
   # inputs.math104.inputs.nixpkgs.follows = "nixpkgs";
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
   inputs.nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs-unstable";

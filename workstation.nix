@@ -245,7 +245,7 @@
     };
     harmonia = {
       enable = true;
-      signKeyPath = "/etc/nix/storekey";
+      signKeyPaths = ["/etc/nix/storekey"];
       settings = {
         bind = "max-nixos-workstation-zerotier:8080";
         priority = 50;

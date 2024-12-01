@@ -150,11 +150,6 @@
       persistent = true;
     };
     nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
-    package = pkgs.nix.overrideAttrs (
-      {patches ? [], ...}: {
-        patches = patches ++ [ ./8255.patch ];
-      }
-    );
     registry = lib.mapAttrs (_: flake: {
       inherit flake;
     }) inputs;
@@ -520,7 +515,6 @@
       # };
       nix-daemon = {
         serviceConfig = {
-          Delegate = true;
           CapabilityBoundingSet = "CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER CAP_SYS_PTRACE";
           ProtectSystem = "strict";
           BindPaths = "/dev/kvm";
@@ -816,8 +810,8 @@
           pkgsCross.armv7l-hf-multiplatform.buildPackages.gdb
           pkgsCross.riscv32.buildPackages.gdb
           pkgsCross.riscv64.buildPackages.gdb
-          gnome.ghex
-          gnome.gnome-tweaks
+          ghex
+          gnome-tweaks
           graphviz
           gtkterm
           headsetcontrol
