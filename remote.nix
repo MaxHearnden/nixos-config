@@ -21,12 +21,12 @@
         "nosuid"
       ];
     };
-    "/boot" = {
-      options = [
-        "uid=nixos-upgrade"
-        "gid=nixos-upgrade"
-      ];
-    };
+    # "/boot" = {
+    #   options = [
+    #     "uid=nixos-upgrade"
+    #     "gid=nixos-upgrade"
+    #   ];
+    # };
   };
   nix = {
     buildMachines = [
@@ -60,19 +60,19 @@
       substituters = ["http://max-nixos-workstation-zerotier:8080"];
     };
   };
-  security = {
-    polkit = {
-      extraConfig = ''
-        // Allow nixos-upgrade-apply to stop and start systemd services
-        polkit.addRule(function(action, subject) {
-          if (subject.system_unit === "nixos-upgrade-apply.service") {
-            polkit.log("Polkit called by nixos-upgrade-apply with settings " + action + " and " + subject");
-          };
-        });
-      '';
-      debug = true;
-    };
-  };
+  # security = {
+  #   polkit = {
+  #     extraConfig = ''
+  #       // Allow nixos-upgrade-apply to stop and start systemd services
+  #       polkit.addRule(function(action, subject) {
+  #         if (subject.system_unit === "nixos-upgrade-apply.service") {
+  #           polkit.log("Polkit called by nixos-upgrade-apply with settings " + action + " and " + subject");
+  #         };
+  #       });
+  #     '';
+  #     debug = true;
+  #   };
+  # };
   services = {
     btrbk = {
       instances = {
@@ -120,36 +120,36 @@
       "nixos-upgrade" = {
         after = [ "network-online.target" "zerotierone.service" ];
         description = "NixOS Upgrade";
-        serviceConfig = {
-          AmbientCapabilities = "CAP_SYS_ADMIN";
-          CapabilityBoundingSet = "CAP_SYS_ADMIN";
-          NoNewPrivileges = true;
-          Type = "oneshot";
-          RestartSec = 10;
-          Restart = "on-failure";
-          User = "nixos-upgrade";
-          Group = "nixos-upgrade";
-          RemoveIPC = true;
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          SystemCallArchitectures = "native";
-          ProtectKernelTunables = true;
-          RestrictRealtime = true;
-          ProtectHome = true;
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
-          RestrictSUIDSGID = true;
-          ProtectHostname = true;
-          LockPersonality = true;
-          PrivateTmp = true;
-          RestrictNamespaces = true;
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          IPAddressDeny = "any";
-          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
-          ProtectProc = "invisible";
-          MemoryDenyWriteExecute = true;
-        };
+        # serviceConfig = {
+        #   AmbientCapabilities = "CAP_SYS_ADMIN";
+        #   CapabilityBoundingSet = "CAP_SYS_ADMIN";
+        #   NoNewPrivileges = true;
+        #   Type = "oneshot";
+        #   RestartSec = 10;
+        #   Restart = "on-failure";
+        #   User = "nixos-upgrade";
+        #   Group = "nixos-upgrade";
+        #   RemoveIPC = true;
+        #   ProtectClock = true;
+        #   ProtectKernelLogs = true;
+        #   ProtectControlGroups = true;
+        #   ProtectKernelModules = true;
+        #   SystemCallArchitectures = "native";
+        #   ProtectKernelTunables = true;
+        #   RestrictRealtime = true;
+        #   ProtectHome = true;
+        #   RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+        #   RestrictSUIDSGID = true;
+        #   ProtectHostname = true;
+        #   LockPersonality = true;
+        #   PrivateTmp = true;
+        #   RestrictNamespaces = true;
+        #   SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+        #   IPAddressDeny = "any";
+        #   IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
+        #   ProtectProc = "invisible";
+        #   MemoryDenyWriteExecute = true;
+        # };
         path = with pkgs; [
           config.nix.package.out
         ];
@@ -158,45 +158,45 @@
         script = ''
           config="$(${pkgs.curl}/bin/curl "http://max-nixos-workstation-zerotier:8081/${config.networking.hostName}" -f)"
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
-          "''${config}/bin/switch-to-configuration" boot
+          "''${config}/bin/switch-to-configuration" switch
         '';
         unitConfig = {
           X-StopOnRemoval = false;
-          OnSuccess = "nixos-upgrade-apply.service";
+          # OnSuccess = "nixos-upgrade-apply.service";
         };
       };
-      nixos-upgrade-apply = {
-        serviceConfig = {
-          ExecStart = "/nix/var/nix/profiles/system/bin/switch-to-configuration switch";
-          AmbientCapabilities = "CAP_SYS_ADMIN";
-          CapabilityBoundingSet = "CAP_SYS_ADMIN";
-          NoNewPrivileges = true;
-          Type = "oneshot";
-          RestartSec = 10;
-          # Restart = "on-failure";
-          User = "nixos-upgrade";
-          Group = "nixos-upgrade";
-          RemoveIPC = true;
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          ProtectKernelModules = true;
-          SystemCallArchitectures = "native";
-          ProtectKernelTunables = true;
-          RestrictRealtime = true;
-          ProtectHome = true;
-          RestrictAddressFamilies = "AF_UNIX";
-          RestrictSUIDSGID = true;
-          ProtectHostname = true;
-          LockPersonality = true;
-          PrivateTmp = true;
-          RestrictNamespaces = true;
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          IPAddressDeny = "any";
-          ProtectProc = "invisible";
-          MemoryDenyWriteExecute = true;
-        };
-      };
+      # nixos-upgrade-apply = {
+      #   serviceConfig = {
+      #     ExecStart = "/nix/var/nix/profiles/system/bin/switch-to-configuration switch";
+      #     AmbientCapabilities = "CAP_SYS_ADMIN";
+      #     CapabilityBoundingSet = "CAP_SYS_ADMIN";
+      #     NoNewPrivileges = true;
+      #     Type = "oneshot";
+      #     RestartSec = 10;
+      #     # Restart = "on-failure";
+      #     User = "nixos-upgrade";
+      #     Group = "nixos-upgrade";
+      #     RemoveIPC = true;
+      #     ProtectClock = true;
+      #     ProtectKernelLogs = true;
+      #     ProtectControlGroups = true;
+      #     ProtectKernelModules = true;
+      #     SystemCallArchitectures = "native";
+      #     ProtectKernelTunables = true;
+      #     RestrictRealtime = true;
+      #     ProtectHome = true;
+      #     RestrictAddressFamilies = "AF_UNIX";
+      #     RestrictSUIDSGID = true;
+      #     ProtectHostname = true;
+      #     LockPersonality = true;
+      #     PrivateTmp = true;
+      #     RestrictNamespaces = true;
+      #     SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+      #     IPAddressDeny = "any";
+      #     ProtectProc = "invisible";
+      #     MemoryDenyWriteExecute = true;
+      #   };
+      # };
     };
     timers = {
       nixos-upgrade = {
