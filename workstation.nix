@@ -599,42 +599,42 @@
       #     enable = true;
       #   };
       # };
-      postgresql = {
-        serviceConfig =
-          let hosts = builtins.toFile "hosts" ''
-            127.0.0.1 localhost
-            ::1 localhost
-          ''; in {
-          BindReadOnlyPaths = "${hosts}:/etc/hosts /etc/passwd";
-          NoNewPrivileges = true;
-          PrivateUsers = lib.mkForce false;
-          PrivateNetwork = true;
-          CapabilityBoundingSet = "";
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          ProtectHome = true;
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          MemoryDenyWriteExecute = true;
-          Environment = [ "XDG_DATA_DIRS=${config.services.postgresql.package}/share" ];
-          RemoveIPC = true;
-          RestrictNamespaces = true;
-          RestrictSUIDSGID = true;
-          SystemCallArchitectures = "native";
-          ProtectKernelModules = true;
-          IPAddressAllow = "localhost";
-          IPAddressDeny = "any";
-          RestrictAddressFamilies="AF_UNIX AF_INET AF_INET6";
-          RestrictRealtime = true;
-          LockPersonality = true;
-          ProtectHostname = true;
-        };
-        confinement = {
-          enable = true;
-          packages = [ config.i18n.glibcLocales ];
-        };
-      };
+      # postgresql = {
+      #   serviceConfig =
+      #     let hosts = builtins.toFile "hosts" ''
+      #       127.0.0.1 localhost
+      #       ::1 localhost
+      #     ''; in {
+      #     BindReadOnlyPaths = "${hosts}:/etc/hosts /etc/passwd";
+      #     NoNewPrivileges = true;
+      #     PrivateUsers = lib.mkForce false;
+      #     PrivateNetwork = true;
+      #     CapabilityBoundingSet = "";
+      #     SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+      #     ProtectProc = "invisible";
+      #     ProcSubset = "pid";
+      #     ProtectHome = true;
+      #     ProtectClock = true;
+      #     ProtectKernelLogs = true;
+      #     MemoryDenyWriteExecute = true;
+      #     Environment = [ "XDG_DATA_DIRS=${config.services.postgresql.package}/share" ];
+      #     RemoveIPC = true;
+      #     RestrictNamespaces = true;
+      #     RestrictSUIDSGID = true;
+      #     SystemCallArchitectures = "native";
+      #     ProtectKernelModules = true;
+      #     IPAddressAllow = "localhost";
+      #     IPAddressDeny = "any";
+      #     RestrictAddressFamilies="AF_UNIX AF_INET AF_INET6";
+      #     RestrictRealtime = true;
+      #     LockPersonality = true;
+      #     ProtectHostname = true;
+      #   };
+      #   confinement = {
+      #     enable = true;
+      #     packages = [ config.i18n.glibcLocales ];
+      #   };
+      # };
     };
     sockets = {
       latest-system = {
