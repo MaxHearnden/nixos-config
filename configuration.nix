@@ -856,7 +856,7 @@
           simutrans
           # inputs.shh.packages.x86_64-linux.default
           slirp4netns
-          snis
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
           sshfs
           # stack
           # gnomeExtensions.systemd-status
