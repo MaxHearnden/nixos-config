@@ -120,13 +120,13 @@
       "nixos-upgrade" = {
         after = [ "network-online.target" "zerotierone.service" ];
         description = "NixOS Upgrade";
-        # serviceConfig = {
+        serviceConfig = {
         #   AmbientCapabilities = "CAP_SYS_ADMIN";
         #   CapabilityBoundingSet = "CAP_SYS_ADMIN";
         #   NoNewPrivileges = true;
-        #   Type = "oneshot";
-        #   RestartSec = 10;
-        #   Restart = "on-failure";
+          Type = "oneshot";
+          RestartSec = 10;
+          Restart = "on-failure";
         #   User = "nixos-upgrade";
         #   Group = "nixos-upgrade";
         #   RemoveIPC = true;
@@ -149,7 +149,7 @@
         #   IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
         #   ProtectProc = "invisible";
         #   MemoryDenyWriteExecute = true;
-        # };
+        };
         path = with pkgs; [
           config.nix.package.out
         ];
