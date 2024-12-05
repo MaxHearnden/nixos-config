@@ -431,6 +431,10 @@
     stateVersion = "23.11";
   };
   systemd = {
+    additionalUpstreamSystemUnits = [
+      "capsule@.service"
+      "capsule.slice"
+    ];
     services = let
       short-name = lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName;
     in {
