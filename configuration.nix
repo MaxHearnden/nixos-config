@@ -848,6 +848,7 @@
           python3
           qemu
           qpdfview
+          rare
           ripgrep
           # inputs.rename-exchange.packages.x86_64-linux.default
           rhythmbox
