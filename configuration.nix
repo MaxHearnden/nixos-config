@@ -475,6 +475,7 @@
           User = "nix-gc";
           Group = "nix-gc";
           ProtectHome = "tmpfs";
+          ReadWritePaths = [ "/home/nix-gc" ];
           NoNewPrivileges = true;
           RestrictAddressFamilies = "AF_UNIX";
           # SetLoginEnvironment = false;
