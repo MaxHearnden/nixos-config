@@ -558,7 +558,7 @@
           StateDirectory = "minecraft";
           StateDirectoryMode = "0750";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          BindReadOnlyPaths = [ "/run/nscd" "/run/minecraft-server.stdin" ];
+          BindReadOnlyPaths = [ "/run/nscd" "/etc/resolv.conf" "/run/minecraft-server.stdin" ];
         };
         unitConfig = {
           StopWhenUnneeded = true;
@@ -721,9 +721,6 @@
       #     enable = true;
       #   };
       # };
-      podman = {
-        enable = false;
-      };
       postgresql = {
         serviceConfig =
           let hosts = builtins.toFile "hosts" ''
