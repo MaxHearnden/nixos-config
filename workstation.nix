@@ -350,6 +350,10 @@
       enable = true;
       declarative = true;
       eula = true;
+      serverProperties = {
+        server-ip = "127.0.0.1";
+        server-port = 25564;
+      };
     };
     nfs = {
       server = {
@@ -487,6 +491,58 @@
           Restart = "always";
           User = "latest-system";
           Group = "latest-system";
+        };
+      };
+      minecraft-server = {
+        wantedBy = lib.mkForce [ ];
+        serviceConfig = {
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          SocketBindAllow = "ipv4:tcp:25564";
+          SocketBindDeny = "any";
+          StateDirectory = "minecraft";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          BindReadOnlyPaths = [ "/run/nscd" "/run/minecraft-server.stdin" ];
+        };
+        unitConfig = {
+          StopWhenUnneeded = true;
+        };
+        confinement = {
+          enable = true;
+          packages = [ pkgs.coreutils ];
+        };
+      };
+      minecraft-server-proxy = {
+        requires = [ "minecraft-server-proxy.socket" "minecraft-server.service" ];
+        after = [ "minecraft-server-proxy.socket" "minecraft-server.service" ];
+        serviceConfig = {
+          CapabilityBoundingSet = "";
+          DynamicUser = true;
+          ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:25564 --exit-idle-time=5min";
+          IPAddressAllow = "100.64.0.0/10 fd7a:115c:a1e0::/48 localhost";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictNetworkInterfaces = "tailscale0 lo";
+          SocketBindDeny = "any";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          Type = "notify";
+          UMask = "0077";
+        };
+        confinement = {
+          enable = true;
         };
       };
       # nix-serve = {
@@ -650,6 +706,17 @@
           IPAddressDeny = "any";
         };
         wantedBy = [ "multi-user.target" ];
+      };
+      minecraft-server = {
+        bindsTo = lib.mkForce [];
+        wantedBy = [ "sockets.target" ];
+      };
+      minecraft-server-proxy = {
+        listenStreams = [ "127.0.0.1:25565" "100.91.224.22:25565" "[fd7a:115c:a1e0:ab12:4843:cd96:625b:e016]:25565" ];
+        socketConfig = {
+          FreeBind = true;
+        };
+        wantedBy = [ "sockets.target" ];
       };
     };
     timers = {
