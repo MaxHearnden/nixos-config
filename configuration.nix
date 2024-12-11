@@ -489,12 +489,15 @@
           RestrictSUIDSGID = true;
           ProtectHostname = true;
           LockPersonality = true;
+          ProtectHome = true;
+          ProtectSystem = "strict";
           ProtectProc = "invisible";
           ProcSubset = "pid";
           RestrictRealtime = true;
           PrivateNetwork = true;
           IPAddressDeny = "any";
           StateDirectory = "nix-gc";
+          StateDirectoryMode = "0700";
           # PrivateDevices = true;
         };
         confinement = {
