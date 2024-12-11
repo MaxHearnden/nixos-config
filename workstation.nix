@@ -502,6 +502,7 @@
           SocketBindAllow = "ipv4:tcp:25564";
           SocketBindDeny = "any";
           StateDirectory = "minecraft";
+          StateDirectoryMode = "0750";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           BindReadOnlyPaths = [ "/run/nscd" "/run/minecraft-server.stdin" ];
         };
@@ -512,6 +513,12 @@
           enable = true;
           packages = [ pkgs.coreutils ];
         };
+        postStart = ''
+          for i in $(seq 60); do
+            ${pkgs.netcat}/bin/nc -z 127.0.0.1 25564 && exit
+            sleep 1
+          done
+        '';
       };
       minecraft-server-proxy = {
         requires = [ "minecraft-server-proxy.socket" "minecraft-server.service" ];
