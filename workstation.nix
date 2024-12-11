@@ -721,6 +721,9 @@
       #     enable = true;
       #   };
       # };
+      podman = {
+        enable = false;
+      };
       postgresql = {
         serviceConfig =
           let hosts = builtins.toFile "hosts" ''
