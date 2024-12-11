@@ -474,8 +474,6 @@
           BindPaths = "/nix/var/nix/profiles";
           User = "nix-gc";
           Group = "nix-gc";
-          ProtectHome = "tmpfs";
-          ReadWritePaths = [ "/home/nix-gc" ];
           NoNewPrivileges = true;
           RestrictAddressFamilies = "AF_UNIX";
           # SetLoginEnvironment = false;
@@ -496,13 +494,14 @@
           RestrictRealtime = true;
           PrivateNetwork = true;
           IPAddressDeny = "any";
+          StateDirectory = "nix-gc";
           # PrivateDevices = true;
         };
         confinement = {
           enable = true;
         };
         environment = {
-          HOME = "/home/nix-gc";
+          XDG_STATE_HOME = "%S/nix-gc";
         };
       };
       # wpa_supplicant = {
