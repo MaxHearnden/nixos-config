@@ -479,6 +479,10 @@
           ProcSubset = "pid";
           ProtectHome = true;
           IPAddressDeny = "any";
+          Restart = "always";
+          User = "latest-system";
+          Group = "latest-system";
+          DynamicUser = true;
           # RootDirectory = "/var/empty";
           # MountAPIVFS = true;
           # RootEphemeral = true;
@@ -487,11 +491,6 @@
           enable = true;
         };
         requires = [ "latest-system.socket" ];
-        serviceConfig = {
-          Restart = "always";
-          User = "latest-system";
-          Group = "latest-system";
-        };
       };
       minecraft-server = {
         wantedBy = lib.mkForce [ ];
@@ -750,7 +749,6 @@
   };
   users = {
     groups = {
-      latest-system = {};
       # nix-serve = {};
     };
     users = {
@@ -758,10 +756,6 @@
         packages = with pkgs; [
           zstd
         ];
-      };
-      latest-system = {
-        isSystemUser = true;
-        group = "latest-system";
       };
       max = {
         packages = with pkgs; [
