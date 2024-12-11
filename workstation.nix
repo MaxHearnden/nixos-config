@@ -243,6 +243,7 @@
         local = "/localnet/";
         domain = "localnet";
         dhcp-fqdn = true;
+        no-hosts = true;
       };
     };
     gitea = {
@@ -475,6 +476,7 @@
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
+          PrivateUsers = lib.mkForce false;
           ProtectControlGroups = true;
           ProtectClock = true;
           ProtectHostname = true;
@@ -493,6 +495,10 @@
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           UMask = "0077";
           User = "dnsmasq";
+          BindReadOnlyPaths = [ "/etc/resolv.conf" "/etc/passwd" "/run/nscd" "/run/dbus/system_bus_socket" ];
+        };
+        confinement = {
+          enable = true;
         };
       };
       harmonia = {
