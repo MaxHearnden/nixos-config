@@ -215,16 +215,34 @@
         }
       ];
     };
+    dbus = {
+      packages = [
+        (pkgs.writeTextDir "share/dbus-1/system.d/dnsmasq-rootless.conf" ''
+          <!DOCTYPE busconfig PUBLIC
+           "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+           "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+          <busconfig>
+                  <policy user="dnsmasq">
+                          <allow own="uk.org.thekelleys.dnsmasq"/>
+                          <allow send_destination="uk.org.thekelleys.dnsmasq"/>
+                  </policy>
+          </busconfig>
+        '')
+      ];
+    };
     dnsmasq = {
       enable = true;
+      resolveLocalQueries = false;
       settings = {
         bind-dynamic = true;
         interface = [ "enp2s0" ];
         enable-ra = true;
         ra-param = "enp2s0,0,0";
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
+        interface-name = "max-nixos-workstation.localnet,enp2s0";
+        local = "/localnet/";
         domain = "localnet";
-        selfmx = true;
+        dhcp-fqdn = true;
       };
     };
     gitea = {
@@ -444,6 +462,37 @@
           RestrictAddressFamilies = "AF_UNIX";
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
+        };
+      };
+      dnsmasq = {
+        preStart = lib.mkForce "";
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN";
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN";
+          IPAddressAllow = "127.0.0.53 fd80:1234::/64 192.168.2.0/24";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          ProtectControlGroups = true;
+          ProtectClock = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = lib.mkForce "strict";
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          StateDirectory = "dnsmasq";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          UMask = "0077";
+          User = "dnsmasq";
         };
       };
       harmonia = {
