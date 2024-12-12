@@ -562,7 +562,7 @@
           SocketBindAllow = "ipv4:tcp:25564";
           SocketBindDeny = "any";
           StateDirectory = "minecraft";
-          StateDirectoryMode = "0750";
+          StateDirectoryMode = "0700";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           BindReadOnlyPaths = [ "/run/nscd" "/etc/resolv.conf" "/run/minecraft-server.stdin" ];
         };
