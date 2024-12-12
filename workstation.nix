@@ -500,7 +500,7 @@
             "/etc/passwd"
             "/run/nscd"
             "/run/dbus/system_bus_socket"
-            "/run/systemd/journal"
+            "/run/systemd/journal/dev-log"
           ];
         };
         confinement = {
