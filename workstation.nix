@@ -468,9 +468,9 @@
       dnsmasq = {
         preStart = lib.mkForce "";
         serviceConfig = {
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN";
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN";
-          IPAddressAllow = "127.0.0.53 fd80:1234::/64 192.168.2.0/24";
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
+          IPAddressAllow = "0.0.0.0 255.255.255.255 fe80::/10 ff02::1 127.0.0.53 fd80:1234::/64 192.168.2.0/24";
           IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -495,7 +495,13 @@
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           UMask = "0077";
           User = "dnsmasq";
-          BindReadOnlyPaths = [ "/etc/resolv.conf" "/etc/passwd" "/run/nscd" "/run/dbus/system_bus_socket" ];
+          BindReadOnlyPaths = [
+            "/etc/resolv.conf"
+            "/etc/passwd"
+            "/run/nscd"
+            "/run/dbus/system_bus_socket"
+            "/run/systemd/journal"
+          ];
         };
         confinement = {
           enable = true;
