@@ -566,6 +566,7 @@
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           BindReadOnlyPaths = [ "/run/nscd" "/etc/resolv.conf" "/run/minecraft-server.stdin" ];
         };
+        stopIfChanged = false;
         unitConfig = {
           StopWhenUnneeded = true;
         };
