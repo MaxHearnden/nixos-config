@@ -795,7 +795,7 @@
           nmap
           nodejs
           notepadqq
-          (octaveFull.withPackages (ps: with ps; [statistics]))
+          (octaveFull.withPackages (ps: with ps; [statistics image]))
           oversteer
           p7zip
           pioneer
