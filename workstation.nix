@@ -606,6 +606,7 @@
           SocketBindDeny = "any";
           SystemCallArchitectures = "native";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          BindReadOnlyPaths = "/run/systemd/journal";
           Type = "notify";
           UMask = "0077";
         };
@@ -761,13 +762,21 @@
       };
       minecraft-server = {
         bindsTo = lib.mkForce [];
-        wantedBy = [ "sockets.target" ];
+        partOf = [ "minecraft-server.target" ];
+        wantedBy = [ "minecraft-server.target" ];
       };
       minecraft-server-proxy = {
         listenStreams = [ "127.0.0.1:25565" "100.91.224.22:25565" "[fd7a:115c:a1e0:ab12:4843:cd96:625b:e016]:25565" ];
+        partOf = [ "minecraft-server.target" ];
         socketConfig = {
           FreeBind = true;
         };
+        wantedBy = [ "minecraft-server.target" ];
+      };
+    };
+    targets = {
+      minecraft-server = {
+        # Only starts the sockets
         wantedBy = [ "sockets.target" ];
       };
     };
