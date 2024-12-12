@@ -721,10 +721,6 @@
         home = "/home/max/shared";
         isSystemUser = true;
       };
-      openvswitch = {
-        isSystemUser = true;
-        group = "openvswitch";
-      };
       tailscale = {
         isSystemUser = true;
         group = "tailscale";
@@ -737,7 +733,6 @@
     groups = {
       nix-gc = {};
       sh = {};
-      openvswitch = {};
       tailscale = {};
       vfio = {};
       zerotierd = {};
@@ -883,9 +878,6 @@
           };
         };
       };
-    };
-    vswitch = {
-      package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.openvswitch;
     };
   };
   zramSwap = {
