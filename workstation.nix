@@ -369,6 +369,7 @@
       enable = true;
       declarative = true;
       eula = true;
+      package = inputs.nix-minecraft.packages.x86_64-linux.fabric-server;
       serverProperties = {
         server-ip = "127.0.0.1";
         server-port = 25564;
@@ -553,18 +554,29 @@
         };
         requires = [ "latest-system.socket" ];
       };
-      minecraft-server = {
+      minecraft-server =
+        let mods = pkgs.linkFarmFromDrvs "mods" [
+          (pkgs.fetchurl {
+            hash = "sha256-2ni2tQjMCO3jaEA1OHXoonZpGqHGVlY/9rzVsijrxVA=";
+            url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/pl9FpaYJ/voicechat-fabric-1.21.4-2.5.26.jar";
+          })
+        ]; in {
         wantedBy = lib.mkForce [ ];
         serviceConfig = {
           NoNewPrivileges = true;
           ProtectSystem = "strict";
           RemoveIPC = true;
-          SocketBindAllow = "ipv4:tcp:25564";
+          SocketBindAllow = ["ipv4:tcp:25564" "udp:24454"];
           SocketBindDeny = "any";
           StateDirectory = "minecraft";
           StateDirectoryMode = "0700";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          BindReadOnlyPaths = [ "/run/nscd" "/etc/resolv.conf" "/run/minecraft-server.stdin" ];
+          BindReadOnlyPaths = [
+            "/run/nscd"
+            "/etc/resolv.conf"
+            "/run/minecraft-server.stdin"
+            "${mods}:/var/lib/minecraft/mods"
+          ];
         };
         stopIfChanged = false;
         unitConfig = {
@@ -572,7 +584,7 @@
         };
         confinement = {
           enable = true;
-          packages = [ pkgs.coreutils ];
+          packages = [ pkgs.coreutils mods ];
         };
         postStart = ''
           for i in $(seq 60); do
