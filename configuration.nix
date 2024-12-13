@@ -623,6 +623,7 @@
           RestrictNamespaces = true;
           RestrictSUIDSGID = true;
           ProtectHostname = true;
+          ProtectSystem = lib.mkForce "strict";
           LockPersonality = true;
           RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
           ProtectClock = true;
@@ -661,6 +662,7 @@
           RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
           ProtectClock = true;
           ProtectKernelLogs = true;
+          ProtectSystem = lib.mkForce "strict";
           SystemCallArchitectures = "native";
           MemoryDenyWriteExecute = true;
           RestrictRealtime = true;
