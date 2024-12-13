@@ -81,6 +81,7 @@
         ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
         tailscale0 = {
           allowedTCPPorts = [ 22 3000 25565 ];
+          allowedUDPPorts = [ 24454 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -584,7 +585,7 @@
         };
         confinement = {
           enable = true;
-          packages = [ pkgs.coreutils mods ];
+          packages = [ pkgs.coreutils mods pkgs.udev ];
         };
         postStart = ''
           for i in $(seq 60); do
@@ -592,6 +593,9 @@
             sleep 1
           done
         '';
+        environment = {
+          LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.udev ];
+        };
       };
       minecraft-server-proxy = {
         requires = [ "minecraft-server-proxy.socket" "minecraft-server.service" ];
