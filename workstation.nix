@@ -604,7 +604,7 @@
           CapabilityBoundingSet = "";
           DynamicUser = true;
           ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:25564 --exit-idle-time=5min";
-          IPAddressAllow = "100.64.0.0/10 fd7a:115c:a1e0::/48 localhost";
+          IPAddressAllow = "172.28.0.0/16 100.64.0.0/10 fd7a:115c:a1e0::/48 localhost";
           IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -618,7 +618,7 @@
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
           RestrictNamespaces = true;
           RestrictRealtime = true;
-          RestrictNetworkInterfaces = "tailscale0 lo";
+          RestrictNetworkInterfaces = "ztmjfp7kiq tailscale0 lo";
           SocketBindDeny = "any";
           SystemCallArchitectures = "native";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
@@ -782,7 +782,7 @@
         wantedBy = [ "minecraft-server.target" ];
       };
       minecraft-server-proxy = {
-        listenStreams = [ "127.0.0.1:25565" "100.91.224.22:25565" "[fd7a:115c:a1e0:ab12:4843:cd96:625b:e016]:25565" ];
+        listenStreams = [ "172.28.10.244:25565" "127.0.0.1:25565" "100.91.224.22:25565" "[fd7a:115c:a1e0:ab12:4843:cd96:625b:e016]:25565" ];
         partOf = [ "minecraft-server.target" ];
         socketConfig = {
           FreeBind = true;
