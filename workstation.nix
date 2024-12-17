@@ -78,7 +78,10 @@
   networking = {
     firewall = {
       interfaces = {
-        ztmjfp7kiq.allowedTCPPorts = [ 8080 8081 3000 2049 ];
+        ztmjfp7kiq = {
+          allowedTCPPorts = [ 8080 8081 3000 2049 25565 ];
+          allowedUDPPorts = [ 25565 ];
+        };
         tailscale0 = {
           allowedTCPPorts = [ 22 3000 25565 ];
           allowedUDPPorts = [ 24454 ];
