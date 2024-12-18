@@ -81,7 +81,7 @@
             backend_remote = "btrfs-progs-sudo";
             volume = {
               "/nexus" = {
-                target_preserve = "1d";
+                target_preserve = "1d 6w 6m";
                 target = "ssh://max-nixos-workstation-zerotier/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
               };
             };
@@ -100,7 +100,7 @@
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
           PrivateNetwork = true;
           BindReadOnlyPaths = [ "/run/nscd" ];
-          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf snapshot --preserve";
+          ExecStart = lib.mkForce "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf snapshot --preserve";
           Restart = "on-failure";
         };
         unitConfig = {
