@@ -795,6 +795,7 @@
           (octaveFull.withPackages (ps: with ps; [statistics image]))
           oversteer
           p7zip
+          passt
           pioneer
           plover.dev
           powertop
