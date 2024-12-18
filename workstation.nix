@@ -173,7 +173,7 @@
     };
     btrbk = {
       instances = {
-        workstation = {
+        btrbk = {
           settings = {
             volume = {
               "/nexus" = {
@@ -461,7 +461,7 @@
           UMask = "0077";
         };
       };
-      btrbk-workstation = {
+      btrbk-btrbk = {
         serviceConfig = {
           BindPaths = [ "/Big" ];
           PrivateNetwork = true;

@@ -309,7 +309,7 @@
     };
     btrbk = {
       instances = {
-        ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
+        btrbk = {
           settings = {
             backend = "btrfs-progs";
             target_preserve_min = "no";
@@ -435,17 +435,15 @@
       "capsule@.service"
       "capsule.slice"
     ];
-    services = let
-      short-name = lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName;
-    in {
-      "btrbk-${short-name}" = {
+    services = {
+      "btrbk-btrbk" = {
         restartIfChanged = false;
         confinement = {
           enable = true;
         };
         serviceConfig = {
           BindPaths = ["/nexus"];
-          BindReadOnlyPaths = ["/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout ${config.environment.etc."btrbk/${short-name}.conf".source}:/etc/btrbk/${short-name}.conf /etc/passwd /etc/hosts"];
+          BindReadOnlyPaths = ["/dev/log /run/systemd/journal/socket /run/systemd/journal/stdout ${config.environment.etc."btrbk/btrbk.conf".source}:/etc/btrbk/btrbk.conf /etc/passwd /etc/hosts"];
           PrivateUsers = lib.mkForce false;
           RestrictNamespaces = true;
           UMask = "0077";

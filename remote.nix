@@ -76,11 +76,12 @@
   services = {
     btrbk = {
       instances = {
-        ${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName} = {
+        btrbk = {
           settings = {
             backend_remote = "btrfs-progs-sudo";
             volume = {
               "/nexus" = {
+                target_preserve = "1d";
                 target = "ssh://max-nixos-workstation-zerotier/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
               };
             };
@@ -91,30 +92,33 @@
   };
   systemd = {
     services = {
-      "btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {
+      "btrbk-btrbk" = {
         wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
         after = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
         serviceConfig = {
-          IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
           RestrictSUIDSGID = true;
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+          PrivateNetwork = true;
           BindReadOnlyPaths = [ "/run/nscd" ];
+          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf snapshot --preserve";
+          Restart = "on-failure";
         };
         unitConfig = {
-          OnFailure = "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.service";
+          OnSuccess = "btrbk-backup-btrbk.service";
         };
       };
-      "btrbk-retry-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" =
-        let cfg = config.systemd.services."btrbk-${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+      "btrbk-backup-btrbk" =
+        let cfg = config.systemd.services."btrbk-btrbk";
         in {
           inherit (cfg) wants after confinement restartIfChanged;
           path = lib.mkForce cfg.path;
           serviceConfig = lib.removeAttrs cfg.serviceConfig ["RootDirectory" "InaccessiblePaths" "ReadOnlyPaths" "RuntimeDirectory"] // {
-            ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}.conf resume";
-            Restart = "on-failure";
+            IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
+            PrivateNetwork = null;
+            ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf resume";
           };
           unitConfig = cfg.unitConfig // {
-            OnFailure = [];
+            OnSuccess = [];
           };
         };
       "nixos-upgrade" = {

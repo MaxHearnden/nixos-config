@@ -158,7 +158,7 @@
     };
     btrbk = {
       instances = {
-        pc = {
+        btrbk = {
           settings = {
             volume = {
               "ssh://max-nixos-workstation-zerotier/nexus" = {
@@ -525,7 +525,7 @@
           UMask = "0077";
         };
       };
-      btrbk-pc = {
+      btrbk-btrbk = {
         serviceConfig = {
           RestrictSUIDSGID = lib.mkForce false;
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
