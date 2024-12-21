@@ -15,6 +15,7 @@
     # }).linuxKernel.packages.linux_6_1;
     kernelParams = [
       "console=ttyS0,115200"
+      "console=tty0"
     ];
     loader = {
       grub = {
