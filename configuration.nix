@@ -753,6 +753,7 @@
           elinks
           emacs
           espup
+          ethtool
           file
           firefox
           firmware-manager
