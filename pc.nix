@@ -524,6 +524,9 @@
           SystemCallArchitectures = "native";
           UMask = "0077";
         };
+        confinement = {
+          enable = true;
+        };
       };
       btrbk-btrbk = {
         serviceConfig = {

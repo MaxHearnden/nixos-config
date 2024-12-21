@@ -230,7 +230,7 @@
     fish = {
       enable = true;
       interactiveShellInit = ''
-        ${config.systemd.package}/bin/systemctl shutdown --when=show
+        ${config.systemd.package}/bin/systemctl shutdown --quiet --when=show
       '';
     };
     git = {
@@ -287,20 +287,6 @@
   security = {
     doas = {
       enable = true;
-    };
-    wrappers = {
-      "mount.cifs" = {
-        source = "${pkgs.cifs-utils}/bin/mount.cifs";
-        owner = "root";
-        group = "root";
-        setuid = true;
-      };
-      "mount.nfs" = {
-        source = "${pkgs.nfs-utils}/bin/mount.nfs";
-        owner = "root";
-        group = "root";
-        setuid = true;
-      };
     };
   };
   services = {
@@ -423,11 +409,6 @@
   };
   system = {
     configurationRevision = inputs.self.rev or "dirty";
-    extraDependencies = [
-      # Prevent unnecicary gc and rebuild
-      pkgs.pkgsCross.riscv32.buildPackages.gcc.info
-      pkgs.pkgsCross.riscv64.buildPackages.gcc.info
-    ];
     stateVersion = "23.11";
   };
   systemd = {
@@ -739,7 +720,7 @@
     };
     users = {
       max = {
-        extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "adbusers" "wireshark" "tss" ];
+        extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "wireshark" "tss" ];
         isNormalUser = true;
         packages = with pkgs; [
           authenticator
@@ -775,7 +756,6 @@
           htop
           # inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
           libreoffice-fresh
-          libvirt
           linux-manual
           lshw
           lsof
@@ -808,7 +788,6 @@
           rhythmbox
           rustup
           # rust-analyzer
-          scummvm
           shellcheck
           signal-desktop
           # simple-http-server
