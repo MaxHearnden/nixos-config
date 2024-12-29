@@ -81,8 +81,9 @@
             backend_remote = "btrfs-progs-sudo";
             volume = {
               "/nexus" = {
-                target_preserve = "1d 6w 6m";
-                target = "ssh://max-nixos-workstation-zerotier/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}";
+                target = {
+                  "ssh://max-nixos-workstation-zerotier/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {};
+                };
               };
             };
           };

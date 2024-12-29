@@ -298,8 +298,8 @@
         btrbk = {
           settings = {
             backend = "btrfs-progs";
-            target_preserve_min = "no";
-            target_preserve = "6w 6m";
+            target_preserve_min = "latest";
+            target_preserve = "1d 6w 6m";
             ssh_user = "btrbk";
             send_compressed_data = "yes";
             stream_buffer = "25%";

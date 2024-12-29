@@ -168,7 +168,7 @@
                     snapshot_name = "@NixOS-for-pc";
                   };
                 };
-                target = "/nexus/backups/workstation";
+                target = "/HDD/backups/workstation";
                 snapshot_preserve = "1d 1w";
                 snapshot_preserve_min = "latest";
                 incremental = "strict";
@@ -179,10 +179,15 @@
                     snapshot_name = "shared-for-pc";
                   };
                 };
-                target = "/nexus/backups/workstation";
+                target = "/HDD/backups/workstation";
                 snapshot_preserve = "1d 1w";
                 snapshot_preserve_min = "latest";
                 incremental = "strict";
+              };
+              "/nexus" = {
+                target = {
+                  "/HDD/backups/pc" = {};
+                };
               };
             };
           };
@@ -538,6 +543,13 @@
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
         };
       };
+    };
+    tmpfiles = {
+      rules = [
+        "v /HDD/backups 700 btrbk btrbk"
+        "d /HDD/backups/pc"
+        "d /HDD/backups/workstation"
+      ];
     };
   };
 
