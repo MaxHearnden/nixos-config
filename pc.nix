@@ -535,6 +535,9 @@
         };
       };
       btrbk-btrbk = {
+        unitConfig = {
+          RequiresMountsFor = "/HDD/backups";
+        };
         serviceConfig = {
           BindPaths = [ "/HDD/backups" ];
           PrivateNetwork = lib.mkForce false;
