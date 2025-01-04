@@ -663,6 +663,11 @@
         };
       };
     };
+    sockets = {
+      podman = {
+        enable = false;
+      };
+    };
     tmpfiles = {
       rules = [
         "d /nexus/snapshots/btrbk - btrbk btrbk"
