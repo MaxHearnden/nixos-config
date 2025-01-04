@@ -415,6 +415,8 @@
     additionalUpstreamSystemUnits = [
       "capsule@.service"
       "capsule.slice"
+      "soft-reboot.target"
+      "systemd-soft-reboot.service"
     ];
     services = {
       "btrbk-btrbk" = {
