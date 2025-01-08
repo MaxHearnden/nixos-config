@@ -784,6 +784,7 @@
           passt
           pioneer
           plover.dev
+          podman-compose
           powertop
           prismlauncher
           python3
