@@ -406,6 +406,7 @@
   #   };
   # };
   systemd = {
+    defaultUnit = lib.mkForce "multi-user.target";
     network = {
       enable = true;
       links = {
