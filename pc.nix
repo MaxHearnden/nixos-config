@@ -146,14 +146,14 @@
           auth = [ "none" ];
           bindPort = 8080;
           bindAddress = "172.28.13.156";
-          extraArguments = "8080 192.168.1.82 8080";
+          extraArguments = "8080 192.168.1.79 8080";
         }
         {
           type = "tcppm";
           auth = [ "none" ];
           bindPort = 9090;
           bindAddress = "172.28.13.156";
-          extraArguments = "9090 192.168.1.82 9090";
+          extraArguments = "9090 192.168.1.79 9090";
         }
       ];
     };
