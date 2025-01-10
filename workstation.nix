@@ -17,9 +17,6 @@
       tmpfsSize = "100%";
     };
   };
-  console = {
-    enable = false;
-  };
   environment = {
     etc =
       lib.listToAttrs (map (file: {
@@ -412,7 +409,6 @@
     };
   };
   systemd = {
-    defaultUnit = lib.mkForce "multi-user.target";
     network = {
       enable = true;
       networks = {
