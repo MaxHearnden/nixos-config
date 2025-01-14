@@ -165,7 +165,7 @@
           config="$(${pkgs.curl}/bin/curl "http://max-nixos-workstation-zerotier:8081/${config.networking.hostName}" -f)"
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           "''${config}/bin/switch-to-configuration" boot
-          nixos-kexec --when="7:00"
+          ${inputs.nixos-kexec.packages.x86_64-linux.default}/bin/nixos-kexec --when="7:00"
         '';
         unitConfig = {
           X-StopOnRemoval = false;
