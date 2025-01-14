@@ -158,13 +158,6 @@
         {
           type = "tcppm";
           auth = [ "none" ];
-          bindPort = 5000;
-          bindAddress = "192.168.2.1";
-          extraArguments = "5000 max-nixos-workstation-zerotier 8080";
-        }
-        {
-          type = "tcppm";
-          auth = [ "none" ];
           bindPort = 3000;
           bindAddress = "100.91.224.22";
           extraArguments = "3000 172.28.10.244 3000";
@@ -270,7 +263,7 @@
       enable = true;
       signKeyPaths = ["/etc/nix/storekey"];
       settings = {
-        bind = "max-nixos-workstation-zerotier:8080";
+        bind = "[::1]:8080";
         priority = 50;
       };
     };
@@ -513,12 +506,48 @@
         };
       };
       harmonia = {
-        wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" "nss-lookup.target" ];
         serviceConfig = {
+          IPAddressAllow = "::1";
+          IPAddressDeny = "any";
+          PrivateNetwork = lib.mkForce true;
           RestrictSUIDSGID = true;
           RemoveIPC = true;
         };
-        after = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" "nss-lookup.target" ];
+        unitConfig = {
+          StopWhenUnneeded = true;
+        };
+        wantedBy = lib.mkForce [];
+      };
+      harmonia-proxy = {
+        after = [ "harmonia.service" "harmonia-proxy.socket" ];
+        confinement.enable = true;
+        requires = [ "harmonia.service" "harmonia-proxy.socket" ];
+        serviceConfig = {
+          CapabilityBoundingSet = "";
+          DynamicUser = true;
+          ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ::1:8080 --exit-idle-time=5min";
+          IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40 ::1";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateNetwork = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          SystemCallArchitectures = "native";
+          RestrictAddressFamilies = "AF_INET6";
+          RestrictNamespaces = true;
+          RestrictNetworkInterfaces = "ztmjfp7kiq lo";
+          RestrictRealtime = true;
+          SystemCallFilter = ["@system-service" "~@resources @privileged"];
+          UMask = "0077";
+        };
+        unitConfig.JoinsNamespaceOf = "harmonia.service";
       };
       latest-system = {
         serviceConfig = {
@@ -770,6 +799,16 @@
       };
     };
     sockets = {
+      harmonia-proxy = {
+        listenStreams = ["172.28.10.244:8080" "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8080" "[fc9c:6b89:eec5:d88:e258::1]:8080"];
+        socketConfig = {
+          FreeBind = true;
+          IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
+          IPAddressDeny = "any";
+          RestrictNetworkInterfaces = "ztmjfp7kiq lo";
+        };
+        wantedBy = [ "sockets.target" ];
+      };
       latest-system = {
         listenStreams = ["172.28.10.244:8081" "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8081" "[fc9c:6b89:eec5:d88:e258::1]:8081"];
         socketConfig = {
