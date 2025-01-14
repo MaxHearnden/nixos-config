@@ -221,9 +221,6 @@
     _1password-gui = {
       enable = true;
     };
-    # adb = {
-    #   enable = true;
-    # };
     command-not-found = {
       enable = false;
     };
@@ -761,7 +758,6 @@
           gtkterm
           headsetcontrol
           htop
-          # inputs.keyboard_mouse_emulate_on_raspberry.packages.x86_64-linux.default
           libreoffice-fresh
           linux-manual
           lshw
@@ -792,29 +788,17 @@
           qpdfview
           rare
           ripgrep
-          # inputs.rename-exchange.packages.x86_64-linux.default
           rhythmbox
           rustup
-          # rust-analyzer
           shellcheck
           signal-desktop
-          # simple-http-server
           simutrans
-          # inputs.shh.packages.x86_64-linux.default
           slirp4netns
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
           sshfs
-          # stack
-          # gnomeExtensions.systemd-status
           tea
-          #teams
           teams-for-linux
-          #texlive.combined.scheme-full
-          # inputs.tobig.packages.x86_64-linux.default
           tpm2-tools
-          # thunderbird
-          # nodePackages.uglify-js
-          # umlet
           usbutils
           vdrift
           vim
@@ -834,20 +818,14 @@
                   inherit (exts.theumletteam) umlet;
                 };
           })
-          # vulnix
           w3m
           watchexec
           whatsapp-for-linux
-    #      wine
           winetricks
-          #((wineWowPackages.full.override {sdlSupport = true; vkd3dSupport = true;}).overrideAttrs (_: {patches = [./attachment.cgi];}))
           wineWowPackages.full
           wireshark
           wl-clipboard
           xclip
-    #      xfel
-          # yacas
-    #      (import (pkgs.fetchurl {url = "https://github.com/input-output-hk/haskell.nix/tarball/master";})).hix
           xorg.xhost
           zgrviewer
         ];
