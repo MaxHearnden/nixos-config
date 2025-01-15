@@ -587,11 +587,30 @@
         };
         serviceConfig = {
           BindPaths = "%S/ovsdb:/var/db/openvswitch %t/ovsdb:/var/run/openvswitch";
+          CapabilityBoundingSet = "";
           Group = "ovs";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
           PIDFile = lib.mkForce "/run/ovsdb/ovsdb.pid";
+          PrivateNetwork = true;
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = "AF_UNIX";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
           RuntimeDirectory = "ovsdb:openvswitch";
           StateDirectory = "ovsdb";
           StateDirectoryMode = "0700";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = ["@system-service perf_event_open" "~@privileged resources"];
           UMask = "007";
           User = "ovsdb";
         };
@@ -602,6 +621,7 @@
         serviceConfig = {
           AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BROADCAST CAP_NET_RAW";
           BindReadOnlyPaths = "/run/ovsdb /run/systemd/journal/dev-log";
+          CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BROADCAST CAP_NET_RAW";
           ExecStart = lib.mkForce ''
             ${config.virtualisation.vswitch.package}/bin/ovs-vswitchd \
               unix:/run/ovsdb/db.sock \
@@ -612,7 +632,14 @@
           User = "ovs-vswitchd";
           PIDFile = lib.mkForce "/run/ovs-vswitchd/ovs-vswitchd.pid";
           PrivateUsers = lib.mkForce false;
+          ProtectHome = true;
+          ProtectProc = "invisible";
+          ProtectSystem = true;
+          RemoveIPC = true;
+          RestrictNamespaces = true;
           RuntimeDirectory = "ovs-vswitchd";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = ["@system-service perf_event_open" "~@privileged resources"];
           UMask = "0007";
         };
       };
