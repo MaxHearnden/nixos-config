@@ -158,6 +158,7 @@
         };
         path = with pkgs; [
           config.nix.package.out
+          kexec-tools
         ];
         requires = [ "network-online.target" "zerotierone.service" ];
         restartIfChanged = false;
