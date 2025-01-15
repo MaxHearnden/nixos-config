@@ -580,6 +580,42 @@
           RestrictRealtime = true;
         };
       };
+      ovsdb = {
+        confinement = {
+          enable = true;
+          packages = [ pkgs.coreutils pkgs.gnugrep ];
+        };
+        serviceConfig = {
+          BindPaths = "%S/ovsdb:/var/db/openvswitch %t/ovsdb:/var/run/openvswitch";
+          Group = "ovs";
+          PIDFile = lib.mkForce "/run/ovsdb/ovsdb.pid";
+          RuntimeDirectory = "ovsdb:openvswitch";
+          StateDirectory = "ovsdb";
+          StateDirectoryMode = "0700";
+          UMask = "007";
+          User = "ovsdb";
+        };
+      };
+      ovs-vswitchd = {
+        confinement.enable = true;
+        environment.OVS_RUNDIR = "/run/ovs-vswitchd";
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BROADCAST CAP_NET_RAW";
+          BindReadOnlyPaths = "/run/ovsdb /run/systemd/journal/dev-log";
+          ExecStart = lib.mkForce ''
+            ${config.virtualisation.vswitch.package}/bin/ovs-vswitchd \
+              unix:/run/ovsdb/db.sock \
+              --pidfile=/run/ovs-vswitchd/ovs-vswitchd.pid \
+              --detach
+          '';
+          Group = "ovs";
+          User = "ovs-vswitchd";
+          PIDFile = lib.mkForce "/run/ovs-vswitchd/ovs-vswitchd.pid";
+          PrivateUsers = lib.mkForce false;
+          RuntimeDirectory = "ovs-vswitchd";
+          UMask = "0007";
+        };
+      };
       podman = {
         enable = false;
       };
@@ -706,6 +742,14 @@
         home = "/home/max/shared";
         isSystemUser = true;
       };
+      ovsdb = {
+        isSystemUser = true;
+        group = "ovs";
+      };
+      ovs-vswitchd = {
+        isSystemUser = true;
+        group = "ovs";
+      };
       tailscale = {
         isSystemUser = true;
         group = "tailscale";
@@ -716,6 +760,7 @@
       };
     };
     groups = {
+      ovs = {};
       nix-gc = {};
       sh = {};
       tailscale = {};
