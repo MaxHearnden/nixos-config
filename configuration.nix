@@ -610,7 +610,7 @@
           StateDirectory = "ovsdb";
           StateDirectoryMode = "0700";
           SystemCallArchitectures = "native";
-          SystemCallFilter = ["@system-service perf_event_open" "~@privileged resources"];
+          SystemCallFilter = ["@system-service perf_event_open" "~@privileged @resources"];
           UMask = "007";
           User = "ovsdb";
         };
@@ -639,7 +639,7 @@
           RestrictNamespaces = true;
           RuntimeDirectory = "ovs-vswitchd";
           SystemCallArchitectures = "native";
-          SystemCallFilter = ["@system-service perf_event_open" "~@privileged resources"];
+          SystemCallFilter = ["@system-service perf_event_open" "~@privileged @resources"];
           UMask = "0007";
         };
       };
