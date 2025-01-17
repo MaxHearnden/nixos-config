@@ -165,8 +165,14 @@
         script = ''
           config="$(${pkgs.curl}/bin/curl "http://max-nixos-workstation-zerotier:8081/${config.networking.hostName}" -f)"
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
-          "''${config}/bin/switch-to-configuration" boot
-          ${inputs.nixos-kexec.packages.x86_64-linux.default}/bin/nixos-kexec --when "+1d"
+          booted=$(readlink -e "/run/booted-system/kernel" "/run/booted-system/kernel-modules")
+          current=$(readlink -e "$config/kernel" "$config/kernel-modules")
+          if [ "$booted" != "$current" ]; then
+            "$config/bin/switch-to-configuration" boot
+            ${inputs.nixos-kexec.packages.x86_64-linux.default}/bin/nixos-kexec --when "+1d"
+          else
+            "$config/bin/switch-to-configuration" switch
+          fi
         '';
         unitConfig = {
           X-StopOnRemoval = false;
