@@ -413,6 +413,8 @@
       "capsule@.service"
       "capsule.slice"
       "soft-reboot.target"
+      "systemd-nsresourced.service"
+      "systemd-nsresourced.socket"
       "systemd-soft-reboot.service"
     ];
     services = {
