@@ -28,6 +28,9 @@
     #   ];
     # };
   };
+  networking.networkmanager.plugins = [
+    pkgs.networkmanager-openconnect
+  ];
   nix = {
     buildMachines = [
       {
