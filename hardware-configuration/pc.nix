@@ -25,7 +25,7 @@
 
   fileSystems."/HDD" =
     { device = "/dev/disk/by-uuid/ad77fc97-b17e-44ac-9bdd-f93f007b9532";
-      options = [ "defaults" "compress=zstd" "noatime" "user_subvol_rm_allowed" "x-systemd.automount" "x-systemd.idle-timeout=5m" ];
+      options = [ "defaults" "compress=zstd" "noatime" "user_subvol_rm_allowed" "x-systemd.automount" ];
       fsType = "btrfs";
     };
 
