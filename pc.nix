@@ -55,6 +55,7 @@
         };
       }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock" "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock" "720-kernel-initrd.pcrlock" ]);
   };
+  hardware.nvidia.open = true;
   networking = {
     firewall = {
       interfaces = {
@@ -381,6 +382,9 @@
           autoSuspend = false;
         };
       };
+      videoDrivers = [
+        "nvidia"
+      ];
       # xrandrHeads = [
       #   "HDMI-0"
       #   {
