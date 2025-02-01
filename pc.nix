@@ -13,6 +13,7 @@
     #     allowUnfree = true;
     #   };
     # }).linuxKernel.packages.linux_6_1;
+    kernelPackages = lib.mkForce pkgs.linuxPackages;
     kernelParams = [
       "console=ttyS0,115200"
       "console=tty0"
