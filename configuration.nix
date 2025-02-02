@@ -852,6 +852,7 @@
           nodejs
           notepadqq
           (octaveFull.withPackages (ps: with ps; [statistics image]))
+          ollama
           oversteer
           p7zip
           passt
