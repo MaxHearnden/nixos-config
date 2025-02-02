@@ -61,7 +61,7 @@
     firewall = {
       interfaces = {
         ztmjfp7kiq = {
-          allowedTCPPorts = [ 8080 9090 ];
+          allowedTCPPorts = [ 8080 9090 11434 ];
         };
       };
     };
@@ -373,6 +373,11 @@
     #     };
     #   };
     # };
+    ollama = {
+      enable = true;
+      host = "172.28.13.156";
+      acceleration = "cuda";
+    };
     ratbagd = {
       enable = true;
     };
