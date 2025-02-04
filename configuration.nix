@@ -22,6 +22,11 @@
         enable = true;
       };
     };
+    kernel = {
+      sysctl = {
+        "net.conf.*.tcp_ecn" = 1;
+      };
+    };
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       efi = {
