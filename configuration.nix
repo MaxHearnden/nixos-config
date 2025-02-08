@@ -814,6 +814,7 @@
           ungoogled-chromium
           ciscoPacketTracer8
           comma
+          devcontainer
           discord
           dwarf-fortress
           elinks
