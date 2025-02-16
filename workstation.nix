@@ -415,17 +415,24 @@
             Name = "eno1";
           };
           dhcpV4Config = {
-            SendHostname = true;
+            ClientIdentifier = "mac";
+            SendHostname = false;
             UseHostname = false;
+            UseTimezone = true;
+            Use6RD = true;
           };
           dhcpV6Config = {
-            SendHostname = true;
+            SendHostname = false;
             UseHostname = false;
+            UseDomains = "route";
+            DUIDType = "link-layer";
           };
           networkConfig = {
             LLDP = true;
             LLMNR = false;
             MulticastDNS = false;
+            UseDomains = "route";
+            DNSDefaultRoute = true;
           };
         };
         "10-enp2s0" = {
@@ -441,6 +448,10 @@
           networkConfig = {
             ConfigureWithoutCarrier = true;
             DNSDefaultRoute = false;
+          };
+          dhcpPrefixDelegationConfig = {
+            UplinkInterface = "eno1";
+            SubnetId = 1;
           };
           DHCP = "no";
         };
