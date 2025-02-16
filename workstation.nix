@@ -125,6 +125,7 @@
     };
     networkmanager = {
       unmanaged = [
+        "eno1"
         "enp2s0"
       ];
     };
@@ -405,6 +406,28 @@
     network = {
       enable = true;
       networks = {
+        "10-eno1" = {
+          DHCP = "yes";
+          linkConfig = {
+            MTUBytes = "9000";
+          };
+          matchConfig = {
+            Name = "eno1";
+          };
+          dhcpV4Config = {
+            SendHostname = true;
+            UseHostname = false;
+          };
+          dhcpV6Config = {
+            SendHostname = true;
+            UseHostname = false;
+          };
+          networkConfig = {
+            LLDP = true;
+            LLMNR = false;
+            MulticastDNS = false;
+          };
+        };
         "10-enp2s0" = {
           address = ["192.168.2.1/24" "fd80:1234::1/64"];
           matchConfig = {
