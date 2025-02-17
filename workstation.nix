@@ -91,6 +91,9 @@
           allowedUDPPorts = [ 53 69 ];
         };
       };
+      extraReversePathFilterRules = ''
+        iifname "vrf-interface-*" accept
+      '';
       extraInputRules = ''
         iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
         ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
@@ -127,6 +130,10 @@
       unmanaged = [
         "eno1"
         "enp2s0"
+        "enp3s0f0"
+        "enp3s0f1"
+        "enp3s0f2"
+        "enp3s0f3"
       ];
     };
   };
@@ -233,15 +240,16 @@
       resolveLocalQueries = false;
       settings = {
         bind-dynamic = true;
-        interface = [ "enp2s0" ];
-        enable-ra = true;
-        ra-param = "enp2s0,0,0";
+        dhcp-fqdn = true;
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
+        dhcp-rapid-commit = true;
+        domain = "localnet";
+        enable-ra = true;
+        interface = [ "enp2s0" ];
         interface-name = "max-nixos-workstation.localnet,enp2s0";
         local = "/localnet/";
-        domain = "localnet";
-        dhcp-fqdn = true;
         no-hosts = true;
+        ra-param = "enp2s0,0,0";
       };
     };
     gitea = {
@@ -441,6 +449,7 @@
             Name = "enp2s0";
           };
           linkConfig = {
+            MTUBytes = 9216;
             RequiredForOnline = false;
           };
           domains = [ "localnet" ];
@@ -455,10 +464,42 @@
           };
           DHCP = "no";
         };
-      };
-      wait-online = {
-        enable = false;
-      };
+      } // lib.listToAttrs (
+        lib.genList (index:
+          lib.nameValuePair "20-enp3s0f${toString index}" {
+            DHCP = "yes";
+            linkConfig = {
+              RequiredForOnline = false;
+            };
+            matchConfig = {
+              Name = "enp3s0f${toString index}";
+            };
+            networkConfig = {
+              DNSDefaultRoute = false;
+            };
+            ipv6AcceptRAConfig = {
+              UseMTU = true;
+            };
+            dhcpV4Config = {
+              Hostname = "max-nixos-workstation-${toString index}";
+              UseMTU = true;
+            };
+            dhcpV6Config = {
+              Hostname = "max-nixos-workstation-${toString index}";
+            };
+            vrf = ["vrf-interface-${toString index}"];
+          }) 4);
+      netdevs = lib.listToAttrs (
+        lib.genList (index:
+          lib.nameValuePair "20-vrf-interface-${toString index}" {
+            netdevConfig = {
+              Kind = "vrf";
+              Name = "vrf-interface-${toString index}";
+            };
+            vrfConfig = {
+              Table = 10 + index;
+            };
+          }) 4);
     };
     services = {
       "3proxy" = {
