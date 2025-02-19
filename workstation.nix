@@ -464,6 +464,14 @@
           };
           DHCP = "no";
         };
+        "20-vrf-interface" = {
+          matchConfig = {
+            Name = "vrf-interface-*";
+          };
+          linkConfig = {
+            RequiredForOnline = false;
+          };
+        };
       } // lib.listToAttrs (
         lib.genList (index:
           lib.nameValuePair "20-enp3s0f${toString index}" {
