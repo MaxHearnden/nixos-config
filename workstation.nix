@@ -91,9 +91,6 @@
           allowedUDPPorts = [ 53 69 ];
         };
       };
-      extraReversePathFilterRules = ''
-        iifname "vrf-interface-*" accept
-      '';
       extraInputRules = ''
         iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
         ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
@@ -119,6 +116,13 @@
     #     useDHCP = false;
     #   };
     # };
+    localCommands = ''
+      # Remove the priority 0 local rule
+      ip rule del priority 0 || true
+
+      # Add the same rule at priority 2000 (after vrf lookup)
+      ip rule add priority 2000 lookup local || true
+    '';
     nat = {
       enable = true;
       externalInterface = "eno1";
