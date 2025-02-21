@@ -77,6 +77,7 @@
   };
   networking = {
     firewall = {
+      filterForward = true;
       interfaces = {
         ztmjfp7kiq = {
           allowedTCPPorts = [ 8080 8081 3000 2049 25565 ];
@@ -119,9 +120,7 @@
     localCommands = ''
       # Remove the priority 0 local rule
       ip rule del priority 0 || true
-
-      # Add the same rule at priority 2000 (after vrf lookup)
-      ip rule add priority 2000 lookup local || true
+      ip -6 rule del priority 0 || true
     '';
     nat = {
       enable = true;
@@ -466,6 +465,13 @@
             UplinkInterface = "eno1";
             SubnetId = 1;
           };
+          routingPolicyRules = [
+            {
+              Family = "both";
+              Priority = 2000;
+              Table = "local";
+            }
+          ];
           DHCP = "no";
         };
         "20-vrf-interface" = {
