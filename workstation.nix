@@ -419,9 +419,6 @@
       networks = {
         "10-eno1" = {
           DHCP = "yes";
-          linkConfig = {
-            MTUBytes = "9000";
-          };
           matchConfig = {
             Name = "eno1";
           };
@@ -431,12 +428,17 @@
             UseHostname = false;
             UseTimezone = true;
             Use6RD = true;
+            UseMTU = true;
+            RequestOptions = lib.concatMapStringsSep " " toString (lib.subtractLists [52 53 55] (lib.range 1 254));
           };
           dhcpV6Config = {
             SendHostname = false;
             UseHostname = false;
             UseDomains = "route";
             DUIDType = "link-layer";
+          };
+          ipv6AcceptRAConfig = {
+            UseMTU = true;
           };
           networkConfig = {
             LLDP = true;
@@ -501,6 +503,7 @@
             dhcpV4Config = {
               Hostname = "max-nixos-workstation-${toString index}";
               UseMTU = true;
+              RequestOptions = lib.concatMapStringsSep " " toString (lib.subtractLists [52 53 55] (lib.range 1 254));
             };
             dhcpV6Config = {
               Hostname = "max-nixos-workstation-${toString index}";
