@@ -7,7 +7,7 @@
   inputs.vscode-extensions.inputs.nixpkgs.follows = "nixpkgs-unstable";
   inputs.nixos-kexec.url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec";
   inputs.nixos-kexec.inputs.nixpkgs.follows = "nixpkgs";
-  inputs.nix-minecraft.url = "git+https://github.com/Infinidoge/nix-minecraft";
+  inputs.nix-minecraft.url = "github:Infinidoge/nix-minecraft";
   inputs.nix-minecraft.inputs.nixpkgs.follows = "nixpkgs";
   outputs = { self, nixpkgs, ... }@inputs: {
     packages.x86_64-linux.default =
