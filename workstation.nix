@@ -140,7 +140,7 @@
       ];
     };
     nftables.tables."zoning".family = "inet";
-    nftables.tables."zoning".contents = ''
+    nftables.tables."zoning".content = ''
       chain zoning-prerouting {
         type filter hook prerouting priority raw; policy accept;
         ct zone set meta iif map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
