@@ -139,6 +139,18 @@
         "enp3s0f3"
       ];
     };
+    nftables.tables."zoning".family = "inet";
+    nftables.tables."zoning".contents = ''
+      chain zoning-prerouting {
+        type filter hook prerouting priority raw; policy accept;
+        ct zone set meta iif map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
+      }
+
+      chain zoning-output {
+        type filter hook output priority raw; policy accept;
+        ct zone set meta oif map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
+      }
+    '';
   };
   security = {
     tpm2 = {
