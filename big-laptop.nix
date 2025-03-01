@@ -3,24 +3,8 @@
 {
   boot = {
     extraModprobeConfig = "options iwlwifi 11n_disable=1";
-    loader = {
-      grub = {
-        useOSProber = true;
-      };
-    };
-    kernelPackages = lib.mkForce pkgs.linuxPackages;
   };
   hardware = {
-    nvidia = {
-      open = true;
-      prime = {
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
-        offload = {
-          enable = true;
-        };
-      };
-    };
     tuxedo-drivers = {
       enable = true;
     };
@@ -32,11 +16,6 @@
   services = {
     logind = {
       lidSwitch = "ignore";
-    };
-    xserver = {
-      videoDrivers = [
-        "nvidia"
-      ];
     };
   };
   time = {

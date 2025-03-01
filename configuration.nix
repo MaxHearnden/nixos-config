@@ -116,7 +116,7 @@
     bluetooth = {
       disabledPlugins = ["input"];
     };
-    enableAllFirmware = true;
+    enableRedistributableFirmware = true;
     pulseaudio = {
       extraConfig = ''
         .nofail
@@ -170,14 +170,22 @@
       use-cgroups = true;
     };
   };
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      segger-jlink = {
-        acceptLicense = true;
-      };
-    };
-  };
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) ([
+    "1password"
+    "1password-cli"
+    "discord"
+    "dwarf-fortress"
+    "steam"
+    "steam-unwrapped"
+    "zerotierone"
+  ] ++ lib.optionals (config.networking.hostName == "max-nixos-pc") [
+    "cuda_cccl"
+    "cuda_cudart"
+    "cuda_nvcc"
+    "libcublas"
+    "nvidia-settings"
+    "nvidia-x11"
+  ]);
   networking = {
     hosts = {
       "fc9c:6b89:ee1a:7a70:b542:0000:0000:0001" = ["max-nixos-chromebooksd2-zerotier-6plane" "max-nixos-chromebooksd2-zerotier-ipv6" "max-nixos-chromebooksd2-zerotier" "max-nixos-chromebooksd2"];
@@ -351,12 +359,6 @@
       settings = {
         X11Forwarding = true;
       };
-    };
-    printing = {
-      enable = true;
-      drivers = [
-        pkgs.cnijfilter2
-      ];
     };
     sshd = {
       enable = true;
@@ -813,7 +815,6 @@
           btop
           cargo-watch
           ungoogled-chromium
-          ciscoPacketTracer8
           comma
           devcontainer
           discord
