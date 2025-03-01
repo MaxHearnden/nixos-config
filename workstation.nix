@@ -260,13 +260,14 @@
         dhcp-fqdn = true;
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         dhcp-rapid-commit = true;
+        dhcp-option = [ "option:mtu,9216" ];
         domain = "localnet";
         enable-ra = true;
         interface = [ "enp2s0" ];
         interface-name = "max-nixos-workstation.localnet,enp2s0";
         local = "/localnet/";
         no-hosts = true;
-        ra-param = "enp2s0,0,0";
+        ra-param = "enp2s0,mtu:enp2s0,0,0";
       };
     };
     gitea = {
