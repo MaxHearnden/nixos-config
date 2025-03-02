@@ -256,16 +256,18 @@
       enable = true;
       resolveLocalQueries = false;
       settings = {
-        bind-dynamic = true;
+        bind-interfaces = true;
+        conf-file = "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
         dhcp-fqdn = true;
+        dhcp-option = [ "option:mtu,9216" ];
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         dhcp-rapid-commit = true;
-        dhcp-option = [ "option:mtu,9216" ];
+        dnssec = true;
         domain = "home.arpa";
         enable-ra = true;
         interface = [ "enp2s0" ];
         interface-name = "max-nixos-workstation.home.arpa,enp2s0";
-        local = "/home.arpa/";
+        local = ["//" "/home.arpa/"];
         no-hosts = true;
         ra-param = "enp2s0,mtu:enp2s0,0,0";
       };
