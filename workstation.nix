@@ -261,11 +261,11 @@
         dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         dhcp-rapid-commit = true;
         dhcp-option = [ "option:mtu,9216" ];
-        domain = "localnet";
+        domain = "home.arpa";
         enable-ra = true;
         interface = [ "enp2s0" ];
-        interface-name = "max-nixos-workstation.localnet,enp2s0";
-        local = "/localnet/";
+        interface-name = "max-nixos-workstation.home.arpa,enp2s0";
+        local = "/home.arpa/";
         no-hosts = true;
         ra-param = "enp2s0,mtu:enp2s0,0,0";
       };
@@ -475,7 +475,7 @@
             MTUBytes = 9216;
             RequiredForOnline = false;
           };
-          domains = [ "localnet" ];
+          domains = [ "home.arpa" ];
           dns = [ "192.168.2.1" "fd80:1234::1" ];
           networkConfig = {
             ConfigureWithoutCarrier = true;
