@@ -590,6 +590,49 @@
           UMask = "0077";
         };
       };
+      bind = {
+        confinement = {
+          enable = true;
+        };
+        preStart = lib.mkForce ''
+          if ! [ -f "/etc/bind/rndc.key" ]; then
+            ${config.services.bind.package.out}/bin/rndc-confgen -c /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
+          fi
+        '';
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+          BindReadOnlyPaths = [ "/run/systemd/journal/dev-log" ];
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+          ConfigurationDirectory = "bind";
+          ExecStart = lib.mkForce "${config.services.bind.package.out}/bin/named -c ${config.services.bind.configFile}";
+          Group = "named";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          PrivateUsers = lib.mkForce [];
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RuntimeDirectory = "named";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          UMask = "077";
+          User = "named";
+        };
+      };
       btrbk-btrbk = {
         serviceConfig = {
           BindPaths = [ "/Big" ];
