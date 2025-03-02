@@ -419,6 +419,9 @@
     ratbagd = {
       enable = true;
     };
+    resolved = {
+      dnssec = "true";
+    };
     xserver = {
       displayManager = {
         gdm = {
