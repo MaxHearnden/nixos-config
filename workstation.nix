@@ -423,6 +423,9 @@
     };
     resolved = {
       dnssec = "true";
+      extraConfig = ''
+        Cache=no
+      '';
     };
     xserver = {
       displayManager = {
@@ -466,7 +469,6 @@
             MulticastDNS = false;
             UseDomains = "route";
             DNSDefaultRoute = true;
-            DNSOverTLS = true;
           };
         };
         "10-enp2s0" = {
