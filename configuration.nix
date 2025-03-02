@@ -815,7 +815,9 @@
           ungoogled-chromium
           comma
           devcontainer
+          dig
           discord
+          dnsmasq
           dwarf-fortress
           elinks
           emacs
