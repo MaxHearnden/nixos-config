@@ -189,6 +189,23 @@
         }
       ];
     };
+    bind = {
+      enable = true;
+      forwarders = [
+        "127.0.0.54"
+      ];
+      listenOn = ["none"];
+      listenOnIpv6 = ["none"];
+      extraOptions = ''
+        listen-on port 54 { 127.0.0.1; };
+        listen-on-v6 port 54 { ::1; };
+      '';
+      extraConfig = ''
+        server ::/0 {
+          bogus true;
+        };
+      '';
+    };
     btrbk = {
       instances = {
         btrbk = {
