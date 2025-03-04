@@ -859,7 +859,6 @@
           nmap
           nodejs
           notepadqq
-          (octaveFull.withPackages (ps: with ps; [statistics image]))
           ollama
           (writeShellScriptBin "ollama-pc" ''
             OLLAMA_HOST=172.28.10.244:11434 exec ${lib.getBin ollama} "$@"
