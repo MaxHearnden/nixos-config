@@ -1000,12 +1000,32 @@
         };
       };
       slattach = {
+        confinement = {
+          enable = true;
+        };
         serviceConfig = {
           AmbientCapabilities = "CAP_NET_ADMIN";
+          BindPaths = "/dev/ttyS0";
           CapabilityBoundingSet = "CAP_NET_ADMIN";
+          DeviceAllow = "/dev/ttyS0";
           DynamicUser = true;
-          ExecStart = "${lib.getBin pkgs.nettools}/bin/slattach -L -s 115200 -d /dev/ttyS0";
+          ExecStart = "${lib.getBin pkgs.nettools}/bin/slattach -L -s 115200 /dev/ttyS0";
           Group = "dialout";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateNetwork = true;
+          PrivateUsers = lib.mkForce false;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = "none";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = ["@system-service" "~@privileged @resources"];
           Type = "exec";
           UMask = "077";
           User = "slattach";
