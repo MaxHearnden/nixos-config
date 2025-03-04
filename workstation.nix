@@ -91,9 +91,13 @@
           allowedTCPPorts = [ 5000 53 ];
           allowedUDPPorts = [ 53 69 ];
         };
+        "sl*" = {
+          allowedTCPPorts = [ 5000 53 ];
+          allowedUDPPorts = [ 53 69 ];
+        };
       };
       extraInputRules = ''
-        iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
+        iifname {"enp2s0", "sl*"} udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
         ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
       '';
     };
@@ -127,6 +131,7 @@
       externalInterface = "eno1";
       internalInterfaces = [
         "enp2s0"
+        "sl*"
       ];
     };
     networkmanager = {
@@ -137,6 +142,7 @@
         "enp3s0f1"
         "enp3s0f2"
         "enp3s0f3"
+        "sl*"
       ];
     };
     nftables.tables.zoning = {
@@ -273,16 +279,16 @@
       enable = true;
       resolveLocalQueries = false;
       settings = {
-        bind-interfaces = true;
+        bind-dynamic = true;
         conf-file = "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
         dhcp-fqdn = true;
         dhcp-option = [ "option:mtu,9216" ];
-        dhcp-range = [ "192.168.2.20,192.168.2.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
+        dhcp-range = [ "192.168.2.20,192.168.2.250" "192.168.3.20,192.168.3.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         dhcp-rapid-commit = true;
         dnssec = true;
         domain = "home.arpa";
         enable-ra = true;
-        interface = [ "enp2s0" ];
+        interface = [ "enp2s0" "sl*" ];
         interface-name = "max-nixos-workstation.home.arpa,enp2s0";
         local = ["//" "/home.arpa/"];
         no-hosts = true;
@@ -514,6 +520,23 @@
               Table = "local";
             }
           ];
+          DHCP = "no";
+        };
+        "10-sl" = {
+          address = ["192.168.3.1/24"];
+          matchConfig = {
+            Name = "sl*";
+          };
+          linkConfig = {
+            MTUBytes = 9216;
+            RequiredForOnline = false;
+          };
+          domains = [ "home.arpa" ];
+          dns = [ "192.168.3.1" ];
+          networkConfig = {
+            ConfigureWithoutCarrier = true;
+            DNSDefaultRoute = false;
+          };
           DHCP = "no";
         };
         "20-vrf-interface" = {
@@ -975,6 +998,19 @@
           enable = true;
           packages = [ pkgs.gnugrep config.i18n.glibcLocales ];
         };
+      };
+      slattach = {
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_ADMIN";
+          CapabilityBoundingSet = "CAP_NET_ADMIN";
+          DynamicUser = true;
+          ExecStart = "${lib.getBin pkgs.nettools}/bin/slattach -L -s 115200 -d /dev/ttyS0";
+          Group = "dialout";
+          Type = "exec";
+          UMask = "077";
+          User = "slattach";
+        };
+        wantedBy = [ "multi-user.target" ];
       };
     };
     sockets = {
