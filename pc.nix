@@ -512,7 +512,7 @@
         #   vlan = ["eno1.1" "eno1.2"];
         # };
       };
-      wait-online.enable = true;
+      wait-online.enable = lib.mkForce true;
     };
     services = {
       "3proxy" = {
