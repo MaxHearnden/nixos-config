@@ -323,14 +323,6 @@
     fwupd = {
       enable = true;
     };
-    globalprotect = {
-      enable = true;
-      settings = {
-        "*" = {
-          openconnect-args = "--script=${pkgs.vpn-slice}/bin/vpn-slice";
-        };
-      };
-    };
     gnome = {
       core-developer-tools = {
         enable = true;
