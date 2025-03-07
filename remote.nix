@@ -95,6 +95,29 @@
     };
   };
   systemd = {
+    network = {
+      enable = true;
+      networks = {
+        "10-sl" = {
+          matchConfig = {
+            Name = "sl*";
+          };
+          DHCP = "yes";
+          linkConfig = {
+            RequiredForOnline = false;
+          };
+          networkConfig = {
+            DNSSEC = true;
+          };
+          dhcpV4Config = {
+            UseMTU = true;
+          };
+        };
+      };
+      wait-online = {
+        enable = false;
+      };
+    };
     services = {
       "btrbk-btrbk" = {
         wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
@@ -214,6 +237,38 @@
       #     MemoryDenyWriteExecute = true;
       #   };
       # };
+      "slattach@" = {
+        confinement = {
+          enable = true;
+        };
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_ADMIN";
+          BindPaths = "%I";
+          CapabilityBoundingSet = "CAP_NET_ADMIN";
+          DeviceAllow = "%I";
+          DynamicUser = true;
+          ExecStart = "${lib.getBin pkgs.nettools}/bin/slattach -L -s 115200 %I";
+          Group = "dialout";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateNetwork = true;
+          PrivateUsers = lib.mkForce false;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = "none";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = ["@system-service" "~@privileged @resources"];
+          Type = "exec";
+          UMask = "077";
+          User = "slattach";
+        };
+      };
     };
     timers = {
       nixos-upgrade = {
