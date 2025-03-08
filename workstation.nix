@@ -195,23 +195,6 @@
         }
       ];
     };
-    bind = {
-      enable = true;
-      forwarders = [
-        "127.0.0.54"
-      ];
-      listenOn = ["none"];
-      listenOnIpv6 = ["none"];
-      extraOptions = ''
-        listen-on port 54 { 127.0.0.1; };
-        listen-on-v6 port 54 { ::1; };
-      '';
-      extraConfig = ''
-        server ::/0 {
-          bogus true;
-        };
-      '';
-    };
     btrbk = {
       instances = {
         btrbk = {
@@ -450,6 +433,20 @@
         Cache=no
       '';
     };
+    unbound = {
+      enable = true;
+      resolveLocalQueries = false;
+      settings = {
+        server = {
+          port = 54;
+        };
+        forward-zone = {
+          name = ".";
+          forward-addr = ["148.88.65.52#dns.lancaster.ac.uk" "148.88.65.53#dns.lancaster.ac.uk"];
+          forward-tls-upstream = true;
+        };
+      };
+    };
     xserver = {
       displayManager = {
         gdm = {
@@ -611,49 +608,6 @@
           MemoryDenyWriteExecute = true;
           SystemCallArchitectures = "native";
           UMask = "0077";
-        };
-      };
-      bind = {
-        confinement = {
-          enable = true;
-        };
-        preStart = lib.mkForce ''
-          if ! [ -f "/etc/bind/rndc.key" ]; then
-            ${config.services.bind.package.out}/bin/rndc-confgen -c /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
-          fi
-        '';
-        serviceConfig = {
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-          BindReadOnlyPaths = [ "/run/systemd/journal/dev-log" ];
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-          ConfigurationDirectory = "bind";
-          ExecStart = lib.mkForce "${config.services.bind.package.out}/bin/named -c ${config.services.bind.configFile}";
-          Group = "named";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateTmp = true;
-          PrivateUsers = lib.mkForce [];
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          RuntimeDirectory = "named";
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          UMask = "077";
-          User = "named";
         };
       };
       btrbk-btrbk = {
