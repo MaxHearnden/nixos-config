@@ -232,11 +232,9 @@
     firefox = {
       enable = true;
       preferences = {
-        network.trr = {
-          custom_uri = "https://9.9.9.9/dns-query";
-          mode = 3;
-          uri = "https://9.9.9.9/dns-query";
-        };
+        "network.trr.custom_uri" = "https://9.9.9.9/dns-query";
+        "network.trr.mode" = 3;
+        "network.trr.uri" = "https://9.9.9.9/dns-query";
       };
     };
     fish = {
