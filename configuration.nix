@@ -229,6 +229,16 @@
     command-not-found = {
       enable = false;
     };
+    firefox = {
+      enable = true;
+      preferences = {
+        network.trr = {
+          custom_uri = "https://9.9.9.9/dns-query";
+          mode = 3;
+          uri = "https://9.9.9.9/dns-query";
+        };
+      };
+    };
     fish = {
       enable = true;
       interactiveShellInit = ''
@@ -741,7 +751,6 @@
           espup
           ethtool
           file
-          firefox
           firmware-manager
           gcc
           pkgsCross.aarch64-multiplatform.buildPackages.gcc
