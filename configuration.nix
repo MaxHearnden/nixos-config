@@ -288,9 +288,6 @@
         };
       };
     };
-    cachefilesd = {
-      enable = true;
-    };
     fwupd = {
       enable = true;
     };
