@@ -33,24 +33,6 @@
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
-      # grub = {
-      #   device = "nodev";
-      #   efiSupport = true;
-      #   enable = true;
-      #   extraEntries = ''
-      #     menuentry "iPXE" {
-      #       chainloader @bootRoot@/ipxe.efi
-      #     }
-
-      #     menuentry "memtest86+" {
-      #       chainloader @bootRoot@/memtest.efi
-      #     }
-      #   '';
-      #   extraFiles = {
-      #     "ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
-      #     "memtest.efi" = "${pkgs.memtest86plus}/memtest.efi";
-      #   };
-      # };
     };
   };
   console = {
@@ -128,24 +110,6 @@
   i18n = {
     defaultLocale = "en_GB.utf8";
   };
-  # krb5 = {
-  #   domain_realm = {
-  #     "172.28.10.244" = "WORKSTATION";
-  #     "max-nixos-workstation" = "WORKSTATION";
-  #   };
-  #   enable = true;
-  #   libdefaults = {
-  #     default_realm = "WORKSTATION";
-  #     ignore_acceptor_hostname = true;
-  #   };
-  #   realms = {
-  #     WORKSTATION = {
-  #       kdc = [
-  #         "172.28.10.244"
-  #       ];
-  #     };
-  #   };
-  # };
   nix = {
     daemonIOSchedClass = "idle";
     daemonCPUSchedPolicy = "idle";
@@ -195,7 +159,6 @@
       "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258" = ["max-nixos-workstation-zerotier-rfc4193" "max-nixos-workstation-zerotier-ipv6" "max-nixos-workstation-zerotier" "max-nixos-workstation"];
       "fc9c:6b89:eec5:0d88:e258:0000:0000:0001" = ["max-nixos-workstation-zerotier-6plane" "max-nixos-workstation-zerotier-ipv6" "max-nixos-workstation-zerotier" "max-nixos-workstation"];
       "172.28.10.244" = ["max-nixos-workstation-zerotier-ipv4" "max-nixos-workstation-zerotier" "max-nixos-workstation"];
-      # "172.28.198.106" = ["max-nixos-laptop"];
       "fd80:56c2:e21c:3d4b:0c99:93ba:b3a3:f197" = ["max-nixos-dell-zerotier-rfc4193" "max-nixos-dell-zerotier-ipv6" "max-nixos-dell-zerotier" "max-nixos-dell"];
       "fc9c:6b89:eeba:b3a3:f197:0000:0000:0001" = ["max-nixos-dell-zerotier-6plane" "max-nixos-dell-zerotier-ipv6" "max-nixos-dell-zerotier" "max-nixos-dell"];
       "172.28.12.138" = ["max-nixos-dell-zerotier-ipv4" "max-nixos-dell-zerotier" "max-nixos-dell"];
@@ -339,13 +302,6 @@
         enable = true;
       };
     };
-    # guix = {
-    #   enable = true;
-    #   gc = {
-    #     enable = true;
-    #     extraArgs = [ "-d" ];
-    #   };
-    # };
     libinput = {
       enable = true;
     };
@@ -460,7 +416,6 @@
           Group = "nix-gc";
           NoNewPrivileges = true;
           RestrictAddressFamilies = "AF_UNIX";
-          # SetLoginEnvironment = false;
           RestrictNamespaces = true;
           UMask = "0077";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
@@ -482,7 +437,6 @@
           IPAddressDeny = "any";
           StateDirectory = "nix-gc";
           StateDirectoryMode = "0700";
-          # PrivateDevices = true;
         };
         confinement = {
           enable = true;
@@ -491,35 +445,17 @@
           XDG_STATE_HOME = "%S/nix-gc";
         };
       };
-      # wpa_supplicant = {
-      #   serviceConfig = {
-      #     RootDirectory = "/var/empty";
-      #     TemporaryFileSystem = "/";
-      #     SystemCallArchitectures = "native";
-      #     NoNewPrivileges = true;
-      #     PrivateMounts = true;
-      #     MountAPIVFS = true;
-      #     BindReadOnlyPaths = "/nix/store /run/dbus/system_bus_socket";
-      #     RestrictNamespaces = true;
-      #     CapabilityBoundingSet = "CAP_NET_ADMIN";
-      #   };
-      # };
       nix-daemon = {
         serviceConfig = {
           CapabilityBoundingSet = "CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER CAP_SYS_PTRACE";
           ProtectSystem = "strict";
           BindPaths = "/dev/kvm";
           DeviceAllow = "/dev/kvm";
-          # RootDirectory = "/var/empty";
-          # TemporaryFileSystem = "/";
-          # BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
-          # BindPaths = "/nix /root/.cache/nix /tmp";
           ReadWritePaths = "/nix /tmp";
           RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
           SystemCallFilter = [ "@debug @system-service @mount @sandbox sethostname setdomainname" ];
           SystemCallErrorNumber = "ENOSYS";
           SystemCallLog = "~@system-service @mount @sandbox sethostname setdomainname";
-          # PrivateMounts = true;
           NoNewPrivileges = true;
           PrivateDevices = true;
           ProtectClock = true;
@@ -527,48 +463,13 @@
           ProtectKernelModules = true;
           RestrictNamespaces = "user net mnt ipc pid uts cgroup";
           RestrictSUIDSGID = true;
-          # IPAddressAllow = "172.28.10.244";
           RestrictNetworkInterfaces = "~tailscale0";
-          # IPAddressDeny = "127.0.0.1/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 fd00::/8 169.254.0.0/16 fe80::/10 100.64.0.0/10";
           RestrictRealtime = true;
           CacheDirectory = "nix";
           CacheDirectoryMode = "0700";
           Environment = [ "XDG_CACHE_HOME=%C" ];
         };
       };
-      # guix-daemon = {
-      #   serviceConfig = {
-      #     CapabilityBoundingSet = "CAP_SYS_CHROOT CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_NET_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER";
-      #     ProtectSystem = "strict";
-      #     BindPaths = "/dev/kvm";
-      #     DeviceAllow = "/dev/kvm";
-      #     # RootDirectory = "/var/empty";
-      #     # TemporaryFileSystem = "/";
-      #     # BindReadOnlyPaths = "/etc/nix /etc/resolv.conf /etc/ssl /etc/static/ssl /etc/passwd /etc/group /machines";
-      #     # BindPaths = "/nix /root/.cache/nix /tmp";
-      #     ReadWritePaths = "/gnu /var/guix /tmp";
-      #     RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
-      #     SystemCallFilter = [ "@system-service @mount seccomp sethostname setdomainname @pkey" ];
-      #     # PrivateMounts = true;
-      #     NoNewPrivileges = true;
-      #     LogsDirectory = "guix";
-      #     PrivateDevices = true;
-      #     ProtectClock = true;
-      #     ProtectControlGroups = true;
-      #     ProtectHome = "read-only";
-      #     ProtectKernelModules = true;
-      #     SocketBindDeny = "any";
-      #     RestrictNamespaces = "user net mnt ipc pid uts";
-      #     RestrictSUIDSGID = true;
-      #     # IPAddressAllow = "172.28.10.244";
-      #     RestrictNetworkInterfaces = "~tailscale0";
-      #     # IPAddressDeny = "127.0.0.1/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 fd00::/8 169.254.0.0/16 fe80::/10 100.64.0.0/10";
-      #     RestrictRealtime = true;
-      #     CacheDirectory = "guix";
-      #     CacheDirectoryMode = "0700";
-      #     Environment = [ "XDG_CACHE_HOME=%C" ];
-      #   };
-      # };
       nscd = {
         serviceConfig = {
           CapabilityBoundingSet = "";
