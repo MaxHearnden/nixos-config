@@ -430,19 +430,23 @@
     resolved = {
       dnssec = "true";
       extraConfig = ''
+        DNS=127.0.0.52%lo
         Cache=no
       '';
     };
     unbound = {
       enable = true;
+      localControlSocketPath = "/run/unbound/unbound.ctl";
       resolveLocalQueries = false;
       settings = {
         server = {
-          port = 54;
+          interface = "127.0.0.52";
+          qname-minimisation = false;
+          tls-use-sni = false;
         };
         forward-zone = {
           name = ".";
-          forward-addr = ["148.88.65.52#dns.lancaster.ac.uk" "148.88.65.53#dns.lancaster.ac.uk"];
+          forward-addr = ["9.9.9.9#dns.quad9.net" "149.112.112.112#dns.quad9.net" "2620:fe::fe#dns.quad9.net" "2620:fe::9#dns.quad9.net"];
           forward-tls-upstream = true;
         };
       };
@@ -477,9 +481,9 @@
           dhcpV6Config = {
             SendHostname = false;
             UseHostname = false;
-            UseDomains = "route";
             DUIDType = "link-layer";
           };
+          domains = [ "~lancs.ac.uk" ];
           ipv6AcceptRAConfig = {
             UseMTU = true;
           };
@@ -487,8 +491,8 @@
             LLDP = true;
             LLMNR = false;
             MulticastDNS = false;
-            UseDomains = "route";
-            DNSDefaultRoute = true;
+            UseDomains = false;
+            DNSDefaultRoute = false;
           };
         };
         "10-enp2s0" = {
