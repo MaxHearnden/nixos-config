@@ -13,9 +13,4 @@
   networking = {
     hostName = "max-nixos-dell";
   };
-  services = {
-    tcsd = {
-      enable = true;
-    };
-  };
 }
