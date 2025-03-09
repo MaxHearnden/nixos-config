@@ -815,6 +815,9 @@
       };
     };
     targets = {
+      nfs-client = {
+        enable = false;
+      };
       minecraft-server = {
         # Only starts the sockets
         wantedBy = [ "sockets.target" ];
