@@ -680,7 +680,6 @@
           pkgsCross.riscv32.buildPackages.gdb
           pkgsCross.riscv64.buildPackages.gdb
           ghex
-          openconnect
           gnome-tweaks
           graphviz
           gtkterm

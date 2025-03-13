@@ -22,9 +22,6 @@
       ];
     };
   };
-  networking.networkmanager.plugins = [
-    pkgs.networkmanager-openconnect
-  ];
   nix = {
     settings = {
       trusted-public-keys = ["max-nixos-workstation:Ds5AWfGPm6jRbVSjG4ht42MK++hhfFczQ4bJRhD9thI="];
