@@ -74,6 +74,7 @@
         };
       };
     };
+    resolved.enable = false;
   };
   systemd = {
     network = {
