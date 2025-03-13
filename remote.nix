@@ -26,33 +26,7 @@
     pkgs.networkmanager-openconnect
   ];
   nix = {
-    buildMachines = [
-      {
-        hostName = "max-nixos-workstation-zerotier?remote-program=/run/current-system/sw/bin/ssh-mac-x86";
-        maxJobs = 4;
-        protocol = "ssh-ng";
-        sshUser = "root";
-        supportedFeatures = [
-          "big-parallel"
-          "benchmark"
-        ];
-        systems = ["x86_64-darwin"];
-      }
-      {
-        hostName = "max-nixos-workstation-zerotier?remote-program=/run/current-system/sw/bin/ssh-mac";
-        maxJobs = 8;
-        protocol = "ssh-ng";
-        sshUser = "root";
-        supportedFeatures = [
-          "big-parallel"
-          "benchmark"
-        ];
-        systems = ["aarch64-darwin"];
-      }
-    ];
-    distributedBuilds = true;
     settings = {
-      builders-use-substitutes = true;
       trusted-public-keys = ["max-nixos-workstation:Ds5AWfGPm6jRbVSjG4ht42MK++hhfFczQ4bJRhD9thI="];
       substituters = ["http://max-nixos-workstation-zerotier:8080"];
     };

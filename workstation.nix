@@ -25,11 +25,7 @@
         value = {
           source = "/run/booted-system/${file}";
         };
-      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock" "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock" "720-kernel-initrd.pcrlock" ]) // {
-        "nix/machines" = {
-          source = "/machines";
-        };
-      };
+      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock" "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock" "720-kernel-initrd.pcrlock" ]);
     systemPackages = with pkgs; [
       gtk3
       (
@@ -58,9 +54,7 @@
       options = [ "nofail" "defaults" "compress=zstd" "nosuid" "nodev" "noatime" ];
     };
   };
-  nix = {
-    distributedBuilds = true;
-  };
+  nix.settings.substitute = false;
   networking = {
     firewall = {
       filterForward = true;
