@@ -123,12 +123,14 @@
       inherit flake;
     }) inputs;
     settings = {
+      allowed-users = [ "max" ];
       auto-optimise-store = true;
       experimental-features = [
         "nix-command"
         "flakes"
         "cgroups"
       ];
+      flake-registry = null;
       use-cgroups = true;
     };
   };
