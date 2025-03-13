@@ -301,7 +301,6 @@
       '';
     };
     unbound = {
-      enable = true;
       localControlSocketPath = "/run/unbound/unbound.ctl";
       resolveLocalQueries = false;
       settings.server.interface = "127.0.0.52";

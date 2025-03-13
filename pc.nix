@@ -123,8 +123,6 @@
     ratbagd = {
       enable = true;
     };
-    resolved.enable = false;
-    unbound.enable = true;
     xserver = {
       autorun = false;
       displayManager = {
