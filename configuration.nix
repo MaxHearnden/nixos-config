@@ -197,6 +197,9 @@
     firefox = {
       enable = true;
       preferences = {
+        # Block hateful content
+        "network.dns.localDomains" = "www.phoronix.com,phoronix.com";
+
         "network.trr.custom_uri" = "https://9.9.9.9/dns-query";
         "network.trr.mode" = 3;
         "network.trr.uri" = "https://9.9.9.9/dns-query";
