@@ -747,6 +747,7 @@
           PrivateUsers = lib.mkForce false;
           ProcSubset = "pid";
           ProtectClock = true;
+          ProtectHostname = true;
           ProtectHome = true;
           ProtectKernelLogs = true;
           ProtectProc = "invisible";

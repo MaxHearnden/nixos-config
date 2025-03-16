@@ -152,6 +152,7 @@
           ProcSubset = "pid";
           ProtectClock = true;
           ProtectHome = true;
+          ProtectHostname = true;
           ProtectKernelLogs = true;
           ProtectProc = "invisible";
           RestrictAddressFamilies = "none";
