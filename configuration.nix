@@ -731,6 +731,7 @@
           sshfs
           tea
           teams-for-linux
+          texliveFull
           tpm2-tools
           usbutils
           vdrift
