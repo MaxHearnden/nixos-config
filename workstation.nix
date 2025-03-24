@@ -59,11 +59,11 @@
       filterForward = true;
       interfaces = {
         ztmjfp7kiq = {
-          allowedTCPPorts = [ 8080 8081 3000 2049 25565 ];
+          allowedTCPPorts = [ 8080 8081 3000 2049 8000 25565 ];
           allowedUDPPorts = [ 24454 ];
         };
         tailscale0 = {
-          allowedTCPPorts = [ 22 3000 25565 ];
+          allowedTCPPorts = [ 22 3000 8000 25565 ];
           allowedUDPPorts = [ 24454 ];
         };
         enp2s0 = {
