@@ -232,6 +232,8 @@
           set mouse=a
           set shiftwidth=2
           set expandtab
+          set colorcolumn=80
+          set textwidth=80
           inoremap {<CR> {<CR>}<Esc>ko
           inoremap [<CR> [<CR>]<Esc>ko
           inoremap (<CR> (<CR>)<Esc>ko
