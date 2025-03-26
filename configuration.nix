@@ -123,7 +123,7 @@
       inherit flake;
     }) inputs;
     settings = {
-      allowed-users = [ "max" ];
+      allowed-users = [ "max" "nix-gc" ];
       auto-optimise-store = true;
       experimental-features = [
         "nix-command"
