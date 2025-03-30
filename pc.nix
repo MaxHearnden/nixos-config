@@ -124,12 +124,7 @@
       enable = true;
     };
     xserver = {
-      autorun = false;
-      displayManager = {
-        gdm = {
-          autoSuspend = false;
-        };
-      };
+      displayManager.gdm.autoSuspend = false;
       videoDrivers = [
         "nvidia"
       ];
