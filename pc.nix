@@ -44,9 +44,20 @@
         ztmjfp7kiq = {
           allowedTCPPorts = [ 8080 9090 11434 ];
         };
+        usb = {
+          allowedTCPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 67 ];
+        };
       };
     };
     hostName = "max-nixos-pc";
+    nat = {
+      enable = true;
+      externalInterface = "eno1";
+      internalInterfaces = [
+        "usb"
+      ];
+    };
     networkmanager.enable = false;
     useNetworkd = true;
   };
@@ -115,6 +126,38 @@
         };
       };
     };
+    dbus.packages = [
+      (pkgs.writeTextDir "share/dbus-1/system.d/dnsmasq-rootless.conf" ''
+        <!DOCTYPE busconfig PUBLIC
+         "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+         "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+        <busconfig>
+                <policy user="dnsmasq">
+                        <allow own="uk.org.thekelleys.dnsmasq"/>
+                        <allow send_destination="uk.org.thekelleys.dnsmasq"/>
+                </policy>
+        </busconfig>
+      '')
+    ];
+    dnsmasq = {
+      enable = true;
+      resolveLocalQueries = false;
+      settings = {
+        bind-dynamic = true;
+        conf-file =
+          "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
+        dhcp-fqdn = true;
+        dhcp-range = [ "192.168.2.20,192.168.2.250" ];
+        dhcp-rapid-commit = true;
+        dnssec = true;
+        domain = "home.arpa";
+        except-interface = "lo";
+        interface = "usb";
+        interface-name = "max-nixos-pc.home.arpa,usb";
+        local = [ "//" "/home.arpa/" ];
+        no-hosts = true;
+      };
+    };
     ollama = {
       enable = true;
       host = "172.28.13.156";
@@ -145,6 +188,18 @@
             GenericSegmentationOffload = false;
             TCPSegmentationOffload = false;
           };
+        };
+        "10-usb" = {
+          matchConfig.MACAddress = "00:e0:4c:37:03:20";
+          linkConfig.Name = "usb";
+        };
+      };
+      networks."10-usb" = {
+        address = [ "192.168.2.1/24" ];
+        DHCP = "no";
+        matchConfig.MACAddress = "00:e0:4c:37:03:20";
+        networkConfig = {
+          ConfigureWithoutCarrier = true;
         };
       };
       wait-online.enable = lib.mkForce true;
@@ -191,6 +246,48 @@
           RestrictSUIDSGID = lib.mkForce false;
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
+        };
+      };
+      dnsmasq = {
+        preStart = lib.mkForce "";
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
+          IPAddressAllow = "0.0.0.0 255.255.255.255 127.0.0.53 192.168.2.0/24";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateUsers = lib.mkForce false;
+          ProtectControlGroups = true;
+          ProtectClock = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = lib.mkForce "strict";
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_NETLINK";
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          StateDirectory = "dnsmasq";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          UMask = "0077";
+          User = "dnsmasq";
+          BindReadOnlyPaths = [
+            "/etc/resolv.conf"
+            "/etc/passwd"
+            "/run/nscd"
+            "/run/dbus/system_bus_socket"
+            "/run/systemd/journal/dev-log"
+          ];
+        };
+        confinement = {
+          enable = true;
         };
       };
     };
