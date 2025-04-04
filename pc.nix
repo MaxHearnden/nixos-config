@@ -2,6 +2,7 @@
   imports = [
     ./remote.nix
     ./hardware-configuration/pc.nix
+    ./zone.nix
   ];
   boot = {
     kernelPackages = lib.mkForce pkgs.linuxPackages;
@@ -166,11 +167,32 @@
     ratbagd = {
       enable = true;
     };
+    unbound = {
+      localControlSocketPath = "/run/unbound/unbound.ctl";
+      settings = {
+        server.local-zone = "test. transparent";
+        auth-zone = {
+          name = "max.test";
+          zonemd-check = true;
+          zonefile = "/run/zone/test/zonefile";
+        };
+      };
+    };
     xserver = {
       displayManager.gdm.autoSuspend = false;
       videoDrivers = [
         "nvidia"
       ];
+    };
+    zones.test = {
+      algorithm = "ed448";
+      domain = "max.test.";
+      ksks = [ "test-1" ];
+      signzoneArgs = "-u -n -b -z sha512";
+      zone = ''
+        max.test. SOA dns.max.test. . 0 7200 60 ${toString (2 * 24 * 60 * 60)} 60
+        workstation.max.test. A 172.28.10.244
+      '';
     };
   };
   systemd = {
@@ -289,6 +311,10 @@
         confinement = {
           enable = true;
         };
+      };
+      unbound = {
+        after = [ "zone-test.service" ];
+        wants = [ "zone-test.service" ];
       };
     };
     tmpfiles = {
