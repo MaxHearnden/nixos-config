@@ -53,13 +53,34 @@ in {
           packages = [ pkgs.coreutils config.ldns.examples ];
         };
         serviceConfig = {
-          User = "zone";
+          CapabilityBoundingSet = "";
           Group = "zone";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateNetwork = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = "none";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
           RuntimeDirectory = "zone/${name}";
           RuntimeDirectoryPreserve = true;
           StateDirectory = "zone/${name}";
           StateDirectoryMode = "755";
-          PrivateTmp = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @resources"];
+          User = "zone";
         };
         path = [ config.ldns.examples ];
         script = ''
