@@ -45,20 +45,9 @@
         ztmjfp7kiq = {
           allowedTCPPorts = [ 8080 9090 11434 ];
         };
-        usb = {
-          allowedTCPPorts = [ 53 ];
-          allowedUDPPorts = [ 53 67 ];
-        };
       };
     };
     hostName = "max-nixos-pc";
-    nat = {
-      enable = true;
-      externalInterface = "eno1";
-      internalInterfaces = [
-        "usb"
-      ];
-    };
     networkmanager.enable = false;
     useNetworkd = true;
   };
@@ -125,38 +114,6 @@
             };
           };
         };
-      };
-    };
-    dbus.packages = [
-      (pkgs.writeTextDir "share/dbus-1/system.d/dnsmasq-rootless.conf" ''
-        <!DOCTYPE busconfig PUBLIC
-         "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
-         "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-        <busconfig>
-                <policy user="dnsmasq">
-                        <allow own="uk.org.thekelleys.dnsmasq"/>
-                        <allow send_destination="uk.org.thekelleys.dnsmasq"/>
-                </policy>
-        </busconfig>
-      '')
-    ];
-    dnsmasq = {
-      enable = true;
-      resolveLocalQueries = false;
-      settings = {
-        bind-dynamic = true;
-        conf-file =
-          "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
-        dhcp-fqdn = true;
-        dhcp-range = [ "192.168.2.20,192.168.2.250" ];
-        dhcp-rapid-commit = true;
-        dnssec = true;
-        domain = "home.arpa";
-        except-interface = "lo";
-        interface = "usb";
-        interface-name = "max-nixos-pc.home.arpa,usb";
-        local = [ "//" "/home.arpa/" ];
-        no-hosts = true;
       };
     };
     ollama = {
