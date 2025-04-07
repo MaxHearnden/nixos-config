@@ -247,6 +247,11 @@
         interface = [ "enp2s0" "sl*" ];
         interface-name = "max-nixos-workstation.home.arpa,enp2s0";
         local = ["//" "/home.arpa/"];
+        server = ["/max.home.arpa/#"];
+        trust-anchor = [
+          "max.home.arpa.,6286,16,2,E5D985578B9746BFE1C6FF47E87E27F9BE9942BF947C7AE18C448C86C303DB0E"
+          "max.home.arpa.,5629,14,4,663B18A6E58159EA67190937115450B87C60222A4F8D13395ACF3B091CF6155E4BE365D636452E9427C7818866BE9D65"
+        ];
         no-hosts = true;
         ra-param = "enp2s0,mtu:enp2s0,0,0";
       };
