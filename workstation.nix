@@ -29,7 +29,16 @@
         value = {
           source = "/run/booted-system/${file}";
         };
-      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock" "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock" "720-kernel-initrd.pcrlock" ]);
+      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock"
+      "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
+      "720-kernel-initrd.pcrlock" ]) // {
+        "dnssec-trust-anchors.d/home.positive" = {
+          text = ''
+            max.home.arpa. IN DS 6286 16 2 e5d985578b9746bfe1c6ff47e87e27f9be9942bf947c7ae18c448c86c303db0e
+            max.home.arpa. IN DS 5629 14 4 663b18a6e58159ea67190937115450b87c60222a4f8d13395acf3b091cf6155e4be365d636452e9427c7818866be9d65
+          '';
+        };
+      };
     systemPackages = with pkgs; [
       gtk3
       (
@@ -294,6 +303,7 @@
       dnssec = "true";
       extraConfig = ''
         DNS=127.0.0.52%lo
+        Domains=max.home.arpa
         Cache=no
       '';
     };
@@ -301,16 +311,16 @@
       localControlSocketPath = "/run/unbound/unbound.ctl";
       resolveLocalQueries = false;
       settings = {
-        # auth-zone = {
-        #   name = "max.home.arpa";
-        #   zonefile = "/run/zone/home/zonefile";
-        #   zonemd-check = true;
-        # };
+        auth-zone = {
+          name = "max.home.arpa";
+          zonefile = "/run/zone/home/zerotier";
+          zonemd-check = true;
+        };
         server = {
           interface = "127.0.0.52";
-          # local-zone = "home.arpa. transparent";
-          # trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
-          # (lib.attrNames config.services.zones.home.ksks);
+          local-zone = "home.arpa. transparent";
+          trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
+          (lib.attrNames config.services.zones.home.ksks);
         };
       };
     };
@@ -322,30 +332,41 @@
       };
     };
     zones.home = {
-      zskAlgorithms = [ "ed448" ];
+      zskAlgorithms = [ "ed448" "ecdsap384sha384" ];
       domain = "max.home.arpa";
       ksks = {
         max-1 = "ed448";
+        max-2 = "ecdsap384sha384";
       };
       signzoneArgs = "-u -n -b -z sha512";
-      zone = ''
-        max.home.arpa SOA dns . 0 7200 60 ${toString (2 * 24 * 60
-        * 60)} 1800
-        workstation CNAME zerotier.workstation
-        zerotier.workstation A 172.28.10.244
-        zerotier.workstation AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
-        zerotier.workstation AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
-        tailscale.workstation A 100.91.224.22
-        tailscale.workstation AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
-        minecraft DNAME workstation
-        minecraft A 100.91.224.22
-        minecraft AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
-        gitea CNAME workstation
-        chromebook CNAME zerotier.chromebook
-        zerotier.chromebook A 172.28.156.146
-        zerotier.chromebook AAAA fc9c:6b89:ee1a:7a70:b542:0000:0000:0001
-        zerotier.chromebook AAAA fd80:56c2:e21c:3d4b:0c99:931a:7a70:b542
-      '';
+      instances = lib.genAttrs ["zerotier" "tailscale"] (zonename: {
+        zone = ''
+          max.home.arpa SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 * 60
+          * 60)} 1800
+          @ TXT "instance: ${zonename}"
+          dns CNAME workstation
+          workstation CNAME ${zonename}.workstation
+          zerotier.workstation A 172.28.10.244
+          zerotier.workstation AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
+          zerotier.workstation AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
+          tailscale.workstation A 100.91.224.22
+          tailscale.workstation AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+          minecraft DNAME workstation
+          ${if zonename == "tailscale" then ''
+            minecraft A 100.91.224.22
+            minecraft AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+          '' else ''
+            minecraft A 172.28.10.244
+            minecraft AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
+            minecraft AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
+          ''}
+          gitea CNAME workstation
+          chromebook CNAME zerotier.chromebook
+          zerotier.chromebook A 172.28.156.146
+          zerotier.chromebook AAAA fc9c:6b89:ee1a:7a70:b542:0000:0000:0001
+          zerotier.chromebook AAAA fd80:56c2:e21c:3d4b:0c99:931a:7a70:b542
+        '';
+      });
     };
   };
   systemd = {
@@ -804,10 +825,13 @@
         };
         wantedBy = [ "multi-user.target" ];
       };
-      # unbound = {
-      #   after = [ "zone-home.service" ];
-      #   wants = [ "zone-home.service" ];
-      # }
+      systemd-resolved.restartTriggers = [
+        config.environment.etc."dnssec-trust-anchors.d/home.positive".source
+      ];
+      unbound = {
+        after = [ "zone-home.service" ];
+        wants = [ "zone-home.service" ];
+      };
     };
     sockets = {
       harmonia-proxy = {

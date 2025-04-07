@@ -1,15 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  instanceModule = lib.types.submodule ({config, ...}: {
+  zoneInstanceModule = lib.types.submodule ({config, ...}: {
     options = {
-      domain = lib.mkOption {
-        description = "The domain to generate dnssec data for";
-        type = lib.types.str;
-        example = "dnssec.example";
-      };
-      ldns = lib.mkPackageOption pkgs "ldns" {
-        pkgsText = "The ldns package used for key generation and signing";
+      signzoneArgs = lib.mkOption {
+        description = "The arguments to pass to ldns-signzone";
       };
       zone = lib.mkOption {
         description = "zone data";
@@ -21,6 +16,19 @@ let
         default = pkgs.writeText "zonefile" config.zone;
         defaultText = lib.literalExpression
           "pkgs.writeText \"zonefile\" config.zone";
+      };
+    };
+  });
+
+  serviceInstanceModule = lib.types.submodule ({config, ...}: {
+    options = {
+      domain = lib.mkOption {
+        description = "The domain to generate dnssec data for";
+        type = lib.types.str;
+        example = "dnssec.example";
+      };
+      ldns = lib.mkPackageOption pkgs "ldns" {
+        pkgsText = "The ldns package used for key generation and signing";
       };
       signzoneArgs = lib.mkOption {
         description = "The arguments to pass to ldns-signzone";
@@ -34,6 +42,20 @@ let
           test-2 = "ecdsap384sha384";
         };
       };
+      instances = lib.mkOption {
+        description = "The zones to sign with a the same zone signing keys and key signing keys";
+        type = lib.types.attrsOf zoneInstanceModule;
+        default = {};
+        example = {
+          zone = ''
+            dnssec.example SOA dns mail 0 7200 3600 1209600 3600
+            dnssec.example. A 192.0.2.0
+            dns A 192.0.2.0
+            @ MX 10 mail
+            A 192.0.2.0
+          '';
+        };
+      };
       zskAlgorithms = lib.mkOption {
         description = "The algorithms to use when generating zone signing keys";
         type = lib.types.listOf lib.types.str;
@@ -44,7 +66,7 @@ let
 in {
   options.services.zones = lib.mkOption {
     description = "dnssec signed zones";
-    type = lib.types.attrsOf instanceModule;
+    type = lib.types.attrsOf serviceInstanceModule;
     default = {};
   };
 
@@ -109,10 +131,19 @@ in {
             set -- "$@" "$(ldns-keygen -a "$algorithm" ${config.domain})"
           done
 
-          ldns-signzone -f "/run/zone/${name}/zonefile" ${config.signzoneArgs} \
-            ${config.zoneFile} "$@" ${lib.concatStringsSep " " (map (key:
-            "$STATE_DIRECTORY/" + lib.escapeShellArg key + "/") (lib.attrNames
-            config.ksks))}
+          unset zonename
+          for zone in ${lib.concatStringsSep " " (lib.mapAttrsToList (instance: config: "${lib.escapeShellArg
+          instance} ${lib.escapeShellArg config.zoneFile}") config.instances)}; do
+            if [ "''${zonename+set}" = set ]; then
+              ldns-signzone -f "/run/zone/${name}/$zonename" ${config.signzoneArgs} \
+                "$zone" "$@" ${lib.concatStringsSep " " (map (key:
+                "\"$STATE_DIRECTORY\"/" + lib.escapeShellArg key + "/") (lib.attrNames
+                config.ksks))}
+              unset zonename
+            else
+              zonename=$zone
+            fi
+          done
         '';
       };
     }) config.services.zones;
