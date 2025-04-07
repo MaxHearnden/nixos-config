@@ -342,7 +342,7 @@
         max-1 = "ed448";
         max-2 = "ecdsap384sha384";
       };
-      signzoneArgs = "-u -n -b -z sha512";
+      signzoneArgs = "-u -b -z sha512";
       zone = ''
         max.home.arpa SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
         60 * 60)} 1800
