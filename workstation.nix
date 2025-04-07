@@ -334,6 +334,7 @@
       };
     };
     zones.home = {
+      zoneLifetime = 60 * 60 * 24 * 3;
       zskAlgorithms = [ "ed448" "ecdsap384sha384" ];
       domain = "max.home.arpa";
       ksks = {
@@ -829,6 +830,27 @@
         after = [ "zone-home.service" ];
         wants = [ "zone-home.service" ];
       };
+      unbound-notify = {
+        after = [ "zone-home.service" ];
+        confinement = {
+          enable = true;
+        };
+        serviceConfig = {
+          BindReadOnlyPaths = "/etc/unbound/unbound.conf";
+          ConfigurationDirectory = "unbound";
+          ExecStart = "${lib.getExe' pkgs.unbound "unbound-control"} auth_zone_reload max.home.arpa";
+          StateDirectory = "unbound";
+          RuntimeDirectory = "unbound";
+          RuntimeDirectoryPreserve = true;
+          PrivateNetwork = true;
+          PrivateUsers = true;
+          NoNewPrivileges = true;
+          Type = "oneshot";
+          User = "unbound";
+          Group = "unbound";
+        };
+        wantedBy = [ "zone-home.service" ];
+      };
     };
     sockets = {
       harmonia-proxy = {
@@ -878,6 +900,13 @@
           Persistent = true;
         };
       };
+      zone-home = {
+        timerConfig = {
+          OnCalendar = "daily";
+          Unit = "zone-home.target";
+        };
+        wantedBy = [ "timers.target" ];
+      };
     };
     tmpfiles = {
       rules = [
@@ -896,6 +925,10 @@
   };
   users = {
     users = {
+      unbound-notify = {
+        isSystemUser = true;
+        group = "unbound-notify";
+      };
       btrbk = {
         packages = with pkgs; [
           zstd
@@ -907,5 +940,6 @@
         ];
       };
     };
+    groups.unbound-notify = {};
   };
 }
