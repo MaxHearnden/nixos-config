@@ -153,7 +153,7 @@
         test-2 = "ecdsap384sha384";
       };
       signzoneArgs = "-u -n -b -z sha512";
-      instances.zonefile.zone = ''
+      zone = ''
         max.home.arpa. SOA dns.max.home.arpa. . 0 7200 60 ${toString (2 * 24 * 60 * 60)} 1800
         workstation CNAME zerotier.workstation
         zerotier.workstation A 172.28.10.244

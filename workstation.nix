@@ -72,12 +72,12 @@
       filterForward = true;
       interfaces = {
         ztmjfp7kiq = {
-          allowedTCPPorts = [ 8080 8081 3000 2049 8000 25565 ];
-          allowedUDPPorts = [ 24454 ];
+          allowedTCPPorts = [ 53 8080 8081 3000 2049 25565 ];
+          allowedUDPPorts = [ 53 24454 ];
         };
         tailscale0 = {
-          allowedTCPPorts = [ 22 3000 8000 25565 ];
-          allowedUDPPorts = [ 24454 ];
+          allowedTCPPorts = [ 22 53 3000 25565 ];
+          allowedUDPPorts = [ 53 24454 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -313,11 +313,15 @@
       settings = {
         auth-zone = {
           name = "max.home.arpa";
-          zonefile = "/run/zone/home/zerotier";
+          zonefile = "/run/zone/home/zonefile";
           zonemd-check = true;
         };
         server = {
-          interface = "127.0.0.52";
+          interface = ["127.0.0.52" "ztmjfp7kiq" "tailscale0"];
+          interface-action = [
+            "ztmjfp7kiq refuse_non_local"
+            "tailscale0 refuse_non_local"
+          ];
           local-zone = "home.arpa. transparent";
           trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
           (lib.attrNames config.services.zones.home.ksks);
@@ -339,34 +343,29 @@
         max-2 = "ecdsap384sha384";
       };
       signzoneArgs = "-u -n -b -z sha512";
-      instances = lib.genAttrs ["zerotier" "tailscale"] (zonename: {
-        zone = ''
-          max.home.arpa SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 * 60
-          * 60)} 1800
-          @ TXT "instance: ${zonename}"
-          dns CNAME workstation
-          workstation CNAME ${zonename}.workstation
-          zerotier.workstation A 172.28.10.244
-          zerotier.workstation AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
-          zerotier.workstation AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
-          tailscale.workstation A 100.91.224.22
-          tailscale.workstation AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
-          minecraft DNAME workstation
-          ${if zonename == "tailscale" then ''
-            minecraft A 100.91.224.22
-            minecraft AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
-          '' else ''
-            minecraft A 172.28.10.244
-            minecraft AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
-            minecraft AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
-          ''}
-          gitea CNAME workstation
-          chromebook CNAME zerotier.chromebook
-          zerotier.chromebook A 172.28.156.146
-          zerotier.chromebook AAAA fc9c:6b89:ee1a:7a70:b542:0000:0000:0001
-          zerotier.chromebook AAAA fd80:56c2:e21c:3d4b:0c99:931a:7a70:b542
-        '';
-      });
+      zone = ''
+        max.home.arpa SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
+        60 * 60)} 1800
+        dns CNAME workstation
+        gitea CNAME workstation
+        minecraft CNAME minecraft.tailscale
+        minecraft.zerotier CNAME workstation.zerotier
+        minecraft.tailscale CNAME workstation.tailscale
+        chromebook CNAME chromebook.zerotier
+        chromebook.zerotier A 172.28.156.146
+        chromebook.zerotier AAAA fc9c:6b89:ee1a:7a70:b542::1
+        chromebook.zerotier AAAA fd80:56c2:e21c:3d4b:c99:931a:7a70:b542
+        workstation CNAME workstation.zerotier
+        workstation.zerotier A 172.28.10.244
+        workstation.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93c5:d88:e258
+        workstation.zerotier AAAA fc9c:6b89:eec5:d88:e258::1
+        workstation.tailscale A 100.91.224.22
+        workstation.tailscale AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+        pc CNAME pc.zerotier
+        pc.zerotier A 172.28.13.156
+        pc.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567
+        pc.zerotier AAAA fc9c:6b89:eed9:c2b9:c567::1
+      '';
     };
   };
   systemd = {
