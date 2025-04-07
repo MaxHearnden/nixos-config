@@ -831,7 +831,7 @@
         wants = [ "zone-home.service" ];
       };
       unbound-reload = {
-        after = [ "zone-home.service" ];
+        after = [ "unbound.service" "zone-home.service" ];
         confinement = {
           enable = true;
         };
@@ -869,6 +869,7 @@
           User = "unbound";
         };
         wantedBy = [ "zone-home.service" ];
+        wants = [ "unbound.service" ];
       };
     };
     sockets = {
