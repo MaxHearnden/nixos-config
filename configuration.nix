@@ -702,6 +702,8 @@
           gtkterm
           headsetcontrol
           htop
+          ldns.examples
+          ldns.man
           libreoffice-fresh
           linux-manual
           lshw
