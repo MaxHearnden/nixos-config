@@ -92,6 +92,7 @@ in {
             StateDirectoryMode = "755";
             SystemCallArchitectures = "native";
             SystemCallFilter = [ "@system-service" "~@privileged @resources"];
+            Type = "oneshot";
             User = "zone";
           };
           path = [ config.ldns.examples ];
