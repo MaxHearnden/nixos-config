@@ -127,11 +127,15 @@
     unbound = {
       localControlSocketPath = "/run/unbound/unbound.ctl";
       settings = {
-        server.local-zone = "test. transparent";
+        server = {
+          local-zone = "home.arpa. transparent";
+          trust-anchor-file = map (key: "/var/lib/zone/home-test/${key}/.ds")
+          (lib.attrNames config.services.zones.home-test.ksks);
+        };
         auth-zone = {
-          name = "max.test";
+          name = "max.home.arpa";
           zonemd-check = true;
-          zonefile = "/run/zone/test/zonefile";
+          zonefile = "/run/zone/home-test/zonefile";
         };
       };
     };
@@ -141,14 +145,31 @@
         "nvidia"
       ];
     };
-    zones.test = {
-      algorithm = "ed448";
-      domain = "max.test.";
-      ksks = [ "test-1" ];
+    zones.home-test = {
+      zskAlgorithms = ["ed448" "ecdsap384sha384"];
+      domain = "max.home.arpa.";
+      ksks = {
+        test-1 = "ed448";
+        test-2 = "ecdsap384sha384";
+      };
       signzoneArgs = "-u -n -b -z sha512";
       zone = ''
-        max.test. SOA dns.max.test. . 0 7200 60 ${toString (2 * 24 * 60 * 60)} 60
-        workstation.max.test. A 172.28.10.244
+        max.home.arpa. SOA dns.max.home.arpa. . 0 7200 60 ${toString (2 * 24 * 60 * 60)} 1800
+        workstation CNAME zerotier.workstation
+        zerotier.workstation A 172.28.10.244
+        zerotier.workstation AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
+        zerotier.workstation AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
+        tailscale.workstation A 100.91.224.22
+        tailscale.workstation AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+        minecraft DNAME workstation
+        minecraft A 100.91.224.22
+        minecraft AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+        gitea CNAME workstation
+        chromebook CNAME zerotier.chromebook
+        zerotier.chromebook A 172.28.156.146
+        zerotier.chromebook AAAA fc9c:6b89:ee1a:7a70:b542:0000:0000:0001
+        zerotier.chromebook AAAA fd80:56c2:e21c:3d4b:0c99:931a:7a70:b542
+        label.label.label.test TXT "test entry"
       '';
     };
   };
@@ -227,51 +248,9 @@
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
         };
       };
-      dnsmasq = {
-        preStart = lib.mkForce "";
-        serviceConfig = {
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
-          IPAddressAllow = "0.0.0.0 255.255.255.255 127.0.0.53 192.168.2.0/24";
-          IPAddressDeny = "any";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateUsers = lib.mkForce false;
-          ProtectControlGroups = true;
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = lib.mkForce "strict";
-          RemoveIPC = true;
-          RestrictNamespaces = true;
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_NETLINK";
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          StateDirectory = "dnsmasq";
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          UMask = "0077";
-          User = "dnsmasq";
-          BindReadOnlyPaths = [
-            "/etc/resolv.conf"
-            "/etc/passwd"
-            "/run/nscd"
-            "/run/dbus/system_bus_socket"
-            "/run/systemd/journal/dev-log"
-          ];
-        };
-        confinement = {
-          enable = true;
-        };
-      };
       unbound = {
-        after = [ "zone-test.service" ];
-        wants = [ "zone-test.service" ];
+        after = [ "zone-home-test.service" ];
+        wants = [ "zone-home-test.service" ];
       };
     };
     tmpfiles = {

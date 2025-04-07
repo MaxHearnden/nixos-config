@@ -6,7 +6,7 @@ let
       domain = lib.mkOption {
         description = "The domain to generate dnssec data for";
         type = lib.types.str;
-        example = "dnssec.test";
+        example = "dnssec.example";
       };
       ldns = lib.mkPackageOption pkgs "ldns" {
         pkgsText = "The ldns package used for key generation and signing";
@@ -27,12 +27,16 @@ let
         type = lib.types.separatedString " ";
       };
       ksks = lib.mkOption {
-        description = "The name of key signing keys to use";
-        type = lib.types.listOf lib.types.str;
+        description = "The name and algorithm of key signing keys to use";
+        type = lib.types.attrsOf lib.types.str;
+        example = {
+          test-1 = "ed448";
+          test-2 = "ecdsap384sha384";
+        };
       };
-      algorithm = lib.mkOption {
-        description = "The algorithm to use when generating keys";
-        type = lib.types.str;
+      zskAlgorithms = lib.mkOption {
+        description = "The algorithms to use when generating zone signing keys";
+        type = lib.types.listOf lib.types.str;
       };
     };
   });
@@ -85,23 +89,30 @@ in {
         path = [ config.ldns.examples ];
         script = ''
           set -x
-          for ksk in ${lib.escapeShellArgs config.ksks}; do
+          set -- ${lib.escapeShellArgs (lib.attrValues config.ksks)}
+          for ksk in ${lib.escapeShellArgs (lib.attrNames config.ksks)}; do
             if ! [ -e "$STATE_DIRECTORY/$ksk/".private ] ||
               ! [ -e "$STATE_DIRECTORY/$ksk/".ds ] ||
               ! [ -e "$STATE_DIRECTORY/$ksk/".key ]; then
               mkdir -p "$STATE_DIRECTORY/$ksk"
               cd "$STATE_DIRECTORY/$ksk"
-              ldns-keygen -a ${config.algorithm} -k -s -f ${config.domain}
+              ldns-keygen -a "$1" -k -s -f ${config.domain}
             fi
+            shift
           done
 
           cd "$(mktemp -d)"
 
-          zsk=$(ldns-keygen -a ${config.algorithm} ${config.domain})
+          set --
+
+          for algorithm in ${lib.escapeShellArgs config.zskAlgorithms}; do
+            set -- "$@" "$(ldns-keygen -a "$algorithm" ${config.domain})"
+          done
 
           ldns-signzone -f "/run/zone/${name}/zonefile" ${config.signzoneArgs} \
-            ${config.zoneFile} "$zsk" ${lib.concatStringsSep " " (map (key:
-            "$STATE_DIRECTORY/" + lib.escapeShellArg key + "/") config.ksks)}
+            ${config.zoneFile} "$@" ${lib.concatStringsSep " " (map (key:
+            "$STATE_DIRECTORY/" + lib.escapeShellArg key + "/") (lib.attrNames
+            config.ksks))}
         '';
       };
     }) config.services.zones;
