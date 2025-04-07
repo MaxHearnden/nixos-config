@@ -830,7 +830,7 @@
         after = [ "zone-home.service" ];
         wants = [ "zone-home.service" ];
       };
-      unbound-notify = {
+      unbound-reload = {
         after = [ "zone-home.service" ];
         confinement = {
           enable = true;
