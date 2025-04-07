@@ -1,7 +1,11 @@
 { lib, pkgs, config, inputs, ... }:
 
 {
-  imports = [./configuration.nix ./hardware-configuration/workstation.nix];
+  imports = [
+    ./configuration.nix
+    ./hardware-configuration/workstation.nix
+    ./zone.nix
+  ];
   boot = {
     loader = {
       systemd-boot = {
@@ -296,7 +300,19 @@
     unbound = {
       localControlSocketPath = "/run/unbound/unbound.ctl";
       resolveLocalQueries = false;
-      settings.server.interface = "127.0.0.52";
+      settings = {
+        # auth-zone = {
+        #   name = "max.home.arpa";
+        #   zonefile = "/run/zone/home/zonefile";
+        #   zonemd-check = true;
+        # };
+        server = {
+          interface = "127.0.0.52";
+          # local-zone = "home.arpa. transparent";
+          # trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
+          # (lib.attrNames config.services.zones.home.ksks);
+        };
+      };
     };
     xserver = {
       displayManager = {
@@ -304,6 +320,32 @@
           autoSuspend = false;
         };
       };
+    };
+    zones.home = {
+      zskAlgorithms = [ "ed448" ];
+      domain = "max.home.arpa";
+      ksks = {
+        max-1 = "ed448";
+      };
+      signzoneArgs = "-u -n -b -z sha512";
+      zone = ''
+        max.home.arpa SOA dns . 0 7200 60 ${toString (2 * 24 * 60
+        * 60)} 1800
+        workstation CNAME zerotier.workstation
+        zerotier.workstation A 172.28.10.244
+        zerotier.workstation AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
+        zerotier.workstation AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
+        tailscale.workstation A 100.91.224.22
+        tailscale.workstation AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+        minecraft DNAME workstation
+        minecraft A 100.91.224.22
+        minecraft AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+        gitea CNAME workstation
+        chromebook CNAME zerotier.chromebook
+        zerotier.chromebook A 172.28.156.146
+        zerotier.chromebook AAAA fc9c:6b89:ee1a:7a70:b542:0000:0000:0001
+        zerotier.chromebook AAAA fd80:56c2:e21c:3d4b:0c99:931a:7a70:b542
+      '';
     };
   };
   systemd = {
@@ -762,6 +804,10 @@
         };
         wantedBy = [ "multi-user.target" ];
       };
+      # unbound = {
+      #   after = [ "zone-home.service" ];
+      #   wants = [ "zone-home.service" ];
+      # }
     };
     sockets = {
       harmonia-proxy = {
