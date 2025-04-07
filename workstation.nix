@@ -31,14 +31,7 @@
         };
       }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock"
       "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
-      "720-kernel-initrd.pcrlock" ]) // {
-        "dnssec-trust-anchors.d/home.positive" = {
-          text = ''
-            max.home.arpa. IN DS 6286 16 2 e5d985578b9746bfe1c6ff47e87e27f9be9942bf947c7ae18c448c86c303db0e
-            max.home.arpa. IN DS 5629 14 4 663b18a6e58159ea67190937115450b87c60222a4f8d13395acf3b091cf6155e4be365d636452e9427c7818866be9d65
-          '';
-        };
-      };
+      "720-kernel-initrd.pcrlock" ]);
     systemPackages = with pkgs; [
       gtk3
       (

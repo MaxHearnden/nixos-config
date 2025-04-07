@@ -44,6 +44,18 @@
     };
   };
   environment = {
+    etc = {
+      "dnssec-trust-anchors.d/home.positive".text = ''
+        max.home.arpa. IN DS 6286 16 2 e5d985578b9746bfe1c6ff47e87e27f9be9942bf947c7ae18c448c86c303db0e
+        max.home.arpa. IN DS 5629 14 4 663b18a6e58159ea67190937115450b87c60222a4f8d13395acf3b091cf6155e4be365d636452e9427c7818866be9d65
+      '';
+      "home.bind.keys".text = ''
+        trust-anchors {
+          max.home.arpa. initial-ds 6286 16 2 "e5d985578b9746bfe1c6ff47e87e27f9be9942bf947c7ae18c448c86c303db0e";
+          max.home.arpa. initial-ds 5629 14 4 "663b18a6e58159ea67190937115450b87c60222a4f8d13395acf3b091cf6155e4be365d636452e9427c7818866be9d65";
+        };
+      '';
+    };
     shellAliases = {
       sda = "systemd-analyze security --no-pager";
       rpush = "git pull --rebase && git push";
