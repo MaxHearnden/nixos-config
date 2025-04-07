@@ -922,7 +922,7 @@
       };
       zone-home = {
         timerConfig = {
-          OnCalendar = "daily";
+          OnCalendar = "daily UTC";
           Unit = "zone-home.target";
         };
         wantedBy = [ "timers.target" ];
