@@ -873,7 +873,6 @@
         wantedBy = [ "zone-home.service" ];
         wants = [ "unbound.service" ];
       };
-      zone-home.serviceConfig.BindPaths = "/nix/var/nix/profiles/all";
     };
     sockets = {
       harmonia-proxy = {
