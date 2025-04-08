@@ -22,6 +22,9 @@
       ];
     };
   };
+  networking.resolvconf.extraConfig = ''
+    search_domains max.home.arpa
+  '';
   nix = {
     settings = {
       trusted-public-keys = ["max-nixos-workstation:Ds5AWfGPm6jRbVSjG4ht42MK++hhfFczQ4bJRhD9thI="];
