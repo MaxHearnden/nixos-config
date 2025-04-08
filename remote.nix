@@ -122,6 +122,7 @@
       "nixos-upgrade" = {
         after = [ "network-online.target" "zerotierone.service" ];
         description = "NixOS Upgrade";
+        enableStrictShellChecks = true;
         serviceConfig = {
           Type = "oneshot";
           RestartSec = 10;
@@ -134,8 +135,15 @@
         requires = [ "network-online.target" "zerotierone.service" ];
         restartIfChanged = false;
         script = ''
-          config="$(${pkgs.curl}/bin/curl "http://max-nixos-workstation-zerotier:8081/${config.networking.hostName}" -f)"
+          set -x
+
+          config="$(${pkgs.bind.dnsutils}/bin/delv -a /etc/home.bind.keys \
+          +root=max.home.arpa +short @dns.max.home.arpa \
+          "${config.networking.hostName}".systems.max.home.arpa TXT | tail -c \
+          +2 | head -c -2)"
+
           ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set "''${config}"
+
           booted=$(readlink -e "/run/booted-system/kernel" "/run/booted-system/kernel-modules")
           current=$(readlink -e "$config/kernel" "$config/kernel-modules")
           if [ "$booted" != "$current" ]; then
