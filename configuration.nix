@@ -343,6 +343,7 @@
       # Pc is on an unblocked network
       settings = lib.mkIf (config.networking.hostName != "max-nixos-pc") {
         server = {
+          local-zone = "home.arpa. transparent";
           qname-minimisation = false;
           tls-use-sni = false;
         };

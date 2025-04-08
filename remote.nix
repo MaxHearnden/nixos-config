@@ -51,7 +51,6 @@
     resolved.enable = false;
     unbound.settings = {
       server = {
-        local-zone = "home.arpa. transparent";
         trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
       };
       stub-zone = {

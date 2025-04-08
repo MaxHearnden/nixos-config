@@ -320,7 +320,6 @@
             "ztmjfp7kiq refuse_non_local"
             "tailscale0 refuse_non_local"
           ];
-          local-zone = "home.arpa. transparent";
           trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
           (lib.attrNames config.services.zones.home.ksks);
         };

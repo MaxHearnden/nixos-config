@@ -124,6 +124,69 @@
     ratbagd = {
       enable = true;
     };
+    unbound.settings = {
+      auth-zone = [
+        {
+          for-downstream = "no";
+          name = ".";
+          primary = [
+            "199.9.14.201"         # b.root-servers.net
+            "192.33.4.12"          # c.root-servers.net
+            "199.7.91.13"          # d.root-servers.net
+            "192.5.5.241"          # f.root-servers.net
+            "192.112.36.4"         # g.root-servers.net
+            "193.0.14.129"         # k.root-servers.net
+            "192.0.47.132"         # xfr.cjr.dns.icann.org
+            "192.0.32.132"         # xfr.lax.dns.icann.org
+            "2001:500:200::b"      # b.root-servers.net
+            "2001:500:2::c"        # c.root-servers.net
+            "2001:500:2d::d"       # d.root-servers.net
+            "2001:500:2f::f"       # f.root-servers.net
+            "2001:500:12::d0d"     # g.root-servers.net
+            "2001:7fd::1"          # k.root-servers.net
+            "2620:0:2830:202::132" # xfr.cjr.dns.icann.org
+            "2620:0:2d0:202::132"  # xfr.lax.dns.icann.org
+          ];
+          url = "https://www.internic.net/domain/root.zone";
+          fallback-enabled = true;
+          zonemd-check = true;
+          zonefile = "/var/lib/unbound/root.zone";
+        }
+        {
+          for-downstream = "no";
+          name = "arpa";
+          primary = [
+            "199.9.14.201"         # b.root-servers.net
+            "192.33.4.12"          # c.root-servers.net
+            "199.7.91.13"          # d.root-servers.net
+            "192.5.5.241"          # f.root-servers.net
+            "192.112.36.4"         # g.root-servers.net
+            "193.0.14.129"         # k.root-servers.net
+            "192.0.47.132"         # xfr.cjr.dns.icann.org
+            "192.0.32.132"         # xfr.lax.dns.icann.org
+            "2001:500:200::b"      # b.root-servers.net
+            "2001:500:2::c"        # c.root-servers.net
+            "2001:500:2d::d"       # d.root-servers.net
+            "2001:500:2f::f"       # f.root-servers.net
+            "2001:500:12::d0d"     # g.root-servers.net
+            "2001:7fd::1"          # k.root-servers.net
+            "2620:0:2830:202::132" # xfr.cjr.dns.icann.org
+            "2620:0:2d0:202::132"  # xfr.lax.dns.icann.org
+          ];
+          url = "https://www.internic.net/domain/arpa.zone";
+          fallback-enabled = true;
+          zonemd-check = true;
+          zonefile = "/var/lib/unbound/arpa.zone";
+        }
+      ];
+      server = {
+        local-zone = "home.arpa. transparent";
+        local-data = [
+          "\"home.arpa. 10800 SOA localhost. nobody.invalid. 1 3600 1200 604800 10800\""
+          "\"home.arpa. 10800 NS localhost.\""
+        ];
+      };
+    };
     xserver = {
       displayManager.gdm.autoSuspend = false;
       videoDrivers = [
