@@ -341,18 +341,34 @@
     unbound = {
       enable = true;
       # Pc is on an unblocked network
-      settings = lib.mkIf (config.networking.hostName != "max-nixos-pc") {
-        server = {
-          local-zone = "home.arpa. transparent";
-          qname-minimisation = false;
-          tls-use-sni = false;
-        };
-        forward-zone = {
-          name = ".";
-          forward-addr = ["9.9.9.9#dns.quad9.net" "149.112.112.112#dns.quad9.net" "2620:fe::fe#dns.quad9.net" "2620:fe::9#dns.quad9.net"];
-          forward-tls-upstream = true;
-        };
-      };
+      settings = lib.mkMerge [
+        (lib.mkIf (config.networking.hostName != "max-nixos-pc") {
+          server = {
+            qname-minimisation = false;
+            tls-use-sni = false;
+          };
+          forward-zone = {
+            name = ".";
+            forward-addr = ["9.9.9.9#dns.quad9.net" "149.112.112.112#dns.quad9.net" "2620:fe::fe#dns.quad9.net" "2620:fe::9#dns.quad9.net"];
+            forward-tls-upstream = true;
+          };
+        })
+        {
+          auth-zone = [{
+            for-downstream = "no";
+            name = "home.arpa";
+            zonefile = builtins.toFile "zonefile" ''
+              home.arpa. SOA localhost. nobody.invalid. 1 3600 1200 604800 10800
+              @ NS localhost.
+              max NS dns.max
+              dns.max A 172.28.10.244
+              dns.max AAAA fd80:56c2:e21c:3d4b:c99:93c5:d88:e258
+              dns.max AAAA fc9c:6b89:eec5:d88:e258::1
+            '';
+          }];
+          server.local-zone = "home.arpa. nodefault";
+        }
+      ];
     };
     xserver = {
       desktopManager = {

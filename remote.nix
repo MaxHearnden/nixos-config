@@ -49,19 +49,7 @@
       };
     };
     resolved.enable = false;
-    unbound.settings = {
-      server = {
-        trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
-      };
-      stub-zone = {
-        name = "max.home.arpa";
-        stub-addr = [
-          "172.28.10.244"
-          "fd80:56c2:e21c:3d4b:c99:93c5:d88:e258"
-          "fc9c:6b89:eec5:d88:e258::1"
-        ];
-      };
-    };
+    unbound.settings.server.trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
   };
   systemd = {
     network = {
