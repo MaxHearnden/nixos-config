@@ -23,7 +23,7 @@
     };
   };
   networking.resolvconf.extraConfig = ''
-    search_domains max.home.arpa
+    search_domains=max.home.arpa
   '';
   nix = {
     settings = {
