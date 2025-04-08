@@ -27,12 +27,9 @@ let
         description = "zone data";
         type = lib.types.lines;
       };
-      zoneFile = lib.mkOption {
+      zoneFiles = lib.mkOption {
         description = "The path to the zone file to sign";
-        type = lib.types.path;
-        default = pkgs.writeText "zonefile" config.zone;
-        defaultText = lib.literalExpression
-          "pkgs.writeText \"zonefile\" config.zone";
+        type = lib.types.listOf lib.types.path;
       };
       zoneLifetime = lib.mkOption {
         description = "The time in seconds where the zone remains valid";
@@ -44,6 +41,11 @@ let
         description = "The algorithms to use when generating zone signing keys";
         type = lib.types.listOf lib.types.str;
       };
+    };
+    config = {
+      zoneFiles = lib.mkIf (config.zone != "") [
+        ( pkgs.writeText "zonefile" config.zone )
+      ];
     };
   });
 
@@ -63,7 +65,9 @@ in {
             enable = true;
             packages = [ pkgs.coreutils config.ldns.examples ];
           };
+          enableStrictShellChecks = true;
           serviceConfig = {
+            BindReadOnlyPaths = [ config.zoneFiles ];
             CapabilityBoundingSet = "";
             Group = "zone";
             IPAddressDeny = "any";
@@ -121,11 +125,12 @@ in {
               set -- "$@" "$(ldns-keygen -a "$algorithm" ${config.domain})"
             done
 
-            ldns-signzone -f "/run/zone/${name}/zonefile" ${config.signzoneArgs} \
-              -e "$expiary" \
-              "${config.zoneFile}" "$@" ${lib.concatStringsSep " " (map (key:
-              "\"$STATE_DIRECTORY\"/" + lib.escapeShellArg key + "/") (lib.attrNames
-              config.ksks))}
+            cat -- ${lib.escapeShellArgs config.zoneFiles} | ldns-signzone -f
+              "/run/zone/${name}/zonefile" ${config.signzoneArgs} -e \
+              "$expiary" /dev/stdin "$@" ${lib.concatStringsSep " " (
+                map (
+                  key: "\"$STATE_DIRECTORY\"/" + lib.escapeShellArg key + "/"
+                ) (lib.attrNames config.ksks))}
           '';
         };
       }) config.services.zones;

@@ -365,6 +365,7 @@
         pc.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567
         pc.zerotier AAAA fc9c:6b89:eed9:c2b9:c567::1
       '';
+      zoneFiles = [ "/nix/var/nix/profiles/all/zonefile" ];
     };
   };
   systemd = {
@@ -871,6 +872,7 @@
         wantedBy = [ "zone-home.service" ];
         wants = [ "unbound.service" ];
       };
+      zone-home.serviceConfig.BindPaths = "/nix/var/nix/profiles/all";
     };
     sockets = {
       harmonia-proxy = {

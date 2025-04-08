@@ -50,10 +50,16 @@
     };
     packages.x86_64-linux = {
       default = nixpkgs.legacyPackages.x86_64-linux.linkFarm "systems" (builtins.attrValues (builtins.mapAttrs (name: path: {inherit name path;}) self.hydraJobs));
+      zone = nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "zonefile" {} ''
+        for system in ${self.packages.x86_64-linux.default}/*; do
+          echo "$(basename "$system").systems TXT \"$(readlink "$system")\"" >> $out
+        done
+      '';
       systems-with-closure =
         nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-closure" {} ''
           mkdir $out
           ln -s ${self.packages.x86_64-linux.default} $out/systems
+          ln -s ${self.packages.x86_64-linux.zone} $out/zonefile
           ln -s ${nixpkgs.legacyPackages.x86_64-linux.closureInfo {rootPaths = map (drv: drv.drvPath) (builtins.attrValues self.hydraJobs);}} $out/closure
         '';
       vms = nixpkgs.legacyPackages.x86_64-linux.symlinkJoin {
