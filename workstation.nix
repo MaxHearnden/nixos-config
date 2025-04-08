@@ -345,7 +345,12 @@
       zone = ''
         max.home.arpa SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
         60 * 60)} 1800
+        cache CNAME workstation
+        cache.tailscale CNAME workstation.tailscale
+        cache.zerotier CNAME workstation.zerotier
         dns CNAME workstation
+        dns.tailscale CNAME workstation.tailscale
+        dns.zerotier CNAME workstation.zerotier
         gitea CNAME workstation
         minecraft CNAME minecraft.tailscale
         minecraft.zerotier CNAME workstation.zerotier
