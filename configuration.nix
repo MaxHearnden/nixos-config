@@ -355,7 +355,9 @@
         })
         {
           auth-zone = [{
-            for-downstream = "no";
+            for-downstream =
+              lib.mkIf ( config.networking.hostName != "max-nixos-workstation")
+              false;
             name = "home.arpa";
             zonefile = builtins.toFile "zonefile" ''
               home.arpa. SOA localhost. nobody.invalid. 1 3600 1200 604800 10800
