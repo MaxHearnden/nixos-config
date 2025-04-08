@@ -309,11 +309,11 @@
       localControlSocketPath = "/run/unbound/unbound.ctl";
       resolveLocalQueries = false;
       settings = {
-        auth-zone = {
+        auth-zone = [{
           name = "max.home.arpa";
           zonefile = "/run/zone/home/zonefile";
           zonemd-check = true;
-        };
+        }];
         server = {
           interface = ["127.0.0.52" "ztmjfp7kiq" "tailscale0"];
           interface-action = [
