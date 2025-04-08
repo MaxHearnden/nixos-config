@@ -729,6 +729,7 @@
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
+        onSuccess = [ "zone-home.target" ];
         path = with pkgs; [
           coreutils
           gnutar
