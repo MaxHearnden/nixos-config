@@ -125,7 +125,7 @@ in {
               set -- "$@" "$(ldns-keygen -a "$algorithm" ${config.domain})"
             done
 
-            cat -- ${lib.escapeShellArgs config.zoneFiles} | ldns-signzone -f
+            cat -- ${lib.escapeShellArgs config.zoneFiles} | ldns-signzone -f \
               "/run/zone/${name}/zonefile" ${config.signzoneArgs} -e \
               "$expiary" /dev/stdin "$@" ${lib.concatStringsSep " " (
                 map (
