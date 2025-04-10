@@ -941,9 +941,7 @@
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          RuntimeDirectory = "unbound";
           RuntimeDirectoryPreserve = true;
-          StateDirectory = "unbound";
           SystemCallArchitectures = "native";
           SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
           Type = "oneshot";
@@ -951,7 +949,7 @@
           User = "bind";
         };
         wantedBy = [ "zone-home.service" ];
-        wants = [ "unbound.service" ];
+        wants = [ "bind.service" ];
       };
     };
     sockets = {
