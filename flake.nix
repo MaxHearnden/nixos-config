@@ -55,6 +55,12 @@
           echo "$(basename "$system").systems TXT \"$(readlink "$system")\"" >> $out
         done
       '';
+      systems-with-zone =
+        nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-zone" {} ''
+          mkdir $out
+          ln -s ${self.packages.x86_64-linux.default} $out/systems
+          ln -s ${self.packages.x86_64-linux.default} $out/zonefile
+        '';
       systems-with-closure =
         nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-closure" {} ''
           mkdir $out

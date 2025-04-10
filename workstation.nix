@@ -60,6 +60,7 @@
       options = [ "nofail" "defaults" "compress=zstd" "nosuid" "nodev" "noatime" ];
     };
   };
+  nix.settings.keep-outputs = true;
   networking = {
     firewall = {
       filterForward = true;
@@ -825,7 +826,7 @@
         ];
         restartIfChanged = false;
         script = ''
-          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config#systems-with-closure --no-link --print-out-paths --refresh --no-write-lock-file --option store daemon)"
+          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config#systems-with-zone --no-link --print-out-paths --refresh --no-write-lock-file --option store daemon)"
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
           systemctl stop latest-system.service
           config="$(readlink -e "''${config_all}/systems/${config.networking.hostName}")"
