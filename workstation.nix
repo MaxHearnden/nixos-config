@@ -923,7 +923,7 @@
           CapabilityBoundingSet = "";
           ConfigurationDirectory = "bind";
           ExecStart = "${lib.getExe' pkgs.bind "rndc"} reload max.home.arpa";
-          Group = "bind";
+          Group = "named";
           IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -947,7 +947,7 @@
           SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
           Type = "oneshot";
           UMask = "077";
-          User = "bind";
+          User = "named";
         };
         wantedBy = [ "zone-home.service" ];
         wants = [ "bind.service" ];
