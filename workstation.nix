@@ -191,6 +191,14 @@
           '';
           master = true;
         };
+        "maxh" = {
+          file = builtins.toFile "zonefile" ''
+            @ SOA localhost. nobody.invalid. 1 3600 1200 604800 10800
+            @ NS localhost.
+            @ DNAME tailscale.max.home.arpa.
+          '';
+          master = true;
+        };
         "max.home.arpa" = {
           file = "/run/zone/home/zonefile";
           master = true;
