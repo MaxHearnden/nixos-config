@@ -339,7 +339,6 @@
       '';
     };
     unbound = {
-      localControlSocketPath = "/run/unbound/unbound.ctl";
       resolveLocalQueries = false;
       settings = {
         server = {
@@ -914,17 +913,16 @@
         after = [ "zone-home.service" ];
         wants = [ "zone-home.service" ];
       };
-      unbound-reload = {
-        after = [ "unbound.service" "zone-home.service" ];
+      bind-reload = {
+        after = [ "bind.service" "zone-home.service" ];
         confinement = {
           enable = true;
         };
         serviceConfig = {
-          BindReadOnlyPaths = "/etc/unbound/unbound.conf";
           CapabilityBoundingSet = "";
-          ConfigurationDirectory = "unbound";
-          ExecStart = "${lib.getExe' pkgs.unbound "unbound-control"} auth_zone_reload max.home.arpa";
-          Group = "unbound";
+          ConfigurationDirectory = "bind";
+          ExecStart = "${lib.getExe' pkgs.bind "rndc"} reload max.home.arpa";
+          Group = "bind";
           IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -939,7 +937,7 @@
           ProtectProc = "invisible";
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = "AF_UNIX AF_NETLINK";
+          RestrictAddressFamilies = "AF_INET AF_NETLINK";
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
@@ -950,7 +948,7 @@
           SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
           Type = "oneshot";
           UMask = "077";
-          User = "unbound";
+          User = "bind";
         };
         wantedBy = [ "zone-home.service" ];
         wants = [ "unbound.service" ];
