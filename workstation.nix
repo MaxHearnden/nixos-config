@@ -161,6 +161,37 @@
         }
       ];
     };
+    bind = {
+      enable = true;
+      extraOptions = ''
+        listen-on port 54 { 127.0.0.1; };
+        listen-on-v6 port 54 { ::1; };
+        listen-on {
+          172.28.10.244;
+          fc9c:6b89:eec5:0d88:e258:0000:0000:0001;
+          fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258;
+        };
+      '';
+      listenOn = ["none"];
+      listenOnIpv6 = [ "none" ];
+      zones = {
+        "home.arpa" = {
+          file = builtins.toFile "home.arpa" ''
+            @ SOA localhost. nobody.invalid. 1 3600 1200 604800 10800
+            @ NS localhost.
+            max NS dns.max
+            dns.max A 172.28.10.244
+            dns.max AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
+            dns.max AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
+          '';
+          master = true;
+        };
+        "max.home.arpa" = {
+          file = "/run/zone/home/zonefile";
+          master = true;
+        };
+      };
+    };
     btrbk = {
       instances = {
         btrbk = {
@@ -309,20 +340,22 @@
       localControlSocketPath = "/run/unbound/unbound.ctl";
       resolveLocalQueries = false;
       settings = {
-        auth-zone = [{
-          name = "max.home.arpa";
-          zonefile = "/run/zone/home/zonefile";
-          zonemd-check = true;
-        }];
         server = {
-          interface = ["127.0.0.52" "ztmjfp7kiq" "tailscale0"];
-          interface-action = [
-            "ztmjfp7kiq refuse_non_local"
-            "tailscale0 refuse_non_local"
-          ];
+          do-not-query-localhost = false;
+          interface = ["127.0.0.52"];
           trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
           (lib.attrNames config.services.zones.home.ksks);
         };
+        stub-zone = [
+          {
+            name = "home.arpa";
+            stub-addr = "127.0.0.1@54";
+          }
+          {
+            name = "max.home.arpa";
+            stub-addr = "127.0.0.1@54";
+          }
+        ];
       };
     };
     xserver = {
@@ -344,6 +377,7 @@
       zone = ''
         max.home.arpa SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
         60 * 60)} 1800
+        @ NS workstation.zerotier
         cache CNAME workstation
         cache.tailscale CNAME workstation.tailscale
         cache.zerotier CNAME workstation.zerotier
@@ -524,6 +558,48 @@
           MemoryDenyWriteExecute = true;
           SystemCallArchitectures = "native";
           UMask = "0077";
+        };
+      };
+      bind = {
+        confinement.enable = true;
+        preStart = lib.mkForce ''
+          if ! [ -f "/etc/bind/rndc.key" ]; then
+            ${config.services.bind.package.out}/bin/rndc-confgen -c \
+              /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
+          fi
+        '';
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+          BindReadOnlyPaths = [ "/run/systemd/journal/dev-log" "/run/zone/home" ];
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
+          ConfigurationDirectory = "bind";
+          ExecStart = lib.mkForce "${config.services.bind.package.out}/bin/named -c ${config.services.bind.configFile}";
+          Group = "named";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          PrivateUsers = lib.mkForce [];
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RuntimeDirectory = "named";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          UMask = "077";
+          User = "named";
         };
       };
       btrbk-btrbk = {

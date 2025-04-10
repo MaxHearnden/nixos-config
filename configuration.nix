@@ -354,20 +354,6 @@
           };
         })
         {
-          auth-zone = [{
-            for-downstream =
-              lib.mkIf ( config.networking.hostName != "max-nixos-workstation")
-              false;
-            name = "home.arpa";
-            zonefile = builtins.toFile "zonefile" ''
-              home.arpa. SOA localhost. nobody.invalid. 1 3600 1200 604800 10800
-              @ NS localhost.
-              max NS dns.max
-              dns.max A 172.28.10.244
-              dns.max AAAA fd80:56c2:e21c:3d4b:c99:93c5:d88:e258
-              dns.max AAAA fc9c:6b89:eec5:d88:e258::1
-            '';
-          }];
           server.local-zone = "home.arpa. nodefault";
         }
       ];
