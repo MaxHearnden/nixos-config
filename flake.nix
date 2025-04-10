@@ -59,7 +59,7 @@
         nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-zone" {} ''
           mkdir $out
           ln -s ${self.packages.x86_64-linux.default} $out/systems
-          ln -s ${self.packages.x86_64-linux.default} $out/zonefile
+          ln -s ${self.packages.x86_64-linux.zone} $out/zonefile
         '';
       systems-with-closure =
         nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-closure" {} ''
