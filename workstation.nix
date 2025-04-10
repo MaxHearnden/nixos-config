@@ -925,10 +925,10 @@
           ExecStart = "${lib.getExe' pkgs.bind "rndc"} reload max.home.arpa";
           Group = "named";
           IPAddressDeny = "any";
+          IPAddressAllow = "localhost";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
-          PrivateNetwork = true;
           PrivateUsers = true;
           ProcSubset = "pid";
           ProtectClock = true;
