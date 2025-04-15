@@ -167,18 +167,13 @@
       extraOptions = ''
         listen-on port 54 { 127.0.0.1; };
         listen-on-v6 port 54 { ::1; };
-        listen-on {
-          172.28.10.244;
-          100.91.224.22;
-        };
-        listen-on-v6 {
-          fc9c:6b89:eec5:0d88:e258:0000:0000:0001;
-          fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258;
-          fd7a:115c:a1e0:ab12:4843:cd96:625b:e016;
-        };
       '';
-      listenOn = ["none"];
-      listenOnIpv6 = [ "none" ];
+      listenOn = ["172.28.10.244" "100.91.224.22" ];
+      listenOnIpv6 = [
+        "fc9c:6b89:eec5:0d88:e258:0000:0000:0001"
+        "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
+        "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016"
+      ];
       zones = {
         "home.arpa" = {
           file = builtins.toFile "home.arpa" ''
@@ -190,6 +185,7 @@
             dns.max AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
           '';
           master = true;
+          slaves = [ "any" ];
         };
         "maxh" = {
           file = builtins.toFile "zonefile" ''
@@ -198,10 +194,12 @@
             @ DNAME tailscale.max.home.arpa.
           '';
           master = true;
+          slaves = [ "any" ];
         };
         "max.home.arpa" = {
           file = "/run/zone/home/zonefile";
           master = true;
+          slaves = [ "any" ];
         };
       };
     };
