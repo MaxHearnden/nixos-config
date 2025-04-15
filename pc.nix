@@ -191,7 +191,7 @@
       }
       {
         for-downstream = "no";
-        name = "root-servers.net.zone";
+        name = "root-servers.net";
         url = "https://www.internic.net/domain/root-servers.net.zone";
         zonefile = "/var/lib/unbound/root-servers.net.zone";
       }
