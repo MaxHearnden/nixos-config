@@ -177,6 +177,24 @@
         zonemd-check = true;
         zonefile = "/var/lib/unbound/arpa.zone";
       }
+      {
+        for-downstream = "no";
+        name = "in-addr.arpa";
+        url = "https://www.internic.net/domain/in-addr.arpa.zone";
+        zonefile = "/var/lib/unbound/in-addr.arpa.zone";
+      }
+      {
+        for-downstream = "no";
+        name = "ip6.arpa";
+        url = "https://www.internic.net/domain/ip6.arpa.zone";
+        zonefile = "/var/lib/unbound/ip6.arpa.zone";
+      }
+      {
+        for-downstream = "no";
+        name = "root-servers.net.zone";
+        url = "https://www.internic.net/domain/root-servers.net.zone";
+        zonefile = "/var/lib/unbound/root-servers.net.zone";
+      }
     ];
     xserver = {
       displayManager.gdm.autoSuspend = false;
