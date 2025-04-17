@@ -41,13 +41,29 @@
   hardware.nvidia.open = true;
   networking = {
     firewall = {
+      extraForwardRules = ''
+        udp dport 53 reject
+        tcp dport {53, 80} reject
+      '';
+      filterForward = true;
       interfaces = {
+        usb = {
+          allowedTCPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 67 ];
+        };
         ztmjfp7kiq = {
           allowedTCPPorts = [ 8080 9090 11434 ];
         };
       };
     };
     hostName = "max-nixos-pc";
+    nat = {
+      enable = true;
+      externalInterface = "eno1";
+      internalInterfaces = [
+        "usb"
+      ];
+    };
     networkmanager.enable = false;
     useNetworkd = true;
   };
@@ -114,6 +130,43 @@
             };
           };
         };
+      };
+    };
+    dbus = {
+      packages = [
+        (pkgs.writeTextDir "share/dbus-1/system.d/dnsmasq-rootless.conf" ''
+          <!DOCTYPE busconfig PUBLIC
+           "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+           "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+          <busconfig>
+                  <policy user="dnsmasq">
+                          <allow own="uk.org.thekelleys.dnsmasq"/>
+                          <allow send_destination="uk.org.thekelleys.dnsmasq"/>
+                  </policy>
+          </busconfig>
+        '')
+      ];
+    };
+    dnsmasq = {
+      enable = true;
+      resolveLocalQueries = true;
+      settings = {
+        bind-dynamic = true;
+        dnssec = true;
+        domain = "usb.home.arpa";
+        dhcp-fqdn = true;
+        dhcp-range = [ "192.168.2.20,192.168.2.250" ];
+        conf-file =
+          "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
+        except-interface = "lo";
+        interface = "usb";
+        no-hosts = true;
+        dhcp-rapid-commit = true;
+        server = ["127.0.0.1"];
+        trust-anchor = [
+          "max.home.arpa.,6286,16,2,E5D985578B9746BFE1C6FF47E87E27F9BE9942BF947C7AE18C448C86C303DB0E"
+          "max.home.arpa.,5629,14,4,663B18A6E58159EA67190937115450B87C60222A4F8D13395ACF3B091CF6155E4BE365D636452E9427C7818866BE9D65"
+        ];
       };
     };
     ollama = {
@@ -276,6 +329,48 @@
           RestrictSUIDSGID = lib.mkForce false;
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
+        };
+      };
+      dnsmasq = {
+        preStart = lib.mkForce "";
+        serviceConfig = {
+          AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
+          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
+          IPAddressAllow = "0.0.0.0 255.255.255.255 fe80::/10 ff02::1 127.0.0.1 fd80:1234::/64 192.168.2.0/24";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateUsers = lib.mkForce false;
+          ProtectControlGroups = true;
+          ProtectClock = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = lib.mkForce "strict";
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          StateDirectory = "dnsmasq";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
+          UMask = "0077";
+          User = "dnsmasq";
+          BindReadOnlyPaths = [
+            "/etc/resolv.conf"
+            "/etc/passwd"
+            "/run/nscd"
+            "/run/dbus/system_bus_socket"
+            "/run/systemd/journal/dev-log"
+          ];
+        };
+        confinement = {
+          enable = true;
         };
       };
       unbound = {
