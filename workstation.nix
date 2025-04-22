@@ -819,7 +819,7 @@
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
-        onSuccess = [ "zone-home.target" ];
+        onSuccess = [ "latest-system-restart.target" "zone-home.target" ];
         path = with pkgs; [
           coreutils
           gnutar
@@ -836,7 +836,6 @@
         script = ''
           config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config#systems-with-zone --no-link --print-out-paths --refresh --no-write-lock-file --option store daemon)"
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
-          systemctl stop latest-system.service
           config="$(readlink -e "''${config_all}/systems/${config.networking.hostName}")"
           nix-env -p /nix/var/nix/profiles/system --set "''${config}"
           booted=$(readlink /run/booted-system/kernel /run/booted-system/kernel-modules)
@@ -995,6 +994,11 @@
       };
     };
     targets = {
+      latest-system-restart = {
+        description = "Restart latest-system service";
+        conflicts = [ "latest-system.service" ];
+        unitConfig.StopWhenUnneeded = true;
+      };
       nfs-client = {
         enable = false;
       };
