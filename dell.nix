@@ -1,5 +1,5 @@
 { config, pkgs, lib, ... }: {
-  imports = [./remote.nix ./hardware-configuration/dell.nix ./laptop.nix ./guix.nix];
+  imports = [./remote.nix ./hardware-configuration/dell.nix ./laptop.nix];
   boot = {
     loader = {
       grub = {
