@@ -609,6 +609,7 @@
         };
       };
     };
+    shutdownRamfs.enable = true;
     sockets = {
       podman = {
         enable = false;
