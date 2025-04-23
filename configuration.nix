@@ -728,7 +728,7 @@
           notepadqq
           ollama
           (writeShellScriptBin "ollama-pc" ''
-            OLLAMA_HOST=172.28.10.244:11434 exec ${lib.getBin ollama} "$@"
+            OLLAMA_HOST=172.28.10.244:11434 exec ${lib.getExe ollama} "$@"
           '')
           oversteer
           p7zip
