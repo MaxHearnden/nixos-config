@@ -708,6 +708,7 @@
           gtkterm
           headsetcontrol
           htop
+          keepassxc
           ldns.examples
           ldns.man
           libreoffice-fresh
