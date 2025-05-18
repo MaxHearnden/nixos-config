@@ -354,7 +354,19 @@
           };
         })
         {
-          server.local-zone = "home.arpa. nodefault";
+          server = {
+            domain-insecure = "test.";
+            local-zone = [
+              "home.arpa. nodefault"
+              "test. nodefault"
+            ];
+          };
+          stub-zone = {
+            name = "test.";
+            stub-addr = [
+              "::1@8053"
+            ];
+          };
         }
       ];
     };
