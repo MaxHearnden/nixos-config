@@ -361,12 +361,14 @@
               "test. nodefault"
             ];
           };
-          stub-zone = {
-            name = "test.";
-            stub-addr = [
-              "::1@8053"
-            ];
-          };
+          stub-zone = [
+            {
+              name = "test.";
+              stub-addr = [
+                "::1@8053"
+              ];
+            }
+          ];
         }
       ];
     };
