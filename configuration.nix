@@ -111,16 +111,9 @@
       disabledPlugins = ["input"];
     };
     enableRedistributableFirmware = true;
-    pulseaudio = {
-      extraConfig = ''
-        .nofail
-        unload-module module-suspend-on-idle
-        .fail
-      '';
-    };
   };
   i18n = {
-    defaultLocale = "en_GB.utf8";
+    defaultLocale = "en_GB.UTF-8";
   };
   nix = {
     daemonIOSchedClass = "idle";
@@ -326,6 +319,13 @@
       settings = {
         X11Forwarding = true;
       };
+    };
+    pulseaudio = {
+      extraConfig = ''
+        .nofail
+        unload-module module-suspend-on-idle
+        .fail
+      '';
     };
     sshd = {
       enable = true;
