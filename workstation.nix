@@ -430,17 +430,13 @@
             ClientIdentifier = "mac";
             SendHostname = false;
             UseHostname = false;
-            UseTimezone = true;
-            Use6RD = true;
             UseMTU = true;
-            RequestOptions = lib.concatMapStringsSep " " toString (lib.subtractLists [52 53 55] (lib.range 1 254));
           };
           dhcpV6Config = {
             SendHostname = false;
             UseHostname = false;
             DUIDType = "link-layer";
           };
-          domains = [ "~lancs.ac.uk" ];
           ipv6AcceptRAConfig = {
             UseMTU = true;
           };
@@ -457,6 +453,20 @@
             Name = "eno1-web";
           };
           DHCP = "yes";
+          dhcpV4Config = {
+            ClientIdentifier = "mac";
+            SendHostname = false;
+            UseHostname = false;
+            UseMTU = true;
+          };
+          dhcpV6Config = {
+            SendHostname = false;
+            UseHostname = false;
+            DUIDType = "link-layer";
+          };
+          ipv6AcceptRAConfig = {
+            UseMTU = true;
+          };
           networkConfig = {
             LLDP = true;
             LLMNR = false;
