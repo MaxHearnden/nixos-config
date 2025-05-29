@@ -425,6 +425,7 @@
           matchConfig = {
             Name = "eno1";
           };
+          macvlan = [ "eno1-web" ];
           dhcpV4Config = {
             ClientIdentifier = "mac";
             SendHostname = false;
@@ -443,6 +444,19 @@
           ipv6AcceptRAConfig = {
             UseMTU = true;
           };
+          networkConfig = {
+            LLDP = true;
+            LLMNR = false;
+            MulticastDNS = false;
+            UseDomains = false;
+            DNSDefaultRoute = false;
+          };
+        };
+        "10-eno1-web" = {
+          matchConfig = {
+            Name = "eno1-web";
+          };
+          DHCP = "yes";
           networkConfig = {
             LLDP = true;
             LLMNR = false;
@@ -540,7 +554,15 @@
             vrfConfig = {
               Table = 10 + index;
             };
-          }) 4);
+          }) 4)
+        // {
+          "10-eno1-web" = {
+            netdevConfig = {
+              Kind = "macvlan";
+              Name = "eno1-web";
+            };
+          };
+        };
     };
     services = {
       "3proxy" = {
