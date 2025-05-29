@@ -455,7 +455,7 @@
           DHCP = "yes";
           dhcpV4Config = {
             ClientIdentifier = "mac";
-            SendHostname = false;
+            Hostname = "max-webserver";
             UseHostname = false;
             UseMTU = true;
           };
