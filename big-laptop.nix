@@ -3,6 +3,7 @@
 {
   boot = {
     extraModprobeConfig = "options iwlwifi 11n_disable=1";
+    kernelPackages = lib.mkForce pkgs.linuxPackages;
   };
   hardware = {
     tuxedo-drivers = {
