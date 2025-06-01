@@ -31,7 +31,17 @@
         };
       }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock"
       "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
-      "720-kernel-initrd.pcrlock" ]);
+      "720-kernel-initrd.pcrlock" ])
+      // {
+        "bind/zandoodle.me.uk/zonefile".text = ''
+          @ SOA dns zandoodle.me.uk 1 3600 1200 604800 10800
+          @ NS dns
+          @ A 90.250.145.93
+          @ CAA 128 issue "letsencrypt.org;validationmethods=dns-01"
+          @ CAA 128 issuewild ";"
+          dns A 90.250.145.93
+        '';
+      };
     systemPackages = with pkgs; [
       gtk3
       (
@@ -167,6 +177,8 @@
       extraOptions = ''
         listen-on port 54 { 127.0.0.1; };
         listen-on-v6 port 54 { ::1; };
+        managed-keys-directory "/var/lib/named/keys";
+        key-directory "/var/lib/named/keys";
       '';
       listenOn = ["172.28.10.244" "100.91.224.22" ];
       listenOnIpv6 = [
@@ -200,6 +212,13 @@
           file = "/run/zone/home/zonefile";
           master = true;
           slaves = [ "any" ];
+        };
+        "zandoodle.me.uk" = {
+          file = "/var/lib/named/zandoodle.me.uk/zonefile";
+          master = true;
+          extraConfig = ''
+            dnssec-policy default;
+          '';
         };
       };
     };
@@ -612,7 +631,11 @@
         '';
         serviceConfig = {
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-          BindReadOnlyPaths = [ "/run/systemd/journal/dev-log" "/run/zone/home" ];
+          BindReadOnlyPaths = [
+            "/run/systemd/journal/dev-log"
+            "/run/zone/home"
+            "${config.environment.etc."bind/zandoodle.me.uk/zonefile".source}:/var/lib/named/zandoodle.me.uk/zonefile"
+          ];
           CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
           ConfigurationDirectory = "bind";
           ExecStart = lib.mkForce "${config.services.bind.package.out}/bin/named -c ${config.services.bind.configFile}";
@@ -637,10 +660,12 @@
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          RuntimeDirectory = "named";
+          StateDirectory = [
+            "named/zandoodle.me.uk"
+            "named/keys"
+          ];
           SystemCallArchitectures = "native";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          UMask = "077";
           User = "named";
         };
       };
