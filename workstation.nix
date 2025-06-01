@@ -355,6 +355,7 @@
         '';
       };
     };
+    openssh.startWhenNeeded = true;
     ratbagd = {
       enable = true;
     };
@@ -1048,6 +1049,37 @@
           FreeBind = true;
         };
         wantedBy = [ "minecraft-server.target" ];
+      };
+      sshd.enable = false;
+      "sshd@lo" = {
+        description = "SSH Sockets";
+        socketConfig = {
+          Accept = true;
+          ListenStream = 22;
+          TriggerLimitIntervalSec = 0;
+          BindToDevice = "lo";
+        };
+        wantedBy = [ "sockets.target" ];
+      };
+      "sshd@tailscale" = {
+        description = "SSH Sockets";
+        socketConfig = {
+          Accept = true;
+          ListenStream = 22;
+          TriggerLimitIntervalSec = 0;
+          BindToDevice = "tailscale0";
+        };
+        wantedBy = [ "sockets.target" ];
+      };
+      "sshd@zerotier" = {
+        description = "SSH Sockets";
+        socketConfig = {
+          Accept = true;
+          ListenStream = 22;
+          TriggerLimitIntervalSec = 0;
+          BindToDevice = "ztmjfp7kiq";
+        };
+        wantedBy = [ "sockets.target" ];
       };
     };
     targets = {
