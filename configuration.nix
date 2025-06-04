@@ -215,6 +215,12 @@
       enable = true;
       interactiveShellInit = ''
         ${config.systemd.package}/bin/systemctl shutdown --quiet --when=show
+        begin
+          if ! set -l system_status "$(${config.systemd.package}/bin/systemctl \
+              is-system-running)"
+            echo The system status is currently "$system_status"
+          end
+        end
       '';
     };
     git = {
