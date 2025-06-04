@@ -7,6 +7,10 @@
     ./zone.nix
   ];
   boot = {
+    kernel.sysctl = {
+      "net.ipv4.tcp_l3mdev_accept" = true;
+      "net.ipv4.udp_l3mdev_accept" = true;
+    };
     loader = {
       systemd-boot = {
         enable = true;
@@ -82,6 +86,14 @@
         tailscale0 = {
           allowedTCPPorts = [ 22 53 3000 25565 ];
           allowedUDPPorts = [ 53 24454 ];
+        };
+        eno1-web = {
+          allowedTCPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 ];
+        };
+        vrf-web = {
+          allowedTCPPorts = [ 53 ];
+          allowedUDPPorts = [ 53 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -180,7 +192,7 @@
         managed-keys-directory "/var/lib/named/keys";
         key-directory "/var/lib/named/keys";
       '';
-      listenOn = ["172.28.10.244" "100.91.224.22" ];
+      listenOn = ["172.28.10.244" "100.91.224.22" "192.168.1.200" ];
       listenOnIpv6 = [
         "fc9c:6b89:eec5:0d88:e258:0000:0000:0001"
         "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
@@ -494,6 +506,7 @@
             UseDomains = false;
             DNSDefaultRoute = false;
           };
+          vrf = [ "vrf-web" ];
         };
         "10-enp2s0" = {
           address = ["192.168.2.1/24" "fd80:1234::1/64"];
@@ -539,6 +552,14 @@
             DNSDefaultRoute = false;
           };
           DHCP = "no";
+        };
+        "10-vrf-web" = {
+          matchConfig = {
+            Name = "vrf-web";
+          };
+          linkConfig = {
+            RequiredForOnline = false;
+          };
         };
         "20-vrf-interface" = {
           matchConfig = {
@@ -590,6 +611,15 @@
             netdevConfig = {
               Kind = "macvlan";
               Name = "eno1-web";
+            };
+          };
+          "10-vrf-web" = {
+            netdevConfig = {
+              Kind = "vrf";
+              Name = "vrf-web";
+            };
+            vrfConfig = {
+              Table = 20;
             };
           };
         };
@@ -657,7 +687,6 @@
           ProtectProc = "invisible";
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
