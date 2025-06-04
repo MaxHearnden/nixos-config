@@ -90,6 +90,7 @@
       ];
     };
     "/home/max/h-drive" = {
+      enable = false;
       device = "//homes.lancs.ac.uk/04/hearndem";
       fsType = "cifs";
       options = [
