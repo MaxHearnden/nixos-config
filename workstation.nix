@@ -45,6 +45,7 @@
           @ CAA 128 issuewild ";"
           dns A 90.250.145.93
         '';
+        "bind/named.conf".source = config.services.bind.configFile;
       };
     systemPackages = with pkgs; [
       gtk3
