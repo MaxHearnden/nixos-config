@@ -1099,7 +1099,7 @@
           TriggerLimitIntervalSec = 0;
           BindToDevice = "tailscale0";
         };
-        wantedBy = [ "sockets.target" ];
+        wantedBy = [ "sys-subsystem-net-devices-tailscale0.device" ];
       };
       "sshd@zerotier" = {
         description = "SSH Sockets";
@@ -1109,7 +1109,7 @@
           TriggerLimitIntervalSec = 0;
           BindToDevice = "ztmjfp7kiq";
         };
-        wantedBy = [ "sockets.target" ];
+        wantedBy = [ "sys-subsystem-net-devices-ztmjfp7kiq.device" ];
       };
     };
     targets = {
