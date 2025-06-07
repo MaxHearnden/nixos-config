@@ -34,7 +34,8 @@
       "720-kernel-initrd.pcrlock" ])
       // {
         "bind/zandoodle.me.uk/zonefile".text = ''
-          @ SOA dns zandoodle.me.uk 1 3600 1200 604800 10800
+          $TTL 600
+          @ SOA dns zandoodle.me.uk 1 3600 1200 604800 600
           @ NS dns
           @ A 90.250.145.93
           @ CAA 128 issue "letsencrypt.org;validationmethods=dns-01"
