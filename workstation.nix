@@ -7,10 +7,6 @@
     ./zone.nix
   ];
   boot = {
-    kernel.sysctl = {
-      "net.ipv4.tcp_l3mdev_accept" = true;
-      "net.ipv4.udp_l3mdev_accept" = true;
-    };
     loader = {
       systemd-boot = {
         enable = true;
@@ -193,7 +189,7 @@
         managed-keys-directory "/var/lib/named/keys";
         key-directory "/var/lib/named/keys";
       '';
-      listenOn = ["172.28.10.244" "100.91.224.22" "192.168.1.200" ];
+      listenOn = [ "172.28.10.244" "100.91.224.22" ];
       listenOnIpv6 = [
         "fc9c:6b89:eec5:0d88:e258:0000:0000:0001"
         "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
@@ -381,13 +377,26 @@
       '';
     };
     unbound = {
+      package = pkgs.unbound-with-systemd.overrideAttrs (
+        { patches ? [], ... }: {
+          patches = patches ++ [
+            ./0001-Match-address-when-searching-for-systemd-sockets.patch
+          ];
+        });
       resolveLocalQueries = false;
       settings = {
         server = {
           do-not-query-localhost = false;
-          interface = ["127.0.0.52"];
+          interface = ["127.0.0.52" "192.168.1.200"];
+          interface-action = [
+            "192.168.1.200 allow_setrd"
+          ];
+          interface-view = [
+            "192.168.1.200 web"
+          ];
           trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
           (lib.attrNames config.services.zones.home.ksks);
+          use-systemd = true;
         };
         stub-zone = [
           {
@@ -397,6 +406,20 @@
           {
             name = "max.home.arpa";
             stub-addr = "127.0.0.1@54";
+          }
+          {
+            name = "zandoodle.me.uk";
+            stub-addr = "127.0.0.1@54";
+            stub-no-cache = true;
+          }
+        ];
+        view = [
+          {
+            name = "web";
+            local-zone = [
+              ". refuse"
+              "zandoodle.me.uk transparent"
+            ];
           }
         ];
       };
@@ -558,9 +581,6 @@
           matchConfig = {
             Name = "vrf-web";
           };
-          linkConfig = {
-            RequiredForOnline = false;
-          };
         };
         "20-vrf-interface" = {
           matchConfig = {
@@ -612,6 +632,9 @@
             netdevConfig = {
               Kind = "macvlan";
               Name = "eno1-web";
+            };
+            macvlanConfig = {
+              Mode = "bridge";
             };
           };
           "10-vrf-web" = {
@@ -699,6 +722,8 @@
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
           User = "named";
         };
+        wants = [ "zone-home.service" ];
+        after = [ "zone-home.service" ];
       };
       btrbk-btrbk = {
         serviceConfig = {
@@ -1006,8 +1031,8 @@
         config.environment.etc."dnssec-trust-anchors.d/home.positive".source
       ];
       unbound = {
-        after = [ "zone-home.service" ];
-        wants = [ "zone-home.service" ];
+        after = [ "local-dns.socket" "web-dns.socket" ];
+        wants = [ "local-dns.socket" "web-dns.socket" ];
       };
       bind-reload = {
         after = [ "bind.service" "zone-home.service" ];
@@ -1110,6 +1135,28 @@
           BindToDevice = "ztmjfp7kiq";
         };
         wantedBy = [ "sys-subsystem-net-devices-ztmjfp7kiq.device" ];
+      };
+      "web-dns" = {
+        description = "eno1-web specific DNS socket";
+        socketConfig = {
+          ListenStream = "192.168.1.200:53";
+          ListenDatagram = "192.168.1.200:53";
+          FreeBind = true;
+          TriggerLimitIntervalSec = 0;
+          BindToDevice = "eno1-web";
+          Service = "unbound.service";
+        };
+      };
+      "local-dns" = {
+        description = "local DNS socket";
+        socketConfig = {
+          ListenStream = "127.0.0.52:53";
+          ListenDatagram = "127.0.0.52:53";
+          FreeBind = true;
+          TriggerLimitIntervalSec = 0;
+          BindToDevice = "lo";
+          Service = "unbound.service";
+        };
       };
     };
     targets = {
