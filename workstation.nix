@@ -35,12 +35,12 @@
       // {
         "bind/zandoodle.me.uk/zonefile".text = ''
           $TTL 600
-          @ SOA dns zandoodle.me.uk 1 3600 1200 604800 600
+          @ SOA dns zandoodle.me.uk. 1 3600 1200 604800 600
           @ NS dns
-          @ A 90.250.145.93
+          $INCLUDE /var/lib/ddns/zonefile @
           @ CAA 128 issue "letsencrypt.org;validationmethods=dns-01"
           @ CAA 128 issuewild ";"
-          dns A 90.250.145.93
+          $INCLUDE /var/lib/ddns/zonefile dns
         '';
         "bind/named.conf".source = config.services.bind.configFile;
       };
@@ -690,6 +690,7 @@
           BindReadOnlyPaths = [
             "/run/systemd/journal/dev-log"
             "/run/zone/home"
+            "/var/lib/ddns"
             "${config.environment.etc."bind/zandoodle.me.uk/zonefile".source}:/var/lib/named/zandoodle.me.uk/zonefile"
           ];
           CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
@@ -776,6 +777,47 @@
         confinement = {
           enable = true;
         };
+      };
+      get-IP-address = {
+        confinement = {
+          enable = true;
+        };
+        serviceConfig = {
+          CapabilityBoundingSet = "";
+          Group = "ddns";
+          IPAddressAllow = "192.168.1.1";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemainAfterExit = true;
+          RemoveIPC = true;
+          RestrictAddressFamilies = "AF_INET";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RuntimeDirectory = "ddns";
+          StateDirectory = "ddns";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+          Type = "oneshot";
+          User = "ddns";
+        };
+        script = ''
+          ${lib.getExe pkgs.curl} -o /run/ddns/login.lp -v \
+            http://192.168.1.1/login.lp?getSessionStatus=true
+          ${lib.getExe pkgs.jq} -r .wanIPAddress /run/ddns/login.lp \
+            >/var/lib/ddns/IPv4-address
+          printf "@ A " | ${lib.getExe' pkgs.coreutils "cat"} - \
+            /var/lib/ddns/IPv4-address >/var/lib/ddns/zonefile
+        '';
       };
       harmonia = {
         serviceConfig = {
@@ -1188,6 +1230,12 @@
         };
         wantedBy = [ "timers.target" ];
       };
+      get-IP-address = {
+        timerConfig = {
+          OnUnitActiveSec = "1h";
+        };
+        wantedBy = [ "timers.target" ];
+      };
     };
     tmpfiles = {
       rules = [
@@ -1206,9 +1254,9 @@
   };
   users = {
     users = {
-      unbound-notify = {
+      ddns = {
         isSystemUser = true;
-        group = "unbound-notify";
+        group = "ddns";
       };
       btrbk = {
         packages = with pkgs; [
@@ -1221,6 +1269,6 @@
         ];
       };
     };
-    groups.unbound-notify = {};
+    groups.ddns = {};
   };
 }
