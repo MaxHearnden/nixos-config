@@ -797,7 +797,6 @@
           ProtectKernelLogs = true;
           ProtectProc = "invisible";
           ProtectSystem = "strict";
-          RemainAfterExit = true;
           RemoveIPC = true;
           RestrictAddressFamilies = "AF_INET";
           RestrictNamespaces = true;
@@ -814,9 +813,17 @@
           ${lib.getExe pkgs.curl} -o /run/ddns/login.lp -v \
             http://192.168.1.1/login.lp?getSessionStatus=true
           ${lib.getExe pkgs.jq} -r .wanIPAddress /run/ddns/login.lp \
-            >/var/lib/ddns/IPv4-address
-          printf "@ A " | ${lib.getExe' pkgs.coreutils "cat"} - \
-            /var/lib/ddns/IPv4-address >/var/lib/ddns/zonefile
+            >/run/ddns/IPv4-address
+          lines=$(${lib.getExe' pkgs.coreutils "wc"} -l --total=only \
+            /run/ddns/IPv4-address)
+          if [ "''${lines}" = 1 ]; then
+            mv -f /run/ddns/IPv4-address /var/lib/ddns/IPv4-address
+            printf "@ A " | ${lib.getExe' pkgs.coreutils "cat"} - \
+              /var/lib/ddns/IPv4-address >/var/lib/ddns/zonefile
+          else
+            echo "WARNING: INVALID IPV4 ADDRESS" >&2
+            exit 1
+          fi
         '';
       };
       harmonia = {
