@@ -33,15 +33,6 @@
       "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
       "720-kernel-initrd.pcrlock" ])
       // {
-        "bind/zandoodle.me.uk/zonefile".text = ''
-          $TTL 600
-          @ SOA dns zandoodle.me.uk. 1 3600 1200 604800 600
-          @ NS dns
-          $INCLUDE /var/lib/ddns/zonefile @
-          @ CAA 128 issue "letsencrypt.org;validationmethods=dns-01"
-          @ CAA 128 issuewild ";"
-          $INCLUDE /var/lib/ddns/zonefile dns
-        '';
         "bind/named.conf".source = config.services.bind.configFile;
       };
     systemPackages = with pkgs; [
@@ -84,14 +75,6 @@
         tailscale0 = {
           allowedTCPPorts = [ 22 53 3000 25565 ];
           allowedUDPPorts = [ 53 24454 ];
-        };
-        eno1-web = {
-          allowedTCPPorts = [ 53 ];
-          allowedUDPPorts = [ 53 ];
-        };
-        vrf-web = {
-          allowedTCPPorts = [ 53 ];
-          allowedUDPPorts = [ 53 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -222,13 +205,6 @@
           file = "/run/zone/home/zonefile";
           master = true;
           slaves = [ "any" ];
-        };
-        "zandoodle.me.uk" = {
-          file = "/var/lib/named/zandoodle.me.uk/zonefile";
-          master = true;
-          extraConfig = ''
-            dnssec-policy default;
-          '';
         };
       };
     };
@@ -378,23 +354,11 @@
       '';
     };
     unbound = {
-      package = pkgs.unbound-with-systemd.overrideAttrs (
-        { patches ? [], ... }: {
-          patches = patches ++ [
-            ./0001-Match-address-when-searching-for-systemd-sockets.patch
-          ];
-        });
       resolveLocalQueries = false;
       settings = {
         server = {
           do-not-query-localhost = false;
-          interface = ["127.0.0.52" "192.168.1.200"];
-          interface-action = [
-            "192.168.1.200 allow_setrd"
-          ];
-          interface-view = [
-            "192.168.1.200 web"
-          ];
+          interface = ["127.0.0.52"];
           trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
           (lib.attrNames config.services.zones.home.ksks);
           use-systemd = true;
@@ -407,20 +371,6 @@
           {
             name = "max.home.arpa";
             stub-addr = "127.0.0.1@54";
-          }
-          {
-            name = "zandoodle.me.uk";
-            stub-addr = "127.0.0.1@54";
-            stub-no-cache = true;
-          }
-        ];
-        view = [
-          {
-            name = "web";
-            local-zone = [
-              ". refuse"
-              "zandoodle.me.uk transparent"
-            ];
           }
         ];
       };
@@ -690,8 +640,6 @@
           BindReadOnlyPaths = [
             "/run/systemd/journal/dev-log"
             "/run/zone/home"
-            "/var/lib/ddns"
-            "${config.environment.etc."bind/zandoodle.me.uk/zonefile".source}:/var/lib/named/zandoodle.me.uk/zonefile"
           ];
           CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
           ConfigurationDirectory = "bind";
@@ -717,7 +665,6 @@
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           StateDirectory = [
-            "named/zandoodle.me.uk"
             "named/keys"
           ];
           SystemCallArchitectures = "native";
@@ -1081,10 +1028,6 @@
       systemd-resolved.restartTriggers = [
         config.environment.etc."dnssec-trust-anchors.d/home.positive".source
       ];
-      unbound = {
-        after = [ "local-dns.socket" "web-dns.socket" ];
-        wants = [ "local-dns.socket" "web-dns.socket" ];
-      };
       bind-reload = {
         after = [ "bind.service" "zone-home.service" ];
         confinement = {
@@ -1187,28 +1130,6 @@
         };
         wantedBy = [ "sys-subsystem-net-devices-ztmjfp7kiq.device" ];
       };
-      "web-dns" = {
-        description = "eno1-web specific DNS socket";
-        socketConfig = {
-          ListenStream = "192.168.1.200:53";
-          ListenDatagram = "192.168.1.200:53";
-          FreeBind = true;
-          TriggerLimitIntervalSec = 0;
-          BindToDevice = "eno1-web";
-          Service = "unbound.service";
-        };
-      };
-      "local-dns" = {
-        description = "local DNS socket";
-        socketConfig = {
-          ListenStream = "127.0.0.52:53";
-          ListenDatagram = "127.0.0.52:53";
-          FreeBind = true;
-          TriggerLimitIntervalSec = 0;
-          BindToDevice = "lo";
-          Service = "unbound.service";
-        };
-      };
     };
     targets = {
       latest-system-restart = {
@@ -1234,12 +1155,6 @@
         timerConfig = {
           OnCalendar = "daily UTC";
           Unit = "zone-home.target";
-        };
-        wantedBy = [ "timers.target" ];
-      };
-      get-IP-address = {
-        timerConfig = {
-          OnUnitActiveSec = "1h";
         };
         wantedBy = [ "timers.target" ];
       };
