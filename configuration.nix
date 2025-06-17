@@ -700,7 +700,6 @@
           authenticator
           btop
           cargo-watch
-          ungoogled-chromium
           comma
           devcontainer
           dig
@@ -714,21 +713,16 @@
           file
           firmware-manager
           gcc
-          pkgsCross.aarch64-multiplatform.buildPackages.gcc
-          pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc
-          pkgsCross.riscv32.buildPackages.gcc
-          pkgsCross.riscv64.buildPackages.gcc
           gdb
-          pkgsCross.aarch64-multiplatform.buildPackages.gdb
-          pkgsCross.armv7l-hf-multiplatform.buildPackages.gdb
-          pkgsCross.riscv32.buildPackages.gdb
-          pkgsCross.riscv64.buildPackages.gdb
           ghex
           gnome-tweaks
           graphviz
           gtkterm
           headsetcontrol
           htop
+          inputs.nixos-kexec.packages.x86_64-linux.default
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
           keepassxc
           ldns.examples
           ldns.man
@@ -736,27 +730,31 @@
           linux-manual
           lshw
           lsof
-          (man-pages.overrideAttrs ({patches ? [], ...}: {
-            patches = patches ++ [ ./fs-manpages.patch ];
-          }))
           man-pages-posix
+          (man-pages.overrideAttrs (
+            { patches ? [], ... }: {
+              patches = patches ++ [ ./fs-manpages.patch ];
+            }))
+          mixxx
           nix-du
           nix-top
-          inputs.nixos-kexec.packages.x86_64-linux.default
-          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
-          mixxx
           nmap
           nodejs
           notepadqq
           ollama
-          (writeShellScriptBin "ollama-pc" ''
-            OLLAMA_HOST=172.28.13.156:11434 exec ${lib.getExe ollama} "$@"
-          '')
           openssl
           oversteer
           p7zip
           passt
           pioneer
+          pkgsCross.aarch64-multiplatform.buildPackages.gcc
+          pkgsCross.aarch64-multiplatform.buildPackages.gdb
+          pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc
+          pkgsCross.armv7l-hf-multiplatform.buildPackages.gdb
+          pkgsCross.riscv32.buildPackages.gcc
+          pkgsCross.riscv32.buildPackages.gdb
+          pkgsCross.riscv64.buildPackages.gcc
+          pkgsCross.riscv64.buildPackages.gdb
           plover.dev
           podman-compose
           powertop
@@ -765,19 +763,19 @@
           qemu
           qpdfview
           rare
-          ripgrep
           rhythmbox
+          ripgrep
           rustup
           shellcheck
           signal-desktop
           simutrans
           slirp4netns
-          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
           sshfs
           tea
           teams-for-linux
           texliveFull
           tpm2-tools
+          ungoogled-chromium
           usbutils
           vdrift
           vim
@@ -785,25 +783,28 @@
           (vscode-with-extensions.override {
             vscode = vscodium;
             vscodeExtensions =
-              let exts = inputs.vscode-extensions.extensions.${system}.vscode-marketplace; in
-                builtins.attrValues {
-                  inherit (exts.erlang-ls) erlang-ls;
-                  inherit (exts.rust-lang) rust-analyzer;
-                  inherit (exts.haskell) haskell;
-                  inherit (exts.justusadam) language-haskell;
-                  inherit (exts.jnoortheen) nix-ide;
-                  inherit (exts.maelvalais) autoconf;
-                  inherit (exts.prince781) vala;
-                  inherit (exts.theumletteam) umlet;
-                };
-          })
+              let exts = inputs.vscode-extensions.extensions.${system}.vscode-marketplace;
+              in builtins.attrValues {
+                inherit (exts.erlang-ls) erlang-ls;
+                inherit (exts.rust-lang) rust-analyzer;
+                inherit (exts.haskell) haskell;
+                inherit (exts.justusadam) language-haskell;
+                inherit (exts.jnoortheen) nix-ide;
+                inherit (exts.maelvalais) autoconf;
+                inherit (exts.prince781) vala;
+                inherit (exts.theumletteam) umlet;
+              };
+            })
           w3m
           watchexec
           whatsapp-for-linux
-          winetricks
           wineWowPackages.full
+          winetricks
           wireshark
           wl-clipboard
+          (writeShellScriptBin "ollama-pc" ''
+            OLLAMA_HOST=172.28.13.156:11434 exec ${lib.getExe ollama} "$@"
+          '')
           xclip
           xorg.xhost
           zgrviewer
