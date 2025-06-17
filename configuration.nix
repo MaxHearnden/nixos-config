@@ -724,8 +724,8 @@
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
           keepassxc
+          ldns
           ldns.examples
-          ldns.man
           libreoffice-fresh
           linux-manual
           lshw
@@ -763,6 +763,7 @@
           qemu
           qpdfview
           rare
+          rdap
           rhythmbox
           ripgrep
           rustup
@@ -798,6 +799,7 @@
           w3m
           watchexec
           whatsapp-for-linux
+          whois
           wineWowPackages.full
           winetricks
           wireshark
