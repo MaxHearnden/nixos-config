@@ -647,7 +647,7 @@
         "Z /var/lib/zerotier-one - zerotierd zerotierd"
         "d /var/lib/zerotier-one/networks.p 700 zerotierd zerotierd"
         "v /home/max/build 755 max users"
-        "d /nix/var/nix/builds 755"
+        "d /nix/var/nix/builds 755 root root 7d"
       ] ++ map (netId: "f /var/lib/zerotier-one/networks.p/${netId}.conf 700 zerotierd zerotierd") config.services.zerotierone.joinNetworks;
     };
     user = {
