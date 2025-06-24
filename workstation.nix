@@ -953,7 +953,7 @@
         script = ''
           cd /run/nixos-upgrade-all
 
-          git pull --single-branch \
+          git clone --single-branch \
             gitea@max-nixos-workstation-zerotier/zandoodle/nixos-config main
 
           cd nixos-config
