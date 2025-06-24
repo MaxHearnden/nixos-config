@@ -132,6 +132,7 @@
     settings = {
       allowed-users = [ "max" "nix-gc" ];
       auto-optimise-store = true;
+      build-dir = "/nix/var/nix/builds";
       experimental-features = [
         "nix-command"
         "flakes"
@@ -646,6 +647,7 @@
         "Z /var/lib/zerotier-one - zerotierd zerotierd"
         "d /var/lib/zerotier-one/networks.p 700 zerotierd zerotierd"
         "v /home/max/build 755 max users"
+        "d /nix/var/nix/builds 755"
       ] ++ map (netId: "f /var/lib/zerotier-one/networks.p/${netId}.conf 700 zerotierd zerotierd") config.services.zerotierone.joinNetworks;
     };
     user = {
