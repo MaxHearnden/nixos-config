@@ -956,6 +956,8 @@
           git pull --single-branch \
             gitea@max-nixos-workstation-zerotier/zandoodle/nixos-config main
 
+          cd nixos-config
+
           git checkout -b update
 
           nix flake update --commit-lock-file
