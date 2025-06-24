@@ -954,7 +954,7 @@
           cd /run/nixos-upgrade-all
 
           git clone --single-branch \
-            gitea@max-nixos-workstation-zerotier/zandoodle/nixos-config main
+            gitea@max-nixos-workstation-zerotier:zandoodle/nixos-config main
 
           cd nixos-config
 
