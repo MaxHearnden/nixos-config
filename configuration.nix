@@ -512,7 +512,6 @@
           CacheDirectoryMode = "0700";
           CapabilityBoundingSet = "CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER CAP_SYS_PTRACE";
           DeviceAllow = "/dev/kvm";
-          Environment = [ "XDG_CACHE_HOME=%C" ];
           NoNewPrivileges = true;
           PrivateDevices = true;
           ProtectClock = true;
@@ -529,6 +528,7 @@
           SystemCallFilter = [ "@debug @system-service @mount @sandbox sethostname setdomainname" ];
           SystemCallLog = "~@system-service @mount @sandbox sethostname setdomainname";
         };
+        environment.XDG_CACHE_HOME = "%C";
       };
       nscd = {
         serviceConfig = {
