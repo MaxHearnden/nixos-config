@@ -56,6 +56,7 @@
         };
       '';
     };
+    sessionVariables.SYSTEMD_EDITOR = "nvim";
     shellAliases = {
       sda = "systemd-analyze security --no-pager";
       rpush = "git pull --rebase && git push";
