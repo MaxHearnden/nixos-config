@@ -139,6 +139,7 @@
         "cgroups"
       ];
       flake-registry = null;
+      store = "daemon";
       use-cgroups = true;
     };
   };
@@ -512,6 +513,10 @@
           CacheDirectoryMode = "0700";
           CapabilityBoundingSet = "CAP_CHOWN CAP_SETUID CAP_SETGID CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_KILL CAP_FOWNER CAP_SYS_PTRACE";
           DeviceAllow = "/dev/kvm";
+          ExecStart = [
+            ""
+            "@${lib.getExe' config.nix.package "nix-daemon"} nix-daemon --daemon --option store local"
+          ];
           NoNewPrivileges = true;
           PrivateDevices = true;
           ProtectClock = true;
