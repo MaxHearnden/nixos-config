@@ -234,6 +234,10 @@
             .virtfs_metadata
           '';
         };
+        user = {
+          email = "maxoscarhearnden@gmail.com";
+          name = "MaxHearnden";
+        };
       };
     };
     java = {
