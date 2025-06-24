@@ -953,7 +953,9 @@
         script = ''
           cd /run/nixos-upgrade-all
 
-          git clone --single-branch \
+          git -c \
+            "core.sshCommand=ssh -i /var/lib/nixos-upgrade-all/id_ed25519" \
+            clone --single-branch \
             gitea@max-nixos-workstation-zerotier:zandoodle/nixos-config main
 
           cd nixos-config
