@@ -363,6 +363,7 @@
         {
           server = {
             domain-insecure = "test.";
+            ede = true;
             local-zone = [
               "home.arpa. nodefault"
               "test. nodefault"
