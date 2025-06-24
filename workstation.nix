@@ -935,7 +935,7 @@
           RuntimeDirectory = "nixos-upgrade-all";
           RuntimeDirectoryMode = "0700";
           StateDirectory = "nixos-upgrade-all";
-          StateDirectoryMode = "0700";
+          StateDirectoryMode = "0755";
         };
         path = with pkgs; [
           coreutils
