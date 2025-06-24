@@ -931,6 +931,12 @@
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
         onSuccess = [ "latest-system-restart.target" "zone-home.target" ];
+        serviceConfig = {
+          RuntimeDirectory = "nixos-upgrade-all";
+          RuntimeDirectoryMode = "0700";
+          StateDirectory = "nixos-upgrade-all";
+          StateDirectoryMode = "0700";
+        };
         path = with pkgs; [
           coreutils
           gnutar
@@ -945,11 +951,42 @@
         ];
         restartIfChanged = false;
         script = ''
-          config_all="$(nix build git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-config#systems-with-zone --no-link --print-out-paths --refresh --no-write-lock-file --option store daemon)"
+          cd /run/nixos-upgrade-all
+
+          git pull --single-branch \
+            gitea@max-nixos-workstation-zerotier/zandoodle/nixos-config main
+
+          git checkout -b update
+
+          nix flake update --commit-lock-file
+
+          if config_all="$(nix build \
+            git+file:///run/nixos-upgrade-all/nixos-config#systems-with-zone \
+            --no-link --print-out-paths --refresh --no-write-lock-file \
+            --option store daemon)"; then
+            git checkout main
+            git merge --ff update
+            git -c \
+              "core.sshCommand=ssh -i /var/lib/nixos-upgrade-all/id_ed25519" \
+              push
+            update_failed=no
+          else
+            git checkout main
+            config_all="$(nix build \
+              git+file:///run/nixos-upgrade-all/nixos-config#systems-with-zone \
+              --no-link --print-out-paths --refresh --no-write-lock-file \
+              --option store daemon)"
+            update_failed=yes
+            echo "Failed to update lock file" >&2
+          fi
+
           nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
-          config="$(readlink -e "''${config_all}/systems/${config.networking.hostName}")"
+
+          config="$(readlink -e \
+            "''${config_all}/systems/${config.networking.hostName}")"
           nix-env -p /nix/var/nix/profiles/system --set "''${config}"
-          booted=$(readlink /run/booted-system/kernel /run/booted-system/kernel-modules)
+
+          booted=$(readlink /run/booted-system/{kernel,kernel-modules})
           current=$(readlink "''${config}/kernel" "''${config}/kernel-modules")
           if [ "''${booted}" != "''${current}" ]
           then
@@ -963,6 +1000,10 @@
             else
               "''${config}/bin/switch-to-configuration" switch
             fi
+          fi
+          if [ "''${update_failed}" = yes ]; then
+            echo "Failed to update lock file" >&2
+            exit 2
           fi
         '';
         startAt = "04:15";
