@@ -1007,7 +1007,8 @@
           fi
           if [ "''${update_failed}" = yes ]; then
             echo "Failed to update lock file" >&2
-            exit 2
+            # Temporary failure
+            exit 75
           fi
         '';
         startAt = "04:15";
