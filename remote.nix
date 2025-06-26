@@ -48,7 +48,6 @@
         };
       };
     };
-    resolved.enable = false;
     unbound.settings = {
       stub-zone = [
         {

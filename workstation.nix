@@ -62,6 +62,11 @@
           pc.zerotier AAAA fc9c:6b89:eed9:c2b9:c567::1
           $INCLUDE /nix/var/nix/profiles/all/zonefile
         '';
+        "resolv.conf".text = ''
+          nameserver 127.0.0.53
+          options edns0 trust-ad
+          search max.home.arpa home.arpa
+        '';
       };
     systemPackages = with pkgs; [
       gtk3
@@ -381,20 +386,10 @@
     ratbagd = {
       enable = true;
     };
-    resolved = {
-      dnssec = "true";
-      extraConfig = ''
-        DNS=127.0.0.52%lo
-        Domains=max.home.arpa
-        Cache=no
-      '';
-    };
     unbound = {
       resolveLocalQueries = false;
       settings = {
-        server = {
-          interface = ["127.0.0.52"];
-        };
+        server.interface = ["127.0.0.53"];
         stub-zone = [
           {
             name = "home.arpa";
@@ -1023,9 +1018,6 @@
         };
         wantedBy = [ "multi-user.target" ];
       };
-      systemd-resolved.restartTriggers = [
-        config.environment.etc."dnssec-trust-anchors.d/home.positive".source
-      ];
       knot-reload = {
         after = [ "knot.service" ];
         confinement.enable = true;

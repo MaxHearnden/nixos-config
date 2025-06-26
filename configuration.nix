@@ -344,6 +344,7 @@
         .fail
       '';
     };
+    resolved.enable = false;
     sshd = {
       enable = true;
     };
