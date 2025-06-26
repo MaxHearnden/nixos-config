@@ -4,7 +4,6 @@
   imports = [
     ./configuration.nix
     ./hardware-configuration/workstation.nix
-    ./zone.nix
   ];
   boot = {
     loader = {
@@ -33,7 +32,6 @@
       "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
       "720-kernel-initrd.pcrlock" ])
       // {
-        "bind/named.conf".source = config.services.bind.configFile;
         "knot/max.home.arpa.zone".text = ''
           @ SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
           60 * 60)} 1800
@@ -99,12 +97,12 @@
       filterForward = true;
       interfaces = {
         ztmjfp7kiq = {
-          allowedTCPPorts = [ 53 54 8080 8081 3000 2049 25565 ];
-          allowedUDPPorts = [ 53 54 24454 ];
+          allowedTCPPorts = [ 53 8080 8081 3000 2049 25565 ];
+          allowedUDPPorts = [ 53 24454 ];
         };
         tailscale0 = {
-          allowedTCPPorts = [ 22 53 54 3000 25565 ];
-          allowedUDPPorts = [ 53 54 24454 ];
+          allowedTCPPorts = [ 22 53 3000 25565 ];
+          allowedUDPPorts = [ 53 24454 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -194,49 +192,6 @@
           extraArguments = "3000 172.28.10.244 3000";
         }
       ];
-    };
-    bind = {
-      enable = true;
-      extraOptions = ''
-        listen-on port 54 { 127.0.0.1; };
-        listen-on-v6 port 54 { ::1; };
-        managed-keys-directory "/var/lib/named/keys";
-        key-directory "/var/lib/named/keys";
-      '';
-      listenOn = [ "172.28.10.244" "100.91.224.22" ];
-      listenOnIpv6 = [
-        "fc9c:6b89:eec5:0d88:e258:0000:0000:0001"
-        "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
-        "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016"
-      ];
-      zones = {
-        "home.arpa" = {
-          file = builtins.toFile "home.arpa" ''
-            @ SOA localhost. nobody.invalid. 1 3600 1200 604800 10800
-            @ NS localhost.
-            max NS dns.max
-            dns.max A 172.28.10.244
-            dns.max AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
-            dns.max AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
-          '';
-          master = true;
-          slaves = [ "any" ];
-        };
-        "maxh" = {
-          file = builtins.toFile "zonefile" ''
-            @ SOA localhost. nobody.invalid. 1 3600 1200 604800 10800
-            @ NS localhost.
-            @ DNAME tailscale.max.home.arpa.
-          '';
-          master = true;
-          slaves = [ "any" ];
-        };
-        "max.home.arpa" = {
-          file = "/run/zone/home/zonefile";
-          master = true;
-          slaves = [ "any" ];
-        };
-      };
     };
     btrbk = {
       instances = {
@@ -363,13 +318,13 @@
         ];
         server = {
           listen = [
-            "127.0.0.1@55"
-            "::1@55"
-            "172.28.10.244@54"
-            "100.91.224.22@54"
-            "fc9c:6b89:eec5:0d88:e258:0000:0000:0001@54"
-            "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258@54"
-            "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016@54"
+            "127.0.0.1@54"
+            "::1@54"
+            "172.28.10.244"
+            "100.91.224.22"
+            "fc9c:6b89:eec5:0d88:e258:0000:0000:0001"
+            "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
+            "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016"
           ];
         };
         zone = [
@@ -440,9 +395,7 @@
         server = {
           do-not-query-localhost = false;
           interface = ["127.0.0.52"];
-          trust-anchor-file = map (key: "/var/lib/zone/home/${key}/.ds")
-          (lib.attrNames config.services.zones.home.ksks);
-          use-systemd = true;
+          trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
         };
         stub-zone = [
           {
@@ -462,46 +415,6 @@
           autoSuspend = false;
         };
       };
-    };
-    zones.home = {
-      zoneLifetime = 60 * 60 * 24 * 3;
-      zskAlgorithms = [ "ed448" "ecdsap384sha384" ];
-      domain = "max.home.arpa";
-      ksks = {
-        max-1 = "ed448";
-        max-2 = "ecdsap384sha384";
-      };
-      signzoneArgs = "-u -b -z sha512";
-      zone = ''
-        max.home.arpa SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
-        60 * 60)} 1800
-        @ NS workstation.zerotier
-        cache CNAME workstation
-        cache.tailscale CNAME workstation.tailscale
-        cache.zerotier CNAME workstation.zerotier
-        dns CNAME workstation
-        dns.tailscale CNAME workstation.tailscale
-        dns.zerotier CNAME workstation.zerotier
-        gitea CNAME workstation
-        minecraft CNAME minecraft.tailscale
-        minecraft.zerotier CNAME workstation.zerotier
-        minecraft.tailscale CNAME workstation.tailscale
-        chromebook CNAME chromebook.zerotier
-        chromebook.zerotier A 172.28.156.146
-        chromebook.zerotier AAAA fc9c:6b89:ee1a:7a70:b542::1
-        chromebook.zerotier AAAA fd80:56c2:e21c:3d4b:c99:931a:7a70:b542
-        workstation CNAME workstation.zerotier
-        workstation.zerotier A 172.28.10.244
-        workstation.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93c5:d88:e258
-        workstation.zerotier AAAA fc9c:6b89:eec5:d88:e258::1
-        workstation.tailscale A 100.91.224.22
-        workstation.tailscale AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
-        pc CNAME pc.zerotier
-        pc.zerotier A 172.28.13.156
-        pc.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567
-        pc.zerotier AAAA fc9c:6b89:eed9:c2b9:c567::1
-      '';
-      zoneFiles = [ "/nix/var/nix/profiles/all/zonefile" ];
     };
   };
   systemd = {
@@ -707,53 +620,6 @@
           SystemCallArchitectures = "native";
           UMask = "0077";
         };
-      };
-      bind = {
-        confinement.enable = true;
-        preStart = lib.mkForce ''
-          if ! [ -f "/etc/bind/rndc.key" ]; then
-            ${config.services.bind.package.out}/bin/rndc-confgen -c \
-              /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
-          fi
-        '';
-        serviceConfig = {
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-          BindReadOnlyPaths = [
-            "/run/systemd/journal/dev-log"
-            "/run/zone/home"
-          ];
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
-          ConfigurationDirectory = "bind";
-          ExecStart = lib.mkForce "${config.services.bind.package.out}/bin/named -c ${config.services.bind.configFile}";
-          Group = "named";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateTmp = true;
-          PrivateUsers = lib.mkForce [];
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          StateDirectory = [
-            "named/keys"
-          ];
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          User = "named";
-        };
-        wants = [ "zone-home.service" ];
-        after = [ "zone-home.service" ];
       };
       btrbk-btrbk = {
         serviceConfig = {
@@ -1013,7 +879,6 @@
         description = "NixOS upgrade all";
         onSuccess = [
           "latest-system-restart.target"
-          "zone-home.target"
           "knot-reload.target"
         ];
         serviceConfig = {
@@ -1159,44 +1024,6 @@
       systemd-resolved.restartTriggers = [
         config.environment.etc."dnssec-trust-anchors.d/home.positive".source
       ];
-      bind-reload = {
-        after = [ "bind.service" "zone-home.service" ];
-        confinement = {
-          enable = true;
-        };
-        serviceConfig = {
-          CapabilityBoundingSet = "";
-          ConfigurationDirectory = "bind";
-          ExecStart = "${lib.getExe' pkgs.bind "rndc"} reload max.home.arpa";
-          Group = "named";
-          IPAddressDeny = "any";
-          IPAddressAllow = "localhost";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateUsers = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          RestrictAddressFamilies = "AF_INET AF_NETLINK";
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          RuntimeDirectoryPreserve = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
-          Type = "oneshot";
-          UMask = "077";
-          User = "named";
-        };
-        wantedBy = [ "zone-home.service" ];
-        wants = [ "bind.service" ];
-      };
       knot-reload = {
         after = [ "knot.service" ];
         confinement.enable = true;
@@ -1324,13 +1151,6 @@
         timerConfig = {
           Persistent = true;
         };
-      };
-      zone-home = {
-        timerConfig = {
-          OnCalendar = "daily UTC";
-          Unit = "zone-home.target";
-        };
-        wantedBy = [ "timers.target" ];
       };
     };
     tmpfiles = {
