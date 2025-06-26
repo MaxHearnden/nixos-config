@@ -393,7 +393,6 @@
       resolveLocalQueries = false;
       settings = {
         server = {
-          do-not-query-localhost = false;
           interface = ["127.0.0.52"];
         };
         stub-zone = [
