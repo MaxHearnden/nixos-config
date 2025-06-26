@@ -60,7 +60,6 @@
           ];
         }
       ];
-      server.trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
     };
   };
   systemd = {

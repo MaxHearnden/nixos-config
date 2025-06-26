@@ -395,7 +395,6 @@
         server = {
           do-not-query-localhost = false;
           interface = ["127.0.0.52"];
-          trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
         };
         stub-zone = [
           {

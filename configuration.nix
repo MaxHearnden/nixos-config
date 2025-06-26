@@ -378,6 +378,7 @@
               "home.arpa. nodefault"
               "test. nodefault"
             ];
+            trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
           };
           stub-zone = [
             {
