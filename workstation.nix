@@ -877,6 +877,10 @@
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
+        onFailure = [
+          "latest-system-restart.target"
+          "knot-reload.target"
+        ];
         onSuccess = [
           "latest-system-restart.target"
           "knot-reload.target"
