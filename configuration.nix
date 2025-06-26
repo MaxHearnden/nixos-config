@@ -273,6 +273,9 @@
     nix-index = {
       enable = true;
     };
+    ssh.extraConfig = ''
+      VerifyHostKeyDNS ask
+    '';
     steam = {
       enable = true;
     };
