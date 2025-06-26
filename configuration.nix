@@ -372,6 +372,7 @@
         })
         {
           server = {
+            do-not-query-localhost = false;
             domain-insecure = "test.";
             ede = true;
             local-zone = [
