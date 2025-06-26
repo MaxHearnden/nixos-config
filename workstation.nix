@@ -34,6 +34,36 @@
       "720-kernel-initrd.pcrlock" ])
       // {
         "bind/named.conf".source = config.services.bind.configFile;
+        "knot/max.home.arpa.zone".text = ''
+          @ SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
+          60 * 60)} 1800
+          @ NS workstation.zerotier
+          cache CNAME workstation
+          cache.tailscale CNAME workstation.tailscale
+          cache.zerotier CNAME workstation.zerotier
+          dns CNAME workstation
+          dns.tailscale CNAME workstation.tailscale
+          dns.zerotier CNAME workstation.zerotier
+          gitea CNAME workstation
+          minecraft CNAME minecraft.tailscale
+          minecraft.zerotier CNAME workstation.zerotier
+          minecraft.tailscale CNAME workstation.tailscale
+          chromebook CNAME chromebook.zerotier
+          chromebook.zerotier A 172.28.156.146
+          chromebook.zerotier AAAA fc9c:6b89:ee1a:7a70:b542::1
+          chromebook.zerotier AAAA fd80:56c2:e21c:3d4b:c99:931a:7a70:b542
+          workstation CNAME workstation.zerotier
+          workstation.zerotier A 172.28.10.244
+          workstation.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93c5:d88:e258
+          workstation.zerotier AAAA fc9c:6b89:eec5:d88:e258::1
+          workstation.tailscale A 100.91.224.22
+          workstation.tailscale AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
+          pc CNAME pc.zerotier
+          pc.zerotier A 172.28.13.156
+          pc.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567
+          pc.zerotier AAAA fc9c:6b89:eed9:c2b9:c567::1
+          $INCLUDE /nix/var/nix/profiles/all/zonefile
+        '';
       };
     systemPackages = with pkgs; [
       gtk3
@@ -69,12 +99,12 @@
       filterForward = true;
       interfaces = {
         ztmjfp7kiq = {
-          allowedTCPPorts = [ 53 8080 8081 3000 2049 25565 ];
-          allowedUDPPorts = [ 53 24454 ];
+          allowedTCPPorts = [ 53 54 8080 8081 3000 2049 25565 ];
+          allowedUDPPorts = [ 53 54 24454 ];
         };
         tailscale0 = {
-          allowedTCPPorts = [ 22 53 3000 25565 ];
-          allowedUDPPorts = [ 53 24454 ];
+          allowedTCPPorts = [ 22 53 54 3000 25565 ];
+          allowedUDPPorts = [ 53 54 24454 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -318,6 +348,57 @@
       settings = {
         bind = "[::1]:8080";
         priority = 50;
+      };
+    };
+    knot = {
+      enable = true;
+      settings = {
+        policy = [
+          {
+            id = "max.home.arpa";
+            manual = true;
+            rrsig-lifetime = "12h";
+            rrsig-refresh = "4h";
+          }
+        ];
+        server = {
+          listen = [
+            "127.0.0.1@55"
+            "::1@55"
+            "172.28.10.244@54"
+            "100.91.224.22@54"
+            "fc9c:6b89:eec5:0d88:e258:0000:0000:0001@54"
+            "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258@54"
+            "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016@54"
+          ];
+        };
+        zone = [
+          {
+            domain = "home.arpa";
+            file = builtins.toFile "home.arpa.zone" ''
+              @ SOA localhost. nobody.invalid. 0 3600 1200 604800 10800
+              @ NS localhost.
+              max NS dns.max
+              dns.max A 172.28.10.244
+              dns.max AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
+              dns.max AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
+            '';
+            journal-content = "all";
+            zonefile-load = "difference-no-serial";
+            zonefile-sync = -1;
+          }
+          {
+            dnssec-signing = true;
+            dnssec-policy = "max.home.arpa";
+            domain = "max.home.arpa";
+            file = "/etc/knot/max.home.arpa.zone";
+            semantic-checks = true;
+            journal-content = "all";
+            zonefile-load = "difference-no-serial";
+            zonefile-sync = -1;
+            zonemd-generate = "zonemd-sha512";
+          }
+        ];
       };
     };
     minecraft-server = {
@@ -930,7 +1011,11 @@
       nixos-upgrade-all = {
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
-        onSuccess = [ "latest-system-restart.target" "zone-home.target" ];
+        onSuccess = [
+          "latest-system-restart.target"
+          "zone-home.target"
+          "knot-reload.target"
+        ];
         serviceConfig = {
           RuntimeDirectory = "nixos-upgrade-all";
           RuntimeDirectoryMode = "0700";
@@ -1112,6 +1197,43 @@
         wantedBy = [ "zone-home.service" ];
         wants = [ "bind.service" ];
       };
+      knot-reload = {
+        after = [ "knot.service" ];
+        confinement.enable = true;
+        requires = [ "knot.service" ];
+        restartTriggers = map (zone: config.environment.etc."knot/${zone}".source) [
+          "max.home.arpa.zone"
+        ];
+        serviceConfig = {
+          BindReadOnlyPaths = "/run/knot/knot.sock";
+          CapabilityBoundingSet = "";
+          ExecStart = "${lib.getExe' pkgs.knot-dns "knotc"} zone-reload";
+          Group = "knot";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateNetwork = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemainAfterExit = true;
+          RemoveIPC = true;
+          RestrictAddressFamilies = "AF_UNIX";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+          Type = "oneshot";
+          User = "knot";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
     };
     sockets = {
       harmonia-proxy = {
@@ -1178,6 +1300,12 @@
       };
     };
     targets = {
+      knot-reload = {
+        description = "Restart knot-reload service";
+        conflicts = [ "knot-reload.service" ];
+        unitConfig.StopWhenUnneeded = true;
+        onSuccess = [ "knot-reload.service" ];
+      };
       latest-system-restart = {
         description = "Restart latest-system service";
         conflicts = [ "latest-system.service" ];
