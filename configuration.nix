@@ -274,7 +274,7 @@
       enable = true;
     };
     ssh.extraConfig = ''
-      VerifyHostKeyDNS ask
+      VerifyHostKeyDNS yes
     '';
     steam = {
       enable = true;
