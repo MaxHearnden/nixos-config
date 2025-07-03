@@ -36,7 +36,7 @@
       instances = {
         btrbk = {
           settings = {
-            backend_remote = "btrfs-progs-sudo";
+            backend_remote = "btrfs-progs-doas";
             volume = {
               "/nexus" = {
                 target = {
