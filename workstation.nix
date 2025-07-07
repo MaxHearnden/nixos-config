@@ -396,7 +396,7 @@
         server = {
           domain-insecure = ["broadband"];
           interface = ["127.0.0.53"];
-          verbosity = 4;
+          qname-minimisation = false;
         };
         stub-zone = [
           {
