@@ -359,7 +359,8 @@
       enable = true;
       # Pc is on an unblocked network
       settings = lib.mkMerge [
-        (lib.mkIf (config.networking.hostName != "max-nixos-pc") {
+        (lib.mkIf (config.networking.hostName != "max-nixos-pc" &&
+        config.networking.hostName != "max-nixos-workstation") {
           server = {
             qname-minimisation = false;
             tls-use-sni = false;
@@ -373,7 +374,7 @@
         {
           server = {
             do-not-query-localhost = false;
-            domain-insecure = "test.";
+            domain-insecure = ["test."];
             ede = true;
             local-zone = [
               "home.arpa. nodefault"

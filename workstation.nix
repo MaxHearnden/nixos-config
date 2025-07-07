@@ -389,7 +389,15 @@
     unbound = {
       resolveLocalQueries = false;
       settings = {
-        server.interface = ["127.0.0.53"];
+        forward-zone = {
+          name = ".";
+          forward-host = [ "orion.broadband" ];
+        };
+        server = {
+          domain-insecure = ["broadband"];
+          interface = ["127.0.0.53"];
+          verbosity = 4;
+        };
         stub-zone = [
           {
             name = "home.arpa";
@@ -398,6 +406,10 @@
           {
             name = "max.home.arpa";
             stub-addr = "127.0.0.1@54";
+          }
+          {
+            name = "broadband";
+            stub-addr = "192.168.1.1";
           }
         ];
       };
