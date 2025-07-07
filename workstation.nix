@@ -391,7 +391,7 @@
       settings = {
         forward-zone = {
           name = ".";
-          forward-host = [ "orion.broadband" ];
+          forward-host = [ "orion.broadband@55" ];
         };
         server = {
           domain-insecure = ["broadband"];
