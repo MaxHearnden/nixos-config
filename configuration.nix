@@ -756,7 +756,6 @@
             }))
           mixxx
           nix-du
-          nix-top
           nmap
           nodejs
           notepadqq
