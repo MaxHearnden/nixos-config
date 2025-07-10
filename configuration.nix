@@ -802,7 +802,7 @@
           (vscode-with-extensions.override {
             vscode = vscodium;
             vscodeExtensions =
-              let exts = inputs.vscode-extensions.extensions.${system}.vscode-marketplace;
+              let exts = inputs.vscode-extensions.extensions.${config.nixpkgs.system}.vscode-marketplace;
               in builtins.attrValues {
                 inherit (exts.erlang-ls) erlang-ls;
                 inherit (exts.rust-lang) rust-analyzer;
@@ -815,8 +815,8 @@
               };
             })
           w3m
+          wasistlos
           watchexec
-          whatsapp-for-linux
           whois
           wineWowPackages.full
           winetricks
