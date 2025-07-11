@@ -134,9 +134,10 @@
       auto-optimise-store = true;
       build-dir = "/nix/var/nix/builds";
       experimental-features = [
-        "nix-command"
-        "flakes"
+        "ca-derivations"
         "cgroups"
+        "flakes"
+        "nix-command"
       ];
       flake-registry = null;
       store = "daemon";
