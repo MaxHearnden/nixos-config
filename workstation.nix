@@ -391,7 +391,7 @@
       settings = {
         forward-zone = {
           name = ".";
-          forward-host = [ "orion.broadband@55" ];
+          forward-addr = [ "192.168.4.1@55" ];
         };
         server = {
           domain-insecure = ["broadband"];
@@ -437,6 +437,8 @@
             SendHostname = false;
             UseHostname = false;
             UseMTU = true;
+            UseRoutes = false;
+            UseGateway = false;
           };
           dhcpV6Config = {
             SendHostname = false;
@@ -453,6 +455,7 @@
             UseDomains = false;
             DNSDefaultRoute = false;
           };
+          vlan = [ "shadow-lan" ];
         };
         "10-eno1-web" = {
           matchConfig = {
@@ -509,6 +512,10 @@
             }
           ];
           DHCP = "no";
+        };
+        "10-shadow-lan" = {
+          DHCP = "yes";
+          matchConfig.Name = "shadow-lan";
         };
         "10-sl" = {
           address = ["192.168.3.1/24"];
@@ -586,6 +593,13 @@
             macvlanConfig = {
               Mode = "bridge";
             };
+          };
+          "10-shadow-lan" = {
+            netdevConfig = {
+              Kind = "vlan";
+              Name = "shadow-lan";
+            };
+            vlanConfig.Id = 20;
           };
           "10-vrf-web" = {
             netdevConfig = {
