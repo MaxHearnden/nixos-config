@@ -141,10 +141,10 @@
       unmanaged = [
         "eno1"
         "enp2s0"
-        "enp3s0f0"
-        "enp3s0f1"
-        "enp3s0f2"
-        "enp3s0f3"
+        "ens4f0"
+        "ens4f1"
+        "ens4f2"
+        "ens4f3"
         "sl*"
       ];
     };
