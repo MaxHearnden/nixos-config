@@ -437,8 +437,6 @@
             SendHostname = false;
             UseHostname = false;
             UseMTU = true;
-            UseRoutes = false;
-            UseGateway = false;
           };
           dhcpV6Config = {
             SendHostname = false;
@@ -515,6 +513,10 @@
         };
         "10-shadow-lan" = {
           DHCP = "yes";
+          dhcpV4Config = {
+            UseRoutes = false;
+            UseGateway = false;
+          };
           matchConfig.Name = "shadow-lan";
         };
         "10-sl" = {
