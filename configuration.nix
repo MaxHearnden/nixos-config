@@ -381,6 +381,29 @@
               "home.arpa. nodefault"
               "test. nodefault"
             ];
+            private-address = [
+              "10.0.0.0/8"
+              "100.64.0.0/10"
+              "127.0.0.0/8"
+              "169.254.0.0/16"
+              "172.16.0.0/12"
+              "192.168.0.0/16"
+              "::ffff:10.0.0.0/104"
+              "::ffff:100.64.0.0/106"
+              "::ffff:127.0.0.0/104"
+              "::ffff:169.254.0.0/112"
+              "::ffff:172.16.0.0/108"
+              "::ffff:192.168.0.0/112"
+              "::1/128"
+              "fc00::/7"
+              "fe80::/10"
+            ];
+            private-domain = [
+              "broadband"
+              "compsoc-dev.com"
+              "home.arpa"
+              "zandoodle.me.uk"
+            ];
             trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
           };
           stub-zone = [
