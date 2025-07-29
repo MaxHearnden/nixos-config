@@ -36,35 +36,39 @@
         value = {
           source = "/run/booted-system/${file}";
         };
-      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock" "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock" "720-kernel-initrd.pcrlock" ]);
+      }) [ "650-systemd-boot.pcrlock" "670-kernel.pcrlock"
+      "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
+      "720-kernel-initrd.pcrlock" ])
+      // {
+        "tayga/tayga.conf".text = ''
+          tun-device tayga
+          ipv4-addr 192.0.0.2
+          ipv6-addr fd64::1
+          map 192.0.0.1 fd64::2
+          prefix 64:ff9b::/96
+        '';
+      };
   };
   hardware.nvidia.open = true;
   networking = {
     firewall = {
       extraForwardRules = ''
-        udp dport 53 reject
-        tcp dport {53, 80} reject
+        iifname tayga oifname shadow-lan accept
       '';
       filterForward = true;
-      interfaces = {
-        usb = {
-          allowedTCPPorts = [ 53 ];
-          allowedUDPPorts = [ 53 67 ];
-        };
-        ztmjfp7kiq = {
-          allowedTCPPorts = [ 8080 9090 11434 ];
-        };
-      };
+      interfaces.ztmjfp7kiq.allowedTCPPorts = [ 8080 9090 11434 ];
     };
     hostName = "max-nixos-pc";
-    nat = {
-      enable = true;
-      externalInterface = "eno1";
-      internalInterfaces = [
-        "usb"
-      ];
-    };
     networkmanager.enable = false;
+    nftables.tables.tayga-nat66 = {
+      family = "ip6";
+      content = ''
+        chain tayga-nat {
+          type nat hook postrouting priority srcnat; policy accept
+          iifname tayga oifname shadow-lan masquerade
+        }
+      '';
+    };
     useNetworkd = true;
   };
   security = {
@@ -132,43 +136,6 @@
         };
       };
     };
-    dbus = {
-      packages = [
-        (pkgs.writeTextDir "share/dbus-1/system.d/dnsmasq-rootless.conf" ''
-          <!DOCTYPE busconfig PUBLIC
-           "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
-           "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
-          <busconfig>
-                  <policy user="dnsmasq">
-                          <allow own="uk.org.thekelleys.dnsmasq"/>
-                          <allow send_destination="uk.org.thekelleys.dnsmasq"/>
-                  </policy>
-          </busconfig>
-        '')
-      ];
-    };
-    dnsmasq = {
-      enable = true;
-      resolveLocalQueries = true;
-      settings = {
-        bind-dynamic = true;
-        dnssec = true;
-        domain = "usb.home.arpa";
-        dhcp-fqdn = true;
-        dhcp-range = [ "192.168.2.20,192.168.2.250" ];
-        conf-file =
-          "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
-        except-interface = "lo";
-        interface = "usb";
-        no-hosts = true;
-        dhcp-rapid-commit = true;
-        server = ["127.0.0.1"];
-        trust-anchor = [
-          "max.home.arpa.,6286,16,2,E5D985578B9746BFE1C6FF47E87E27F9BE9942BF947C7AE18C448C86C303DB0E"
-          "max.home.arpa.,5629,14,4,663B18A6E58159EA67190937115450B87C60222A4F8D13395ACF3B091CF6155E4BE365D636452E9427C7818866BE9D65"
-        ];
-      };
-    };
     ollama = {
       enable = true;
       host = "172.28.13.156";
@@ -180,7 +147,7 @@
     unbound.settings = {
       forward-zone = {
         name = ".";
-        forward-host = [ "orion.broadband@55" ];
+        forward-addr = [ "fd80:1::1@55" ];
       };
       server = {
         domain-insecure = [ "broadband" ];
@@ -202,6 +169,7 @@
   };
   systemd = {
     network = {
+      config.networkConfig.IPv6Forwarding = true;
       enable = true;
       links = {
         "10-eno1" = {
@@ -216,17 +184,46 @@
             TCPSegmentationOffload = false;
           };
         };
-        "10-usb" = {
-          matchConfig.MACAddress = "00:e0:4c:37:03:20";
-          linkConfig.Name = "usb";
+      };
+      netdevs = {
+        "10-shadow-lan" = {
+          netdevConfig = {
+            Kind = "vlan";
+            Name = "shadow-lan";
+          };
+          vlanConfig.Id = 20;
+        };
+        "10-tayga" = {
+          netdevConfig = {
+            Kind = "tun";
+            Name = "tayga";
+          };
+          tunConfig = {
+            Group = "tayga";
+            User = "tayga";
+          };
         };
       };
-      networks."10-usb" = {
-        address = [ "192.168.2.1/24" ];
-        DHCP = "no";
-        matchConfig.MACAddress = "00:e0:4c:37:03:20";
-        networkConfig = {
-          ConfigureWithoutCarrier = true;
+      networks = {
+        "10-eno1" = {
+          DHCP = "ipv6";
+          matchConfig.Name = "eno1";
+          networkConfig.IPv6AcceptRA = true;
+          vlan = [ "shadow-lan" ];
+        };
+        "10-shadow-lan" = {
+          DHCP = "ipv6";
+          matchConfig.Name = "shadow-lan";
+          networkConfig.IPv6AcceptRA = true;
+        };
+        "10-tayga" = {
+          address = [ "192.0.0.1/30" "fd64::/64" ];
+          matchConfig.Name = "tayga";
+          routes = [
+            {
+              Destination = "0.0.0.0/0";
+            }
+          ];
         };
       };
       wait-online.enable = lib.mkForce true;
@@ -317,6 +314,46 @@
           enable = true;
         };
       };
+      tayga = {
+        after = [ "sys-subsystem-net-devices-tayga.device" ];
+        confinement.enable = true;
+        restartTriggers = [ config.environment.etc."tayga/tayga.conf".source ];
+        serviceConfig = {
+          BindReadOnlyPaths = [
+            "${config.environment.etc."tayga/tayga.conf".source}:/etc/tayga/tayga.conf"
+            "/dev/net/tun"
+          ];
+          CapabilityBoundingSet = "";
+          DeviceAllow = "/dev/net/tun";
+          ExecStart = "${lib.getExe pkgs.tayga} -d -c /etc/tayga/tayga.conf";
+          Group = "tayga";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateTmp = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          Restart = "on-failure";
+          RestrictAddressFamilies = "AF_INET";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          StateDirectory = "tayga";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+          UMask = "077";
+          User = "tayga";
+        };
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "sys-subsystem-net-devices-tayga.device" ];
+      };
       unbound = {
         after = [ "zone-home-test.service" ];
         wants = [ "zone-home-test.service" ];
@@ -338,6 +375,7 @@
   ];
 
   users = {
+    groups.tayga = {};
     users = {
       btrbk = {
         packages = with pkgs; [
@@ -348,6 +386,10 @@
         packages = with pkgs; [
           piper
         ];
+      };
+      tayga = {
+        isSystemUser = true;
+        group = "tayga";
       };
     };
   };
