@@ -67,6 +67,13 @@
           options edns0 trust-ad
           search max.home.arpa home.arpa
         '';
+        "tayga/tayga.conf".text = ''
+          tun-device tayga
+          ipv4-addr 192.0.0.2
+          ipv6-addr fd64::1
+          map 192.0.0.1 fd64::2
+          prefix 64:ff9b::/96
+        '';
       };
     systemPackages = with pkgs; [
       gtk3
@@ -118,6 +125,9 @@
           allowedUDPPorts = [ 53 69 ];
         };
       };
+      extraForwardRules = ''
+        iifname tayga oifname shadow-lan accept
+      '';
       extraInputRules = ''
         iifname {"enp2s0", "sl*"} udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
         ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
@@ -148,19 +158,30 @@
         "sl*"
       ];
     };
-    nftables.tables.zoning = {
-      family = "inet";
-      content = ''
-        chain zoning-prerouting {
-          type filter hook prerouting priority raw; policy accept;
-          ct zone set meta iifname map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
-        }
+    nftables.tables = {
+      zoning = {
+        family = "inet";
+        content = ''
+          chain zoning-prerouting {
+            type filter hook prerouting priority raw; policy accept;
+            ct zone set meta iifname map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
+          }
 
-        chain zoning-output {
-          type filter hook output priority raw; policy accept;
-          ct zone set meta oifname map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
-        }
-      '';
+          chain zoning-output {
+            type filter hook output priority raw; policy accept;
+            ct zone set meta oifname map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
+          }
+        '';
+      };
+      tayga-nat66 = {
+        family = "ip6";
+        content = ''
+          chain tayga-nat {
+            type nat hook postrouting priority srcnat; policy accept;
+            iifname tayga oifname shadow-lan masquerade
+          }
+        '';
+      };
     };
   };
   security = {
@@ -391,7 +412,7 @@
       settings = {
         forward-zone = {
           name = ".";
-          forward-addr = [ "192.168.4.1@55" ];
+          forward-addr = [ "fd80:1::1@55" ];
         };
         server = {
           domain-insecure = ["broadband"];
@@ -427,14 +448,15 @@
       enable = true;
       networks = {
         "10-eno1" = {
-          DHCP = "yes";
+          DHCP = "ipv6";
           matchConfig = {
             Name = "eno1";
           };
-          macvlan = [ "eno1-web" ];
+          # macvlan = [ "eno1-web" ];
           dhcpV4Config = {
             ClientIdentifier = "mac";
             SendHostname = false;
+            UseGateway = false;
             UseHostname = false;
             UseMTU = true;
           };
@@ -512,7 +534,7 @@
           DHCP = "no";
         };
         "10-shadow-lan" = {
-          DHCP = "yes";
+          DHCP = "ipv6";
           dhcpV4Config = {
             UseRoutes = false;
             UseGateway = false;
@@ -535,6 +557,15 @@
             DNSDefaultRoute = false;
           };
           DHCP = "no";
+        };
+        "10-tayga" = {
+          address = [ "192.0.0.1/31" "fd64::/64" ];
+          matchConfig.Name = "tayga";
+          routes = [
+            {
+              Destination = "0.0.0.0/0";
+            }
+          ];
         };
         "10-vrf-web" = {
           matchConfig = {
@@ -602,6 +633,16 @@
               Name = "shadow-lan";
             };
             vlanConfig.Id = 20;
+          };
+          "10-tayga" = {
+            netdevConfig = {
+              Kind = "tun";
+              Name = "tayga";
+            };
+            tunConfig = {
+              User = "tayga";
+              Group = "tayga";
+            };
           };
           "10-vrf-web" = {
             netdevConfig = {
@@ -1046,6 +1087,46 @@
         };
         wantedBy = [ "multi-user.target" ];
       };
+      tayga = {
+        after = [ "sys-subsystem-net-devices-tayga.device" ];
+        confinement.enable = true;
+        restartTriggers = [ config.environment.etc."tayga/tayga.conf".source ];
+        serviceConfig = {
+          BindReadOnlyPaths = [
+            "${config.environment.etc."tayga/tayga.conf".source}:/etc/tayga/tayga.conf"
+            "/dev/net/tun"
+          ];
+          CapabilityBoundingSet = "";
+          DeviceAllow = "/dev/net/tun";
+          ExecStart = "${lib.getExe pkgs.tayga} -d -c /etc/tayga/tayga.conf";
+          Group = "tayga";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateTmp = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          Restart = "on-failure";
+          RestrictAddressFamilies = "AF_INET";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          StateDirectory = "tayga";
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
+          UMask = "077";
+          User = "tayga";
+        };
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "sys-subsystem-net-devices-tayga.device" ];
+      };
       knot-reload = {
         after = [ "knot.service" ];
         confinement.enable = true;
@@ -1206,7 +1287,14 @@
           piper
         ];
       };
+      tayga = {
+        group = "tayga";
+        isSystemUser = true;
+      };
     };
-    groups.ddns = {};
+    groups = {
+      ddns = {};
+      tayga = {};
+    };
   };
 }
