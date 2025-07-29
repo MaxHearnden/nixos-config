@@ -272,48 +272,6 @@
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
         };
       };
-      dnsmasq = {
-        preStart = lib.mkForce "";
-        serviceConfig = {
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
-          IPAddressAllow = "0.0.0.0 255.255.255.255 fe80::/10 ff02::1 127.0.0.1 fd80:1234::/64 192.168.2.0/24";
-          IPAddressDeny = "any";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateUsers = lib.mkForce false;
-          ProtectControlGroups = true;
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = lib.mkForce "strict";
-          RemoveIPC = true;
-          RestrictNamespaces = true;
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          StateDirectory = "dnsmasq";
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          UMask = "0077";
-          User = "dnsmasq";
-          BindReadOnlyPaths = [
-            "/etc/resolv.conf"
-            "/etc/passwd"
-            "/run/nscd"
-            "/run/dbus/system_bus_socket"
-            "/run/systemd/journal/dev-log"
-          ];
-        };
-        confinement = {
-          enable = true;
-        };
-      };
       tayga = {
         after = [ "sys-subsystem-net-devices-tayga.device" ];
         confinement.enable = true;
