@@ -449,7 +449,6 @@
           matchConfig = {
             Name = "eno1";
           };
-          # macvlan = [ "eno1-web" ];
           dhcpV4Config = {
             ClientIdentifier = "mac";
             SendHostname = false;
@@ -473,34 +472,6 @@
             DNSDefaultRoute = false;
           };
           vlan = [ "shadow-lan" ];
-        };
-        "10-eno1-web" = {
-          matchConfig = {
-            Name = "eno1-web";
-          };
-          DHCP = "yes";
-          dhcpV4Config = {
-            ClientIdentifier = "mac";
-            Hostname = "max-webserver";
-            UseHostname = false;
-            UseMTU = true;
-          };
-          dhcpV6Config = {
-            SendHostname = false;
-            UseHostname = false;
-            DUIDType = "link-layer";
-          };
-          ipv6AcceptRAConfig = {
-            UseMTU = true;
-          };
-          networkConfig = {
-            LLDP = true;
-            LLMNR = false;
-            MulticastDNS = false;
-            UseDomains = false;
-            DNSDefaultRoute = false;
-          };
-          vrf = [ "vrf-web" ];
         };
         "10-enp2s0" = {
           address = ["192.168.2.1/24" "fd80:1234::1/64"];
@@ -561,11 +532,6 @@
             }
           ];
         };
-        "10-vrf-web" = {
-          matchConfig = {
-            Name = "vrf-web";
-          };
-        };
         "20-vrf-interface" = {
           matchConfig = {
             Name = "vrf-interface-*";
@@ -612,15 +578,6 @@
             };
           }) 4)
         // {
-          "10-eno1-web" = {
-            netdevConfig = {
-              Kind = "macvlan";
-              Name = "eno1-web";
-            };
-            macvlanConfig = {
-              Mode = "bridge";
-            };
-          };
           "10-shadow-lan" = {
             netdevConfig = {
               Kind = "vlan";
@@ -636,15 +593,6 @@
             tunConfig = {
               User = "tayga";
               Group = "tayga";
-            };
-          };
-          "10-vrf-web" = {
-            netdevConfig = {
-              Kind = "vrf";
-              Name = "vrf-web";
-            };
-            vrfConfig = {
-              Table = 20;
             };
           };
         };
