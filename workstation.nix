@@ -429,10 +429,6 @@
             name = "max.home.arpa";
             stub-addr = "127.0.0.1@54";
           }
-          {
-            name = "broadband";
-            stub-addr = "192.168.1.1";
-          }
         ];
       };
     };
@@ -536,10 +532,7 @@
         };
         "10-shadow-lan" = {
           DHCP = "ipv6";
-          dhcpV4Config = {
-            UseRoutes = false;
-            UseGateway = false;
-          };
+          ipv6AcceptRAConfig.UsePREF64 = true;
           matchConfig.Name = "shadow-lan";
         };
         "10-sl" = {

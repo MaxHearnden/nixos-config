@@ -290,7 +290,10 @@
   };
   services = {
     avahi = {
-      enable = false;
+      enable =
+        lib.mkIf (config.networking.hostName != "max-nixos-workstation" ||
+        config.networking.hostName != "max-nixos-pc") false;
+      nssmdns6 = true;
     };
     btrbk = {
       instances = {

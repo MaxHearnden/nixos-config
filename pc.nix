@@ -153,12 +153,6 @@
         domain-insecure = [ "broadband" ];
         qname-minimisation = false;
       };
-      stub-zone = [
-        {
-          name = "broadband";
-          stub-addr = "192.168.1.1";
-        }
-      ];
     };
     xserver = {
       displayManager.gdm.autoSuspend = false;
