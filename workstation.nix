@@ -121,16 +121,12 @@
           allowedTCPPorts = [ 5000 53 ];
           allowedUDPPorts = [ 53 69 ];
         };
-        "sl*" = {
-          allowedTCPPorts = [ 5000 53 ];
-          allowedUDPPorts = [ 53 69 ];
-        };
       };
       extraForwardRules = ''
         iifname tayga oifname shadow-lan accept
       '';
       extraInputRules = ''
-        iifname {"enp2s0", "sl*"} udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
+        iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
         ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
       '';
     };
@@ -145,7 +141,6 @@
       externalInterface = "eno1";
       internalInterfaces = [
         "enp2s0"
-        "sl*"
       ];
     };
     networkmanager = {
@@ -156,7 +151,6 @@
         "ens4f1"
         "ens4f2"
         "ens4f3"
-        "sl*"
       ];
     };
     nftables.tables = {
@@ -296,7 +290,7 @@
         dnssec = true;
         domain = "home.arpa";
         enable-ra = true;
-        interface = [ "enp2s0" "sl*" ];
+        interface = [ "enp2s0" ];
         interface-name = "max-nixos-workstation.home.arpa,enp2s0";
         local = ["//" "/home.arpa/"];
         server = ["/max.home.arpa/#"];
@@ -505,23 +499,6 @@
           DHCP = "ipv6";
           ipv6AcceptRAConfig.UsePREF64 = true;
           matchConfig.Name = "shadow-lan";
-        };
-        "10-sl" = {
-          address = ["192.168.3.1/24"];
-          matchConfig = {
-            Name = "sl*";
-          };
-          linkConfig = {
-            MTUBytes = 9216;
-            RequiredForOnline = false;
-          };
-          domains = [ "home.arpa" ];
-          dns = [ "192.168.3.1" ];
-          networkConfig = {
-            ConfigureWithoutCarrier = true;
-            DNSDefaultRoute = false;
-          };
-          DHCP = "no";
         };
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];
@@ -994,40 +971,6 @@
           enable = true;
           packages = [ pkgs.gnugrep config.i18n.glibcLocales ];
         };
-      };
-      slattach = {
-        confinement = {
-          enable = true;
-        };
-        serviceConfig = {
-          AmbientCapabilities = "CAP_NET_ADMIN";
-          BindPaths = "/dev/ttyS0";
-          CapabilityBoundingSet = "CAP_NET_ADMIN";
-          DeviceAllow = "/dev/ttyS0";
-          DynamicUser = true;
-          ExecStart = "${lib.getBin pkgs.nettools}/bin/slattach -L -s 115200 /dev/ttyS0";
-          Group = "dialout";
-          IPAddressDeny = "any";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          PrivateNetwork = true;
-          PrivateUsers = lib.mkForce false;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectHome = true;
-          ProtectKernelLogs = true;
-          ProtectProc = "invisible";
-          RestrictAddressFamilies = "none";
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = ["@system-service" "~@privileged @resources"];
-          Type = "exec";
-          UMask = "077";
-          User = "slattach";
-        };
-        wantedBy = [ "multi-user.target" ];
       };
       tayga = {
         after = [ "sys-subsystem-net-devices-tayga.device" ];
