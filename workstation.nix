@@ -407,7 +407,7 @@
       settings = {
         forward-zone = {
           name = ".";
-          forward-addr = [ "fd80:1::1@55" ];
+          forward-addr = [ "fd09:a389:7c1e:1::1@55" ];
         };
         server = {
           domain-insecure = ["broadband"];
