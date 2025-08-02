@@ -45,7 +45,8 @@
           ipv4-addr 192.0.0.2
           ipv6-addr fd64::1
           map 192.0.0.1 fd64::2
-          prefix 64:ff9b::/96
+          prefix fd09:a389:7c1e:3::/64
+          strict-frag-hdr true
         '';
       };
   };

@@ -74,6 +74,7 @@
           ipv6-addr fd64::1
           map 192.0.0.1 fd64::2
           prefix fd09:a389:7c1e:3::/64
+          strict-frag-hdr true
         '';
       };
     systemPackages = with pkgs; [
