@@ -217,6 +217,7 @@
           routes = [
             {
               Destination = "0.0.0.0/0";
+              MTUBytes = 1480;
             }
           ];
         };
