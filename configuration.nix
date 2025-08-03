@@ -773,7 +773,6 @@
           ldns
           ldns.examples
           libreoffice-fresh
-          linux-manual
           lshw
           lsof
           man-pages-posix
