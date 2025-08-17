@@ -7,6 +7,16 @@
   ];
   boot = {
     kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+    kernelPatches = lib.mkIf (!pkgs.linux_latest.config ? LOGITECH_FF) [
+      {
+        name = "logitech-ff";
+        structuredExtraConfig = {
+          LOGITECH_FF = lib.kernel.yes;
+          LOGIWHEELS_FF = lib.kernel.yes;
+        };
+        patch = null;
+      }
+    ];
     loader = {
       systemd-boot = {
         enable = true;
