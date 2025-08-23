@@ -181,11 +181,15 @@
       };
       netdevs = {
         "10-shadow-lan" = {
+          extraConfig = ''
+            [VLAN]
+            Id=20
+            Protocol=802.1ad
+          '';
           netdevConfig = {
             Kind = "vlan";
             Name = "shadow-lan";
           };
-          vlanConfig.Id = 20;
         };
         "10-tayga" = {
           netdevConfig = {
