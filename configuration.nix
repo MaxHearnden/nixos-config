@@ -276,6 +276,9 @@
     };
     ssh.extraConfig = ''
       VerifyHostKeyDNS yes
+      Host *.zandoodle.me.uk zandoodle.me.uk
+      StrictHostKeyChecking yes
+      UserKnownHostsFile /dev/null
     '';
     steam = {
       enable = true;
