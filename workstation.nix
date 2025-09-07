@@ -426,10 +426,6 @@
         };
         stub-zone = [
           {
-            name = "home.arpa";
-            stub-addr = "127.0.0.1@54";
-          }
-          {
             name = "max.home.arpa";
             stub-addr = "127.0.0.1@54";
           }
