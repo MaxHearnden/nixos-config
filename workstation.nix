@@ -421,6 +421,10 @@
         };
         server = {
           domain-insecure = ["broadband"];
+          local-zone = [
+            "168.192.in-addr.arpa nodefault"
+            "d.f.ip6.arpa nodefault"
+          ];
           interface = ["127.0.0.53"];
           qname-minimisation = false;
         };
