@@ -147,12 +147,22 @@
     unbound.settings = {
       forward-zone = {
         name = ".";
-        forward-addr = [ "fd09:a389:7c1e:1::1@55" ];
+        forward-addr = [ "fd09:a389:7c1e:4::1@55" ];
       };
       server = {
         domain-insecure = [ "broadband" ];
         qname-minimisation = false;
       };
+      stub-zone = [
+        {
+          name = "max.home.arpa";
+          stub-addr = [
+            "172.28.10.244"
+            "fc9c:6b89:eec5:d88:e258::1"
+            "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
+          ];
+        }
+      ];
     };
     xserver = {
       displayManager.gdm.autoSuspend = false;

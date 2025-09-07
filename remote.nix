@@ -49,7 +49,7 @@
       };
     };
     unbound.settings = {
-      stub-zone = [
+      stub-zone = lib.mkIf (config.networking.hostName != "max-nixos-pc") [
         {
           name = "home.arpa";
           stub-addr = [
