@@ -634,7 +634,7 @@
         after = [ "modprobe@tun.service" ];
         confinement = {
           enable = true;
-          packages = [ pkgs.tailscale ];
+          packages = [ config.services.tailscale.package ];
         };
       };
       zerotierone = {
