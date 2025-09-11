@@ -356,6 +356,7 @@
     };
     tailscale = {
       enable = true;
+      package = pkgs.tailscale.overrideAttrs { doCheck = false; };
     };
     udev = {
       packages = [
@@ -566,8 +567,7 @@
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallErrorNumber = "ENOSYS";
-          SystemCallFilter = [ "@debug @system-service @mount @sandbox sethostname setdomainname" ];
-          SystemCallLog = "~@system-service @mount @sandbox sethostname setdomainname";
+          SystemCallFilter = [ "@debug @system-service @mount @sandbox sethostname setdomainname bpf" ];
         };
         environment.XDG_CACHE_HOME = "%C";
       };
