@@ -475,7 +475,7 @@
             UseDomains = false;
             DNSDefaultRoute = false;
           };
-          vlan = [ "shadow-lan" ];
+          vlan = [ "guest" "shadow-lan" ];
         };
         "10-enp2s0" = {
           address = ["192.168.2.1/24" "fd80:1234::1/64"];
@@ -504,6 +504,15 @@
             }
           ];
           DHCP = "no";
+        };
+        "10-guest" = {
+          DHCP = "yes";
+          name = "guest";
+          vrf = ["guest-vrf"];
+        };
+        "10-guest-vrf" = {
+          name = "guest-vrf";
+          linkConfig.RequiredForOnline = false;
         };
         "10-shadow-lan" = {
           DHCP = "ipv6";
@@ -576,6 +585,20 @@
               Kind = "vlan";
               Name = "shadow-lan";
             };
+          };
+          "10-guest" = {
+            netdevConfig = {
+              Kind = "vlan";
+              Name = "guest";
+            };
+            vlanConfig.Id = 10;
+          };
+          "10-guest-vrf" = {
+            netdevConfig = {
+              Kind = "vrf";
+              Name = "guest-vrf";
+            };
+            vrfConfig.Table = 20;
           };
           "10-tayga" = {
             netdevConfig = {
