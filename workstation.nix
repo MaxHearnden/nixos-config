@@ -148,7 +148,7 @@
     '';
     nat = {
       enable = true;
-      externalInterface = "eno1";
+      externalInterface = "tayga";
       internalInterfaces = [
         "enp2s0"
       ];
