@@ -515,20 +515,6 @@
           ];
           DHCP = "no";
         };
-        "10-guest" = {
-          DHCP = "yes";
-          name = "guest";
-          vrf = ["guest-vrf"];
-        };
-        "10-guest-vrf" = {
-          name = "guest-vrf";
-          linkConfig.RequiredForOnline = false;
-        };
-        "10-shadow-lan" = {
-          DHCP = "ipv6";
-          ipv6AcceptRAConfig.UsePREF64 = true;
-          matchConfig.Name = "shadow-lan";
-        };
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];
           matchConfig.Name = "tayga";
@@ -586,31 +572,6 @@
             };
           }) 4)
         // {
-          "10-shadow-lan" = {
-            extraConfig = ''
-              [VLAN]
-              Id=20
-              Protocol=802.1ad
-            '';
-            netdevConfig = {
-              Kind = "vlan";
-              Name = "shadow-lan";
-            };
-          };
-          "10-guest" = {
-            netdevConfig = {
-              Kind = "vlan";
-              Name = "guest";
-            };
-            vlanConfig.Id = 10;
-          };
-          "10-guest-vrf" = {
-            netdevConfig = {
-              Kind = "vrf";
-              Name = "guest-vrf";
-            };
-            vrfConfig.Table = 20;
-          };
           "10-tayga" = {
             netdevConfig = {
               Kind = "tun";
