@@ -419,17 +419,13 @@
           {
             name = "broadband";
             forward-addr = [
-              "172.28.13.156"
-              "fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567"
-              "fc9c:6b89:eed9:c2b9:c567::1"
+              "fc9c:6b89:eed9:c2b9:c567:1:192.168.1.1"
             ];
           }
           {
             name = "zandoodle.me.uk";
             forward-addr = [
-              "172.28.13.156"
-              "fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567"
-              "fc9c:6b89:eed9:c2b9:c567::1"
+              "fc9c:6b89:eed9:c2b9:c567:1:192.168.1.201"
             ];
             forward-first = true;
           }
