@@ -415,10 +415,25 @@
     unbound = {
       resolveLocalQueries = false;
       settings = {
-        forward-zone = {
-          name = ".";
-          forward-addr = [ "fd09:a389:7c1e:4::1@55" ];
-        };
+        forward-zone = [
+          {
+            name = "broadband";
+            forward-addr = [
+              "172.28.13.156"
+              "fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567"
+              "fc9c:6b89:eed9:c2b9:c567::1"
+            ];
+          }
+          {
+            name = "zandoodle.me.uk";
+            forward-addr = [
+              "172.28.13.156"
+              "fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567"
+              "fc9c:6b89:eed9:c2b9:c567::1"
+            ];
+            forward-first = true;
+          }
+        ];
         server = {
           domain-insecure = ["broadband"];
           local-zone = [
@@ -449,14 +464,13 @@
       enable = true;
       networks = {
         "10-eno1" = {
-          DHCP = "ipv6";
+          DHCP = "yes";
           matchConfig = {
             Name = "eno1";
           };
           dhcpV4Config = {
             ClientIdentifier = "mac";
             SendHostname = false;
-            UseGateway = false;
             UseHostname = false;
             UseMTU = true;
           };
@@ -524,6 +538,7 @@
           matchConfig.Name = "tayga";
           routes = [
             {
+              Metric = 2048;
               Destination = "0.0.0.0/0";
               MTUBytes = 1480;
             }
