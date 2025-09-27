@@ -133,7 +133,7 @@
         };
       };
       extraForwardRules = ''
-        iifname tayga oifname shadow-lan accept
+        iifname tayga oifname ztmjfp7kiq accept
       '';
       extraInputRules = ''
         iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
@@ -183,7 +183,7 @@
         content = ''
           chain tayga-nat {
             type nat hook postrouting priority srcnat; policy accept;
-            iifname tayga oifname shadow-lan masquerade
+            iifname tayga oifname ztmjfp7kiq masquerade
           }
         '';
       };
