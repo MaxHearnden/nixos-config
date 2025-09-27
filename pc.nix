@@ -59,6 +59,7 @@
     firewall = {
       extraForwardRules = ''
         iifname tayga oifname shadow-lan accept
+        iifname ztmjfp7kiq oifname plat accept
       '';
       filterForward = true;
       interfaces.ztmjfp7kiq.allowedTCPPorts = [ 8080 9090 11434 ];
