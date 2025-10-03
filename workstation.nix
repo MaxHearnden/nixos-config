@@ -1174,6 +1174,7 @@
       };
       btrbk = {
         packages = with pkgs; [
+          mbuffer
           zstd
         ];
       };
