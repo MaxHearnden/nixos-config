@@ -37,6 +37,7 @@
         btrbk = {
           settings = {
             backend_remote = "btrfs-progs-doas";
+            stream_buffer_remote = "12g";
             volume = {
               "/nexus" = {
                 target = {
