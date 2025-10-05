@@ -833,7 +833,6 @@
             vscodeExtensions =
               let exts = inputs.vscode-extensions.extensions.${config.nixpkgs.system}.vscode-marketplace;
               in builtins.attrValues {
-                inherit (exts.erlang-ls) erlang-ls;
                 inherit (exts.rust-lang) rust-analyzer;
                 inherit (exts.haskell) haskell;
                 inherit (exts.justusadam) language-haskell;
