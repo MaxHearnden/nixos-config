@@ -765,6 +765,7 @@
           gcc
           gdb
           ghex
+          glslang
           gnome-tweaks
           graphviz
           gtkterm
@@ -818,6 +819,7 @@
           shellcheck
           signal-desktop
           simutrans
+          slang
           slirp4netns
           sshfs
           tea

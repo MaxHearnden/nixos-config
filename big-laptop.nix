@@ -6,7 +6,7 @@
     kernelPackages = lib.mkForce pkgs.linuxPackages;
   };
   hardware = {
-    graphics.extraPackages = [ pkgs.intel-vaapi-driver pkgs.nvidia-vaapi-driver ];
+    graphics.extraPackages = [ pkgs.intel-media-driver pkgs.nvidia-vaapi-driver ];
     nvidia.open = true;
     tuxedo-drivers = {
       enable = true;
@@ -14,6 +14,10 @@
   };
   imports = [ ./hardware-configuration/laptop.nix ./laptop.nix ./remote.nix ];
   networking = {
+    firewall.interfaces.enp45s0 = {
+      allowedTCPPorts = [ 9943 9944 ];
+      allowedUDPPorts = [ 9943 9944 ];
+    };
     hostName = "max-nixos-laptop";
   };
   services = {
