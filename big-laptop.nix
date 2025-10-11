@@ -6,6 +6,8 @@
     kernelPackages = lib.mkForce pkgs.linuxPackages;
   };
   hardware = {
+    graphics.extraPackages = [ pkgs.intel-vaapi-driver pkgs.nvidia-vaapi-driver ];
+    nvidia.open = true;
     tuxedo-drivers = {
       enable = true;
     };
@@ -18,6 +20,7 @@
     logind = {
       lidSwitch = "ignore";
     };
+    xserver.videoDrivers = [ "nvidia" ];
   };
   time = {
     hardwareClockInLocalTime = true;

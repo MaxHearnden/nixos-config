@@ -152,7 +152,8 @@
     "steam"
     "steam-unwrapped"
     "zerotierone"
-  ] ++ lib.optionals (config.networking.hostName == "max-nixos-pc") [
+  ] ++ lib.optionals (builtins.elem config.networking.hostName [ "max-nixos-pc"
+  "max-nixos-laptop"]) [
     "cuda_cccl"
     "cuda_cudart"
     "cuda_nvcc"
