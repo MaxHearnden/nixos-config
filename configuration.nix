@@ -826,6 +826,7 @@
           teams-for-linux
           texliveFull
           tpm2-tools
+          typst
           ungoogled-chromium
           usbutils
           vdrift
