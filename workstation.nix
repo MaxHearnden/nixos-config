@@ -425,7 +425,8 @@
           {
             name = "zandoodle.me.uk";
             forward-addr = [
-              "fc9c:6b89:eed9:c2b9:c567:1:192.168.1.201"
+              "100.122.82.8"
+              "fd7a:115c:a1e0::1a01:5208"
             ];
             forward-first = true;
           }
