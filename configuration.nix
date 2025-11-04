@@ -748,6 +748,7 @@
         isNormalUser = true;
         packages = with pkgs; [
           authenticator
+          blender
           btop
           cargo-watch
           comma
@@ -767,6 +768,7 @@
           ghex
           glslang
           gnome-tweaks
+          godot
           graphviz
           gtkterm
           headsetcontrol
