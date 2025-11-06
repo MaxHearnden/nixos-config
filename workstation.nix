@@ -793,9 +793,9 @@
       minecraft-server =
         let mods = pkgs.linkFarmFromDrvs "mods" [
           (pkgs.fetchurl {
-            hash = "sha256-fn5gtJEA6eA2t3YpMT+/mGwuLtLLOf2OWLNS7QI0rzY=";
+            hash = "sha256-yC5pMBLsi4BnUq4CxTfwe4MGTqoBg04ZaRrsBC3Ds3Y=";
             url =
-              "https://cdn.modrinth.com/data/9eGKb6K1/versions/suJqF5xU/voicechat-fabric-1.21.5-2.5.30.jar";
+              "https://cdn.modrinth.com/data/9eGKb6K1/versions/BjR2lc4k/voicechat-fabric-1.21.10-2.6.6.jar";
           })
         ]; in {
         wantedBy = lib.mkForce [ ];
