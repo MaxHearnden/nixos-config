@@ -391,7 +391,8 @@
       enable = true;
       declarative = true;
       eula = true;
-      package = inputs.nix-minecraft.packages.x86_64-linux.fabric-server;
+      package =
+        inputs.nix-minecraft.packages.x86_64-linux.fabric-servers.fabric-1.21.10;
       serverProperties = {
         server-ip = "127.0.0.1";
         server-port = 25564;
