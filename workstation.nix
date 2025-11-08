@@ -392,7 +392,7 @@
       declarative = true;
       eula = true;
       package =
-        inputs.nix-minecraft.packages.x86_64-linux.fabric-servers.fabric-1.21.10;
+        inputs.nix-minecraft.legacyPackages.x86_64-linux.fabricServers.fabric-1_21_10;
       serverProperties = {
         server-ip = "127.0.0.1";
         server-port = 25564;
