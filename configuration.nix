@@ -827,6 +827,7 @@
           tea
           teams-for-linux
           texliveFull
+          thunderbird
           tpm2-tools
           typst
           ungoogled-chromium
