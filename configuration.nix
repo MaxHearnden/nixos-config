@@ -788,6 +788,7 @@
               patches = patches ++ [ ./fs-manpages.patch ];
             }))
           mixxx
+          neomutt
           nix-du
           nmap
           nodejs
