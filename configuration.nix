@@ -410,6 +410,7 @@
               "broadband"
               "compsoc-dev.com"
               "home.arpa"
+              "test"
               "zandoodle.me.uk"
             ];
             trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
