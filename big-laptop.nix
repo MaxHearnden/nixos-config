@@ -16,7 +16,7 @@
   networking = {
     firewall.interfaces.enp45s0 = {
       allowedTCPPorts = [ 9943 9944 ];
-      allowedUDPPorts = [ 9943 9944 ];
+      allowedUDPPorts = [ 67 9943 9944 ];
     };
     hostName = "max-nixos-laptop";
   };
