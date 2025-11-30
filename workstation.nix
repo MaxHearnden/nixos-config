@@ -1079,7 +1079,7 @@
           IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
           IPAddressDeny = "any";
         };
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "sockets.target" ];
       };
       minecraft-server = {
         bindsTo = lib.mkForce [];

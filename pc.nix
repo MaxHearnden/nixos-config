@@ -353,7 +353,7 @@
           User = "tayga";
         };
         wantedBy = [ "multi-user.target" ];
-        wants = [ "sys-subsystem-net-devices-tayga.device" ];
+        wants = [ "sys-subsystem-net-devices-plat.device" ];
       };
       tayga = {
         after = [ "sys-subsystem-net-devices-tayga.device" ];
