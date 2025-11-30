@@ -148,6 +148,7 @@
         };
       };
     };
+    displayManager.gdm.autoSuspend = false;
     ollama = {
       enable = true;
       host = "172.28.13.156";
@@ -178,7 +179,6 @@
       ];
     };
     xserver = {
-      displayManager.gdm.autoSuspend = false;
       videoDrivers = [
         "nvidia"
       ];

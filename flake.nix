@@ -13,7 +13,7 @@
       url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec";
     };
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     vscode-extensions = {
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       url = "github:nix-community/nix-vscode-extensions";

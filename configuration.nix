@@ -324,6 +324,8 @@
         };
       };
     };
+    desktopManager.gnome.enable = true;
+    displayManager.gdm.enable = true;
     fwupd = {
       enable = true;
     };
@@ -428,17 +430,11 @@
     };
     xserver = {
       desktopManager = {
-        gnome = {
-          enable = true;
-        };
         xterm = {
           enable = true;
         };
       };
       displayManager = {
-        gdm = {
-          enable = true;
-        };
         startx = {
           enable = true;
         };
@@ -784,16 +780,12 @@
           lshw
           lsof
           man-pages-posix
-          (man-pages.overrideAttrs (
-            { patches ? [], ... }: {
-              patches = patches ++ [ ./fs-manpages.patch ];
-            }))
+          man-pages
           mixxx
           neomutt
           nix-du
           nmap
           nodejs
-          notepadqq
           ollama
           openssl
           oversteer

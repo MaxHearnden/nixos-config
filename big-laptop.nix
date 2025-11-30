@@ -21,9 +21,7 @@
     hostName = "max-nixos-laptop";
   };
   services = {
-    logind = {
-      lidSwitch = "ignore";
-    };
+    logind.settings.Login.HandleLidSwitch = "ignore";
     xserver.videoDrivers = [ "nvidia" ];
   };
   time = {

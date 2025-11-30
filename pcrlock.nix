@@ -1,9 +1,9 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 
 {
-  system.extraSystemBuilderCmds = let
+  system.systemBuilderCommands = let
     pcrlock = "${inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.systemd.out}/lib/systemd/systemd-pcrlock";
-  in ''
+  in lib.mkAfter ''
     # Lock bootloader
     ${pcrlock} lock-pe $out/systemd/lib/systemd/boot/efi/systemd-bootx64.efi --pcrlock=$out/650-systemd-boot.pcrlock
     # Lock kernel

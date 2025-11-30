@@ -287,6 +287,7 @@
         '')
       ];
     };
+    displayManager.gdm.autoSuspend = false;
     dnsmasq = {
       enable = true;
       resolveLocalQueries = false;
@@ -447,13 +448,6 @@
             stub-addr = "127.0.0.1@54";
           }
         ];
-      };
-    };
-    xserver = {
-      displayManager = {
-        gdm = {
-          autoSuspend = false;
-        };
       };
     };
   };
