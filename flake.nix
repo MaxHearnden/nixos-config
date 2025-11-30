@@ -50,19 +50,19 @@
     };
     packages.x86_64-linux = {
       default = nixpkgs.legacyPackages.x86_64-linux.linkFarm "systems" (builtins.attrValues (builtins.mapAttrs (name: path: {inherit name path;}) self.hydraJobs));
-      zone = nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "zonefile" {} ''
+      zone = nixpkgs.legacyPackages.x86_64-linux.runCommand "zonefile" {} ''
         for system in ${self.packages.x86_64-linux.default}/*; do
           echo "$(basename "$system").systems TXT \"$(readlink "$system")\"" >> $out
         done
       '';
       systems-with-zone =
-        nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-zone" {} ''
+        nixpkgs.legacyPackages.x86_64-linux.runCommand "systems-with-zone" {} ''
           mkdir $out
           ln -s ${self.packages.x86_64-linux.default} $out/systems
           ln -s ${self.packages.x86_64-linux.zone} $out/zonefile
         '';
       systems-with-closure =
-        nixpkgs.legacyPackages.x86_64-linux.runCommandNoCC "systems-with-closure" {} ''
+        nixpkgs.legacyPackages.x86_64-linux.runCommand "systems-with-closure" {} ''
           mkdir $out
           ln -s ${self.packages.x86_64-linux.default} $out/systems
           ln -s ${self.packages.x86_64-linux.zone} $out/zonefile
