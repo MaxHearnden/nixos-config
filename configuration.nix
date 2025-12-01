@@ -766,6 +766,7 @@
           glslang
           gnome-tweaks
           godot
+          godot-export-templates-bin
           graphviz
           gtkterm
           headsetcontrol
