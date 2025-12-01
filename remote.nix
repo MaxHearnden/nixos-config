@@ -90,6 +90,7 @@
       "btrbk-btrbk" = {
         wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
         after = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
+        confinement.packages = [ pkgs.zstd ];
         serviceConfig = {
           RestrictSUIDSGID = true;
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
