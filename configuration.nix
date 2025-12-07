@@ -759,6 +759,7 @@
           espup
           ethtool
           file
+          file-roller
           firmware-manager
           gcc
           gdb
