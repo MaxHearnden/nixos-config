@@ -296,7 +296,7 @@
         conf-file = "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
         dhcp-fqdn = true;
         dhcp-option = [ "option:mtu,9216" ];
-        dhcp-range = [ "192.168.2.20,192.168.2.250" "192.168.3.20,192.168.3.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
+        dhcp-range = [ "192.168.4.20,192.168.4.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         dhcp-rapid-commit = true;
         dnssec = true;
         domain = "home.arpa";
@@ -402,11 +402,11 @@
     nfs = {
       server = {
         enable = true;
-        hostName = "max-nixos-workstation-zerotier-ipv4,max-nixos-workstation-zerotier-6plane,max-nixos-workstation-zerotier-rfc4193,192.168.2.1";
+        hostName = "max-nixos-workstation-zerotier-ipv4,max-nixos-workstation-zerotier-6plane,max-nixos-workstation-zerotier-rfc4193,192.168.4.1";
         exports = ''
           /Big/shared -mp=/Big,rw,all_squash,anonuid=1000,anongid=100,async max-nixos-* max-guix-*
-          /Big/shared/riscv/star64_root 192.168.2.0/24(rw,no_root_squash,mp=/Big)
-          /nix 192.168.2.0/24(ro,no_root_squash)
+          /Big/shared/riscv/star64_root 192.168.4.0/24(rw,no_root_squash,mp=/Big)
+          /nix 192.168.4.0/24(ro,no_root_squash)
         '';
       };
     };
@@ -484,7 +484,7 @@
           vlan = [ "guest" "shadow-lan" ];
         };
         "10-enp2s0" = {
-          address = ["192.168.2.1/24" "fd80:1234::1/64"];
+          address = ["192.168.4.1/24" "fd80:1234::1/64"];
           matchConfig = {
             Name = "enp2s0";
           };
@@ -493,7 +493,7 @@
             RequiredForOnline = false;
           };
           domains = [ "home.arpa" ];
-          dns = [ "192.168.2.1" "fd80:1234::1" ];
+          dns = [ "192.168.4.1" "fd80:1234::1" ];
           networkConfig = {
             ConfigureWithoutCarrier = true;
             DNSDefaultRoute = false;
@@ -589,7 +589,7 @@
           ProtectHome = true;
           PrivateDevices = true;
           IPAddressDeny = "any";
-          IPAddressAllow = "100.109.29.126 172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258/88 fc9c:6b89:eec5:0d88:e258:0000:0000:0001/40 192.168.2.1/24";
+          IPAddressAllow = "100.109.29.126 172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258/88 fc9c:6b89:eec5:0d88:e258:0000:0000:0001/40 192.168.4.1/24";
           ProtectKernelModules = true;
           ProtectClock = true;
           ProtectKernelLogs = true;
@@ -622,7 +622,7 @@
         serviceConfig = {
           AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
           CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
-          IPAddressAllow = "0.0.0.0 255.255.255.255 fe80::/10 ff02::1 127.0.0.53 fd80:1234::/64 192.168.2.0/24";
+          IPAddressAllow = "0.0.0.0 255.255.255.255 fe80::/10 ff02::1 127.0.0.53 fd80:1234::/64 192.168.4.0/24";
           IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
