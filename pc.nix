@@ -54,7 +54,13 @@
         '';
       };
   };
-  hardware.nvidia.open = true;
+  hardware = {
+    graphics.extraPackages = [
+      pkgs.intel-media-driver
+      pkgs.nvidia-vaapi-driver
+    ];
+    nvidia.open = true;
+  };
   networking = {
     firewall = {
       extraForwardRules = ''
@@ -62,7 +68,13 @@
         iifname ztmjfp7kiq oifname plat accept
       '';
       filterForward = true;
-      interfaces.ztmjfp7kiq.allowedTCPPorts = [ 8080 9090 11434 ];
+      interfaces = {
+        eno1 = {
+          allowedTCPPorts = [ 9943 9944 ];
+          allowedUDPPorts = [ 9943 9944 ];
+        };
+        ztmjfp7kiq.allowedTCPPorts = [ 8080 9090 11434 ];
+      };
     };
     hostName = "max-nixos-pc";
     nat = {
