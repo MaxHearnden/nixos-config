@@ -164,7 +164,12 @@
         forward-first = true;
       };
       server = {
-        domain-insecure = [ "broadband" ];
+        domain-insecure = [
+          "broadband"
+          "home.arpa"
+          "168.192.in-addr.arpa"
+          "d.f.ip6.arpa"
+        ];
         qname-minimisation = false;
       };
       stub-zone = [
