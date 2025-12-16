@@ -56,6 +56,48 @@
           max.home.arpa. initial-ds 5629 14 4 "663b18a6e58159ea67190937115450b87c60222a4f8d13395acf3b091cf6155e4be365d636452e9427c7818866be9d65";
         };
       '';
+      "xdg/neomutt/neomuttrc".text = ''
+        source ${pkgs.neomutt}/etc/neomuttrc
+        set imap_user = max@zandoodle.me.uk
+        set imap_pass = `op read -n op://Private/5lnrtyp6srjblkeczdaipaltxa/password`
+        set spool_file = imaps://max@zandoodle.me.uk@imap.zandoodle.me.uk
+        set imap_check_subscribed = yes
+        set edit_headers = yes
+        set smtp_url = smtps://max@zandoodle.me.uk@smtp.zandoodle.me.uk
+        set imap_pass = `op read -n op://Private/5lnrtyp6srjblkeczdaipaltxa/password`
+        set smtp_pass = `op read -n op://Private/5lnrtyp6srjblkeczdaipaltxa/password`
+
+        set header_cache = ~/.cache/neomutt/cache/
+        set message_cachedir = ~/.cache/neomutt/cache/
+
+        set header_cache_compress_method = "zstd"
+        set header_cache_compress_level = 3
+
+        set tmpdir = /run/user/1000
+
+        set from = max@zandoodle.me.uk
+        set use_threads = yes
+        set pager_index_lines = 6
+        set pager_context = 3
+        set pager_stop = yes
+        set editor = "nvim"
+        set reply_with_xorig = yes
+        alternates 'zandoodle.me.uk$'
+        alternates 'compsoc-dev.com$'
+
+        set reverse_name = yes
+        set use_from = yes
+        set from = "max@zandoodle.me.uk"
+
+        bind index G imap-fetch-mail
+        set move = yes
+        set mbox_type = "maildir"
+        set keep_flagged = yes
+        set record = imaps://max@zandoodle.me.uk@imap.zandoodle.me.uk/Sent
+        set auto_edit = yes
+        set fast_reply = yes
+        unignore Authentication-Results
+      '';
     };
     sessionVariables.SYSTEMD_EDITOR = "nvim";
     shellAliases = {
