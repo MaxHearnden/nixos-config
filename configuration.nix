@@ -817,6 +817,7 @@
           ripgrep
           rustup
           shellcheck
+          sidequest
           signal-desktop
           simutrans
           slang
