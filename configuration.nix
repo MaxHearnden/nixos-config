@@ -25,6 +25,7 @@
     kernel = {
       sysctl = {
         "net.ipv4.tcp_ecn" = 1;
+        "net.ipv4.tcp_fastopen" = 3;
       };
     };
     kernelPackages = pkgs.linuxPackages_latest;
