@@ -268,6 +268,10 @@
           "168.192.in-addr.arpa"
           "d.f.ip6.arpa"
         ];
+        local-zone = [
+          "168.192.in-addr.arpa nodefault"
+          "d.f.ip6.arpa nodefault"
+        ];
         qname-minimisation = false;
       };
       stub-zone = [
