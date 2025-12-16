@@ -367,6 +367,7 @@
     };
     unbound = {
       enable = true;
+      package = pkgs.unbound-full;
       # Pc is on an unblocked network
       settings = lib.mkMerge [
         (lib.mkIf (config.networking.hostName != "max-nixos-pc") {
