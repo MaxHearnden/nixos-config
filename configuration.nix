@@ -876,21 +876,20 @@
           vdrift
           vim
           vlc
-          # (vscode-with-extensions.override {
-          #   vscode = vscodium;
-          #   vscodeExtensions =
-          #     let exts = inputs.vscode-extensions.extensions.${config.nixpkgs.system}.vscode-marketplace;
-          #     in builtins.attrValues {
-          #       inherit (exts.rust-lang) rust-analyzer;
-          #       inherit (exts.haskell) haskell;
-          #       inherit (exts.justusadam) language-haskell;
-          #       inherit (exts.jnoortheen) nix-ide;
-          #       inherit (exts.maelvalais) autoconf;
-          #       inherit (exts.prince781) vala;
-          #       inherit (exts.theumletteam) umlet;
-          #     };
-          #   })
-          vscodium
+          (vscode-with-extensions.override {
+            vscode = vscodium;
+            vscodeExtensions =
+              let exts = inputs.vscode-extensions.extensions.${config.nixpkgs.system}.vscode-marketplace;
+              in builtins.attrValues {
+                inherit (exts.rust-lang) rust-analyzer;
+                inherit (exts.haskell) haskell;
+                inherit (exts.justusadam) language-haskell;
+                inherit (exts.jnoortheen) nix-ide;
+                inherit (exts.maelvalais) autoconf;
+                inherit (exts.prince781) vala;
+                inherit (exts.theumletteam) umlet;
+              };
+            })
           w3m
           wasistlos
           watchexec
