@@ -259,7 +259,7 @@
     unbound.settings = {
       forward-zone = {
         name = ".";
-        forward-addr = [ "fd09:a389:7c1e:4::1@55" ];
+        forward-addr = [ "fd09:a389:7c1e:1::1@55" ];
         forward-first = true;
       };
       server = {
@@ -312,15 +312,11 @@
       };
       netdevs = {
         "10-shadow-lan" = {
-          extraConfig = ''
-            [VLAN]
-            Id=20
-            Protocol=802.1ad
-          '';
           netdevConfig = {
             Kind = "vlan";
             Name = "shadow-lan";
           };
+          vlanConfig.Id = 20;
         };
         "10-tayga" = {
           netdevConfig = {
