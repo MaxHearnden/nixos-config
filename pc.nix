@@ -257,11 +257,17 @@
       enable = true;
     };
     unbound.settings = {
-      forward-zone = {
-        name = ".";
-        forward-addr = [ "fd09:a389:7c1e:1::1@55" "192.168.1.201@55" ];
-        forward-first = true;
-      };
+      forward-zone = [
+        {
+          name = ".";
+          forward-addr = [ "fd09:a389:7c1e:1::1@55" "192.168.1.201@55" ];
+          forward-first = true;
+        }
+        {
+          name = "broadband";
+          forward-addr = [ "192.168.1.1" ];
+        }
+      ];
       server = {
         domain-insecure = [
           "broadband"
