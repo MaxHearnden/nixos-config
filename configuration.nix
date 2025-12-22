@@ -805,6 +805,7 @@
         ];
         isNormalUser = true;
         packages = with pkgs; [
+          alacritty
           authenticator
           blender
           btop
