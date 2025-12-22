@@ -865,7 +865,6 @@
           pkgsCross.riscv32.buildPackages.gdb
           pkgsCross.riscv64.buildPackages.gcc
           pkgsCross.riscv64.buildPackages.gdb
-          plover.dev
           podman-compose
           powertop
           prismlauncher
