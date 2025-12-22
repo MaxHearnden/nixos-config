@@ -404,6 +404,9 @@
       enable = true;
     };
     udev = {
+      extraRules = ''
+        KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
+      '';
       packages = [
         pkgs.oversteer
       ];
@@ -785,7 +788,16 @@
     };
     users = {
       max = {
-        extraGroups = [ "wheel" "dialout" "networkmanager" "plugdev" "video" "wireshark" "tss" ];
+        extraGroups = [
+          "dialout"
+          "input"
+          "networkmanager"
+          "plugdev"
+          "tss"
+          "video"
+          "wheel"
+          "wireshark"
+        ];
         isNormalUser = true;
         packages = with pkgs; [
           authenticator
@@ -819,6 +831,11 @@
           inputs.nixos-kexec.packages.x86_64-linux.default
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
+          (
+            inputs.plover-flake.packages.x86_64-linux.plover.withPlugins (ps:
+            with ps; [
+              plover-uinput
+            ]))
           keepassxc
           ldns
           ldns.examples

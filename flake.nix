@@ -14,6 +14,10 @@
     };
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    plover-flake = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:opensteno/plover-flake";
+    };
     vscode-extensions = {
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       url = "github:nix-community/nix-vscode-extensions";
