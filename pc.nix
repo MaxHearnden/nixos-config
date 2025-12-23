@@ -353,8 +353,10 @@
           vlan = [ "shadow-lan" ];
         };
         "10-shadow-lan" = {
-          DHCP = "ipv6";
-          matchConfig.Name = "shadow-lan";
+          DHCP = "yes";
+          dhcpV4Config.RouteMetric = 1536;
+          ipv6AcceptRAConfig.RouteMetric = 2048;
+          name = "shadow-lan";
           networkConfig.IPv6AcceptRA = true;
         };
         "10-tayga" = {
