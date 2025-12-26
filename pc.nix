@@ -97,7 +97,6 @@
     };
     useNetworkd = true;
   };
-  programs.firefox.preferences."network.trr.mode" = lib.mkForce 0;
   security = {
     tpm2 = {
       enable = true;
