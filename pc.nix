@@ -166,47 +166,34 @@
     knot = {
       enable = true;
       settings = {
-        acl = [
-          {
-            id = "transfer";
-            action = "transfer";
-            address = [
-              "10.0.0.0/8"
-              "100.64.0.0/10"
-              "127.0.0.0/8"
-              "169.254.0.0/16"
-              "192.168.0.0/16"
-              "172.16.0.0/12"
-              "::1/128"
-              "fc00::/7"
-              "fe80::/10"
-            ];
-          }
+        acl.transfer = {
+          action = "transfer";
+          address = [
+            "10.0.0.0/8"
+            "100.64.0.0/10"
+            "127.0.0.0/8"
+            "169.254.0.0/16"
+            "192.168.0.0/16"
+            "172.16.0.0/12"
+            "::1/128"
+            "fc00::/7"
+            "fe80::/10"
+          ];
+        };
+        mod-queryacl.local.address = [
+          "10.0.0.0/8"
+          "100.64.0.0/10"
+          "127.0.0.0/8"
+          "169.254.0.0/16"
+          "192.168.0.0/16"
+          "172.16.0.0/12"
+          "::1/128"
+          "fc00::/7"
+          "fe80::/10"
         ];
-        mod-queryacl = [
-          {
-            id = "local";
-            address = [
-              "10.0.0.0/8"
-              "100.64.0.0/10"
-              "127.0.0.0/8"
-              "169.254.0.0/16"
-              "192.168.0.0/16"
-              "172.16.0.0/12"
-              "::1/128"
-              "fc00::/7"
-              "fe80::/10"
-            ];
-          }
-        ];
-        remote = [
-          {
-            id = "orion";
-            address = [
-              "fd7a:115c:a1e0::1a01:5208@54"
-              "100.122.82.8@54"
-            ];
-          }
+        remote.orion.address = [
+          "fd7a:115c:a1e0::1a01:5208@54"
+          "100.122.82.8@54"
         ];
         server = {
           automatic-acl = true;
@@ -216,35 +203,27 @@
           tcp-fastopen = true;
           tcp-reuseport = true;
         };
-        template = [
-          {
+        template = {
+          catalog-zone = {
             acl = [ "transfer" ];
-            id = "catalog-zone";
             master = "orion";
             module = "mod-queryacl/local";
             semantic-checks = true;
-          }
-          {
+          };
+          global = {
             acl = [ "transfer" ];
             dnssec-validation = true;
-            id = "global";
             master = "orion";
             semantic-checks = true;
             zonemd-verify = true;
-          }
-          {
-            id = "default";
-            global-module = ["mod-cookies" "mod-rrl"];
-          }
-        ];
-        zone = [
-          {
-            domain = "catz";
-            master = "orion";
-            catalog-role = "interpret";
-            catalog-template = ["catalog-zone" "global"];
-          }
-        ];
+          };
+          default.global-module = ["mod-cookies" "mod-rrl"];
+        };
+        zone.catz = {
+          master = "orion";
+          catalog-role = "interpret";
+          catalog-template = ["catalog-zone" "global"];
+        };
       };
     };
     ollama = {
@@ -535,6 +514,7 @@
         ];
       };
       max = {
+        extraGroups = [ "knot" ];
         packages = with pkgs; [
           piper
         ];
