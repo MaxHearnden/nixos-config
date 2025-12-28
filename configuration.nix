@@ -324,12 +324,15 @@
     nix-index = {
       enable = true;
     };
-    ssh.extraConfig = ''
-      VerifyHostKeyDNS yes
-      Host *.zandoodle.me.uk zandoodle.me.uk
-      StrictHostKeyChecking yes
-      UserKnownHostsFile /dev/null
-    '';
+    ssh = {
+      extraConfig = ''
+        VerifyHostKeyDNS yes
+        Host *.zandoodle.me.uk zandoodle.me.uk
+        StrictHostKeyChecking yes
+        UserKnownHostsFile /dev/null
+      '';
+      package = pkgs.opensshWithKerberos;
+    };
     steam = {
       enable = true;
     };
@@ -342,7 +345,7 @@
     krb5 = {
       enable = true;
       settings.libdefaults = {
-        default_realm = "ZANDOODLE.ME.UK";
+        default_realm = "WORKSTATION.ZANDOODLE.ME.UK";
         dns_canonicalize_hostname = "fallback";
         dns_lookup_realm = true;
         permitted_enctypes = "aes256-sha2";
@@ -400,7 +403,6 @@
     };
     openssh = {
       openFirewall = false;
-      package = pkgs.opensshWithKerberos;
       settings = {
         X11Forwarding = true;
       };

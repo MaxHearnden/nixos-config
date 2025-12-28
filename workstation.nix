@@ -124,8 +124,8 @@
           allowedUDPPorts = [ 53 24454 ];
         };
         tailscale0 = {
-          allowedTCPPorts = [ 22 53 3000 25565 ];
-          allowedUDPPorts = [ 53 24454 ];
+          allowedTCPPorts = [ 22 53 88 464 749 3000 25565 ];
+          allowedUDPPorts = [ 53 88 464 24454 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 5000 53 ];
@@ -190,6 +190,10 @@
     };
   };
   security = {
+    krb5.settings.domain_realm = {
+      "zandoodle.me.uk" = "ZANDOODLE.ME.UK";
+      "workstation.zandoodle.me.uk" = "WORKSTATION.ZANDOODLE.ME.UK";
+    };
     tpm2 = {
       enable = true;
       tctiEnvironment = {
@@ -337,6 +341,13 @@
         priority = 50;
       };
     };
+    kerberos_server = {
+      enable = true;
+      settings.realms."WORKSTATION.ZANDOODLE.ME.UK" = {
+        supported_enctypes = "aes256-sha2";
+        master_key_type = "aes256-sha2";
+      };
+    };
     knot = {
       enable = true;
       settings = {
@@ -410,7 +421,13 @@
         '';
       };
     };
-    openssh.startWhenNeeded = true;
+    openssh = {
+      settings = {
+        GSSAPIAuthentication = true;
+        GSSAPIStrictAcceptorCheck = false;
+      };
+      startWhenNeeded = true;
+    };
     ratbagd = {
       enable = true;
     };
