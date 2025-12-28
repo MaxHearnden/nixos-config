@@ -330,6 +330,7 @@
         Host *.zandoodle.me.uk zandoodle.me.uk
         StrictHostKeyChecking yes
         UserKnownHostsFile /dev/null
+        GSSAPIAuthentication yes
       '';
       package = pkgs.opensshWithKerberos;
     };
