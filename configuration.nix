@@ -339,6 +339,17 @@
   };
   security = {
     doas.enable = true;
+    krb5 = {
+      enable = true;
+      settings.libdefaults = {
+        default_realm = "ZANDOODLE.ME.UK";
+        dns_canonicalize_hostname = "fallback";
+        dns_lookup_realm = true;
+        permitted_enctypes = "aes256-sha2";
+        rdns = false;
+      };
+    };
+    pam.krb5.enable = false;
     sudo.enable = false;
   };
   services = {
@@ -389,6 +400,7 @@
     };
     openssh = {
       openFirewall = false;
+      package = pkgs.opensshWithKerberos;
       settings = {
         X11Forwarding = true;
       };
