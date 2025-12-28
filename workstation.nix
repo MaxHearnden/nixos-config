@@ -190,10 +190,6 @@
     };
   };
   security = {
-    krb5.settings.domain_realm = {
-      "zandoodle.me.uk" = "ZANDOODLE.ME.UK";
-      "workstation.zandoodle.me.uk" = "WORKSTATION.ZANDOODLE.ME.UK";
-    };
     tpm2 = {
       enable = true;
       tctiEnvironment = {
@@ -344,6 +340,20 @@
     kerberos_server = {
       enable = true;
       settings.realms."WORKSTATION.ZANDOODLE.ME.UK" = {
+        acl = [
+          {
+            access = "all";
+            principal = "*/admin";
+          }
+          {
+            access = "all";
+            principal = "max/zandoodle.me.uk@ZANDOODLE.ME.UK";
+          }
+          {
+            access = "all";
+            principal = "max/workstation.zandoodle.me.uk";
+          }
+        ];
         supported_enctypes = "aes256-sha2";
         master_key_type = "aes256-sha2";
       };
