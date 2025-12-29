@@ -4,7 +4,7 @@
   imports = [./configuration.nix];
   fileSystems = {
     "/home/max/shared" = {
-      device = "max-nixos-workstation-zerotier:/Big/shared";
+      device = "workstation.zandoodle.me.uk:/Big/shared";
       fsType = "nfs";
       options = [
         "defaults"
@@ -15,6 +15,7 @@
         "nofail"
         "noatime"
         "nofsc"
+        "sec=krb5p"
         "softreval"
         "async"
         "nodev"
