@@ -345,12 +345,22 @@
     doas.enable = true;
     krb5 = {
       enable = true;
-      settings.libdefaults = {
-        default_realm = "WORKSTATION.ZANDOODLE.ME.UK";
-        dns_canonicalize_hostname = "fallback";
-        dns_lookup_realm = true;
-        permitted_enctypes = "aes256-sha2";
-        rdns = false;
+      settings = {
+        libdefaults = {
+          default_realm = "WORKSTATION.ZANDOODLE.ME.UK";
+          dns_canonicalize_hostname = "fallback";
+          dns_lookup_realm = true;
+          permitted_enctypes = "aes256-sha2";
+          rdns = false;
+        };
+        realms = {
+          "ZANDOODLE.ME.UK" = {
+            admin_server = "local.zandoodle.me.uk";
+          };
+          "WORKSTATION.ZANDOODLE.ME.UK" = {
+            admin_server = "workstation.zandoodle.me.uk";
+          };
+        };
       };
     };
     pam.krb5.enable = false;
