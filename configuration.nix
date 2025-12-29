@@ -351,6 +351,7 @@
           dns_canonicalize_hostname = "fallback";
           dns_lookup_realm = true;
           permitted_enctypes = "aes256-sha2";
+          spake_preauth_groups = "edwards25519";
           rdns = false;
         };
         realms = {
