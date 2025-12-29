@@ -353,7 +353,10 @@
     };
     knot = {
       enable = true;
-      keyFiles = [ "/etc/knot/workstation.tsig" ];
+      keyFiles = [
+        "/etc/knot/workstation.tsig"
+        "/run/credentials/knot.service/caddy"
+      ];
       settings = {
         policy = {
           acme-challenge = {
@@ -709,6 +712,44 @@
           enable = true;
         };
       };
+      gen-tsig = {
+        before = [ "knot.service" "caddy.service" ];
+        requiredBy = [ "knot.service" "caddy.service" ];
+        confinement.enable = true;
+        serviceConfig = {
+          CapabilityBoundingSet = "";
+          DynamicUser = true;
+          Group = "keymgr";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateNetwork = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemainAfterExit = true;
+          RestrictAddressFamilies = true;
+          RestrictRealtime = true;
+          RuntimeDirectory = "keymgr";
+          RuntimeDirectoryPreserve = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @resources"];
+          Type = "oneshot";
+          UMask = "077";
+          User = "keymgr";
+        };
+        script = ''
+          ${lib.getExe' pkgs.knot-dns "keymgr"} -t caddy >/run/keymgr/caddy
+          for attr in id algorithm secret; do
+            ${lib.getExe pkgs.yq} -r .key.[]."$attr" </run/keymgr/caddy >/run/keymgr/caddy-"$attr"
+          done
+        '';
+      };
       get-IP-address = {
         confinement = {
           enable = true;
@@ -801,6 +842,7 @@
         };
         unitConfig.JoinsNamespaceOf = "harmonia.service";
       };
+      knot.serviceConfig.LoadCredential = "caddy:/run/keymgr/caddy";
       latest-system = {
         serviceConfig = {
           ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system-systemd --protocol activate";
