@@ -29,6 +29,13 @@
       };
     };
     kernelPackages = pkgs.linuxPackages_latest;
+    kernelPatches = [
+      {
+        name = "krb5-aes-sha2";
+        structuredExtraConfig.RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2 = lib.kernel.yes;
+        patch = null;
+      }
+    ];
     loader = {
       efi = {
         canTouchEfiVariables = true;
@@ -667,13 +674,6 @@
         enable = false;
       };
 
-      # Disable rpc units requiring krb5
-      rpc-gssd = {
-        enable = false;
-      };
-      rpc-svcgssd = {
-        enable = false;
-      };
       tailscaled = {
         serviceConfig = {
           UMask = "0077";
