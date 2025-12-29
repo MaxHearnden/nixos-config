@@ -353,16 +353,30 @@
     };
     knot = {
       enable = true;
+      keyFiles = [ "/etc/knot/workstation.tsig" ];
       settings = {
-        policy = [
-          {
-            id = "max.home.arpa";
+        policy = {
+          acme-challenge = {
+            ds-push = "orion";
+            ksk-submission = "orion";
+            propagation-delay = "10m";
+            single-type-signing = true;
+          };
+          "max.home.arpa" = {
             manual = true;
             rrsig-lifetime = "12h";
             rrsig-refresh = "4h";
-          }
-        ];
+          };
+        };
+        remote.orion = {
+          address = [
+            "fd7a:115c:a1e0::1a01:5208@54"
+            "100.122.82.8@54"
+          ];
+          key = "workstation";
+        };
         server = {
+          automatic-acl = true;
           listen = [
             "127.0.0.1@54"
             "::1@54"
@@ -373,6 +387,7 @@
             "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016"
           ];
         };
+        submission.orion.parent = [ "orion" ];
         zone = [
           {
             domain = "home.arpa";
@@ -387,6 +402,21 @@
             journal-content = "all";
             zonefile-load = "difference-no-serial";
             zonefile-sync = -1;
+          }
+          {
+            dnssec-signing = true;
+            dnssec-policy = "acme-challenge";
+            domain = "_acme-challenge.workstation.zandoodle.me.uk";
+            file = builtins.toFile "acme-challenge" ''
+              @ soa workstation.zandoodle.me.uk. hostmaster.zandoodle.me.uk 0 14400 3600 604800 86400
+              @ ns dns.zandoodle.me.uk.
+            '';
+            notify = "orion";
+            semantic-checks = true;
+            journal-content = "all";
+            zonefile-load = "difference-no-serial";
+            zonefile-skip = "TXT";
+            zonemd-generate = "zonemd-sha512";
           }
           {
             dnssec-signing = true;
