@@ -110,16 +110,16 @@
       filterForward = true;
       interfaces = {
         ztmjfp7kiq = {
-          allowedTCPPorts = [ 53 8080 8081 3000 2049 25565 ];
-          allowedUDPPorts = [ 53 24454 ];
+          allowedTCPPorts = [ 53 80 443 8080 8081 3000 2049 25565 ];
+          allowedUDPPorts = [ 53 443 24454 ];
         };
         tailscale0 = {
-          allowedTCPPorts = [ 22 53 88 464 749 2049 3000 25565 ];
-          allowedUDPPorts = [ 53 88 464 2049 24454 ];
+          allowedTCPPorts = [ 22 53 80 88 443 464 749 2049 3000 25565 ];
+          allowedUDPPorts = [ 53 88 443 464 2049 24454 ];
         };
         enp2s0 = {
-          allowedTCPPorts = [ 5000 53 ];
-          allowedUDPPorts = [ 53 69 ];
+          allowedTCPPorts = [ 5000 53 80 443 ];
+          allowedUDPPorts = [ 53 69 443 ];
         };
       };
       extraForwardRules = ''
@@ -188,32 +188,6 @@
     };
   };
   services = {
-    _3proxy = {
-      enable = true;
-      services = [
-        {
-          type = "tcppm";
-          auth = [ "none" ];
-          bindPort = 3000;
-          bindAddress = "max-nixos-workstation-zerotier-6plane";
-          extraArguments = "3000 172.28.10.244 3000";
-        }
-        {
-          type = "tcppm";
-          auth = [ "none" ];
-          bindPort = 3000;
-          bindAddress = "max-nixos-workstation-zerotier-rfc4193";
-          extraArguments = "3000 172.28.10.244 3000";
-        }
-        {
-          type = "tcppm";
-          auth = [ "none" ];
-          bindPort = 3000;
-          bindAddress = "100.91.224.22";
-          extraArguments = "3000 172.28.10.244 3000";
-        }
-      ];
-    };
     btrbk = {
       instances = {
         btrbk = {
@@ -261,6 +235,45 @@
           ];
         }
       ];
+    };
+    caddy = {
+      enable = true;
+      globalConfig = ''
+        acme_ca "https://acme-v02.api.letsencrypt.org/directory"
+        admin "unix//run/caddy/caddy.sock"
+        dns rfc2136 {
+          key_name {file./run/credentials/caddy.service/tsig-id}
+          key_alg {file./run/credentials/caddy.service/tsig-algorithm}
+          key {file./run/credentials/caddy.service/tsig-secret}
+          server [::1]:54
+        }
+        key_type p384
+        preferred_chains smallest
+      '';
+      package = pkgs.caddy.withPlugins {
+        plugins = [ "github.com/caddy-dns/rfc2136@v1.0.0" ];
+        hash = "sha256-f/grl1eTVWqem0us5ucxHizChqUfexymh67OD0PDwn8=";
+      };
+      virtualHosts = {
+        "*.workstation.zandoodle.me.uk".extraConfig = ''
+          tls {
+            issuer acme {
+              dns
+              profile shortlived
+              resolvers fd7a:115c:a1e0::1a01:5208
+            }
+          }
+
+          @gitea host gitea.workstation.zandoodle.me.uk
+          handle @gitea {
+            reverse_proxy unix//run/gitea/gitea.sock
+          }
+
+          handle {
+            abort
+          }
+        '';
+      };
     };
     dbus = {
       packages = [
@@ -311,8 +324,9 @@
           DISABLE_GIT_HOOKS = true;
         };
         server = {
-          DOMAIN = "max-nixos-workstation-zerotier";
-          HTTP_ADDR = "172.28.10.244";
+          DOMAIN = "workstation.zandoodle.me.uk";
+          HTTP_ADDR = "/run/gitea/gitea.sock";
+          PROTOCOL = "http+unix";
         };
         service = {
           DISABLE_REGISTRATION = true;
@@ -358,6 +372,13 @@
         "/run/credentials/knot.service/caddy"
       ];
       settings = {
+        acl.caddy = {
+          address = "::1";
+          action = "update";
+          key = "caddy";
+          update-owner = "zone";
+          update-type = "TXT";
+        };
         policy = {
           acme-challenge = {
             ds-push = "orion";
@@ -407,6 +428,7 @@
             zonefile-sync = -1;
           }
           {
+            acl = [ "caddy" ];
             dnssec-signing = true;
             dnssec-policy = "acme-challenge";
             domain = "_acme-challenge.workstation.zandoodle.me.uk";
@@ -419,6 +441,7 @@
             journal-content = "all";
             zonefile-load = "difference-no-serial";
             zonefile-skip = "TXT";
+            zonefile-sync = -1;
             zonemd-generate = "zonemd-sha512";
           }
           {
@@ -669,6 +692,11 @@
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
         };
+      };
+      caddy.serviceConfig = {
+        LoadCredential =
+          map (attr: "tsig-${attr}:/run/keymgr/caddy-${attr}") [ "id" "secret" "algorithm"];
+        RuntimeDirectory = "caddy";
       };
       dnsmasq = {
         preStart = lib.mkForce "";
