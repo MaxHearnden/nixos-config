@@ -92,7 +92,7 @@
           RestrictSUIDSGID = true;
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
           PrivateNetwork = true;
-          BindReadOnlyPaths = [ "/run/nscd" ];
+          BindReadOnlyPaths = [ "/var/run/nscd" "/run/nscd" ];
           ExecStart = lib.mkForce "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf snapshot --preserve";
           Restart = "on-failure";
         };
@@ -106,7 +106,7 @@
           inherit (cfg) wants after confinement restartIfChanged;
           path = lib.mkForce cfg.path;
           serviceConfig = lib.removeAttrs cfg.serviceConfig ["RootDirectory" "InaccessiblePaths" "ReadOnlyPaths" "RuntimeDirectory"] // {
-            IPAddressAllow = "172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258 fc9c:6b89:eec5:0d88:e258:0000:0000:0001";
+            IPAddressAllow = "100.91.224.22 fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
             PrivateNetwork = [];
             ExecStartPre = "${pkgs.btrbk}/bin/btrbk clean";
             ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/btrbk.conf resume";
