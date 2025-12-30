@@ -47,11 +47,11 @@
         "rev": "cd93d4cf19ffd97b10cdf4bd5f43629871de5c1a",
         "revCount": 7,
         "type": "git",
-        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/latest-system"
+        "url": "https://gitea.workstation.zandoodle.me.uk/zandoodle/latest-system"
       },
       "original": {
         "type": "git",
-        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/latest-system"
+        "url": "https://gitea.workstation.zandoodle.me.uk/zandoodle/latest-system"
       }
     },
     "nix-minecraft": {
@@ -89,11 +89,11 @@
         "rev": "c09254bcb4419211ce377963aa31fa659acd0fcb",
         "revCount": 6,
         "type": "git",
-        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec"
+        "url": "https://gitea.workstation.zandoodle.me.uk/zandoodle/nixos-kexec"
       },
       "original": {
         "type": "git",
-        "url": "http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec"
+        "url": "https://gitea.workstation.zandoodle.me.uk/zandoodle/nixos-kexec"
       }
     },
     "nixpkgs": {

@@ -2,7 +2,7 @@
   inputs = {
     latest-system = {
       inputs.nixpkgs.follows = "nixpkgs";
-      url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/latest-system";
+      url = "git+https://gitea.workstation.zandoodle.me.uk/zandoodle/latest-system";
     };
     nix-minecraft = {
       inputs.nixpkgs.follows = "nixpkgs";
@@ -10,7 +10,7 @@
     };
     nixos-kexec = {
       inputs.nixpkgs.follows = "nixpkgs";
-      url = "git+http://max-nixos-workstation-zerotier:3000/zandoodle/nixos-kexec";
+      url = "git+https://gitea.workstation.zandoodle.me.uk/zandoodle/nixos-kexec";
     };
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
