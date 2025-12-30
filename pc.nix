@@ -130,7 +130,7 @@
         btrbk = {
           settings = {
             volume = {
-              "ssh://max-nixos-workstation-zerotier/nexus" = {
+              "ssh://workstation.zandoodle.me.uk/nexus" = {
                 subvolume = {
                   "@NixOS" = {
                     snapshot_name = "@NixOS-for-pc";
@@ -141,7 +141,7 @@
                 snapshot_preserve_min = "latest";
                 incremental = "strict";
               };
-              "ssh://max-nixos-workstation-zerotier/Big" = {
+              "ssh://workstation.zandoodle.me.uk/Big" = {
                 subvolume = {
                   "shared" = {
                     snapshot_name = "shared-for-pc";
@@ -262,11 +262,7 @@
       stub-zone = [
         {
           name = "max.home.arpa";
-          stub-addr = [
-            "172.28.10.244"
-            "fc9c:6b89:eec5:d88:e258::1"
-            "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
-          ];
+          stub-host = "workstation.zandoodle.me.uk";
         }
       ];
     };

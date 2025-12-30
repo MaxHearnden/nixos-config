@@ -34,33 +34,36 @@
       "720-kernel-initrd.pcrlock" ])
       // {
         "knot/max.home.arpa.zone".text = ''
-          @ SOA dns nobody.invalid. 0 7200 60 ${toString (2 * 24 *
+          @ SOA workstation.zandoodle.me.uk. nobody.invalid. 0 7200 60 ${toString (2 * 24 *
           60 * 60)} 1800
-          @ NS workstation.zerotier
+          @ NS workstation.zandoodle.me.uk.
           cache CNAME workstation
           cache.tailscale CNAME workstation.tailscale
           cache.zerotier CNAME workstation.zerotier
-          dns CNAME workstation
+          dns CNAME workstation.tailscale
           dns.tailscale CNAME workstation.tailscale
           dns.zerotier CNAME workstation.zerotier
-          gitea CNAME workstation
           minecraft CNAME minecraft.tailscale
           minecraft.zerotier CNAME workstation.zerotier
           minecraft.tailscale CNAME workstation.tailscale
-          chromebook CNAME chromebook.zerotier
+          chromebook CNAME chromebook.tailscale
           chromebook.zerotier A 172.28.156.146
           chromebook.zerotier AAAA fc9c:6b89:ee1a:7a70:b542::1
           chromebook.zerotier AAAA fd80:56c2:e21c:3d4b:c99:931a:7a70:b542
-          workstation CNAME workstation.zerotier
+          chromebook.tailscale A 100.69.85.70
+          chromebook.tailscale AAAA fd7a:115c:a1e0::d401:55461
+          workstation CNAME workstation.tailscale
           workstation.zerotier A 172.28.10.244
           workstation.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93c5:d88:e258
           workstation.zerotier AAAA fc9c:6b89:eec5:d88:e258::1
           workstation.tailscale A 100.91.224.22
           workstation.tailscale AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
-          pc CNAME pc.zerotier
+          pc CNAME pc.tailscale
           pc.zerotier A 172.28.13.156
           pc.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567
           pc.zerotier AAAA fc9c:6b89:eed9:c2b9:c567::1
+          pc.tailscale A 100.95.236.105
+          pc.tailscale AAAA fd7a:115c:a1e0::d2df:ec69
           $INCLUDE /nix/var/nix/profiles/all/zonefile
         '';
         "resolv.conf".text = ''
@@ -1033,7 +1036,7 @@
           git -c \
             "core.sshCommand=ssh -i /var/lib/nixos-upgrade-all/id_ed25519" \
             clone --single-branch -b main \
-            gitea@max-nixos-workstation-zerotier:zandoodle/nixos-config
+            gitea@workstation.zandoodle.me.uk:zandoodle/nixos-config
 
           cd nixos-config
 

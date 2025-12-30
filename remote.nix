@@ -29,7 +29,7 @@
   nix = {
     settings = {
       trusted-public-keys = ["max-nixos-workstation:Ds5AWfGPm6jRbVSjG4ht42MK++hhfFczQ4bJRhD9thI="];
-      substituters = ["http://max-nixos-workstation-zerotier:8080"];
+      substituters = ["https://cache.workstation.zandoodle.me.uk"];
     };
   };
   services = {
@@ -42,7 +42,7 @@
             volume = {
               "/nexus" = {
                 target = {
-                  "ssh://max-nixos-workstation-zerotier/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {};
+                  "ssh://workstation.zandoodle.me.uk/Big/backups/${lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName}" = {};
                 };
               };
             };
@@ -54,11 +54,7 @@
       stub-zone = lib.mkIf (config.networking.hostName != "max-nixos-pc") [
         {
           name = "home.arpa";
-          stub-addr = [
-            "172.28.10.244"
-            "fc9c:6b89:eec5:d88:e258::1"
-            "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
-          ];
+          stub-host = "workstation.zandoodle.me.uk";
         }
       ];
     };

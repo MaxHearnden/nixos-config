@@ -645,7 +645,6 @@
           ReadWritePaths = "/nix /tmp";
           RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
           RestrictNamespaces = "user net mnt ipc pid uts cgroup";
-          RestrictNetworkInterfaces = "~tailscale0";
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallErrorNumber = "ENOSYS";
