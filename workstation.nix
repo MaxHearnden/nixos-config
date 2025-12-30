@@ -51,7 +51,7 @@
           chromebook.zerotier AAAA fc9c:6b89:ee1a:7a70:b542::1
           chromebook.zerotier AAAA fd80:56c2:e21c:3d4b:c99:931a:7a70:b542
           chromebook.tailscale A 100.69.85.70
-          chromebook.tailscale AAAA fd7a:115c:a1e0::d401:55461
+          chromebook.tailscale AAAA fd7a:115c:a1e0::d401:5546
           workstation CNAME workstation.tailscale
           workstation.zerotier A 172.28.10.244
           workstation.zerotier AAAA fd80:56c2:e21c:3d4b:c99:93c5:d88:e258
