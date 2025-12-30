@@ -40,6 +40,27 @@
       "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
       "720-kernel-initrd.pcrlock" ])
       // {
+        "dnsdist/dnsdist.conf".text = ''
+          -- listen on local addresses
+          addLocal("127.0.0.1:53")
+          addLocal("[::]:53")
+
+          newServer({
+            address = "[::1]:54",
+            name = "knot",
+            pool = "auth",
+            healthCheckMode = "lazy"
+          })
+          newServer({
+            address = "[::1]:55",
+            name = "unbound",
+            pool = "recursive",
+            healthCheckMode = "lazy"
+          })
+
+          addAction(RDRule(), PoolAction("recursive"))
+          addAction(AllRule(), PoolAction("auth"))
+        '';
         "tayga/tayga.conf".text = ''
           tun-device tayga
           ipv4-addr 192.0.0.2
@@ -63,8 +84,8 @@
   };
   networking = {
     firewall = {
-      allowedTCPPorts = [ 8053 ];
-      allowedUDPPorts = [ 8053 ];
+      allowedTCPPorts = [ 54 8053 ];
+      allowedUDPPorts = [ 54 8053 ];
       extraForwardRules = ''
         iifname tayga oifname shadow-lan accept
         iifname ztmjfp7kiq oifname plat accept
@@ -198,7 +219,7 @@
         server = {
           automatic-acl = true;
           identity = "pc.zandoodle.me.uk";
-          listen = [ "0.0.0.0@8053" "::@8053" ];
+          listen = [ "0.0.0.0@8053" "::@8053" "0.0.0.0@54" "::@54" ];
           nsid = "pc.zandoodle.me.uk";
           tcp-fastopen = true;
           tcp-reuseport = true;
@@ -253,6 +274,7 @@
           "168.192.in-addr.arpa"
           "d.f.ip6.arpa"
         ];
+        interface = [ "127.0.0.1@55" "::@55" ];
         local-zone = [
           "168.192.in-addr.arpa nodefault"
           "d.f.ip6.arpa nodefault"
@@ -358,6 +380,9 @@
       };
       wait-online.enable = lib.mkForce true;
     };
+    packages = [
+      pkgs.dnsdist
+    ];
     services = {
       "3proxy" = {
         serviceConfig = {
@@ -401,6 +426,32 @@
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
         };
+      };
+      dnsdist = {
+        serviceConfig = {
+          # Override the dnsdist service to use /etc/dnsdist/dnsdist.conf
+          ExecStart = [
+            ""
+            "${lib.getExe pkgs.dnsdist} --supervised --disable-syslog --config /etc/dnsdist/dnsdist.conf"
+          ];
+          ExecStartPre = [
+            ""
+            "${lib.getExe pkgs.dnsdist} --check-config --config /etc/dnsdist/dnsdist.conf"
+          ];
+
+          # Run as a dedicated user
+          User = "dnsdist";
+          Group = "dnsdist";
+        };
+
+        # Restart dnsdist when the config changes
+        restartTriggers = [ config.environment.etc."dnsdist/dnsdist.conf".source ];
+
+        # Restart dnsdist immediatly
+        startLimitIntervalSec = 0;
+
+        # Start dnsdist on boot
+        wantedBy = [ "multi-user.target" ];
       };
       plat = {
         after = [ "sys-subsystem-net-devices-plat.device" ];
@@ -502,12 +553,19 @@
   ];
 
   users = {
-    groups.tayga = {};
+    groups = {
+      dnsdist = {};
+      tayga = {};
+    };
     users = {
       btrbk = {
         packages = with pkgs; [
           zstd
         ];
+      };
+      dnsdist = {
+        group = "dnsdist";
+        isSystemUser = true;
       };
       max = {
         extraGroups = [ "knot" ];
