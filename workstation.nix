@@ -264,9 +264,25 @@
             }
           }
 
+          header {
+            Cross-Origin-Resource-Policy same-origin
+            Referrer-Policy no-referrer
+            Strict-Transport-Security "max-age=31536000; includeSubdomains; preload"
+            X-Content-Type-Options nosniff
+            X-Frame-Options DENY
+          }
+
           @gitea host gitea.workstation.zandoodle.me.uk
           handle @gitea {
             reverse_proxy unix//run/gitea/gitea.sock
+          }
+
+          @harmonia host cache.workstation.zandoodle.me.uk
+          handle @harmonia {
+            header {
+              Content-Security-Policy "base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; script-src 'sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4'; style-src-elem https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css;"
+            }
+            reverse_proxy unix//run/harmonia.sock
           }
 
           handle {
@@ -1178,7 +1194,12 @@
     };
     sockets = {
       harmonia-proxy = {
-        listenStreams = ["172.28.10.244:8080" "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8080" "[fc9c:6b89:eec5:d88:e258::1]:8080"];
+        listenStreams = [
+          "172.28.10.244:8080"
+          "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8080"
+          "[fc9c:6b89:eec5:d88:e258::1]:8080"
+          "/run/harmonia.sock"
+        ];
         socketConfig = {
           FreeBind = true;
           IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
