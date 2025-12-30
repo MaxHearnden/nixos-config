@@ -396,7 +396,7 @@
         serviceConfig = {
           BindPaths = [ "/HDD/backups" ];
           PrivateNetwork = lib.mkForce false;
-          IPAddressAllow = "100.91.224.22 fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
+          IPAddressAllow = "::1 127.0.0.1 100.91.224.22 fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
           RestrictSUIDSGID = lib.mkForce false;
           CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
