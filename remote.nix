@@ -8,8 +8,8 @@
       fsType = "nfs";
       options = [
         "defaults"
-        "x-systemd.requires=sys-devices-virtual-net-ztmjfp7kiq.device"
-        "x-systemd.requires=zerotierone.service"
+        "x-systemd.requires=sys-devices-virtual-net-tailscale0.device"
+        "x-systemd.requires=tailscale0.service"
         "x-systemd.automount"
         "x-systemd.idle-timeout=5m"
         "nofail"
@@ -85,8 +85,8 @@
     };
     services = {
       "btrbk-btrbk" = {
-        wants = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
-        after = [ "zerotierone.service" "sys-devices-virtual-net-ztmjfp7kiq.device" ];
+        wants = [ "tailscale0.service" "sys-devices-virtual-net-tailscale0.device" ];
+        after = [ "tailscale0.service" "sys-devices-virtual-net-tailscale0.device" ];
         confinement.packages = [ pkgs.zstd ];
         serviceConfig = {
           RestrictSUIDSGID = true;
@@ -116,7 +116,7 @@
           };
         };
       "nixos-upgrade" = {
-        after = [ "network-online.target" "zerotierone.service" ];
+        after = [ "network-online.target" "tailscale0.service" ];
         description = "NixOS Upgrade";
         enableStrictShellChecks = true;
         serviceConfig = {
