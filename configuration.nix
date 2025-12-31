@@ -363,9 +363,11 @@
         };
         realms = {
           "ZANDOODLE.ME.UK" = {
+            disable_encrypted_timestamp = true;
             admin_server = "local.zandoodle.me.uk";
           };
           "WORKSTATION.ZANDOODLE.ME.UK" = {
+            disable_encrypted_timestamp = true;
             admin_server = "workstation.zandoodle.me.uk";
           };
         };
