@@ -219,7 +219,7 @@
         server = {
           automatic-acl = true;
           identity = "pc.zandoodle.me.uk";
-          listen = [ "0.0.0.0@8053" "::@8053" "0.0.0.0@54" "::@54" ];
+          listen = [ "0.0.0.0@54" "::@54" ];
           nsid = "pc.zandoodle.me.uk";
           tcp-fastopen = true;
           tcp-reuseport = true;
