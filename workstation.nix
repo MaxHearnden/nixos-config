@@ -346,6 +346,7 @@
           DOMAIN = "workstation.zandoodle.me.uk";
           HTTP_ADDR = "/run/gitea/gitea.sock";
           PROTOCOL = "http+unix";
+          ROOT_URL = "https://gitea.workstation.zandoodle.me.uk";
         };
         service = {
           DISABLE_REGISTRATION = true;
