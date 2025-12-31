@@ -377,7 +377,7 @@
             }
             {
               access = "all";
-              principal = "max/workstation.zandoodle.me.uk";
+              principal = "max";
             }
           ];
           supported_enctypes = "aes256-sha2";
