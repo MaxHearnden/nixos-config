@@ -239,6 +239,11 @@
     };
     firewall = {
       interfaces = {
+        tailscale0 = {
+          allowedTCPPorts = [
+            22
+          ];
+        };
         ztmjfp7kiq = {
           allowedTCPPorts = [
             22 # ssh
