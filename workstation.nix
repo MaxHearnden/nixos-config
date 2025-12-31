@@ -500,13 +500,7 @@
         '';
       };
     };
-    openssh = {
-      settings = {
-        GSSAPIAuthentication = true;
-        GSSAPIStrictAcceptorCheck = false;
-      };
-      startWhenNeeded = true;
-    };
+    openssh.startWhenNeeded = true;
     ratbagd = {
       enable = true;
     };

@@ -431,6 +431,8 @@
     openssh = {
       openFirewall = false;
       settings = {
+        GSSAPIAuthentication = true;
+        GSSAPIStrictAcceptorCheck = false;
         X11Forwarding = true;
       };
     };
