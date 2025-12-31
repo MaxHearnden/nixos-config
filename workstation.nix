@@ -493,7 +493,7 @@
         enable = true;
         hostName = "workstation.zandoodle.me.uk,max-nixos-workstation-zerotier-ipv4,max-nixos-workstation-zerotier-6plane,max-nixos-workstation-zerotier-rfc4193,192.168.4.1";
         exports = ''
-          /Big/shared -mp=/Big,sec=krb5p,rw,all_squash,anonuid=1000,anongid=100,async *
+          /Big/shared -mp=/Big,sec=krb5p,rw *
           /Big/shared/riscv/star64_root 192.168.4.0/24(rw,no_root_squash,mp=/Big)
           /nix 192.168.4.0/24(ro,no_root_squash)
         '';

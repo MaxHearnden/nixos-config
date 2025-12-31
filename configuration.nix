@@ -420,6 +420,7 @@
     libinput = {
       enable = true;
     };
+    nfs.idmapd.settings.General.Domain = "workstation.zandoodle.me.uk";
     openssh = {
       openFirewall = false;
       settings = {
