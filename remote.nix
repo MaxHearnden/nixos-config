@@ -9,7 +9,7 @@
       options = [
         "defaults"
         "x-systemd.requires=sys-devices-virtual-net-tailscale0.device"
-        "x-systemd.requires=tailscale0.service"
+        "x-systemd.requires=tailscaled.service"
         "x-systemd.automount"
         "x-systemd.idle-timeout=5m"
         "nofail"
