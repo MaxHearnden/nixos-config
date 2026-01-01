@@ -8,8 +8,8 @@
       fsType = "nfs";
       options = [
         "defaults"
-        "x-systemd.requires=sys-devices-virtual-net-tailscaled.device"
-        "x-systemd.requires=tailscaled.service"
+        "x-systemd.requires=sys-devices-virtual-net-tailscale0.device"
+        "x-systemd.requires=tailscale0.service"
         "x-systemd.automount"
         "x-systemd.idle-timeout=5m"
         "nofail"
@@ -85,8 +85,8 @@
     };
     services = {
       "btrbk-btrbk" = {
-        wants = [ "tailscaled.service" "sys-devices-virtual-net-tailscaled.device" ];
-        after = [ "tailscaled.service" "sys-devices-virtual-net-tailscaled.device" ];
+        wants = [ "tailscaled.service" "sys-devices-virtual-net-tailscale0.device" ];
+        after = [ "tailscaled.service" "sys-devices-virtual-net-tailscale0.device" ];
         confinement.packages = [ pkgs.zstd ];
         serviceConfig = {
           RestrictSUIDSGID = true;
