@@ -888,6 +888,7 @@
         unitConfig.JoinsNamespaceOf = "harmonia.service";
       };
       kadmind = {
+        after = [ "kadmind.socket" ];
         confinement = {
           enable = true;
           packages = [
@@ -895,18 +896,19 @@
             config.environment.etc."krb5.conf".source
           ];
         };
+        requires = [ "kadmind.socket" ];
         serviceConfig = {
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
           BindReadOnlyPaths = [
             "${config.environment.etc."krb5kdc/kdc.conf".source}:/etc/krb5kdc/kdc.conf"
             "${config.environment.etc."krb5.conf".source}:/etc/krb5.conf"
           ];
+          CapabilityBoundingSet = "";
           Group = "krb5";
+          IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
-          PrivateUsers = lib.mkForce false;
+          PrivateNetwork = true;
           ProcSubset = "pid";
           ProtectClock = true;
           ProtectHome = true;
@@ -915,7 +917,7 @@
           ProtectProc = "invisible";
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+          RestrictAddressFamilies = "AF_UNIX";
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           RestrictNamespaces = true;
@@ -925,8 +927,10 @@
           UMask = "077";
           User = "krb5";
         };
+        wantedBy = lib.mkForce [];
       };
       kdc = {
+        after = [ "kdc.socket" ];
         confinement = {
           enable = true;
           packages = [
@@ -934,22 +938,23 @@
             config.environment.etc."krb5.conf".source
           ];
         };
+        requires = [ "kdc.socket" ];
         serviceConfig = {
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-          CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
           BindReadOnlyPaths = [
             "${config.environment.etc."krb5kdc/kdc.conf".source}:/etc/krb5kdc/kdc.conf"
             "${config.environment.etc."krb5.conf".source}:/etc/krb5.conf"
           ];
+          CapabilityBoundingSet = "";
           ExecStart = lib.mkForce (utils.escapeSystemdExecArgs ([
             (lib.getExe' config.security.krb5.package "krb5kdc")
             "-n"
           ] ++ config.services.kerberos_server.extraKDCArgs));
           Group = "krb5";
+          IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
-          PrivateUsers = lib.mkForce false;
+          PrivateNetwork = true;
           ProcSubset = "pid";
           ProtectClock = true;
           ProtectHome = true;
@@ -958,7 +963,7 @@
           ProtectProc = "invisible";
           ProtectSystem = "strict";
           RemoveIPC = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+          RestrictAddressFamilies = "AF_UNIX";
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           RestrictNamespaces = true;
@@ -1289,6 +1294,16 @@
           IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
           IPAddressDeny = "any";
         };
+        wantedBy = [ "sockets.target" ];
+      };
+      kadmind = {
+        listenDatagrams = [ "[::]:464" ];
+        listenStreams = [ "[::]:464" "[::]:749" ];
+        wantedBy = [ "sockets.target" ];
+      };
+      kdc = {
+        listenDatagrams = [ "[::]:88" ];
+        listenStreams = [ "[::]:88" ];
         wantedBy = [ "sockets.target" ];
       };
       latest-system = {
