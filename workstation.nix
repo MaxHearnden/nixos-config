@@ -403,7 +403,6 @@
           acme-challenge = {
             ds-push = "orion";
             ksk-submission = "orion";
-            propagation-delay = "10m";
             single-type-signing = true;
           };
           "max.home.arpa" = {
@@ -431,7 +430,10 @@
             "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016"
           ];
         };
-        submission.orion.parent = [ "orion" ];
+        submission.orion = {
+          parent = [ "orion" ];
+          parent-delay = "1d";
+        };
         zone = [
           {
             domain = "home.arpa";
