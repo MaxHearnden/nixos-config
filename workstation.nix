@@ -402,6 +402,7 @@
         policy = {
           acme-challenge = {
             ds-push = "orion";
+            ksk-lifetime = "14d";
             ksk-submission = "orion";
             single-type-signing = true;
           };
