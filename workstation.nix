@@ -476,7 +476,7 @@ in
             dnssec-policy = "acme-challenge";
             domain = "_acme-challenge.workstation.zandoodle.me.uk";
             file = builtins.toFile "acme-challenge" ''
-              @ soa workstation.zandoodle.me.uk. hostmaster.zandoodle.me.uk 0 14400 3600 604800 86400
+              @ soa workstation.zandoodle.me.uk. hostmaster.zandoodle.me.uk. 0 14400 3600 604800 86400
               @ ns dns.zandoodle.me.uk.
             '';
             notify = "orion";
