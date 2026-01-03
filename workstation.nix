@@ -1,5 +1,13 @@
 { lib, pkgs, config, inputs, utils, ... }:
 
+let
+  python = pkgs.python3;
+  kdcproxy = python.pkgs.callPackage ./kdcproxy.nix {};
+  kdcproxy_env = python.buildEnv.override {
+    extraLibs = [ kdcproxy ];
+  };
+in
+
 {
   imports = [
     ./configuration.nix
@@ -33,6 +41,9 @@
       "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
       "720-kernel-initrd.pcrlock" ])
       // {
+        "kdcproxy.conf".text = ''
+          [*ZANDOODLE.ME.UK]
+        '';
         "knot/max.home.arpa.zone".text = ''
           @ SOA workstation.zandoodle.me.uk. nobody.invalid. 0 7200 60 ${toString (2 * 24 *
           60 * 60)} 1800
@@ -287,6 +298,14 @@
               Content-Security-Policy "base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; script-src 'sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4'; style-src-elem https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css;"
             }
             reverse_proxy unix//run/harmonia.sock
+          }
+
+          @kdcproxy host kkdcp.workstation.zandoodle.me.uk
+          handle @kdcproxy {
+            header {
+              Content-Security-Policy "default-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'"
+            }
+            reverse_proxy unix//run/kdcproxy
           }
 
           handle {
@@ -976,6 +995,32 @@
           User = "krb5";
         };
       };
+      kdcproxy = {
+        after = [ "kdcproxy.socket" ];
+        confinement = {
+          enable = true;
+          packages = [
+            kdcproxy_env
+          ];
+        };
+        environment.PYTHONPATH = "${kdcproxy_env}/${python.sitePackages}/";
+        requires = [ "kdcproxy.socket" ];
+        serviceConfig = {
+          BindReadOnlyPaths = [
+            "${config.environment.etc."resolv.conf".source}:/etc/resolv.conf"
+            "${config.environment.etc."kdcproxy.conf".source}:/etc/kdcproxy.conf"
+          ];
+          CapabilityBoundingSet = "";
+          DynamicUser = true;
+          ExecStart = "${lib.getExe python.pkgs.gunicorn} kdcproxy";
+          Group = "kdcproxy";
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          Type = "exec";
+          UMask = "077";
+          User = "kdcproxy";
+        };
+      };
       knot.serviceConfig.LoadCredential = "caddy:/run/keymgr/caddy";
       latest-system = {
         serviceConfig = {
@@ -1305,6 +1350,10 @@
       kdc = {
         listenDatagrams = [ "[::]:88" ];
         listenStreams = [ "[::]:88" ];
+        wantedBy = [ "sockets.target" ];
+      };
+      kdcproxy = {
+        listenStreams = [ "/run/kdcproxy" ];
         wantedBy = [ "sockets.target" ];
       };
       latest-system = {
