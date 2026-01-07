@@ -273,6 +273,7 @@
           "home.arpa"
           "168.192.in-addr.arpa"
           "d.f.ip6.arpa"
+          "root-servers.net"
         ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64;
         interface = [ "127.0.0.1@55" "::@55" ];
         local-zone = [
