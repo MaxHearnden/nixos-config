@@ -475,6 +475,14 @@
               forward-addr = ["9.9.9.9#dns.quad9.net" "149.112.112.112#dns.quad9.net" "2620:fe::fe#dns.quad9.net" "2620:fe::9#dns.quad9.net"];
               forward-tls-upstream = true;
             }
+            {
+              name = "zandoodle.me.uk.";
+              stub-addr = [
+                "fd7a:115c:a1e0::1a01:5208"
+                "100.122.82.8"
+              ];
+              forward-first = true;
+            }
           ];
         })
         {
