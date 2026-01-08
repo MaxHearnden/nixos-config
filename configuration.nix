@@ -477,7 +477,7 @@
             }
             {
               name = "zandoodle.me.uk.";
-              stub-addr = [
+              forward-addr = [
                 "fd7a:115c:a1e0::1a01:5208"
                 "100.122.82.8"
               ];
