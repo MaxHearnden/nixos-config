@@ -371,6 +371,8 @@
           "ZANDOODLE.ME.UK" = {
             disable_encrypted_timestamp = true;
             admin_server = "local.zandoodle.me.uk";
+          } // lib.optionalAttrs (config.networking.hostname != "max-nixos-pc") {
+            sitename = "tailscale";
           };
           "WORKSTATION.ZANDOODLE.ME.UK" = {
             disable_encrypted_timestamp = true;

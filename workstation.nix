@@ -194,7 +194,6 @@ in
     };
   };
   security = {
-    krb5.settings.realms."ZANDOODLE.ME.UK".sitename = "tailscale";
     tpm2 = {
       enable = true;
       tctiEnvironment = {
