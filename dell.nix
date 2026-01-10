@@ -14,4 +14,8 @@
     hostName = "max-nixos-dell";
   };
   services.tcsd.enable = true;
+  users.users.max.packages = with pkgs; [
+    tpm-tools
+    tpmmanager
+  ];
 }
