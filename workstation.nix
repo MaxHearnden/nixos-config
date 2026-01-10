@@ -263,7 +263,9 @@ in
           server [::1]:54
         }
         key_type p384
-        preferred_chains smallest
+        preferred_chains {
+          root_common_name "ISRG Root X2"
+        }
       '';
       package = pkgs.caddy.withPlugins {
         plugins = [ "github.com/caddy-dns/rfc2136@v1.0.0" ];
