@@ -63,11 +63,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768357481,
-        "narHash": "sha256-LpOWVXsHx20x8eRIhn23Q0icmV3Z6ZeFpAPzEqldXFk=",
+        "lastModified": 1768962252,
+        "narHash": "sha256-HyWOOHcySV8rl36gs4+n0sxPinxpwWOgwXibfFPYeZ0=",
         "owner": "Infinidoge",
         "repo": "nix-minecraft",
-        "rev": "f888492aa1a1eeb0114cf78af40d44e8300e002e",
+        "rev": "433cf697394104123e1fd02fa689534ac1733bfa",
         "type": "github"
       },
       "original": {
@@ -156,11 +156,11 @@
         "rtf-tokenize": "rtf-tokenize"
       },
       "locked": {
-        "lastModified": 1768710399,
-        "narHash": "sha256-vo+LNituxzpobRgm1GKOSiXjrRK+sVclNH+CzQ3q5nQ=",
+        "lastModified": 1768883358,
+        "narHash": "sha256-dWIrdBEH1EkfSvB9rE7E4saBMiq1BSkHao9KOl+p3cI=",
         "owner": "opensteno",
         "repo": "plover-flake",
-        "rev": "b8de51bde54311a97566b9c900a859b060011ad9",
+        "rev": "f37a6ed9e8f2371694d01a36633ab1b1aac89610",
         "type": "github"
       },
       "original": {
@@ -266,11 +266,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768875310,
-        "narHash": "sha256-yUtG7GOvsjmxf3xdHN/e5BZp5/ZoihiZgqxYJNwVD9U=",
+        "lastModified": 1768961914,
+        "narHash": "sha256-IBEuhAlNrOejnfxwYOINI41NVppt62OnLQLiMCNWBSo=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "5ec577201443e3fed2229e8a460d02202dc80be1",
+        "rev": "05bffac3f1450b1590161937e9eda5914f879ba9",
         "type": "github"
       },
       "original": {
