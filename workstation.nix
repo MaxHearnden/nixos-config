@@ -339,7 +339,7 @@ in
         conf-file = "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
         dhcp-fqdn = true;
         dhcp-option = [ "option:mtu,9216" ];
-        dhcp-range = [ "192.168.4.20,192.168.4.250" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
+        dhcp-range = [ "192.168.3.2,192.168.3.199" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         dhcp-rapid-commit = true;
         dnssec = true;
         domain = "home.arpa";
@@ -516,11 +516,11 @@ in
     nfs = {
       server = {
         enable = true;
-        hostName = "workstation.zandoodle.me.uk,max-nixos-workstation-zerotier-ipv4,max-nixos-workstation-zerotier-6plane,max-nixos-workstation-zerotier-rfc4193,192.168.4.1";
+        hostName = "workstation.zandoodle.me.uk,max-nixos-workstation-zerotier-ipv4,max-nixos-workstation-zerotier-6plane,max-nixos-workstation-zerotier-rfc4193,192.168.3.1";
         exports = ''
           /Big/shared -mp=/Big,sec=krb5p,rw *
-          /Big/shared/riscv/star64_root 192.168.4.0/24(rw,no_root_squash,mp=/Big)
-          /nix 192.168.4.0/24(ro,no_root_squash)
+          /Big/shared/riscv/star64_root 192.168.3.0/24(rw,no_root_squash,mp=/Big)
+          /nix 192.168.3.0/24(ro,no_root_squash)
         '';
       };
     };
@@ -590,7 +590,7 @@ in
           vlan = [ "guest" "shadow-lan" ];
         };
         "10-enp2s0" = {
-          address = ["192.168.4.1/24" "fd80:1234::1/64"];
+          address = ["192.168.3.1/24" "fd80:1234::1/64"];
           matchConfig = {
             Name = "enp2s0";
           };
@@ -599,7 +599,7 @@ in
             RequiredForOnline = false;
           };
           domains = [ "home.arpa" ];
-          dns = [ "192.168.4.1" "fd80:1234::1" ];
+          dns = [ "192.168.3.1" "fd80:1234::1" ];
           networkConfig = {
             ConfigureWithoutCarrier = true;
             DNSDefaultRoute = false;
@@ -733,8 +733,8 @@ in
         serviceConfig = {
           AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
           CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN CAP_NET_BROADCAST";
-          IPAddressAllow = "0.0.0.0 255.255.255.255 fe80::/10 ff02::1 127.0.0.53 fd80:1234::/64 192.168.4.0/24";
-          IPAddressDeny = "any";
+          # IPAddressAllow = "0.0.0.0 255.255.255.255 fe80::/10 ff02::1 127.0.0.53 fd80:1234::/64 192.168.4.0/24";
+          # IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
