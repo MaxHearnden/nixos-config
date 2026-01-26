@@ -301,10 +301,16 @@ in
             reverse_proxy unix//run/harmonia.sock
           }
 
+          @test host test.workstation.zandoodle.me.uk
+          handle @test {
+            reverse_proxy [::1]:8080
+          }
+
           @kdcproxy host kkdcp.workstation.zandoodle.me.uk
           handle @kdcproxy {
             header {
               Content-Security-Policy "default-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'"
+              Access-Control-Allow-Origin https://test.workstation.zandoodle.me.uk
             }
             reverse_proxy unix//run/kdcproxy
           }
