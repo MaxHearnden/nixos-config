@@ -343,6 +343,14 @@
         StrictHostKeyChecking yes
         UserKnownHostsFile /dev/null
         GSSAPIAuthentication yes
+
+        Host localhost
+        CanonicalizeHostname no
+
+        Host *
+        CanonicalDomains zandoodle.me.uk int.zandoodle.me.uk
+        CanonicalizeFallbackLocal no
+        CanonicalizeHostname yes
       '';
       package = pkgs.opensshWithKerberos;
     };
