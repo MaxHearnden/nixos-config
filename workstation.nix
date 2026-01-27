@@ -432,7 +432,6 @@ in
         };
         policy = {
           acme-challenge = {
-            algorithm = "ed25519";
             ds-push = "orion";
             ksk-lifetime = "14d";
             ksk-submission = "orion";
