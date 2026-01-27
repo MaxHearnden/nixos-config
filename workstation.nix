@@ -83,7 +83,7 @@ in
         "resolv.conf".text = ''
           nameserver 127.0.0.53
           options edns0 trust-ad
-          search max.home.arpa home.arpa
+          search int.zandoodle.me.uk zandoodle.me.uk max.home.arpa home.arpa
         '';
         "tayga/tayga.conf".text = ''
           tun-device tayga

@@ -24,7 +24,7 @@
     };
   };
   networking.resolvconf.extraConfig = ''
-    search_domains=max.home.arpa
+    search_domains="int.zandoodle.me.uk zandoodle.me.uk max.home.arpa"
   '';
   nix = {
     settings = {
