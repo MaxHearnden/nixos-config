@@ -43,6 +43,9 @@ in
       // {
         "kdcproxy.conf".text = ''
           [*ZANDOODLE.ME.UK]
+
+          [TEST.WORKSTATION.ZANDOODLE.ME.UK]
+          silence_port_warn = true
         '';
         "knot/max.home.arpa.zone".text = ''
           @ SOA workstation.zandoodle.me.uk. nobody.invalid. 0 7200 60 ${toString (2 * 24 *
