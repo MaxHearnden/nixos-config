@@ -351,6 +351,7 @@
         CanonicalDomains zandoodle.me.uk int.zandoodle.me.uk
         CanonicalizeFallbackLocal no
         CanonicalizeHostname yes
+        CanonicalizeMaxDots 0
       '';
       package = pkgs.opensshWithKerberos;
     };
