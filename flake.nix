@@ -1,9 +1,5 @@
 {
   inputs = {
-    latest-system = {
-      inputs.nixpkgs.follows = "nixpkgs";
-      url = "git+https://gitea.workstation.zandoodle.me.uk/zandoodle/latest-system";
-    };
     nix-minecraft = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:Infinidoge/nix-minecraft";

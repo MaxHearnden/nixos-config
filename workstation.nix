@@ -41,6 +41,28 @@ in
       "705-kernel-cmdline.pcrlock" "710-kernel-cmdline.pcrlock"
       "720-kernel-initrd.pcrlock" ])
       // {
+        "dnsdist/dnsdist.conf".text = ''
+          addLocal("[::]:53")
+          addLocal("0.0.0.0:53")
+
+          setACL({"0.0.0.0/0", "::/0"})
+
+          newServer({
+            address = "[::1]:54",
+            name = "knot",
+            pool = "auth",
+            healthCheckMode = "lazy"
+          })
+          newServer({
+            address = "[::1]:55",
+            name = "unbound",
+            pool = "recursive",
+            healthCheckMode = "lazy"
+          })
+
+          addAction(RDRule(), PoolAction("recursive"))
+          addAction(AllRule(), PoolAction("auth"))
+        '';
         "kdcproxy.conf".text = ''
           [*ZANDOODLE.ME.UK]
 
@@ -81,7 +103,8 @@ in
           $INCLUDE /nix/var/nix/profiles/all/zonefile
         '';
         "resolv.conf".text = ''
-          nameserver 127.0.0.53
+          nameserver ::1
+          nameserver 127.0.0.1
           options edns0 trust-ad
           search int.zandoodle.me.uk zandoodle.me.uk max.home.arpa home.arpa
         '';
@@ -127,15 +150,15 @@ in
       filterForward = true;
       interfaces = {
         ztmjfp7kiq = {
-          allowedTCPPorts = [ 53 80 443 8080 8081 3000 2049 25565 ];
+          allowedTCPPorts = [ 53 80 443 25565 ];
           allowedUDPPorts = [ 53 443 24454 ];
         };
         tailscale0 = {
-          allowedTCPPorts = [ 22 53 80 88 443 464 749 2049 3000 25565 ];
-          allowedUDPPorts = [ 53 88 443 464 2049 24454 ];
+          allowedTCPPorts = [ 22 53 54 80 88 443 464 749 2049 25565 ];
+          allowedUDPPorts = [ 53 54 88 443 464 24454 ];
         };
         enp2s0 = {
-          allowedTCPPorts = [ 5000 53 80 443 ];
+          allowedTCPPorts = [ 53 80 443 ];
           allowedUDPPorts = [ 53 69 443 ];
         };
       };
@@ -344,6 +367,7 @@ in
       enable = true;
       resolveLocalQueries = false;
       settings = {
+        auth-server = "127.0.0.1,::1";
         bind-dynamic = true;
         conf-file = "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
         dhcp-fqdn = true;
@@ -356,6 +380,7 @@ in
         interface = [ "enp2s0" ];
         interface-name = "max-nixos-workstation.home.arpa,enp2s0";
         local = ["//" "/home.arpa/"];
+        port = "56";
         server = ["/max.home.arpa/#"];
         trust-anchor = [
           "max.home.arpa.,6286,16,2,E5D985578B9746BFE1C6FF47E87E27F9BE9942BF947C7AE18C448C86C303DB0E"
@@ -454,13 +479,8 @@ in
         server = {
           automatic-acl = true;
           listen = [
-            "127.0.0.1@54"
-            "::1@54"
-            "172.28.10.244"
-            "100.91.224.22"
-            "fc9c:6b89:eec5:0d88:e258:0000:0000:0001"
-            "fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258"
-            "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016"
+            "0.0.0.0@54"
+            "::@54"
           ];
         };
         submission.orion = {
@@ -527,7 +547,7 @@ in
     nfs = {
       server = {
         enable = true;
-        hostName = "workstation.zandoodle.me.uk,max-nixos-workstation-zerotier-ipv4,max-nixos-workstation-zerotier-6plane,max-nixos-workstation-zerotier-rfc4193,192.168.3.1";
+        hostName = "workstation.zandoodle.me.uk,192.168.3.1";
         exports = ''
           /Big/shared -mp=/Big,sec=krb5p,rw *
           /Big/shared/riscv/star64_root 192.168.3.0/24(rw,no_root_squash,mp=/Big)
@@ -556,7 +576,7 @@ in
             "168.192.in-addr.arpa nodefault"
             "d.f.ip6.arpa nodefault"
           ];
-          interface = ["127.0.0.53"];
+          interface = ["0.0.0.0@55" "::@55"];
           qname-minimisation = false;
         };
         stub-zone = [
@@ -697,6 +717,9 @@ in
           };
         };
     };
+    packages = [
+      inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist
+    ];
     services = {
       "3proxy" = {
         serviceConfig = {
@@ -738,6 +761,30 @@ in
         LoadCredential =
           map (attr: "tsig-${attr}:/run/keymgr/caddy-${attr}") [ "id" "secret" "algorithm"];
         RuntimeDirectory = "caddy";
+      };
+      dnsdist =
+      let
+        dnsdist =
+          inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist;
+      in {
+        restartTriggers = [
+          config.environment.etc."dnsdist/dnsdist.conf".source
+        ];
+        serviceConfig = {
+          ExecStart = [
+            ""
+            "${lib.getExe dnsdist} --supervised --disable-syslog --config /etc/dnsdist/dnsdist.conf"
+          ];
+          ExecStartPre = [
+            ""
+            "${lib.getExe dnsdist} --check-config --config /etc/dnsdist/dnsdist.conf"
+          ];
+
+          Group = "dnsdist";
+          User = "dnsdist";
+        };
+        startLimitIntervalSec = 0;
+        wantedBy = ["multi-user.target"];
       };
       dnsmasq = {
         preStart = lib.mkForce "";
@@ -1039,40 +1086,6 @@ in
         };
       };
       knot.serviceConfig.LoadCredential = "caddy:/run/keymgr/caddy";
-      latest-system = {
-        serviceConfig = {
-          ExecStart = "${inputs.latest-system.packages.x86_64-linux.default}/bin/latest-system-systemd --protocol activate";
-          CapabilityBoundingSet = null;
-          NoNewPrivileges = true;
-          RestrictNamespaces = true;
-          RestrictAddressFamilies = "none";
-          UMask = "0077";
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          BindReadOnlyPaths = "/nix/var/nix/profiles/all/systems";
-          SystemCallArchitectures = "native";
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          PrivateNetwork = true;
-          MemoryDenyWriteExecute = true;
-          RestrictSUIDSGID = true;
-          ProtectHostname = true;
-          LockPersonality = true;
-          RestrictRealtime = true;
-          RemoveIPC = true;
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          ProtectHome = true;
-          IPAddressDeny = "any";
-          Restart = "always";
-          User = "latest-system";
-          Group = "latest-system";
-          DynamicUser = true;
-        };
-        confinement = {
-          enable = true;
-        };
-        requires = [ "latest-system.socket" ];
-      };
       minecraft-server =
         let mods = pkgs.linkFarmFromDrvs "mods" [
           (pkgs.fetchurl {
@@ -1153,11 +1166,9 @@ in
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
         onFailure = [
-          "latest-system-restart.target"
           "knot-reload.target"
         ];
         onSuccess = [
-          "latest-system-restart.target"
           "knot-reload.target"
         ];
         serviceConfig = {
@@ -1346,17 +1357,7 @@ in
     };
     sockets = {
       harmonia-proxy = {
-        listenStreams = [
-          "172.28.10.244:8080"
-          "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8080"
-          "[fc9c:6b89:eec5:d88:e258::1]:8080"
-          "/run/harmonia.sock"
-        ];
-        socketConfig = {
-          FreeBind = true;
-          IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
-          IPAddressDeny = "any";
-        };
+        listenStreams = [ "/run/harmonia.sock" ];
         wantedBy = [ "sockets.target" ];
       };
       kadmind = {
@@ -1371,15 +1372,6 @@ in
       };
       kdcproxy = {
         listenStreams = [ "/run/kdcproxy" ];
-        wantedBy = [ "sockets.target" ];
-      };
-      latest-system = {
-        listenStreams = ["172.28.10.244:8081" "[fd80:56c2:e21c:3d4b:c99:93c5:d88:e258]:8081" "[fc9c:6b89:eec5:d88:e258::1]:8081"];
-        socketConfig = {
-          FreeBind = true;
-          IPAddressAllow = "172.28.0.0/16 fd80:56c2:e21c:3d4b:c99:9300::/88 fc9c:6b89:ee00::/40";
-          IPAddressDeny = "any";
-        };
         wantedBy = [ "sockets.target" ];
       };
       minecraft-server = {
@@ -1434,11 +1426,6 @@ in
         unitConfig.StopWhenUnneeded = true;
         onSuccess = [ "knot-reload.service" ];
       };
-      latest-system-restart = {
-        description = "Restart latest-system service";
-        conflicts = [ "latest-system.service" ];
-        unitConfig.StopWhenUnneeded = true;
-      };
       nfs-client = {
         enable = false;
       };
@@ -1475,6 +1462,10 @@ in
         isSystemUser = true;
         group = "ddns";
       };
+      dnsdist = {
+        isSystemUser = true;
+        group = "dnsdist";
+      };
       btrbk = {
         packages = with pkgs; [
           mbuffer
@@ -1497,6 +1488,7 @@ in
     };
     groups = {
       ddns = {};
+      dnsdist = {};
       krb5 = {};
       tayga = {};
     };

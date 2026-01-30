@@ -34,26 +34,6 @@
         "type": "github"
       }
     },
-    "latest-system": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1713023636,
-        "narHash": "sha256-jeQcXhte8C0NdiEiyr9P/vwY22LKu53UfyGiG3DyHzI=",
-        "ref": "refs/heads/main",
-        "rev": "cd93d4cf19ffd97b10cdf4bd5f43629871de5c1a",
-        "revCount": 7,
-        "type": "git",
-        "url": "https://gitea.workstation.zandoodle.me.uk/zandoodle/latest-system"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://gitea.workstation.zandoodle.me.uk/zandoodle/latest-system"
-      }
-    },
     "nix-minecraft": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -219,7 +199,6 @@
     },
     "root": {
       "inputs": {
-        "latest-system": "latest-system",
         "nix-minecraft": "nix-minecraft",
         "nixos-kexec": "nixos-kexec",
         "nixpkgs": "nixpkgs",
