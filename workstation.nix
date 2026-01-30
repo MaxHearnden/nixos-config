@@ -380,6 +380,8 @@ in
         dhcp-option = [
           "option:mtu,9216"
           "option:dns-server,192.168.3.1"
+          "option:domain-search,workstation.home.arpa,int.zandoodle.me.uk,zandoodle.me.uk"
+          "option6:domain-search,workstation.home.arpa,int.zandoodle.me.uk,zandoodle.me.uk"
           "option6:dns-server,[fd00::]"
         ];
         dhcp-range = [ "192.168.3.2,192.168.3.199" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
