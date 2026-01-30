@@ -365,27 +365,29 @@ in
     displayManager.gdm.autoSuspend = false;
     dnsmasq = {
       enable = true;
+      package = pkgs.dnsmasq.overrideAttrs (
+        { patches ? [], ... }: {
+          patches = patches ++ [ ./dnsmasq-ixfr.patch ];
+        });
       resolveLocalQueries = false;
       settings = {
-        auth-server = "127.0.0.1,::1";
+        auth-peer = "127.0.0.1,::1";
+        auth-server = "workstation.zandoodle.me.uk,127.0.0.1,::1";
+        auth-zone = "workstation.home.arpa";
         bind-dynamic = true;
         conf-file = "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
         dhcp-fqdn = true;
-        dhcp-option = [ "option:mtu,9216" ];
+        dhcp-option = [
+          "option:mtu,9216"
+          "option:dns-server,192.168.3.1"
+          "option6:dns-server,[fd00::]"
+        ];
         dhcp-range = [ "192.168.3.2,192.168.3.199" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
         dhcp-rapid-commit = true;
-        dnssec = true;
-        domain = "home.arpa";
+        domain = "workstation.home.arpa";
         enable-ra = true;
         interface = [ "enp2s0" ];
-        interface-name = "max-nixos-workstation.home.arpa,enp2s0";
-        local = ["//" "/home.arpa/"];
         port = "56";
-        server = ["/max.home.arpa/#"];
-        trust-anchor = [
-          "max.home.arpa.,6286,16,2,E5D985578B9746BFE1C6FF47E87E27F9BE9942BF947C7AE18C448C86C303DB0E"
-          "max.home.arpa.,5629,14,4,663B18A6E58159EA67190937115450B87C60222A4F8D13395ACF3B091CF6155E4BE365D636452E9427C7818866BE9D65"
-        ];
         no-hosts = true;
         ra-param = "enp2s0,mtu:enp2s0,0,0";
       };
@@ -448,13 +450,29 @@ in
         "/run/credentials/knot.service/caddy"
       ];
       settings = {
-        acl.caddy = {
-          address = "::1";
-          action = "update";
-          key = "caddy";
-          update-owner = "zone";
-          update-owner-match = "equal";
-          update-type = "TXT";
+        acl = {
+          caddy = {
+            address = "::1";
+            action = "update";
+            key = "caddy";
+            update-owner = "zone";
+            update-owner-match = "equal";
+            update-type = "TXT";
+          };
+          transfer = {
+            action = "transfer";
+            address = [
+              "10.0.0.0/8"
+              "100.64.0.0/10"
+              "127.0.0.0/8"
+              "169.254.0.0/16"
+              "192.168.0.0/16"
+              "172.16.0.0/12"
+              "::1/128"
+              "fc00::/7"
+              "fe80::/10"
+            ];
+          };
         };
         policy = {
           acme-challenge = {
@@ -469,41 +487,49 @@ in
             rrsig-refresh = "4h";
           };
         };
-        remote.orion = {
-          address = [
-            "fd7a:115c:a1e0::1a01:5208@54"
-            "100.122.82.8@54"
+        remote = {
+          dnsmasq.address = [
+            "::1@56"
+            "127.0.0.1@56"
           ];
-          key = "workstation";
+          orion = {
+            address = [
+              "fd7a:115c:a1e0::1a01:5208@54"
+              "100.122.82.8@54"
+            ];
+            key = "workstation";
+          };
         };
         server = {
           automatic-acl = true;
+          identity = "workstation.zandoodle.me.uk";
           listen = [
             "0.0.0.0@54"
             "::@54"
           ];
+          nsid = "workstation.zandoodle.me.uk";
+          tcp-fastopen = true;
+          tcp-reuseport = true;
         };
         submission.orion = {
           parent = [ "orion" ];
           parent-delay = "1d";
         };
+        template.catalog-zone = {
+          acl = [ "transfer" ];
+          master = "orion";
+          semantic-checks = true;
+        };
         zone = [
           {
-            domain = "home.arpa";
-            file = builtins.toFile "home.arpa.zone" ''
-              @ SOA localhost. nobody.invalid. 0 3600 1200 604800 10800
-              @ NS localhost.
-              max NS dns.max
-              dns.max A 172.28.10.244
-              dns.max AAAA fc9c:6b89:eec5:0d88:e258:0000:0000:0001
-              dns.max AAAA fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258
-            '';
-            journal-content = "all";
-            zonefile-load = "difference-no-serial";
-            zonefile-sync = -1;
+            acl = [ "transfer" ];
+            domain = "catz";
+            master = "orion";
+            catalog-role = "interpret";
+            catalog-template = ["catalog-zone"];
           }
           {
-            acl = [ "caddy" ];
+            acl = [ "caddy" "transfer" ];
             dnssec-signing = true;
             dnssec-policy = "acme-challenge";
             domain = "_acme-challenge.workstation.zandoodle.me.uk";
@@ -520,6 +546,14 @@ in
             zonemd-generate = "zonemd-sha512";
           }
           {
+            acl = [ "transfer" ];
+            dnssec-validation = true;
+            domain = "int.zandoodle.me.uk";
+            semantic-checks = true;
+            master = "orion";
+          }
+          {
+            acl = [ "transfer" ];
             dnssec-signing = true;
             dnssec-policy = "max.home.arpa";
             domain = "max.home.arpa";
@@ -529,6 +563,14 @@ in
             zonefile-load = "difference-no-serial";
             zonefile-sync = -1;
             zonemd-generate = "zonemd-sha512";
+          }
+          {
+            acl = [ "transfer" ];
+            domain = "workstation.home.arpa";
+            ixfr-from-axfr = true;
+            master = "dnsmasq";
+            notify = "orion";
+            semantic-checks = true;
           }
         ];
       };
@@ -564,6 +606,11 @@ in
       settings = {
         forward-zone = [
           {
+            name = ".";
+            forward-addr = ["9.9.9.9#dns.quad9.net" "149.112.112.112#dns.quad9.net" "2620:fe::fe#dns.quad9.net" "2620:fe::9#dns.quad9.net"];
+            forward-tls-upstream = true;
+          }
+          {
             name = "broadband";
             forward-addr = [
               "fc9c:6b89:eed9:c2b9:c567:1:192.168.1.1"
@@ -571,20 +618,36 @@ in
           }
         ];
         server = {
-          domain-insecure = ["broadband"];
+          domain-insecure = [
+            "broadband"
+            "home.arpa"
+            "168.192.in-addr.arpa"
+            "d.f.ip6.arpa"
+            "root-servers.net"
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64;
           local-zone = [
             "168.192.in-addr.arpa nodefault"
             "d.f.ip6.arpa nodefault"
-          ];
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa nodefault") 64;
           interface = ["0.0.0.0@55" "::@55"];
           qname-minimisation = false;
+          tls-use-sni = false;
         };
-        stub-zone = [
+        stub-zone = map (zone:
           {
-            name = "max.home.arpa";
-            stub-addr = "127.0.0.1@54";
-          }
-        ];
+            name = zone;
+            stub-addr = [
+              "::1@54"
+              "127.0.0.1@54"
+            ];
+          }) ([
+            "168.192.in-addr.arpa"
+            "compsoc-dev.com"
+            "d.f.ip6.arpa"
+            "home.arpa"
+            "root.servers.net"
+            "zandoodle.me.uk"
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64);
       };
     };
   };

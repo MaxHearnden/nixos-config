@@ -475,7 +475,9 @@
       package = pkgs.unbound-full;
       # Pc is on an unblocked network
       settings = lib.mkMerge [
-        (lib.mkIf (config.networking.hostName != "max-nixos-pc") {
+        (lib.mkIf (
+          config.networking.hostName != "max-nixos-pc" &&
+          config.networking.hostName != "max-nixos-workstation") {
           server = {
             qname-minimisation = false;
             tls-use-sni = false;
