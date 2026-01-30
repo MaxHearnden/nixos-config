@@ -113,7 +113,7 @@ in
           ipv4-addr 192.0.0.2
           ipv6-addr fd64::1
           map 192.0.0.1 fd64::2
-          prefix fc9c:6b89:eed9:c2b9:c567:1::/96
+          prefix fd09:a389:7c1e:3::/64
         '';
       };
     systemPackages = with pkgs; [
@@ -163,7 +163,7 @@ in
         };
       };
       extraForwardRules = ''
-        iifname tayga oifname ztmjfp7kiq accept
+        iifname tayga oifname tailscale0 accept
       '';
       extraInputRules = ''
         iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
@@ -213,7 +213,7 @@ in
         content = ''
           chain tayga-nat {
             type nat hook postrouting priority srcnat; policy accept;
-            iifname tayga oifname ztmjfp7kiq masquerade
+            iifname tayga oifname tailscale0 masquerade
           }
         '';
       };
@@ -615,7 +615,7 @@ in
           {
             name = "broadband";
             forward-addr = [
-              "fc9c:6b89:eed9:c2b9:c567:1:192.168.1.1"
+              "192.168.1.1"
             ];
           }
         ];
