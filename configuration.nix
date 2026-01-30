@@ -863,6 +863,7 @@
           authenticator
           blender
           btop
+          bun
           cargo-watch
           comma
           devcontainer
