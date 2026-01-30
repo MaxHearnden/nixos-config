@@ -412,6 +412,7 @@ in
           ];
           supported_enctypes = "aes256-sha2";
           master_key_type = "aes256-sha2";
+          max_renewable_life = "7d";
         };
       };
     };
