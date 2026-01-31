@@ -378,13 +378,16 @@ in
         conf-file = "${config.services.dnsmasq.package}/share/dnsmasq/trust-anchors.conf";
         dhcp-fqdn = true;
         dhcp-option = [
-          "option:mtu,9216"
+          "option:mtu,9000"
           "option:dns-server,192.168.3.1"
           "option:domain-search,workstation.home.arpa,int.zandoodle.me.uk,zandoodle.me.uk"
           "option6:domain-search,workstation.home.arpa,int.zandoodle.me.uk,zandoodle.me.uk"
           "option6:dns-server,[fd00::]"
         ];
-        dhcp-range = [ "192.168.3.2,192.168.3.199" "fd80:1234::20,fd80:1234::ffff:ffff:ffff:ffff" ];
+        dhcp-range = [
+          "192.168.3.2,192.168.3.199"
+          "fd27:6be8:399c:1::,fd27:6be8:399c:1:ffff:ffff:ffff:ffff"
+        ];
         dhcp-rapid-commit = true;
         domain = "workstation.home.arpa";
         enable-ra = true;
@@ -686,16 +689,14 @@ in
           vlan = [ "guest" "shadow-lan" ];
         };
         "10-enp2s0" = {
-          address = ["192.168.3.1/24" "fd80:1234::1/64"];
+          address = ["192.168.3.1/24" "fd27:6be8:399c:1:a236:9fff:fec3:d4c1/64"];
           matchConfig = {
             Name = "enp2s0";
           };
           linkConfig = {
-            MTUBytes = 9216;
+            MTUBytes = 9000;
             RequiredForOnline = false;
           };
-          domains = [ "home.arpa" ];
-          dns = [ "192.168.3.1" "fd80:1234::1" ];
           networkConfig = {
             ConfigureWithoutCarrier = true;
             DNSDefaultRoute = false;
