@@ -96,6 +96,8 @@
           allowedTCPPorts = [ 9943 9944 ];
           allowedUDPPorts = [ 9943 9944 ];
         };
+        tailscale0.allowedTCPPorts = [ 80 443 ];
+        tailscale0.allowedUDPPorts = [ 443 ];
         ztmjfp7kiq.allowedTCPPorts = [ 8080 9090 11434 ];
       };
     };
@@ -183,23 +185,77 @@
         };
       };
     };
+    caddy = {
+      enable = true;
+      globalConfig = ''
+        acme_ca "https://acme-v02.api.letsencrypt.org/directory"
+        dns rfc2136 {
+          key_name {file./run/credentials/caddy.service/tsig-id}
+          key_alg {file./run/credentials/caddy.service/tsig-algorithm}
+          key {file./run/credentials/caddy.service/tsig-secret}
+          server [::1]:54
+        }
+        key_type p384
+        preferred_chains {
+          root_common_name "ISRG Root X2"
+        }
+      '';
+      package = pkgs.caddy.withPlugins {
+        plugins = [ "github.com/caddy-dns/rfc2136@v1.0.0" ];
+        hash = "sha256-f/grl1eTVWqem0us5ucxHizChqUfexymh67OD0PDwn8=";
+      };
+      virtualHosts."pc.int.zandoodle.me.uk".extraConfig = ''
+        tls {
+          issuer acme {
+            dns
+            profile shortlived
+          }
+        }
+
+        header {
+          Cross-Origin-Resource-Policy same-origin
+          Referrer-Policy no-referrer
+          Strict-Transport-Security "max-age=31536000; includeSubdomains; preload"
+          X-Content-Type-Options nosniff
+          X-Frame-Options DENY
+        }
+
+        reverse_proxy [::1]:11434 {
+          header_up Host localhost
+        }
+      '';
+    };
     displayManager.gdm.autoSuspend = false;
     knot = {
       enable = true;
+      keyFiles = [
+        "/etc/knot/pc.tsig"
+        "/run/credentials/knot.service/caddy"
+      ];
       settings = {
-        acl.transfer = {
-          action = "transfer";
-          address = [
-            "10.0.0.0/8"
-            "100.64.0.0/10"
-            "127.0.0.0/8"
-            "169.254.0.0/16"
-            "192.168.0.0/16"
-            "172.16.0.0/12"
-            "::1/128"
-            "fc00::/7"
-            "fe80::/10"
-          ];
+        acl = {
+          caddy = {
+            address = "::1";
+            action = "update";
+            key = "caddy";
+            update-owner = "zone";
+            update-owner-match = "equal";
+            update-type = "TXT";
+          };
+          transfer = {
+            action = "transfer";
+            address = [
+              "10.0.0.0/8"
+              "100.64.0.0/10"
+              "127.0.0.0/8"
+              "169.254.0.0/16"
+              "192.168.0.0/16"
+              "172.16.0.0/12"
+              "::1/128"
+              "fc00::/7"
+              "fe80::/10"
+            ];
+          };
         };
         mod-queryacl.local.address = [
           "10.0.0.0/8"
@@ -212,10 +268,26 @@
           "fc00::/7"
           "fe80::/10"
         ];
-        remote.orion.address = [
-          "fd7a:115c:a1e0::1a01:5208@54"
-          "100.122.82.8@54"
-        ];
+        policy = {
+          acme-challenge = {
+            ds-push = "orion";
+            ksk-lifetime = "14d";
+            ksk-submission = "subdomain";
+            single-type-signing = true;
+          };
+        };
+        remote = {
+          "ns1.first-ns.de".address = "2a01:4f8:0:a101::a:1";
+          orion = {
+            address = [
+              "fd7a:115c:a1e0::1a01:5208@54"
+              "100.122.82.8@54"
+            ];
+            key = "pc";
+          };
+          "robotns2.second-ns.de".address = "2a01:4f8:0:1::5ddc:2";
+          "robotns3.second-ns.com".address = "2001:67c:192c::add:a3";
+        };
         server = {
           automatic-acl = true;
           identity = "pc.zandoodle.me.uk";
@@ -224,6 +296,7 @@
           tcp-fastopen = true;
           tcp-reuseport = true;
         };
+        submission.subdomain.parent = [ "orion" ];
         template = {
           catalog-zone = {
             acl = [ "transfer" ];
@@ -240,16 +313,34 @@
           };
           default.global-module = ["mod-cookies" "mod-rrl"];
         };
-        zone.catz = {
-          master = "orion";
-          catalog-role = "interpret";
-          catalog-template = ["catalog-zone" "global"];
+        zone = {
+          catz = {
+            master = "orion";
+            catalog-role = "interpret";
+            catalog-template = ["catalog-zone" "global"];
+          };
+          "_acme-challenge.pc.int.zandoodle.me.uk" = {
+            acl = [ "caddy" "transfer" ];
+            dnssec-signing = true;
+            dnssec-policy = "acme-challenge";
+            file = builtins.toFile "acme-challenge" ''
+              @ soa pc.int.zandoodle.me.uk. hostmaster.zandoodle.me.uk. 0 14400 3600 604800 86400
+              @ ns dns.zandoodle.me.uk.
+            '';
+            notify = "orion";
+            semantic-checks = true;
+            journal-content = "all";
+            zonefile-load = "difference-no-serial";
+            zonefile-skip = "TXT";
+            zonefile-sync = -1;
+            zonemd-generate = "zonemd-sha512";
+          };
         };
       };
     };
     ollama = {
       enable = true;
-      host = "172.28.13.156";
+      host = "[::1]";
       acceleration = "cuda";
     };
     ratbagd = {
@@ -428,6 +519,12 @@
           AmbientCapabilities = [ "CAP_DAC_READ_SEARCH CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_MKNOD" ];
         };
       };
+      caddy.serviceConfig.LoadCredential =
+        map (attr: "tsig-${attr}:/run/keymgr/caddy-${attr}") [
+          "id"
+          "secret"
+          "algorithm"
+        ];
       dnsdist = {
         serviceConfig = {
           # Override the dnsdist service to use /etc/dnsdist/dnsdist.conf
@@ -454,6 +551,45 @@
         # Start dnsdist on boot
         wantedBy = [ "multi-user.target" ];
       };
+      gen-tsig = {
+        before = [ "knot.service" "caddy.service" ];
+        requiredBy = [ "knot.service" "caddy.service" ];
+        confinement.enable = true;
+        serviceConfig = {
+          CapabilityBoundingSet = "";
+          DynamicUser = true;
+          Group = "keymgr";
+          IPAddressDeny = "any";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateNetwork = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemainAfterExit = true;
+          RestrictAddressFamilies = "none";
+          RestrictRealtime = true;
+          RuntimeDirectory = "keymgr";
+          RuntimeDirectoryPreserve = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @resources"];
+          Type = "oneshot";
+          UMask = "077";
+          User = "keymgr";
+        };
+        script = ''
+          ${lib.getExe' pkgs.knot-dns "keymgr"} -t caddy >/run/keymgr/caddy
+          for attr in id algorithm secret; do
+            ${lib.getExe pkgs.yq} -r .key.[]."$attr" </run/keymgr/caddy >/run/keymgr/caddy-"$attr"
+          done
+        '';
+      };
+      knot.serviceConfig.LoadCredential = "caddy:/run/keymgr/caddy";
       plat = {
         after = [ "sys-subsystem-net-devices-plat.device" ];
         confinement.enable = true;
