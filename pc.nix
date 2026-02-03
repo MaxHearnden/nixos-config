@@ -705,7 +705,6 @@
         isSystemUser = true;
       };
       max = {
-        extraGroups = [ "knot" ];
         packages = with pkgs; [
           piper
         ];
