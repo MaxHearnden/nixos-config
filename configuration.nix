@@ -974,7 +974,7 @@
           wireshark
           wl-clipboard
           (writeShellScriptBin "ollama-pc" ''
-            OLLAMA_HOST=172.28.13.156:11434 exec ${lib.getExe ollama} "$@"
+            OLLAMA_HOST=https://pc.int.zandoodle.me.uk/ exec ${lib.getExe ollama} "$@"
           '')
           xclip
           xorg.xhost
