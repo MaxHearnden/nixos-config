@@ -421,7 +421,6 @@ in
       signKeyPaths = ["/etc/nix/storekey"];
       settings = {
         bind = "[::1]:8080";
-        enable_compression = true;
         priority = 50;
       };
     };
