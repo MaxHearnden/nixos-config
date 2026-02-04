@@ -554,13 +554,6 @@ in
           }
           {
             acl = [ "transfer" ];
-            dnssec-validation = true;
-            domain = "int.zandoodle.me.uk";
-            semantic-checks = true;
-            master = "orion";
-          }
-          {
-            acl = [ "transfer" ];
             dnssec-signing = true;
             dnssec-policy = "max.home.arpa";
             domain = "max.home.arpa";
