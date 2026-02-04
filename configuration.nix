@@ -532,6 +532,7 @@
               "zandoodle.me.uk"
             ];
             trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
+            val-log-level = 2;
           };
           stub-zone = [
             {
