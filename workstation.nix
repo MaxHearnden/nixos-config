@@ -642,9 +642,13 @@ in
             ];
           }) ([
             "168.192.in-addr.arpa"
+            "_acme-challenge.pc.int.zandoodle.me.uk"
+            "_acme-challenge.workstation.zandoodle.me.uk"
+            "_acme-challenge.zandoodle.me.uk"
             "compsoc-dev.com"
             "d.f.ip6.arpa"
             "home.arpa"
+            "int.zandoodle.me.uk"
             "root.servers.net"
             "zandoodle.me.uk"
           ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64);
