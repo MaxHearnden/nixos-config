@@ -106,7 +106,7 @@ in
           nameserver ::1
           nameserver 127.0.0.1
           options edns0 trust-ad
-          search int.zandoodle.me.uk zandoodle.me.uk max.home.arpa home.arpa
+          search int.zandoodle.me.uk zandoodle.me.uk max.home.arpa home.arpa workstation.home.arpa orion.home.arpa broadband
         '';
         "tayga/tayga.conf".text = ''
           tun-device tayga
