@@ -393,6 +393,7 @@ in
         domain = "workstation.home.arpa";
         enable-ra = true;
         interface = [ "enp2s0" ];
+        interface-name = [ "workstation.home.arpa,enp2s0" ];
         port = "56";
         no-hosts = true;
         ra-param = "enp2s0,mtu:enp2s0,0,0";
