@@ -238,6 +238,9 @@
       "172.28.128.58" = ["max-guix-dell"];
     };
     firewall = {
+      allowedUDPPorts = [
+        41641 # Tailscale
+      ];
       interfaces = {
         tailscale0 = {
           allowedTCPPorts = [
