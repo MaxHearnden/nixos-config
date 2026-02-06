@@ -368,7 +368,7 @@
       enable = true;
       settings = {
         libdefaults = {
-          default_ccache_name = "FILE:/run/user/%{uid}/krb5cc_%{uid}";
+          default_ccache_name = "DIR:/run/user/%{uid}";
           default_realm = "WORKSTATION.ZANDOODLE.ME.UK";
           dns_canonicalize_hostname = "fallback";
           dns_lookup_realm = true;
