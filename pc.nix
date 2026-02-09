@@ -129,25 +129,6 @@
     };
   };
   services = {
-    _3proxy = {
-      enable = true;
-      services = [
-        {
-          type = "tcppm";
-          auth = [ "none" ];
-          bindPort = 8080;
-          bindAddress = "172.28.13.156";
-          extraArguments = "8080 192.168.1.79 8080";
-        }
-        {
-          type = "tcppm";
-          auth = [ "none" ];
-          bindPort = 9090;
-          bindAddress = "172.28.13.156";
-          extraArguments = "9090 192.168.1.79 9090";
-        }
-      ];
-    };
     btrbk = {
       instances = {
         btrbk = {
@@ -476,36 +457,6 @@
       pkgs.dnsdist
     ];
     services = {
-      "3proxy" = {
-        serviceConfig = {
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          DeviceAllow = "";
-          ProtectHome = true;
-          PrivateDevices = true;
-          IPAddressDeny = "any";
-          IPAddressAllow = "172.28.13.156/16 fd80:56c2:e21c:3d4b:c99:93d9:c2b9:c567/88 fc9c:6b89:eed9:c2b9:c567::1/40 192.168.1.79";
-          ProtectKernelModules = true;
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          RestrictNamespaces = true;
-          CapabilityBoundingSet = "";
-          RestrictRealtime = true;
-          PrivateUsers = true;
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          LockPersonality = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6";
-          ProtectKernelTunables = true;
-          ProtectHostname = true;
-          MemoryDenyWriteExecute = true;
-          SystemCallArchitectures = "native";
-          UMask = "0077";
-        };
-        confinement = {
-          enable = true;
-        };
-      };
       btrbk-btrbk = {
         unitConfig = {
           RequiresMountsFor = "/HDD/backups";

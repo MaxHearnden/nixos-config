@@ -1473,16 +1473,6 @@ in
         };
         wantedBy = [ "sys-subsystem-net-devices-tailscale0.device" ];
       };
-      "sshd@zerotier" = {
-        description = "SSH Sockets";
-        socketConfig = {
-          Accept = true;
-          ListenStream = 22;
-          TriggerLimitIntervalSec = 0;
-          BindToDevice = "ztmjfp7kiq";
-        };
-        wantedBy = [ "sys-subsystem-net-devices-ztmjfp7kiq.device" ];
-      };
     };
     targets = {
       knot-reload = {
