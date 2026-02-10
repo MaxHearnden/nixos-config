@@ -473,10 +473,7 @@
             }
             {
               name = "zandoodle.me.uk.";
-              forward-addr = [
-                "fd7a:115c:a1e0::1a01:5208"
-                "100.122.82.8"
-              ];
+              forward-addr = "fd7a:115c:a1e0::1a01:5208";
               forward-first = true;
             }
           ];

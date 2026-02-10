@@ -260,10 +260,7 @@
         remote = {
           "ns1.first-ns.de".address = "2a01:4f8:0:a101::a:1";
           orion = {
-            address = [
-              "fd7a:115c:a1e0::1a01:5208@54"
-              "100.122.82.8@54"
-            ];
+            address = "fd7a:115c:a1e0::1a01:5208@54";
             key = "pc";
           };
           "robotns2.second-ns.de".address = "2a01:4f8:0:1::5ddc:2";
