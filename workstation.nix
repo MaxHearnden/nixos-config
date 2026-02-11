@@ -586,7 +586,8 @@ in
         forward-zone = [
           {
             name = ".";
-            forward-addr = ["9.9.9.9#dns.quad9.net" "149.112.112.112#dns.quad9.net" "2620:fe::fe#dns.quad9.net" "2620:fe::9#dns.quad9.net"];
+            forward-addr =
+              "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
             forward-tls-upstream = true;
           }
           {
@@ -610,7 +611,6 @@ in
           ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa nodefault") 64;
           interface = ["0.0.0.0@55" "::@55"];
           qname-minimisation = false;
-          tls-use-sni = false;
         };
         stub-zone = map (zone:
           {
