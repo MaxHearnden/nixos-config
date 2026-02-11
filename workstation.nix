@@ -628,7 +628,7 @@ in
             "d.f.ip6.arpa"
             "home.arpa"
             "int.zandoodle.me.uk"
-            "root.servers.net"
+            "root-servers.net"
             "zandoodle.me.uk"
           ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64);
       };
