@@ -206,7 +206,6 @@
     "dwarf-fortress"
     "steam"
     "steam-unwrapped"
-    "zerotierone"
   ] ++ lib.optionals (builtins.elem config.networking.hostName [ "max-nixos-pc"
   "max-nixos-laptop"]) [
     "cuda_cccl"
@@ -221,18 +220,9 @@
       allowedUDPPorts = [
         41641 # Tailscale
       ];
-      interfaces = {
-        tailscale0 = {
-          allowedTCPPorts = [
-            22
-          ];
-        };
-        ztmjfp7kiq = {
-          allowedTCPPorts = [
-            22 # ssh
-          ];
-        };
-      };
+      interfaces.tailscale0.allowedTCPPorts = [
+        22
+      ];
     };
     nftables = {
       enable = true;
@@ -549,10 +539,6 @@
         layout = "gb";
       };
     };
-    zerotierone = {
-      enable = true;
-      joinNetworks = [ "8056c2e21c3d4b0c" ];
-    };
   };
   specialisation.nox.configuration = {
     boot = {
@@ -714,7 +700,6 @@
           RestrictRealtime = true;
           ProtectHome = true;
           CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
-          RestrictNetworkInterfaces = "~ztmjfp7kiq";
           Environment = [ "TS_DEBUG_FIREWALL_MODE=nftables" "DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket" ];
         };
         wants = [ "modprobe@tun.service" ];
@@ -722,46 +707,6 @@
         confinement = {
           enable = true;
           packages = [ config.services.tailscale.package ];
-        };
-      };
-      zerotierone = {
-        serviceConfig = {
-          UMask = "0077";
-          BindPaths = "/var/lib/zerotier-one /dev/net/tun";
-          BindReadOnlyPaths = "/etc/resolv.conf /etc/ssl /etc/static/ssl";
-          DeviceAllow = "/dev/net/tun";
-          AmbientCapabilities = "CAP_NET_ADMIN";
-          ProtectKernelModules = true;
-          ProtectProc = [ "invisible" ];
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
-          PrivateUsers = lib.mkForce false;
-          NoNewPrivileges = true;
-          RestrictNamespaces = true;
-          RestrictSUIDSGID = true;
-          ProtectHostname = true;
-          LockPersonality = true;
-          RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          ProtectSystem = lib.mkForce "strict";
-          SystemCallArchitectures = "native";
-          MemoryDenyWriteExecute = true;
-          RestrictRealtime = true;
-          ProtectHome = true;
-          CapabilityBoundingSet = "CAP_NET_ADMIN";
-          ProcSubset = "pid";
-          ExecStart = lib.mkForce "${config.services.zerotierone.package}/bin/zerotier-one -p${toString config.services.zerotierone.port} -U";
-          ExecStartPre = lib.mkForce [];
-          User = "zerotierd";
-          Group = "zerotierd";
-          RemoveIPC = true;
-          RestrictNetworkInterfaces = "~tailscale0";
-        };
-        wants = [ "modprobe@tun.service" ];
-        after = [ "modprobe@tun.service" ];
-        confinement = {
-          enable = true;
-          fullUnit = true;
         };
       };
     };
@@ -775,12 +720,9 @@
       rules = [
         "d /nexus/snapshots/btrbk - btrbk btrbk"
         "A /nix/var/nix/profiles - - - - u:nix-gc:rwx,d:u:nix-gc:rwx,m::rwx,d:m::rwx"
-        "d /var/lib/zerotier-one 700 zerotierd zerotierd"
-        "Z /var/lib/zerotier-one - zerotierd zerotierd"
-        "d /var/lib/zerotier-one/networks.p 700 zerotierd zerotierd"
         "v /home/max/build 755 max users"
         "d /nix/var/nix/builds 755 root root 7d"
-      ] ++ map (netId: "f /var/lib/zerotier-one/networks.p/${netId}.conf 700 zerotierd zerotierd") config.services.zerotierone.joinNetworks;
+      ];
     };
     user = {
       services = {
@@ -816,17 +758,12 @@
         isSystemUser = true;
         group = "tailscale";
       };
-      zerotierd = {
-        isSystemUser = true;
-        group = "zerotierd";
-      };
     };
     groups = {
       nix-gc = {};
       sh = {};
       tailscale = {};
       vfio = {};
-      zerotierd = {};
     };
     users = {
       max = {

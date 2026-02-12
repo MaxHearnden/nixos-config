@@ -131,10 +131,6 @@ in
     firewall = {
       filterForward = true;
       interfaces = {
-        ztmjfp7kiq = {
-          allowedTCPPorts = [ 53 80 443 25565 ];
-          allowedUDPPorts = [ 53 443 24454 ];
-        };
         tailscale0 = {
           allowedTCPPorts = [ 22 53 54 80 88 443 464 749 2049 25565 ];
           allowedUDPPorts = [ 53 54 88 443 464 24454 ];
@@ -765,33 +761,6 @@ in
       inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist
     ];
     services = {
-      "3proxy" = {
-        serviceConfig = {
-          ProtectProc = "invisible";
-          ProcSubset = "pid";
-          DeviceAllow = "";
-          ProtectHome = true;
-          PrivateDevices = true;
-          IPAddressDeny = "any";
-          IPAddressAllow = "100.109.29.126 172.28.10.244 fd80:56c2:e21c:3d4b:0c99:93c5:0d88:e258/88 fc9c:6b89:eec5:0d88:e258:0000:0000:0001/40 192.168.4.1/24";
-          ProtectKernelModules = true;
-          ProtectClock = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          RestrictNamespaces = true;
-          CapabilityBoundingSet = "";
-          RestrictRealtime = true;
-          PrivateUsers = true;
-          SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
-          LockPersonality = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6";
-          ProtectKernelTunables = true;
-          ProtectHostname = true;
-          MemoryDenyWriteExecute = true;
-          SystemCallArchitectures = "native";
-          UMask = "0077";
-        };
-      };
       btrbk-btrbk = {
         serviceConfig = {
           BindPaths = [ "/Big" ];
@@ -995,7 +964,7 @@ in
           SystemCallArchitectures = "native";
           RestrictAddressFamilies = "AF_INET6";
           RestrictNamespaces = true;
-          RestrictNetworkInterfaces = "ztmjfp7kiq lo";
+          RestrictNetworkInterfaces = "lo";
           RestrictRealtime = true;
           SystemCallFilter = ["@system-service" "~@resources @privileged"];
           UMask = "0077";
@@ -1180,7 +1149,7 @@ in
           CapabilityBoundingSet = "";
           DynamicUser = true;
           ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd 127.0.0.1:25564 --exit-idle-time=5min";
-          IPAddressAllow = "172.28.0.0/16 100.64.0.0/10 fd7a:115c:a1e0::/48 localhost";
+          IPAddressAllow = "100.64.0.0/10 fd7a:115c:a1e0::/48 localhost";
           IPAddressDeny = "any";
           LockPersonality = true;
           MemoryDenyWriteExecute = true;
@@ -1194,7 +1163,7 @@ in
           RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
           RestrictNamespaces = true;
           RestrictRealtime = true;
-          RestrictNetworkInterfaces = "ztmjfp7kiq tailscale0 lo";
+          RestrictNetworkInterfaces = "tailscale0 lo";
           SocketBindDeny = "any";
           SystemCallArchitectures = "native";
           SystemCallFilter = [ "@system-service" "~@resources @privileged" ];
@@ -1424,7 +1393,7 @@ in
         wantedBy = [ "minecraft-server.target" ];
       };
       minecraft-server-proxy = {
-        listenStreams = [ "172.28.10.244:25565" "127.0.0.1:25565" "100.91.224.22:25565" "[fd7a:115c:a1e0:ab12:4843:cd96:625b:e016]:25565" ];
+        listenStreams = [ "127.0.0.1:25565" "100.91.224.22:25565" "[fd7a:115c:a1e0:ab12:4843:cd96:625b:e016]:25565" ];
         partOf = [ "minecraft-server.target" ];
         socketConfig = {
           FreeBind = true;

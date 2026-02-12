@@ -98,7 +98,6 @@
         };
         tailscale0.allowedTCPPorts = [ 80 443 ];
         tailscale0.allowedUDPPorts = [ 443 ];
-        ztmjfp7kiq.allowedTCPPorts = [ 8080 9090 11434 ];
       };
     };
     hostName = "max-nixos-pc";
