@@ -68,11 +68,6 @@
           map 192.0.0.1 fd64::2
           prefix fd09:a389:7c1e:3::/64
         '';
-        "tayga/plat.conf".text = ''
-          tun-device plat
-          ipv4-addr 192.168.12.3
-          prefix fc9c:6b89:eed9:c2b9:c567:1::/96
-        '';
       };
   };
   hardware = {
@@ -88,7 +83,6 @@
       allowedUDPPorts = [ 54 8053 ];
       extraForwardRules = ''
         iifname tayga oifname shadow-lan accept
-        iifname ztmjfp7kiq oifname plat accept
       '';
       filterForward = true;
       interfaces = {
@@ -101,11 +95,6 @@
       };
     };
     hostName = "max-nixos-pc";
-    nat = {
-      enable = true;
-      externalInterface = "eno1";
-      internalInterfaces = [ "plat" ];
-    };
     networkmanager.enable = false;
     nftables.tables.tayga-nat66 = {
       family = "ip6";
@@ -113,7 +102,6 @@
         chain tayga-nat {
           type nat hook postrouting priority srcnat; policy accept
           iifname tayga oifname shadow-lan masquerade
-          iifname ztmjfp7kiq oifname plat snat ip6 to [fc9c:6b89:eed9:c2b9:c567:1:c0a8:d00]/120
         }
       '';
     };
@@ -399,16 +387,6 @@
             User = "tayga";
           };
         };
-        "10-plat" = {
-          netdevConfig = {
-            Kind = "tun";
-            Name = "plat";
-          };
-          tunConfig = {
-            Group = "tayga";
-            User = "tayga";
-          };
-        };
       };
       networks = {
         "10-eno1" = {
@@ -430,17 +408,6 @@
           routes = [
             {
               Destination = "0.0.0.0/0";
-              Metric = 2048;
-              MTUBytes = 1480;
-            }
-          ];
-        };
-        "10-plat" = {
-          address = [ "192.168.12.1/24" "fc9c:6b89:eed9:c2b9:c567:1:192.168.12.2/96" ];
-          matchConfig.Name = "plat";
-          routes = [
-            {
-              Destination = "192.168.13.0/24";
               Metric = 2048;
               MTUBytes = 1480;
             }
@@ -537,45 +504,6 @@
         '';
       };
       knot.serviceConfig.LoadCredential = "caddy:/run/keymgr/caddy";
-      plat = {
-        after = [ "sys-subsystem-net-devices-plat.device" ];
-        confinement.enable = true;
-        restartTriggers = [ config.environment.etc."tayga/plat.conf".source ];
-        serviceConfig = {
-          BindReadOnlyPaths = [
-            "${config.environment.etc."tayga/plat.conf".source}:/etc/tayga/plat.conf"
-            "/dev/net/tun"
-          ];
-          CapabilityBoundingSet = "";
-          DeviceAllow = "/dev/net/tun";
-          ExecStart = "${lib.getExe pkgs.tayga} -d -c /etc/tayga/plat.conf";
-          Group = "tayga";
-          IPAddressDeny = "any";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateTmp = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RemoveIPC = true;
-          Restart = "on-failure";
-          RestrictAddressFamilies = "AF_INET";
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged @resources" ];
-          UMask = "077";
-          User = "tayga";
-        };
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "sys-subsystem-net-devices-plat.device" ];
-      };
       tayga = {
         after = [ "sys-subsystem-net-devices-tayga.device" ];
         confinement.enable = true;
