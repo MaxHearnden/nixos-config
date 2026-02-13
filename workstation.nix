@@ -615,6 +615,7 @@ in
               "::1@54"
               "127.0.0.1@54"
             ];
+            stub-first = true;
           }) ([
             "168.192.in-addr.arpa"
             "_acme-challenge.pc.int.zandoodle.me.uk"
