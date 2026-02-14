@@ -1,6 +1,9 @@
 { lib, pkgs, config, inputs, utils, ... }:
 
 let
+  dnsdist =
+    inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.callPackage
+    ./dnsdist.nix {};
   python = pkgs.python3;
   kdcproxy = python.pkgs.callPackage ./kdcproxy.nix {};
   kdcproxy_env = python.buildEnv.override {
@@ -776,11 +779,7 @@ in
           map (attr: "tsig-${attr}:/run/keymgr/caddy-${attr}") [ "id" "secret" "algorithm"];
         RuntimeDirectory = "caddy";
       };
-      dnsdist =
-      let
-        dnsdist =
-          inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist;
-      in {
+      dnsdist = {
         restartTriggers = [
           config.environment.etc."dnsdist/dnsdist.conf".source
         ];
