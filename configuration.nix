@@ -470,6 +470,8 @@
         })
         {
           server = {
+            dns64-prefix = "fd09:a389:7c1e:3::/64";
+            dns64-ignore-aaaa = "vodafone.broadband";
             do-not-query-localhost = false;
             domain-insecure = ["test."];
             ede = true;
@@ -477,6 +479,7 @@
               "home.arpa. nodefault"
               "test. nodefault"
             ];
+            module-config = "\"respip dns64 validator iterator\"";
             private-address = [
               "10.0.0.0/8"
               "100.64.0.0/10"
@@ -500,6 +503,11 @@
               "home.arpa"
               "test"
               "zandoodle.me.uk"
+            ];
+            response-ip = [
+              "fd09:a389:7c1e:3::/64 redirect"
+              "fd09:a389:7c1e:3:c0:0:aa00::/103 always_transparent"
+              "fd09:a389:7c1e:3:c0:a800::/88 always_transparent"
             ];
             trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
             val-log-level = 2;
