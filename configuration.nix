@@ -684,6 +684,11 @@
       };
 
       tailscaled = {
+        environment = {
+          DBUS_SYSTEM_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
+          TS_DEBUG_FIREWALL_MODE = "nftables";
+          TS_DEBUG_MTU = "1350";
+        };
         serviceConfig = {
           UMask = "0077";
           BindPaths = "/dev/net/tun";
@@ -711,7 +716,6 @@
           RestrictRealtime = true;
           ProtectHome = true;
           CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
-          Environment = [ "TS_DEBUG_FIREWALL_MODE=nftables" "DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket" ];
         };
         wants = [ "modprobe@tun.service" ];
         after = [ "modprobe@tun.service" ];
