@@ -135,7 +135,7 @@ in
       filterForward = true;
       interfaces = {
         tailscale0 = {
-          allowedTCPPorts = [ 22 53 54 80 88 443 464 749 2049 25565 ];
+          allowedTCPPorts = [ 22 53 54 80 88 179 443 464 749 2049 25565 ];
           allowedUDPPorts = [ 53 54 88 443 464 24454 ];
         };
         enp2s0 = {
@@ -209,6 +209,31 @@ in
     };
   };
   services = {
+    bird = {
+      enable = true;
+      config = ''
+        protocol bgp {
+          local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
+          neighbor fd7a:115c:a1e0::1a01:5208 as 65001;
+          multihop;
+          ipv6 {
+            export all;
+            import none;
+          };
+          ipv4 {
+            export all;
+            import none;
+          };
+        }
+        protocol device {
+
+        }
+        protocol direct {
+          ipv4;
+          ipv6;
+        }
+      '';
+    };
     btrbk = {
       instances = {
         btrbk = {
