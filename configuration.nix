@@ -226,6 +226,16 @@
     };
     nftables = {
       enable = true;
+      tables.tailscale-enforcement = {
+        family = "inet";
+        content = ''
+          chain output {
+            type filter hook output priority filter - 10;
+            oiftype {768, 769, 776} udp dport 41641 drop
+            oifname { plat, tayga } udp dport 41641 drop
+          }
+        '';
+      };
     };
   };
   programs = {
