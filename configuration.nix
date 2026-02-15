@@ -245,9 +245,9 @@
         "network.dns.localDomains" = "www.phoronix.com,phoronix.com";
 
       } // lib.optionalAttrs (config.networking.hostName != "max-nixos-pc") {
-        "network.trr.custom_uri" = "https://9.9.9.9/dns-query";
+        "network.trr.custom_uri" = "https://local-tailscale.zandoodle.me.uk/dns-query";
         "network.trr.mode" = 3;
-        "network.trr.uri" = "https://9.9.9.9/dns-query";
+        "network.trr.uri" = "https://local-tailscale.zandoodle.me.uk/dns-query";
       };
     };
     fish = {
@@ -451,20 +451,13 @@
         (lib.mkIf (
           config.networking.hostName != "max-nixos-pc" &&
           config.networking.hostName != "max-nixos-workstation") {
-          server = {
-            qname-minimisation = false;
-            tls-use-sni = false;
-          };
+          server.qname-minimisation = false;
           forward-zone = [
             {
               name = ".";
-              forward-addr = ["9.9.9.9#dns.quad9.net" "149.112.112.112#dns.quad9.net" "2620:fe::fe#dns.quad9.net" "2620:fe::9#dns.quad9.net"];
+              forward-addr =
+                ["fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk"];
               forward-tls-upstream = true;
-            }
-            {
-              name = "zandoodle.me.uk.";
-              forward-addr = "fd7a:115c:a1e0::1a01:5208";
-              forward-first = true;
             }
           ];
         })
