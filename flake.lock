@@ -118,11 +118,11 @@
         "rtf-tokenize": "rtf-tokenize"
       },
       "locked": {
-        "lastModified": 1771132019,
-        "narHash": "sha256-Du/FhuLVWLzhM8e+zDAkXaZd1mk0JrZb79KnNtG/Wxo=",
+        "lastModified": 1771206338,
+        "narHash": "sha256-8xmN+wGaS2MzImGvbeDHo9y0gL372oeaGidc8hZIUQE=",
         "owner": "opensteno",
         "repo": "plover-flake",
-        "rev": "17c1021b8f8e5536185261b551dc5cf13f54d08c",
+        "rev": "d03dedbf2ccefc1264c4ec2b94a84e01339c3b8f",
         "type": "github"
       },
       "original": {
@@ -227,11 +227,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771124033,
-        "narHash": "sha256-nXrWf0EiHfy3Nl3mLeQNwsxGYkr/IAyg61IU7IwrtJ4=",
+        "lastModified": 1771210168,
+        "narHash": "sha256-mytNukB0eNll+bEU5J5vQpENlhvGufdEDkDeyHCLQA0=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "4605fab73c36235bfdbea1212fab94b728fcbc08",
+        "rev": "789fa907861bb589b5f02a415704053787a63a03",
         "type": "github"
       },
       "original": {
