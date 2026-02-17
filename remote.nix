@@ -136,7 +136,7 @@
           set -x
 
           config="$(${pkgs.bind.dnsutils}/bin/delv -a /etc/home.bind.keys \
-          +root=max.home.arpa +short @dns.max.home.arpa \
+          +root=max.home.arpa +short +nord @dns.max.home.arpa \
           "${config.networking.hostName}".systems.max.home.arpa TXT | tail -c \
           +2 | head -c -2)"
 
