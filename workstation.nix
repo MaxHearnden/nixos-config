@@ -147,6 +147,7 @@ in
         iifname tayga oifname tailscale0 accept
       '';
       extraInputRules = ''
+        iifname tailscale0 meta l4proto {ipv4, ipv6} accept
         iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
         ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
       '';
@@ -718,6 +719,11 @@ in
           ];
           DHCP = "no";
         };
+        "10-ip6tnl" = {
+          address = ["192.168.10.2/24" "fd27:6be8:399c:2:1089:49ff:febf:e68d/64"];
+          name = "ipv6-tunnel";
+          linkConfig.RequiredForOnline = false;
+        };
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];
           matchConfig.Name = "tayga";
@@ -775,6 +781,17 @@ in
             };
           }) 4)
         // {
+          "10-ip6tnl" = {
+            netdevConfig = {
+              Kind = "ip6tnl";
+              Name = "ipv6-tunnel";
+            };
+            tunnelConfig = {
+              Independent = true;
+              Local = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
+              Remote = "fd7a:115c:a1e0::1a01:5208";
+            };
+          };
           "10-tayga" = {
             netdevConfig = {
               Kind = "tun";
