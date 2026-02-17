@@ -456,6 +456,7 @@
     };
     unbound = {
       enable = true;
+      enableRootTrustAnchor = false;
       package = pkgs.unbound-full;
       # Pc is on an unblocked network
       settings = lib.mkMerge [
@@ -474,6 +475,7 @@
         })
         {
           server = {
+            auto-trust-anchor-file = "/var/lib/unbound/root.key";
             dns64-prefix = "fd09:a389:7c1e:3::/64";
             dns64-ignore-aaaa = "vodafone.broadband";
             do-not-query-localhost = false;
@@ -739,6 +741,8 @@
         "v /home/max/build 755 max users"
         "d /nix/var/nix/builds 755 root root 7d"
       ];
+      settings."10-trust-anchor"."/var/lib/unbound/root.key".C.argument =
+        "${pkgs.dns-root-data}/root.key";
     };
     user = {
       services = {
