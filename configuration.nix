@@ -24,6 +24,7 @@
     };
     kernel = {
       sysctl = {
+        "net.core.fb_tunnels_only_for_init_net" = 2;
         "net.ipv4.tcp_ecn" = 1;
         "net.ipv4.tcp_fastopen" = 3;
       };
