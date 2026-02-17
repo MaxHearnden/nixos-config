@@ -130,7 +130,7 @@
           config.nix.package.out
           kexec-tools
         ];
-        requires = [ "network-online.target" "tailscaled.service" ];
+        wants = [ "network-online.target" "tailscaled.service" ];
         restartIfChanged = false;
         script = ''
           set -x
