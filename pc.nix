@@ -1,4 +1,12 @@
-{ config, inputs, lib, pkgs, ... }: {
+{ config, inputs, lib, pkgs, ... }:
+
+let
+  dnsdist =
+    inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.callPackage
+    ./dnsdist.nix {};
+in
+
+{
   imports = [
     ./remote.nix
     ./hardware-configuration/pc.nix
@@ -417,7 +425,7 @@
       wait-online.enable = lib.mkForce true;
     };
     packages = [
-      pkgs.dnsdist
+      dnsdist
     ];
     services = {
       btrbk-btrbk = {
@@ -444,11 +452,11 @@
           # Override the dnsdist service to use /etc/dnsdist/dnsdist.conf
           ExecStart = [
             ""
-            "${lib.getExe pkgs.dnsdist} --supervised --disable-syslog --config /etc/dnsdist/dnsdist.conf"
+            "${lib.getExe dnsdist} --supervised --disable-syslog --config /etc/dnsdist/dnsdist.conf"
           ];
           ExecStartPre = [
             ""
-            "${lib.getExe pkgs.dnsdist} --check-config --config /etc/dnsdist/dnsdist.conf"
+            "${lib.getExe dnsdist} --check-config --config /etc/dnsdist/dnsdist.conf"
           ];
 
           # Run as a dedicated user
