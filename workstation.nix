@@ -309,7 +309,7 @@ in
             issuer acme {
               dns
               profile shortlived
-              resolvers fd7a:115c:a1e0::1a01:5208
+              resolvers [fd7a:115c:a1e0::1a01:5208]:54
             }
           }
 
