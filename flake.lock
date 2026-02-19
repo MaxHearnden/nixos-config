@@ -118,11 +118,11 @@
         "rtf-tokenize": "rtf-tokenize"
       },
       "locked": {
-        "lastModified": 1771311849,
-        "narHash": "sha256-/ubq8ZrjkEmqq5Zuu/mEWiEeNi/8pyHc66aPJPqkBU8=",
+        "lastModified": 1771477711,
+        "narHash": "sha256-AibC8RHTb16ir1oyGwYY1XGSwjzU5IinCaPWZRn76ow=",
         "owner": "opensteno",
         "repo": "plover-flake",
-        "rev": "9b9975a062f277e9eca5f0fc6a869f489be71fee",
+        "rev": "7d229c75bc9b8278152e53a0fa806a43668b4051",
         "type": "github"
       },
       "original": {
