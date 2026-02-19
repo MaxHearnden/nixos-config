@@ -378,6 +378,13 @@ in
         };
       };
       netdevs = {
+        "10-guest" = {
+          netdevConfig = {
+            Kind = "vlan";
+            Name = "guest";
+          };
+          vlanConfig.Id = 10;
+        };
         "10-shadow-lan" = {
           netdevConfig = {
             Kind = "vlan";
@@ -401,7 +408,14 @@ in
           DHCP = "yes";
           matchConfig.Name = "eno1";
           networkConfig.IPv6AcceptRA = true;
-          vlan = [ "shadow-lan" ];
+          vlan = [ "guest" "shadow-lan" ];
+        };
+        "10-guest" = {
+          DHCP = "yes";
+          dhcpV4Config.RouteMetric = 1536;
+          ipv6AcceptRAConfig.RouteMetric = 2048;
+          name = "guest";
+          networkConfig.IPv6AcceptRA = true;
         };
         "10-shadow-lan" = {
           DHCP = "yes";
