@@ -731,7 +731,7 @@ in
             {
               Metric = 2048;
               Destination = "192.168.0.0/16";
-              MTUBytes = 1260;
+              MTUBytes = 1330;
             }
           ];
         };
