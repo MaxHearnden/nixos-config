@@ -460,10 +460,6 @@
       package = pkgs.unbound-full;
       # Pc is on an unblocked network
       settings = lib.mkMerge [
-        (lib.mkIf (
-          config.networking.hostName != "max-nixos-pc" &&
-          config.networking.hostName != "max-nixos-workstation") {
-          server.qname-minimisation = false;
           forward-zone = [
             {
               name = ".";
@@ -510,6 +506,7 @@
               "test"
               "zandoodle.me.uk"
             ];
+            qname-minimisation = false;
             response-ip = [
               "fd09:a389:7c1e:3::/64 redirect"
               "fd09:a389:7c1e:3:c0:0:aa00::/103 always_transparent"
@@ -518,6 +515,14 @@
             trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
             val-log-level = 2;
           };
+          forward-zone = [
+            {
+              name = ".";
+              forward-addr =
+                "fd7a:115c:a1e0::a101:5208#local-tailscale.zandoodle.me.uk";
+              forward-tls-upstream = true;
+            }
+          ];
           stub-zone = [
             {
               name = "test.";

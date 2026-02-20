@@ -322,11 +322,6 @@ in
     unbound.settings = {
       forward-zone = [
         {
-          name = ".";
-          forward-addr = [ "fd09:a389:7c1e:1::1@55" "192.168.1.201@55" ];
-          forward-first = true;
-        }
-        {
           name = "broadband";
           forward-addr = [ "192.168.1.1" ];
         }
@@ -344,7 +339,6 @@ in
           "168.192.in-addr.arpa nodefault"
           "d.f.ip6.arpa nodefault"
         ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa nodefault") 64;
-        qname-minimisation = false;
       };
       stub-zone = [
         {

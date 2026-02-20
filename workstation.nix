@@ -610,12 +610,6 @@ in
       settings = {
         forward-zone = [
           {
-            name = ".";
-            forward-addr =
-              "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
-            forward-tls-upstream = true;
-          }
-          {
             name = "broadband";
             forward-addr = [
               "192.168.1.1"
@@ -635,7 +629,6 @@ in
             "d.f.ip6.arpa nodefault"
           ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa nodefault") 64;
           interface = ["0.0.0.0@55" "::@55"];
-          qname-minimisation = false;
         };
         stub-zone = map (zone:
           {
