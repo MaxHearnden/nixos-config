@@ -459,80 +459,69 @@
       enableRootTrustAnchor = false;
       package = pkgs.unbound-full;
       # Pc is on an unblocked network
-      settings = lib.mkMerge [
-          forward-zone = [
-            {
-              name = ".";
-              forward-addr =
-                ["fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk"];
-              forward-tls-upstream = true;
-            }
+      settings = {
+        server = {
+          auto-trust-anchor-file = "/var/lib/unbound/root.key";
+          dns64-prefix = "fd09:a389:7c1e:3::/64";
+          dns64-ignore-aaaa = "vodafone.broadband";
+          do-not-query-localhost = false;
+          domain-insecure = ["test."];
+          ede = true;
+          local-zone = [
+            "home.arpa. nodefault"
+            "test. nodefault"
           ];
-        })
-        {
-          server = {
-            auto-trust-anchor-file = "/var/lib/unbound/root.key";
-            dns64-prefix = "fd09:a389:7c1e:3::/64";
-            dns64-ignore-aaaa = "vodafone.broadband";
-            do-not-query-localhost = false;
-            domain-insecure = ["test."];
-            ede = true;
-            local-zone = [
-              "home.arpa. nodefault"
-              "test. nodefault"
-            ];
-            module-config = "\"respip dns64 validator iterator\"";
-            private-address = [
-              "10.0.0.0/8"
-              "100.64.0.0/10"
-              "127.0.0.0/8"
-              "169.254.0.0/16"
-              "172.16.0.0/12"
-              "192.168.0.0/16"
-              "::ffff:10.0.0.0/104"
-              "::ffff:100.64.0.0/106"
-              "::ffff:127.0.0.0/104"
-              "::ffff:169.254.0.0/112"
-              "::ffff:172.16.0.0/108"
-              "::ffff:192.168.0.0/112"
-              "::1/128"
-              "fc00::/7"
-              "fe80::/10"
-            ];
-            private-domain = [
-              "broadband"
-              "compsoc-dev.com"
-              "home.arpa"
-              "test"
-              "zandoodle.me.uk"
-            ];
-            qname-minimisation = false;
-            response-ip = [
-              "fd09:a389:7c1e:3::/64 redirect"
-              "fd09:a389:7c1e:3:c0:0:aa00::/103 always_transparent"
-              "fd09:a389:7c1e:3:c0:a800::/88 always_transparent"
-            ];
-            trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
-            val-log-level = 2;
-          };
-          forward-zone = [
-            {
-              name = ".";
-              forward-addr =
-                "fd7a:115c:a1e0::a101:5208#local-tailscale.zandoodle.me.uk";
-              forward-tls-upstream = true;
-            }
+          module-config = "\"respip dns64 validator iterator\"";
+          private-address = [
+            "10.0.0.0/8"
+            "100.64.0.0/10"
+            "127.0.0.0/8"
+            "169.254.0.0/16"
+            "172.16.0.0/12"
+            "192.168.0.0/16"
+            "::ffff:10.0.0.0/104"
+            "::ffff:100.64.0.0/106"
+            "::ffff:127.0.0.0/104"
+            "::ffff:169.254.0.0/112"
+            "::ffff:172.16.0.0/108"
+            "::ffff:192.168.0.0/112"
+            "::1/128"
+            "fc00::/7"
+            "fe80::/10"
           ];
-          stub-zone = [
-            {
-              name = "test.";
-              stub-addr = [
-                "::1@8053"
-              ];
-            }
+          private-domain = [
+            "broadband"
+            "compsoc-dev.com"
+            "home.arpa"
+            "test"
+            "zandoodle.me.uk"
           ];
-        }
-      ];
+          qname-minimisation = false;
+          response-ip = [
+            "fd09:a389:7c1e:3::/64 redirect"
+            "fd09:a389:7c1e:3:c0:0:aa00::/103 always_transparent"
+            "fd09:a389:7c1e:3:c0:a800::/88 always_transparent"
+          ];
+          trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
+          val-log-level = 2;
+        };
+        forward-zone = [
+          {
+            name = ".";
+            forward-addr =
+              "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
+            forward-tls-upstream = true;
+          }
+        ];
+        stub-zone = [
+          {
+            name = "test.";
+            stub-addr = [
+              "::1@8053"
+            ];
+          }
+        ];
+      };
     };
     xserver = {
       desktopManager = {
