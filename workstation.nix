@@ -1,6 +1,16 @@
 { lib, pkgs, config, inputs, utils, ... }:
 
 let
+  cert_obtained = pkgs.writeShellApplication {
+    name = "cert-obtained";
+    text = ''
+      if [ "$1" = "*.workstation.zandoodle.me.uk" ]; then
+        install -Dm0440 -t /var/lib/caddy/certs \
+          "/var/lib/caddy/.local/share/caddy/$2/wildcard_.workstation.zandoodle.me.uk.crt"\
+          "/var/lib/caddy/.local/share/caddy/$2/wildcard_.workstation.zandoodle.me.uk.key"
+      fi
+    '';
+  };
   dnsdist =
     inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.callPackage
     ./dnsdist.nix {};
@@ -135,7 +145,10 @@ in
       filterForward = true;
       interfaces = {
         tailscale0 = {
-          allowedTCPPorts = [ 22 53 54 80 88 179 443 464 749 2049 25565 ];
+          allowedTCPPorts = [
+            22 53 54 80 88 179 443 464 749 2049 5000 5222 5223 5269 5270 5281
+            25565
+          ];
           allowedUDPPorts = [ 53 54 88 443 464 24454 ];
         };
         enp2s0 = {
@@ -298,10 +311,16 @@ in
         preferred_chains {
           root_common_name "ISRG Root X2"
         }
+        events {
+          on cert_obtained exec ${lib.getExe cert_obtained} {event.data.identifier} {event.data.storage_path}
+        }
       '';
       package = pkgs.caddy.withPlugins {
-        plugins = [ "github.com/caddy-dns/rfc2136@v1.0.0" ];
-        hash = "sha256-f/grl1eTVWqem0us5ucxHizChqUfexymh67OD0PDwn8=";
+        plugins = [
+          "github.com/caddy-dns/rfc2136@v1.0.0"
+          "github.com/mholt/caddy-events-exec@v0.1.0"
+        ];
+        hash = "sha256-YqNxgsGguH0uRxgFwc+/ByciArkmzaUTE7yiVuCbXMc=";
       };
       virtualHosts = {
         "*.workstation.zandoodle.me.uk".extraConfig = ''
@@ -602,6 +621,45 @@ in
       };
     };
     openssh.startWhenNeeded = true;
+    prosody = {
+      admins = [ "max@xmpp.workstation.zandoodle.me.uk" ];
+      enable = true;
+      extraConfig = ''
+        c2s_direct_tls_ports = { 5223 }
+        password_hash = "SHA-256"
+        s2s_direct_tls_ports = { 5270 }
+        unbound = {
+          trustfile = "/var/lib/unbound/root.key"
+        }
+        use_dane = true
+      '';
+      extraModules = [
+        "admin_shell"
+        "bosh"
+        "websocket"
+      ];
+      httpFileShare = {
+        domain = "uploads.workstation.zandoodle.me.uk";
+      };
+      httpInterfaces = [ "127.0.0.1" "::1" ];
+      muc = [
+        {
+          domain = "conference.workstation.zandoodle.me.uk";
+        }
+      ];
+      ssl = {
+        cert = "/var/lib/caddy/certs/wildcard_.workstation.zandoodle.me.uk.crt";
+        key = "/var/lib/caddy/certs/wildcard_.workstation.zandoodle.me.uk.key";
+        extraOptions.curveslist =
+          [ "X25519MLKEM768" "X25519" "prime256v1" "secp384r1" ];
+      };
+      virtualHosts = {
+        default = {
+          domain = "xmpp.workstation.zandoodle.me.uk";
+          enabled = true;
+        };
+      };
+    };
     ratbagd = {
       enable = true;
     };
@@ -1520,6 +1578,7 @@ in
           piper
         ];
       };
+      prosody.extraGroups = [ "caddy" ];
       tayga = {
         group = "tayga";
         isSystemUser = true;
