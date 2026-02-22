@@ -6,8 +6,13 @@ let
     text = ''
       if [ "$1" = "*.workstation.zandoodle.me.uk" ]; then
         install -Dm0440 -t /var/lib/caddy/certs \
-          "/var/lib/caddy/.local/share/caddy/$2/wildcard_.workstation.zandoodle.me.uk.crt"\
+          "/var/lib/caddy/.local/share/caddy/$2/wildcard_.workstation.zandoodle.me.uk.crt" \
           "/var/lib/caddy/.local/share/caddy/$2/wildcard_.workstation.zandoodle.me.uk.key"
+      fi
+      if [ "$1" = "workstation.zandoodle.me.uk" ]; then
+        install -Dm0440 -t /var/lib/caddy/certs \
+          "/var/lib/caddy/.local/share/caddy/$2/$1.crt" \
+          "/var/lib/caddy/.local/share/caddy/$2/$1.key"
       fi
     '';
   };
@@ -372,6 +377,17 @@ in
             abort
           }
         '';
+        "workstation.zandoodle.me.uk".extraConfig = ''
+          tls {
+            issuer acme {
+              dns
+              profile shortlived
+              resolvers [fd7a:115c:a1e0::1a01:5208]:54
+            }
+          }
+
+          abort
+        '';
       };
     };
     dbus = {
@@ -622,16 +638,21 @@ in
     };
     openssh.startWhenNeeded = true;
     prosody = {
-      admins = [ "max@xmpp.workstation.zandoodle.me.uk" ];
+      admins = [ "max@workstation.zandoodle.me.uk" ];
       enable = true;
       extraConfig = ''
         c2s_direct_tls_ports = { 5223 }
+        certificates = "/var/lib/caddy/certs"
         password_hash = "SHA-256"
         s2s_direct_tls_ports = { 5270 }
         unbound = {
           trustfile = "/var/lib/unbound/root.key"
         }
         use_dane = true
+        ssl = {
+          cafile = "/etc/ssl/certs/ca-bundle.crt",
+          curveslist = {"X25519MLKEM768", "X25519", "prime256v1", "secp384r1"}
+        }
       '';
       extraModules = [
         "admin_shell"
@@ -648,15 +669,9 @@ in
         }
       ];
       s2sSecureAuth = true;
-      ssl = {
-        cert = "/var/lib/caddy/certs/wildcard_.workstation.zandoodle.me.uk.crt";
-        key = "/var/lib/caddy/certs/wildcard_.workstation.zandoodle.me.uk.key";
-        extraOptions.curveslist =
-          [ "X25519MLKEM768" "X25519" "prime256v1" "secp384r1" ];
-      };
       virtualHosts = {
         default = {
-          domain = "xmpp.workstation.zandoodle.me.uk";
+          domain = "workstation.zandoodle.me.uk";
           enabled = true;
         };
       };
@@ -1551,6 +1566,10 @@ in
         "v /nexus/backups 700 btrbk btrbk"
         "d /nexus/backups/workstation - btrbk btrbk"
         "a /Big/shared - - - - u:btrbk:rx,g::-,m::rx"
+        "L+ /var/lib/caddy/certs/conference.workstation.zandoodle.me.uk.crt - - - - wildcard_.workstation.zandoodle.me.uk.crt"
+        "L+ /var/lib/caddy/certs/conference.workstation.zandoodle.me.uk.key - - - - wildcard_.workstation.zandoodle.me.uk.key"
+        "L+ /var/lib/caddy/certs/upload.workstation.zandoodle.me.uk.crt - - - - wildcard_.workstation.zandoodle.me.uk.crt"
+        "L+ /var/lib/caddy/certs/upload.workstation.zandoodle.me.uk.key - - - - wildcard_.workstation.zandoodle.me.uk.key"
       ];
     };
   };
