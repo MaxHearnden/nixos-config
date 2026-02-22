@@ -647,6 +647,7 @@ in
           domain = "conference.workstation.zandoodle.me.uk";
         }
       ];
+      s2sSecureAuth = true;
       ssl = {
         cert = "/var/lib/caddy/certs/wildcard_.workstation.zandoodle.me.uk.crt";
         key = "/var/lib/caddy/certs/wildcard_.workstation.zandoodle.me.uk.key";
