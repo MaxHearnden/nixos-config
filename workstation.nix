@@ -171,6 +171,7 @@ in
       '';
     };
     hostName = "max-nixos-workstation";
+    hosts."127.0.0.2" = [ "workstation.zandoodle.me.uk" ];
     localCommands = ''
       # Remove the priority 0 local rule
       ip rule del priority 0 || true
