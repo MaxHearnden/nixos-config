@@ -655,8 +655,10 @@ in
         }
       '';
       extraModules = [
-        "admin_shell"
         "bosh"
+        "csi_simple"
+        "s2s_bidi"
+        "turn_external"
         "websocket"
       ];
       httpFileShare = {
