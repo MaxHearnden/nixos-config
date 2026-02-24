@@ -325,6 +325,27 @@ in
           name = "broadband";
           forward-addr = [ "192.168.1.1" ];
         }
+        {
+          name = "arpa";
+          forward-addr =
+            "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
+          forward-first = true;
+          forward-tls-upstream = true;
+        }
+        {
+          name = "in-addr.arpa";
+          forward-addr =
+            "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
+          forward-first = true;
+          forward-tls-upstream = true;
+        }
+        {
+          name = "ip6.arpa";
+          forward-addr =
+            "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
+          forward-first = true;
+          forward-tls-upstream = true;
+        }
       ];
       server = {
         domain-insecure = [
@@ -345,7 +366,31 @@ in
           name = "max.home.arpa";
           stub-host = "workstation.zandoodle.me.uk";
         }
-      ];
+      ] ++ (map (zone:
+          {
+            name = zone;
+            stub-addr = [
+              "::1@54"
+              "127.0.0.1@54"
+            ];
+            stub-first = true;
+          }) ([
+            "."
+            "168.192.in-addr.arpa"
+            "_acme-challenge.pc.int.zandoodle.me.uk"
+            "_acme-challenge.workstation.zandoodle.me.uk"
+            "_acme-challenge.zandoodle.me.uk"
+            "arpa"
+            "compsoc-dev.com"
+            "d.f.ip6.arpa"
+            "home.arpa"
+            "in-addr.arpa"
+            "int.zandoodle.me.uk"
+            "ip6.arpa"
+            "ipv4only.arpa"
+            "root-servers.net"
+            "zandoodle.me.uk"
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64));
     };
     xserver = {
       videoDrivers = [
