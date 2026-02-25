@@ -629,7 +629,6 @@ in
     nfs = {
       server = {
         enable = true;
-        hostName = "workstation.zandoodle.me.uk,192.168.3.1";
         exports = ''
           /Big/shared -mp=/Big,sec=krb5p,rw *
           /Big/shared/riscv/star64_root 192.168.3.0/24(rw,no_root_squash,mp=/Big)
