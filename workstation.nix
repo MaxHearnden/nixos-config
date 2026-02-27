@@ -144,10 +144,7 @@ in
       options = [ "nofail" "defaults" "compress=zstd" "nosuid" "nodev" "noatime" ];
     };
   };
-  nix.settings = {
-    keep-outputs = true;
-    substitute = false;
-  };
+  nix.settings.keep-outputs = true;
   networking = {
     firewall = {
       filterForward = true;
