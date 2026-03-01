@@ -17,8 +17,7 @@ let
     '';
   };
   dnsdist =
-    inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.callPackage
-    ./dnsdist.nix {};
+    inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist;
   python = pkgs.python3;
   kdcproxy = python.pkgs.callPackage ./kdcproxy.nix {};
   kdcproxy_env = python.buildEnv.override {

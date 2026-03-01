@@ -2,8 +2,7 @@
 
 let
   dnsdist =
-    inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.callPackage
-    ./dnsdist.nix {};
+    inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist;
 in
 
 {
