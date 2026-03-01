@@ -803,6 +803,7 @@
           comma
           devcontainer
           dig
+          dino
           discord
           dnsmasq
           dwarf-fortress
