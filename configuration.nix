@@ -457,6 +457,7 @@
     unbound = {
       enable = true;
       enableRootTrustAnchor = false;
+      localControlSocketPath = "/run/unbound/unbound.ctl";
       package = pkgs.unbound-full;
       # Pc is on an unblocked network
       settings = {
