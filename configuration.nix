@@ -495,6 +495,7 @@
             "compsoc-dev.com"
             "home.arpa"
             "test"
+            "ts.net"
             "zandoodle.me.uk"
           ];
           qname-minimisation = config.networking.hostName == "max-nixos-pc";
@@ -521,6 +522,10 @@
             stub-addr = [
               "::1@8053"
             ];
+          }
+          {
+            name = "ts.net";
+            stub-addr = "fd7a:115c:a1e0::53";
           }
         ];
       };
