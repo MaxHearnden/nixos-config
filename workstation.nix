@@ -325,7 +325,7 @@ in
           "github.com/caddy-dns/rfc2136@v1.0.0"
           "github.com/mholt/caddy-events-exec@v0.1.0"
         ];
-        hash = "sha256-YqNxgsGguH0uRxgFwc+/ByciArkmzaUTE7yiVuCbXMc=";
+        hash = "sha256-FCMjAUbe9DzUIbgu0ixam3S2+SZw/rMFEoR7bMhaNbY=";
       };
       virtualHosts = {
         "*.workstation.zandoodle.me.uk".extraConfig = ''

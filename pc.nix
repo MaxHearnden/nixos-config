@@ -177,7 +177,7 @@ in
       '';
       package = pkgs.caddy.withPlugins {
         plugins = [ "github.com/caddy-dns/rfc2136@v1.0.0" ];
-        hash = "sha256-f/grl1eTVWqem0us5ucxHizChqUfexymh67OD0PDwn8=";
+        hash = "sha256-S078bVfUolEa6icL2hJgTTzZ8r7+j+D9lfyOc5SCvzQ=";
       };
       virtualHosts."pc.int.zandoodle.me.uk".extraConfig = ''
         tls {
