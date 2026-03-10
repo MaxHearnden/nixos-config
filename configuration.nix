@@ -466,7 +466,7 @@
           dns64-prefix = "fd09:a389:7c1e:3::/64";
           dns64-ignore-aaaa = "vodafone.broadband";
           do-not-query-localhost = false;
-          domain-insecure = ["test."];
+          domain-insecure = ["broadband" "test."];
           ede = true;
           local-zone = [
             "home.arpa. nodefault"

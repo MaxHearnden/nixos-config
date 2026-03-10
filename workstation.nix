@@ -693,7 +693,6 @@ in
         ];
         server = {
           domain-insecure = [
-            "broadband"
             "home.arpa"
             "168.192.in-addr.arpa"
             "d.f.ip6.arpa"
