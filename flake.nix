@@ -51,7 +51,7 @@
     packages.x86_64-linux = {
       default = nixpkgs.legacyPackages.x86_64-linux.linkFarm "systems" (builtins.attrValues (builtins.mapAttrs (name: path: {inherit name path;}) self.hydraJobs));
       zone = nixpkgs.legacyPackages.x86_64-linux.runCommand "zonefile" {} ''
-        echo "$TTL 0" > $out
+        echo "\$TTL 0" > $out
         for system in ${self.packages.x86_64-linux.default}/*; do
           echo "$(basename "$system").systems TXT \"$(readlink "$system")\"" >> $out
         done
