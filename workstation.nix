@@ -582,6 +582,7 @@ in
             dnssec-policy = "max.home.arpa";
             domain = "max.home.arpa";
             file = "/etc/knot/max.home.arpa.zone";
+            notify = "orion";
             semantic-checks = true;
             journal-content = "all";
             zonefile-load = "difference-no-serial";
