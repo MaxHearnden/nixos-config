@@ -184,12 +184,12 @@ in
         content = ''
           chain zoning-prerouting {
             type filter hook prerouting priority raw; policy accept;
-            ct zone set meta iifname map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
+            ct zone set meta iifname map {ens4f0: 1, ens4f1: 2, ens4f2: 3, ens4f3: 4}
           }
 
           chain zoning-output {
             type filter hook output priority raw; policy accept;
-            ct zone set meta oifname map {enp3s0f0: 1, enp3s0f1: 2, enp3s0f2: 3, enp3s0f3: 4}
+            ct zone set meta oifname map {ens4f0: 1, ens4f1: 2, ens4f2: 3, ens4f3: 4}
           }
         '';
       };
