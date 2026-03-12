@@ -93,11 +93,8 @@ in
           cache CNAME workstation
           dns CNAME workstation
           minecraft CNAME workstation
-          chromebook A 100.69.85.70
           chromebook AAAA fd7a:115c:a1e0::d401:5546
-          workstation A 100.91.224.22
           workstation AAAA fd7a:115c:a1e0:ab12:4843:cd96:625b:e016
-          pc A 100.95.236.105
           pc AAAA fd7a:115c:a1e0::d2df:ec69
           $INCLUDE /nix/var/nix/profiles/all/zonefile
         '';
