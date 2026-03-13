@@ -243,11 +243,13 @@ in
           multihop;
           ipv6 {
             export all;
-            import filter peer_in_v4;
+            import filter peer_in_v6;
+            import table on;
           };
           ipv4 {
             export all;
-            import filter peer_in_v6;
+            import filter peer_in_v4;
+            import table on;
           };
         }
         protocol device {
