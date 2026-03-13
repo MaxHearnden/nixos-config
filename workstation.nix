@@ -215,6 +215,8 @@ in
   services = {
     bird = {
       enable = true;
+      package =
+        inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3;
       config = ''
         roa4 table r4;
         roa6 table r6;
@@ -239,8 +241,8 @@ in
         }
         protocol bgp orion {
           local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
-          neighbor fd7a:115c:a1e0::1a01:5208 as 65001;
-          multihop;
+          neighbor fd7a:115c:a1e0::1a01:5208 onlink as 65001;
+          interface "tailscale0";
           ipv6 {
             export all;
             import filter peer_in_v6;
