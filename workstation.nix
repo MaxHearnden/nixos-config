@@ -216,17 +216,38 @@ in
     bird = {
       enable = true;
       config = ''
+        roa4 table r4;
+        roa6 table r6;
+        aspa table at;
+        filter peer_in_v4 {
+          if (roa_check(r4) = ROA_INVALID) then {
+            reject "ROA invalid";
+          }
+          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+            reject "ASPA invalid";
+          }
+          accept;
+        }
+        filter peer_in_v6 {
+          if (roa_check(r6) = ROA_INVALID) then {
+            reject "ROA invalid";
+          }
+          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+            reject "ASPA invalid";
+          }
+          accept;
+        }
         protocol bgp {
           local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
           neighbor fd7a:115c:a1e0::1a01:5208 as 65001;
           multihop;
           ipv6 {
             export all;
-            import none;
+            import filter peer_in_v4;
           };
           ipv4 {
             export all;
-            import none;
+            import filter peer_in_v6;
           };
         }
         protocol device {
@@ -235,6 +256,14 @@ in
         protocol direct {
           ipv4;
           ipv6;
+        }
+        protocol rpki {
+          debug all;
+          roa4 { table r4; };
+          roa6 { table r6; };
+          aspa { table at; };
+
+          remote "localhost";
         }
       '';
     };
@@ -665,6 +694,20 @@ in
     };
     ratbagd = {
       enable = true;
+    };
+    routinator = {
+      enable = true;
+      package =
+        pkgs.routinator.overrideAttrs (
+          { patches ? [], ... }: {
+            patches = patches ++ [ ./routinator.patch ];
+          });
+      settings = {
+        extra-tals-dir = ./tals;
+        log-level = "debug";
+        systemd-listen = true;
+        no-rir-tals = true;
+      };
     };
     unbound = {
       resolveLocalQueries = false;
@@ -1495,6 +1538,10 @@ in
           FreeBind = true;
         };
         wantedBy = [ "minecraft-server.target" ];
+      };
+      routinator = {
+        listenStreams = [ "[::]:323" ];
+        wantedBy = [ "routinator.service" ];
       };
       sshd.enable = false;
       "sshd@lo" = {
