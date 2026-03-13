@@ -129,7 +129,7 @@ in
         roa4 table r4;
         roa6 table r6;
         aspa table at;
-        filter peer_in_v4
+        filter peer_in_v4 {
           if (roa_check(r4) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
