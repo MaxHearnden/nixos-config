@@ -703,10 +703,11 @@ in
             patches = patches ++ [ ./routinator.patch ];
           });
       settings = {
+        enable-aspa = true;
         extra-tals-dir = ./tals;
         log-level = "debug";
-        systemd-listen = true;
         no-rir-tals = true;
+        systemd-listen = true;
       };
     };
     unbound = {
