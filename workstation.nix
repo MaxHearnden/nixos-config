@@ -221,19 +221,19 @@ in
         aspa table at;
         filter peer_in_v4 {
           if (roa_check(r4) = ROA_INVALID) then {
-            reject "ROA invalid";
+            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
           if (aspa_check_downstream(at) = ASPA_INVALID) then {
-            reject "ASPA invalid";
+            reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
           accept;
         }
         filter peer_in_v6 {
           if (roa_check(r6) = ROA_INVALID) then {
-            reject "ROA invalid";
+            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
           if (aspa_check_downstream(at) = ASPA_INVALID) then {
-            reject "ASPA invalid";
+            reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
           accept;
         }
