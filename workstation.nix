@@ -223,7 +223,7 @@ in
           if (roa_check(r4) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
-          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+          if (aspa_check_upstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
           accept;
@@ -232,7 +232,7 @@ in
           if (roa_check(r6) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
-          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+          if (aspa_check_upstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
           accept;
@@ -245,11 +245,13 @@ in
             export all;
             import filter peer_in_v6;
             import table on;
+            next hop address fd27:6be8:399c:2:1089:49ff:febf:e68d;
           };
           ipv4 {
             export all;
             import filter peer_in_v4;
             import table on;
+            next hop address 192.168.10.2;
           };
         }
         protocol device {
@@ -258,9 +260,9 @@ in
         protocol direct {
           ipv4;
           ipv6;
+          interface "enp2s0", "ipv6-tunnel";
         }
         protocol rpki {
-          debug all;
           roa4 { table r4; };
           roa6 { table r6; };
           aspa { table at; };
@@ -707,7 +709,6 @@ in
       settings = {
         enable-aspa = true;
         extra-tals-dir = ./tals;
-        log-level = "debug";
         no-rir-tals = true;
         systemd-listen = true;
       };
