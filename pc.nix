@@ -94,7 +94,7 @@ in
       filterForward = true;
       interfaces = {
         eno1 = {
-          allowedTCPPorts = [ 9943 9944 ];
+          allowedTCPPorts = [ 179 9943 9944 ];
           allowedUDPPorts = [ 9943 9944 ];
         };
         tailscale0.allowedTCPPorts = [ 80 443 ];
@@ -123,6 +123,56 @@ in
     };
   };
   services = {
+    bird = {
+      enable = true;
+      config = ''
+        roa4 table r4;
+        roa6 table r6;
+        aspa table at;
+        filter peer_in_v4
+          if (roa_check(r4) = ROA_INVALID) then {
+            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+          }
+          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+            reject "Ignore ASPA invalid ", net, " for ASNs ", bgp_path;
+          }
+          accept;
+        }
+        filter peer_in_v6 {
+          if (roa_check(r6) = ROA_INVALID) then {
+            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+          }
+          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+            reject "Ignore ASPA invalid ", net, " for ASNs ", bgp_path;
+          }
+          accept;
+        }
+        protocol bgp orion {
+          local fd09:a389:7c1e:5:42b0:76ff:fede:79dc as 65002;
+          neighbor fd09:a389:7c1e:5:7006:83ff:feff:5d0b as 65001;
+          ipv6 {
+            export none;
+            import filter peer_in_v6;
+            import table on;
+          };
+          ipv4 {
+            export none;
+            import filter peer_in_v4;
+            import table on;
+          };
+        }
+        protocol device {
+
+        }
+        protocol rpki {
+          roa4 { table r4; };
+          roa6 { table r6; };
+          aspa { table at; };
+
+          remote "localhost";
+        }
+      '';
+    };
     btrbk = {
       instances = {
         btrbk = {
@@ -317,6 +367,20 @@ in
     };
     ratbagd = {
       enable = true;
+    };
+    routinator = {
+      enable = true;
+      package =
+        pkgs.routinator.overrideAttrs (
+          { patches ? [], ... }: {
+            patches = patches ++ [ ./routinator.patch ];
+          });
+      settings = {
+        enable-aspa = true;
+        extra-tals-dir = ./tals;
+        no-rir-tals = true;
+        systemd-listen = true;
+      };
     };
     unbound.settings = {
       forward-zone = [
@@ -606,6 +670,12 @@ in
       unbound = {
         after = [ "zone-home-test.service" ];
         wants = [ "zone-home-test.service" ];
+      };
+    };
+    sockets = {
+      routinator = {
+        listenStreams = [ "[::]:323" ];
+        wantedBy = [ "routinator.service" ];
       };
     };
     tmpfiles = {
