@@ -228,6 +228,7 @@ in
           if (aspa_check_downstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
+          ifname = "ipv6-tunnel";
           accept;
         }
         filter peer_in_v6 {
@@ -237,6 +238,7 @@ in
           if (aspa_check_downstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
+          ifname = "ipv6-tunnel";
           accept;
         }
         protocol bgp orion {
@@ -247,13 +249,11 @@ in
             export all;
             import filter peer_in_v6;
             import table on;
-            next hop address fd27:6be8:399c:2:1089:49ff:febf:e68d;
           };
           ipv4 {
             export all;
             import filter peer_in_v4;
             import table on;
-            next hop address 192.168.10.2;
           };
         }
         protocol device {
