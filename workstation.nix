@@ -223,7 +223,7 @@ in
           if (roa_check(r4) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
-          if (aspa_check_upstream(at) = ASPA_INVALID) then {
+          if (aspa_check_downstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
           accept;
@@ -232,12 +232,12 @@ in
           if (roa_check(r6) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
-          if (aspa_check_upstream(at) = ASPA_INVALID) then {
+          if (aspa_check_downstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
           accept;
         }
-        protocol bgp {
+        protocol bgp orion {
           local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
           neighbor fd7a:115c:a1e0::1a01:5208 as 65001;
           multihop;
