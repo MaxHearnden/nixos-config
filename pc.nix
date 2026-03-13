@@ -150,6 +150,8 @@ in
         protocol bgp orion {
           local fd09:a389:7c1e:5:42b0:76ff:fede:79dc as 65002;
           neighbor fd09:a389:7c1e:5:7006:83ff:feff:5d0b as 65001;
+          local role customer;
+          require roles on;
           ipv6 {
             export none;
             import filter peer_in_v6;

@@ -245,6 +245,8 @@ in
           local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
           neighbor fd7a:115c:a1e0::1a01:5208 onlink as 65001;
           interface "tailscale0";
+          local role customer;
+          require roles on;
           ipv6 {
             export all;
             import filter peer_in_v6;
