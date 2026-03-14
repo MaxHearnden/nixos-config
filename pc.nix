@@ -222,12 +222,12 @@ in
         }
         protocol kernel {
           ipv4 {
-            export where source !~ [RTS_DEVICE, RTS_STATIC];
+            export where source !~ [RTS_DEVICE];
           };
         }
         protocol kernel {
           ipv6 {
-            export where source !~ [RTS_DEVICE, RTS_STATIC];
+            export where source !~ [RTS_DEVICE];
           };
         }
         protocol rpki {
@@ -240,6 +240,10 @@ in
         protocol static {
           ipv4;
           route 192.168.11.0/24 unreachable;
+        }
+        protocol static {
+          ipv6;
+          route fd09:a389:7c1e:6::/64 unreachable;
         }
       '';
     };
@@ -587,6 +591,10 @@ in
           ipv6AcceptRAConfig.RouteMetric = 2048;
           name = "guest";
           networkConfig.IPv6AcceptRA = true;
+        };
+        "10-lo" = {
+          address = [ "192.168.11.1" "fd09:fd09:a389:7c1e:6::1" ];
+          name = "lo";
         };
         "10-shadow-lan" = {
           DHCP = "yes";
