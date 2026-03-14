@@ -125,6 +125,11 @@ in
   services = {
     bird = {
       enable = true;
+      package =
+        inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3.overrideAttrs
+        ({ patches ? [], ... }: {
+          patches = patches ++ [ ./bird-aspa.patch ];
+        });
       config = ''
         roa4 table r4;
         roa6 table r6;
