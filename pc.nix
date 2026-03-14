@@ -166,6 +166,16 @@ in
         protocol device {
 
         }
+        protocol kernel {
+          ipv4 {
+            export where source !~ [RTS_DEVICE, RTS_STATIC];
+          };
+        }
+        protocol kernel {
+          ipv6 {
+            export where source !~ [RTS_DEVICE, RTS_STATIC];
+          };
+        }
         protocol rpki {
           roa4 { table r4; };
           roa6 { table r6; };
