@@ -158,18 +158,25 @@ in
           local role customer;
           require roles on;
           ipv6 {
-            export none;
+            export where net !~ 2000::/3;
             import filter peer_in_v6;
             import table on;
           };
           ipv4 {
-            export none;
+            export all;
             import filter peer_in_v4;
             import table on;
           };
         }
         protocol device {
 
+        }
+        protocol direct {
+          ipv4;
+          ipv6 {
+            import where net.len != 128;
+          };
+          interface "eno1", "guest", "shadow-lan";
         }
         protocol kernel {
           ipv4 {
@@ -187,6 +194,10 @@ in
           aspa { table at; };
 
           remote "localhost";
+        }
+        protocol static {
+          ipv4;
+          route 192.168.11.0/24 unreachable;
         }
       '';
     };
