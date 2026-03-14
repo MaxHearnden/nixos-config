@@ -1,4 +1,4 @@
-commit 922b80e9cb65077f6835eedc982d1a9806fd5ec5
+commit 2fec148ce2857ef2498e3a22b3bada21efa184d1
 Author: Evann DREUMONT <evann@grifon.fr>
 Date:   Sat Feb 7 23:59:12 2026 +0100
 
@@ -110,7 +110,7 @@ index 758a7d0c..77fc1fb8 100644
  
  bt_test_suite(t_aspa_check_official, "Testing ASPA (official tests)");
 diff --git a/nest/rt-table.c b/nest/rt-table.c
-index c153f3c2..990a92b2 100644
+index c153f3c2..ec9d8b09 100644
 --- a/nest/rt-table.c
 +++ b/nest/rt-table.c
 @@ -761,7 +761,7 @@ net_roa_check(rtable *tp, const net_addr *n, u32 asn)
@@ -166,9 +166,8 @@ index c153f3c2..990a92b2 100644
 +     * and vice versa */
      if (n) NET_READ_WALK_ROUTES(tr, n, ep, e)
      {
--      if (!rte_is_valid(&e->rte))
+       if (!rte_is_valid(&e->rte))
 -	continue;
-+      if (!rte_is_valid(e))
 +        continue;
  
        eattr *ea = ea_find(e->rte.attrs, &ea_gen_aspa_providers);
