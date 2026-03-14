@@ -97,6 +97,8 @@ in
           allowedTCPPorts = [ 179 9943 9944 ];
           allowedUDPPorts = [ 9943 9944 ];
         };
+        guest.allowedTCPPorts = [ 179 ];
+        "shadow-lan".allowedTCPPorts = [ 179 ];
         tailscale0.allowedTCPPorts = [ 80 443 ];
         tailscale0.allowedUDPPorts = [ 443 ];
       };
@@ -157,15 +159,51 @@ in
           neighbor fd09:a389:7c1e:5:7006:83ff:feff:5d0b as 65001;
           local role customer;
           require roles on;
+          ipv4 {
+            export all;
+            import filter peer_in_v4;
+            import table on;
+          };
           ipv6 {
             export where net !~ 2000::/3;
             import filter peer_in_v6;
             import table on;
           };
+        }
+        protocol bgp orion_shadow {
+          local fd09:a389:7c1e:1:42b0:76ff:fede:79dc as 65002;
+          neighbor fd09:a389:7c1e:1::1 as 65001;
+          local role customer;
+          require roles on;
           ipv4 {
             export all;
             import filter peer_in_v4;
             import table on;
+            preference 90;
+          };
+          ipv6 {
+            export where net !~ 2000::/3;
+            import filter peer_in_v6;
+            import table on;
+            preference 90;
+          };
+        }
+        protocol bgp orion_guest {
+          local fd09:a389:7c1e:4:42b0:76ff:fede:79dc as 65002;
+          neighbor fd09:a389:7c1e:4:7006:83ff:feff:5d0c as 65001;
+          local role customer;
+          require roles on;
+          ipv4 {
+            export all;
+            import filter peer_in_v4;
+            import table on;
+            preference 80;
+          };
+          ipv6 {
+            export where net !~ 2000::/3;
+            import filter peer_in_v6;
+            import table on;
+            preference 80;
           };
         }
         protocol device {
