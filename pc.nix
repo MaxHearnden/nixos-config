@@ -166,7 +166,7 @@ in
             import table on;
           };
           ipv6 {
-            export where net !~ 2000::/3;
+            export all;
             import filter peer_in_v6;
             import table on;
           };
@@ -185,7 +185,7 @@ in
             preference 90;
           };
           ipv6 {
-            export where net !~ 2000::/3;
+            export all;
             import filter peer_in_v6;
             import table on;
             preference 90;
@@ -204,7 +204,7 @@ in
             preference 80;
           };
           ipv6 {
-            export where net !~ 2000::/3;
+            export all;
             import filter peer_in_v6;
             import table on;
             preference 80;
