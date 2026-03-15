@@ -837,7 +837,6 @@ in
           DHCP = "no";
         };
         "10-ip6tnl" = {
-          address = ["192.168.10.2/24" "fd27:6be8:399c:2:1089:49ff:febf:e68d/64"];
           name = "ipv6-tunnel";
           linkConfig.RequiredForOnline = false;
         };
