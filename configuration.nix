@@ -3,7 +3,7 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
-  imports = [ ./pcrlock.nix ];
+  imports = [ ./pcrlock.nix ./ip-mesh.nix ];
   boot = {
     binfmt = {
       emulatedSystems = [
@@ -218,6 +218,9 @@
   ]);
   networking = {
     firewall = {
+      extraInputRules = ''
+        iifname tailscale0 meta l4proto {ipv4, ipv6} accept
+      '';
       allowedUDPPorts = [
         41641 # Tailscale
       ];
@@ -419,6 +422,16 @@
       games = {
         enable = true;
       };
+    };
+    ip-mesh = {
+      peers = {
+        pc = "fd7a:115c:a1e0::d2df:ec69";
+        laptop = "fd7a:115c:a1e0::d601:c60";
+        workstation = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
+        orion = "fd7a:115c:a1e0::1a01:5208";
+        chromebook = "fd7a:115c:a1e0::d401:5546";
+      };
+      self = lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName;
     };
     libinput = {
       enable = true;

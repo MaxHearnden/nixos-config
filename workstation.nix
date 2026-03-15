@@ -149,7 +149,6 @@ in
         iifname tayga oifname tailscale0 accept
       '';
       extraInputRules = ''
-        iifname tailscale0 meta l4proto {ipv4, ipv6} accept
         iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
         ip6 daddr { fe80::/64, ff02::1:2, ff02::2 } udp dport 547 iifname "enp2s0" accept comment "dnsmasq"
       '';
@@ -231,7 +230,7 @@ in
           if (aspa_check_downstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
-          ifname = "ipv6-tunnel";
+          ifname = "orion-tnl";
           accept;
         }
         filter peer_in_v6 {
@@ -241,7 +240,7 @@ in
           if (aspa_check_downstream(at) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
-          ifname = "ipv6-tunnel";
+          ifname = "orion-tnl";
           accept;
         }
         protocol bgp orion {
@@ -267,7 +266,7 @@ in
         protocol direct {
           ipv4;
           ipv6;
-          interface "enp2s0", "ipv6-tunnel";
+          interface "enp2s0";
         }
         protocol kernel {
           ipv4 {
@@ -836,10 +835,6 @@ in
           ];
           DHCP = "no";
         };
-        "10-ip6tnl" = {
-          name = "ipv6-tunnel";
-          linkConfig.RequiredForOnline = false;
-        };
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];
           matchConfig.Name = "tayga";
@@ -897,17 +892,6 @@ in
             };
           }) 4)
         // {
-          "10-ip6tnl" = {
-            netdevConfig = {
-              Kind = "ip6tnl";
-              Name = "ipv6-tunnel";
-            };
-            tunnelConfig = {
-              Independent = true;
-              Local = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
-              Remote = "fd7a:115c:a1e0::1a01:5208";
-            };
-          };
           "10-tayga" = {
             netdevConfig = {
               Kind = "tun";
