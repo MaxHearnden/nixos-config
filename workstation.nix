@@ -270,12 +270,22 @@ in
         }
         protocol kernel {
           ipv4 {
-            export where source !~ [RTS_DEVICE, RTS_STATIC];
+            export filter {
+              if source ~ [RTS_DEVICE, RTS_STATIC] then
+                reject;
+              krt_prefsrc = 192.168.10.1;
+              accept;
+            };
           };
         }
         protocol kernel {
           ipv6 {
-            export where source !~ [RTS_DEVICE, RTS_STATIC];
+            export filter {
+              if source ~ [RTS_DEVICE, RTS_STATIC] then
+                reject;
+              krt_prefsrc = fd27:6be8:399c:2::1;
+              accept;
+            };
           };
         }
         protocol rpki {
@@ -284,6 +294,14 @@ in
           aspa { table at; };
 
           remote "localhost";
+        }
+        protocol static {
+          ipv4;
+          route 192.168.10.0/24 unreachable;
+        }
+        protocol static {
+          ipv6;
+          route fd27:6be8:399c:2::/64 unreachable;
         }
       '';
     };
@@ -834,6 +852,10 @@ in
             }
           ];
           DHCP = "no";
+        };
+        "10-lo" = {
+          address = [ "fd27:6be8:399c:2::1/128" "192.168.10.1/32" ];
+          name = "lo";
         };
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];
