@@ -27,11 +27,6 @@
         specialArgs = {inherit inputs;};
         system = "x86_64-linux";
       };
-      max-nixos-dell = nixpkgs.lib.nixosSystem {
-        modules = [ ./dell.nix ];
-        specialArgs = {inherit inputs;};
-        system = "x86_64-linux";
-      };
       max-nixos-laptop = nixpkgs.lib.nixosSystem {
         modules = [ ./big-laptop.nix ];
         specialArgs = {inherit inputs;};
