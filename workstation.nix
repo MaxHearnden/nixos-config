@@ -227,6 +227,7 @@ in
         roa4 table r4;
         roa6 table r6;
         aspa table at;
+        ipv6 table radv_routes;
         filter peer_in_v4 {
           if (roa_check(r4) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
@@ -292,6 +293,22 @@ in
             };
           };
         }
+        protocol radv {
+          propagate routes on;
+          ipv6 {
+            table radv_routes; export all;
+          };
+          interface "enp2s0" {
+            managed yes;
+            link mtu 9000;
+          };
+          rdnss fd27:6be8:399c:2::1;
+          dnssl {
+            domain "workstation.home.arpa";
+            domain "int.zandoodle.me.uk";
+            domain "zandoodle.me.uk";
+          };
+        }
         protocol rpki {
           roa4 { table r4; };
           roa6 { table r6; };
@@ -306,6 +323,13 @@ in
         protocol static {
           ipv6;
           route fd27:6be8:399c:2::/64 unreachable;
+        }
+        protocol static {
+          ipv6 {
+            table radv_routes;
+          };
+          route fd27:6be8:399c::/48 unreachable;
+          route fd09:a389:7c1e::/48 unreachable;
         }
       '';
     };
@@ -489,12 +513,10 @@ in
         ];
         dhcp-rapid-commit = true;
         domain = "workstation.home.arpa";
-        enable-ra = true;
         interface = [ "enp2s0" ];
         interface-name = [ "workstation.home.arpa,enp2s0" ];
         port = "56";
         no-hosts = true;
-        ra-param = "enp2s0,mtu:enp2s0,0,0";
       };
     };
     gitea = {
