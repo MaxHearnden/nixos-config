@@ -18,6 +18,7 @@
   networking = {
     hostName = "max-nixos-chromebooksd2";
   };
+  services.ip-mesh.self = lib.mkForce "chromebook";
   swapDevices = [
     {
       device = "/nexus/swapfile";

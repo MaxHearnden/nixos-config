@@ -434,7 +434,7 @@
         laptop = "fd7a:115c:a1e0::d601:c60";
         workstation = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
         orion = "fd7a:115c:a1e0::1a01:5208";
-        chromebooksd2 = "fd7a:115c:a1e0::d401:5546";
+        chromebook = "fd7a:115c:a1e0::d401:5546";
       };
       self = lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName;
     };
