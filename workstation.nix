@@ -147,6 +147,10 @@ in
       };
       extraForwardRules = ''
         iifname tayga oifname tailscale0 accept
+        iiftype ipip6 oifname enp2s0 meta l4proto != udp accept
+        oiftype ipip6 iifname enp2s0 meta l4proto != udp accept
+        iiftype ipip6 oifname enp2s0 udp dport != {41641, 40000} accept
+        oiftype ipip6 iifname enp2s0 udp dport != {41641, 40000} accept
       '';
       extraInputRules = ''
         iifname "enp2s0" udp dport 67 meta nfproto ipv4 accept comment "dnsmasq"
