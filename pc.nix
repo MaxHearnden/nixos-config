@@ -90,6 +90,7 @@ in
       allowedUDPPorts = [ 54 8053 ];
       extraForwardRules = ''
         iifname tayga oifname shadow-lan accept
+        iiftype ipip6 oifname {eno1, guest, "shadow-lan"} accept
       '';
       filterForward = true;
       interfaces = {
@@ -105,14 +106,25 @@ in
     };
     hostName = "max-nixos-pc";
     networkmanager.enable = false;
-    nftables.tables.tayga-nat66 = {
-      family = "ip6";
-      content = ''
-        chain tayga-nat {
-          type nat hook postrouting priority srcnat; policy accept
-          iifname tayga oifname shadow-lan masquerade
-        }
-      '';
+    nftables.tables = {
+      tayga-nat66 = {
+        family = "ip6";
+        content = ''
+          chain tayga-nat {
+            type nat hook postrouting priority srcnat; policy accept
+            iifname tayga oifname shadow-lan masquerade
+          }
+        '';
+      };
+      local-nat = {
+        family = "inet";
+        content = ''
+          chain local-nat {
+            type nat hook postrouting priority srcnat; policy accept
+            iifname != lo oifname {eno1, guest, "shadow-lan"} masquerade
+          }
+        '';
+      };
     };
     useNetworkd = true;
   };
@@ -255,9 +267,20 @@ in
 
         }
         protocol direct {
-          ipv4;
+          ipv4 {
+            import filter {
+              bgp_path.prepend(65002);
+              accept;
+            };
+          };
           ipv6 {
-            import where net.len != 128;
+            import filter {
+              if net.len = 128 then {
+                reject;
+              }
+              bgp_path.prepend(65002);
+              accept;
+            };
           };
           interface "eno1", "guest", "shadow-lan";
         }
@@ -577,7 +600,10 @@ in
   };
   systemd = {
     network = {
-      config.networkConfig.IPv6Forwarding = true;
+      config.networkConfig = {
+        IPv4Forwarding = true;
+        IPv6Forwarding = true;
+      };
       enable = true;
       links = {
         "10-eno1" = {
