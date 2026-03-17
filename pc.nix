@@ -268,19 +268,11 @@ in
         }
         protocol direct {
           ipv4 {
-            import filter {
-              bgp_path.prepend(65002);
-              accept;
-            };
+            preference 70;
           };
           ipv6 {
-            import filter {
-              if net.len = 128 then {
-                reject;
-              }
-              bgp_path.prepend(65002);
-              accept;
-            };
+            import where net.len != 128;
+            preference 70;
           };
           interface "eno1", "guest", "shadow-lan";
         }
