@@ -27,7 +27,6 @@
             Name = "${name}-tnl";
           };
           tunnelConfig = {
-            Independent = true;
             Local = config.services.ip-mesh.self-address;
             Remote = address;
           };
@@ -45,7 +44,21 @@
           };
         };
       }) (lib.filterAttrs (name: _: name !=
-        config.services.ip-mesh.self) config.services.ip-mesh.peers);
+        config.services.ip-mesh.self) config.services.ip-mesh.peers)
+      // {
+        "50-tailscale" = {
+          name = "tailscale0";
+          linkConfig.RequiredForOnline = false;
+          networkConfig = {
+            DHCP = false;
+            IPv6AcceptRA = false;
+            KeepConfiguration = "static";
+          };
+          tunnel = lib.map (name: "${name}-tnl")
+            (lib.filter (name: name != config.services.ip-mesh.self)
+            (lib.attrNames config.services.ip-mesh.peers));
+        };
+      };
     };
   };
 }

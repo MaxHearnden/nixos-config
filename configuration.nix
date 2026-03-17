@@ -589,6 +589,10 @@
       "soft-reboot.target"
       "systemd-soft-reboot.service"
     ];
+    network.config.networkConfig = {
+      ManageForeignRoutingPolicyRules = false;
+      ManageForeignRoutes = false;
+    };
     services = {
       "btrbk-btrbk" = {
         restartIfChanged = false;
