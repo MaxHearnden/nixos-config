@@ -322,12 +322,19 @@ in
             };
           };
         }
+        protocol pipe {
+          table master6;
+          peer table radv_routes;
+          export in 2000::/3 all;
+          import none;
+        };
         protocol radv {
           propagate routes on;
           ipv6 {
             table radv_routes; export all;
           };
           interface "enp2s0" {
+            default lifetime 0;
             managed yes;
             link mtu 9000;
           };
