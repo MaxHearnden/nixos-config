@@ -34,7 +34,10 @@
         name = "50-${name}-tnl";
         value = {
           name = "${name}-tnl";
-          linkConfig.RequiredForOnline = false;
+          linkConfig = {
+            MTUBytes = "1302";
+            RequiredForOnline = false;
+          };
         };
       }) (lib.filterAttrs (name: _: name !=
         config.services.ip-mesh.self) config.services.ip-mesh.peers);
