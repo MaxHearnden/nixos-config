@@ -888,7 +888,6 @@ in
             UseDomains = false;
             DNSDefaultRoute = false;
           };
-          vlan = [ "guest" "shadow-lan" ];
         };
         "10-enp2s0" = {
           address = ["192.168.3.1/24" "fd27:6be8:399c:1:a236:9fff:fec3:d4c1/64"];
