@@ -228,25 +228,21 @@ in
         roa6 table r6;
         aspa table at;
         ipv6 table radv_routes;
-        filter peer_in_v4 {
+        function peer_in_v4(bool upstream) {
           if (roa_check(r4) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
-          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+          if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
-          ifname = "orion-tnl";
-          accept;
         }
-        filter peer_in_v6 {
+        function peer_in_v6(bool upstream) {
           if (roa_check(r6) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
           }
-          if (aspa_check_downstream(at) = ASPA_INVALID) then {
+          if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
-          ifname = "orion-tnl";
-          accept;
         }
         protocol bgp orion {
           local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
@@ -256,12 +252,45 @@ in
           require roles on;
           ipv6 {
             export all;
-            import filter peer_in_v6;
+            import filter {
+              peer_in_v6(false);
+              ifname = "orion-tnl";
+              accept;
+            };
             import table on;
           };
           ipv4 {
             export all;
-            import filter peer_in_v4;
+            import filter {
+              peer_in_v4(false);
+              ifname = "orion-tnl";
+              accept;
+            };
+            import table on;
+          };
+        }
+        protocol bgp pc {
+          local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
+          neighbor fd7a:115c:a1e0::d2df:ec69 onlink as 65002;
+          interface "tailscale0";
+          local role peer;
+          require roles on;
+          ipv6 {
+            export all;
+            import filter {
+              peer_in_v6(false);
+              ifname = "pc-tnl";
+              accept;
+            };
+            import table on;
+          };
+          ipv4 {
+            export all;
+            import filter {
+              peer_in_v4(false);
+              ifname = "pc-tnl";
+              accept;
+            };
             import table on;
           };
         }
