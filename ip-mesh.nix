@@ -46,7 +46,7 @@
       }) (lib.filterAttrs (name: _: name !=
         config.services.ip-mesh.self) config.services.ip-mesh.peers)
       // {
-        "50-tailscale" = {
+        "40-tailscale" = {
           name = "tailscale0";
           linkConfig.RequiredForOnline = false;
           networkConfig = {
