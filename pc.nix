@@ -389,6 +389,7 @@ in
       '';
     };
     displayManager.gdm.autoSuspend = false;
+    ip-mesh.self-tunnel-address = [ "fe80::5/64" ];
     knot = {
       enable = true;
       keyFiles = [

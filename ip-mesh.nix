@@ -7,6 +7,10 @@
       self = lib.mkOption {
         type = lib.types.str;
       };
+      self-tunnel-addresses = lib.mkOption {
+        default = [];
+        type = lib.types.listOf lib.types.str;
+      };
       self-address = lib.mkOption {
         default = config.services.ip-mesh.peers.${config.services.ip-mesh.self};
         type = lib.types.str;
@@ -33,6 +37,7 @@
       networks = lib.mapAttrs' (name: address: {
         name = "50-${name}-tnl";
         value = {
+          address = config.services.ip-mesh.self-tunnel-addresses;
           name = "${name}-tnl";
           linkConfig = {
             MTUBytes = "1302";

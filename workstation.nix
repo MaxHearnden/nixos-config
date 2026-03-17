@@ -581,6 +581,7 @@ in
         priority = 50;
       };
     };
+    ip-mesh.self-tunnel-addresses = [ "fe80::2/64" ];
     kerberos_server = {
       enable = true;
       settings = {

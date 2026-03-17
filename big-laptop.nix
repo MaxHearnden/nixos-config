@@ -21,6 +21,7 @@
     hostName = "max-nixos-laptop";
   };
   services = {
+    ip-mesh.self-tunnel-address = [ "fe80::4/64" ];
     logind.settings.Login.HandleLidSwitch = "ignore";
     xserver.videoDrivers = [ "nvidia" ];
   };

@@ -18,7 +18,10 @@
   networking = {
     hostName = "max-nixos-chromebooksd2";
   };
-  services.ip-mesh.self = lib.mkForce "chromebook";
+  services.ip-mesh = {
+    self-tunnel-addresses = [ "fe80::3/64" ];
+    self = lib.mkForce "chromebook";
+  };
   swapDevices = [
     {
       device = "/nexus/swapfile";
