@@ -240,8 +240,8 @@
         content = ''
           chain output {
             type filter hook output priority filter - 10;
-            oiftype {768, 769, 776} udp dport 41641 drop
-            oifname { plat, tayga } udp dport 41641 drop
+            oiftype ipip6 udp dport {40000, 41641} drop
+            oifname { plat, tayga } udp dport {40000, 41641} drop
           }
         '';
       };
