@@ -270,28 +270,28 @@ in
           };
         }
         protocol bgp pc {
-          local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
-          neighbor fd7a:115c:a1e0::d2df:ec69 onlink as 65002;
-          interface "tailscale0";
+          local fe80::2 as 65000;
+          neighbor fe80::5 as 65002;
+          interface "pc-tnl";
           local role peer;
           require roles on;
           ipv6 {
             export all;
             import filter {
               peer_in_v6(false);
-              ifname = "pc-tnl";
               accept;
             };
             import table on;
           };
           ipv4 {
             export all;
+            extended next hop on;
             import filter {
               peer_in_v4(false);
-              ifname = "pc-tnl";
               accept;
             };
             import table on;
+            require extended next hop on;
           };
         }
         protocol device {

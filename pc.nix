@@ -239,27 +239,28 @@ in
           };
         }
         protocol bgp workstation {
-          local fd7a:115c:a1e0::d2df:ec69 as 65002;
-          neighbor fd7a:115c:a1e0:ab12:4843:cd96:625b:e016%tailscale0 onlink as 65000;
+          local fe80::5 as 65002;
+          neighbor fe80::2 as 65000;
+          interface "workstation-tnl";
           local role peer;
           require roles on;
           ipv6 {
             export all;
             import filter {
               peer_in_v6(false);
-              ifname = "workstation-tnl";
               accept;
             };
             import table on;
           };
           ipv4 {
             export all;
+            extended next hop on;
             import filter {
               peer_in_v4(false);
-              ifname = "workstation-tnl";
               accept;
             };
             import table on;
+            require extended next hop on;
           };
 
         }
