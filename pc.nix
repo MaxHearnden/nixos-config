@@ -296,7 +296,7 @@ in
         }
         protocol static {
           ipv4;
-          route 192.168.11.0/24 unreachable;
+          route 192.168.11.5/32 unreachable;
         }
         protocol static {
           ipv6;
@@ -654,7 +654,7 @@ in
           networkConfig.IPv6AcceptRA = true;
         };
         "10-lo" = {
-          address = [ "192.168.11.1" "fd09:a389:7c1e:6::5" ];
+          address = [ "192.168.11.5/32" "fd09:a389:7c1e:6::5/128" ];
           name = "lo";
         };
         "10-shadow-lan" = {
