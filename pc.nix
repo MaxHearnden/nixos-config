@@ -300,7 +300,7 @@ in
         }
         protocol static {
           ipv6;
-          route fd09:a389:7c1e:6::/64 unreachable;
+          route fd09:a389:7c1e:6::5/128 unreachable;
         }
       '';
     };
@@ -654,7 +654,7 @@ in
           networkConfig.IPv6AcceptRA = true;
         };
         "10-lo" = {
-          address = [ "192.168.11.1" "fd09:a389:7c1e:6::1" ];
+          address = [ "192.168.11.1" "fd09:a389:7c1e:6::5" ];
           name = "lo";
         };
         "10-shadow-lan" = {
