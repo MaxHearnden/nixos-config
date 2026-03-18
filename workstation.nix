@@ -245,28 +245,28 @@ in
           }
         }
         protocol bgp orion {
-          local fd7a:115c:a1e0:ab12:4843:cd96:625b:e016 as 65000;
-          neighbor fd7a:115c:a1e0::1a01:5208 onlink as 65001;
-          interface "tailscale0";
+          local fe80::2 as 65000;
+          neighbor fe80::1 as 65001;
+          interface "orion-tnl";
           local role customer;
           require roles on;
           ipv6 {
             export all;
             import filter {
               peer_in_v6(false);
-              ifname = "orion-tnl";
               accept;
             };
             import table on;
           };
           ipv4 {
             export all;
+            extended next hop on;
             import filter {
               peer_in_v4(false);
-              ifname = "orion-tnl";
               accept;
             };
             import table on;
+            require extended next hop on;
           };
         }
         protocol bgp pc {
