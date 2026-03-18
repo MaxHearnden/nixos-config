@@ -18,6 +18,11 @@
     };
   };
   config = {
+    networking.firewall.interfaces = lib.mapAttrs' (name: _: {
+      name = "${name}-tnl";
+      value.allowedTCPPorts = [ 179 ];
+    }) (lib.filterAttrs (name: _: name !=
+      config.services.ip-mesh.self) config.services.ip-mesh.peers);
     systemd.network = {
       netdevs = lib.mapAttrs' (name: address: {
         name = "50-${name}-tnl";
