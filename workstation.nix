@@ -299,7 +299,6 @@ in
         }
         protocol direct {
           ipv4;
-          ipv6;
           interface "enp2s0";
         }
         protocol kernel {
@@ -307,7 +306,7 @@ in
             export filter {
               if source ~ [RTS_DEVICE, RTS_STATIC] then
                 reject;
-              krt_prefsrc = 192.168.10.1;
+              krt_prefsrc = 192.168.11.2;
               accept;
             };
           };
@@ -354,11 +353,11 @@ in
         }
         protocol static {
           ipv4;
-          route 192.168.10.0/24 unreachable;
+          route 192.168.11.2/32 unreachable;
         }
         protocol static {
           ipv6;
-          route fd27:6be8:399c:2::/64 unreachable;
+          route fd27:6be8:399c::/48 unreachable;
         }
         protocol static {
           ipv6 {
@@ -916,7 +915,7 @@ in
           DHCP = "no";
         };
         "10-lo" = {
-          address = [ "fd27:6be8:399c:2::1/128" "192.168.10.1/32" ];
+          address = [ "fd27:6be8:399c:2::1/128" "192.168.11.2/32" ];
           name = "lo";
         };
         "10-tayga" = {
