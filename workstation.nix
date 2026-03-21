@@ -358,6 +358,7 @@ in
         protocol static {
           ipv6;
           route fd27:6be8:399c::/48 unreachable;
+          route fd09:a389:7c1e:6::2/128 unreachable;
         }
         protocol static {
           ipv6 {
@@ -915,7 +916,7 @@ in
           DHCP = "no";
         };
         "10-lo" = {
-          address = [ "fd27:6be8:399c:2::1/128" "192.168.11.2/32" ];
+          address = [ "fd09:a389:7c1e:6::2/128" "fd27:6be8:399c:2::1/128" "192.168.11.2/32" ];
           name = "lo";
         };
         "10-tayga" = {
