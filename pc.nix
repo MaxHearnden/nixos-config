@@ -49,7 +49,7 @@ in
       // {
         "dnsdist/dnsdist.conf".text = ''
           -- listen on local addresses
-          addLocal("127.0.0.1:53")
+          addLocal("0.0.0.0:53")
           addLocal("[::]:53")
 
           newServer({
@@ -86,8 +86,8 @@ in
   };
   networking = {
     firewall = {
-      allowedTCPPorts = [ 54 8053 ];
-      allowedUDPPorts = [ 54 8053 ];
+      allowedTCPPorts = [ 53 54 55 8053 ];
+      allowedUDPPorts = [ 53 54 55 8053 ];
       extraForwardRules = ''
         iifname tayga oifname shadow-lan accept
         iiftype ipip6 oifname {eno1, guest, "shadow-lan"} accept
