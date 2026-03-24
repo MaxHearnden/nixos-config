@@ -248,6 +248,7 @@ in
             export all;
             import filter {
               peer_in_v6(false);
+              krt_prefsrc = fd09:a389:7c1e:6::5;
               accept;
             };
             import table on;
@@ -257,6 +258,7 @@ in
             extended next hop on;
             import filter {
               peer_in_v4(false);
+              krt_prefsrc = 192.168.11.5;
               accept;
             };
             import table on;
