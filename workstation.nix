@@ -353,12 +353,12 @@ in
         }
         protocol static {
           ipv4;
-          route 192.168.11.2/32 unreachable;
+          route 192.168.11.2/32 via "lo";
         }
         protocol static {
           ipv6;
           route fd27:6be8:399c::/48 unreachable;
-          route fd09:a389:7c1e:6::2/128 unreachable;
+          route fd09:a389:7c1e:6::2/128 via "lo";
         }
         protocol static {
           ipv6 {
@@ -918,6 +918,7 @@ in
         "10-lo" = {
           address = [ "fd09:a389:7c1e:6::2/128" "fd27:6be8:399c:2::1/128" "192.168.11.2/32" ];
           name = "lo";
+          networkConfig.KeepConfiguration = "static";
         };
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];

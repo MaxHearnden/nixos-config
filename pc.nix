@@ -298,11 +298,11 @@ in
         }
         protocol static {
           ipv4;
-          route 192.168.11.5/32 unreachable;
+          route 192.168.11.5/32 via "lo";
         }
         protocol static {
           ipv6;
-          route fd09:a389:7c1e:6::5/128 unreachable;
+          route fd09:a389:7c1e:6::5/128 via "lo";
         }
       '';
     };
@@ -658,6 +658,7 @@ in
         "10-lo" = {
           address = [ "192.168.11.5/32" "fd09:a389:7c1e:6::5/128" ];
           name = "lo";
+          networkConfig.KeepConfiguration = "static";
         };
         "10-shadow-lan" = {
           DHCP = "yes";
