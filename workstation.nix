@@ -136,7 +136,7 @@ in
         tailscale0 = {
           allowedTCPPorts = [
             22 53 54 80 88 179 443 464 749 2049 5000 5222 5223 5269 5270 5281
-            25565
+            8000 25565
           ];
           allowedUDPPorts = [ 53 54 88 443 464 24454 ];
         };
@@ -368,6 +368,10 @@ in
           route fd09:a389:7c1e::/48 unreachable;
         }
       '';
+    };
+    bird-lg.proxy = {
+      enable = true;
+      listenAddresses = [ "[::]:8000" ];
     };
     btrbk = {
       instances = {

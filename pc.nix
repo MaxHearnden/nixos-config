@@ -100,7 +100,7 @@ in
         };
         guest.allowedTCPPorts = [ 179 ];
         "shadow-lan".allowedTCPPorts = [ 179 ];
-        tailscale0.allowedTCPPorts = [ 80 179 443 ];
+        tailscale0.allowedTCPPorts = [ 80 179 443 8000 ];
         tailscale0.allowedUDPPorts = [ 443 ];
       };
     };
@@ -305,6 +305,10 @@ in
           route fd09:a389:7c1e:6::5/128 via "lo";
         }
       '';
+    };
+    bird-lg.proxy = {
+      enable = true;
+      listenAddresses = [ "[::]:8000" ];
     };
     btrbk = {
       instances = {
