@@ -224,6 +224,7 @@ in
           patches = patches ++ [ ./bird-aspa.patch ];
         });
       config = ''
+        router id 192.168.11.2;
         roa4 table r4;
         roa6 table r6;
         aspa table at;
