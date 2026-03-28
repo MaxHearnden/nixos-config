@@ -90,11 +90,11 @@ in
       allowedUDPPorts = [ 53 54 55 8053 ];
       extraForwardRules = ''
         iifname tayga oifname shadow-lan accept
-        iiftype ipip6 oifname {eno1, guest, "shadow-lan"} accept
+        iiftype ipip6 oifname {internet, guest, "shadow-lan"} accept
       '';
       filterForward = true;
       interfaces = {
-        eno1 = {
+        internet = {
           allowedTCPPorts = [ 179 9943 9944 ];
           allowedUDPPorts = [ 9943 9944 ];
         };
@@ -121,7 +121,7 @@ in
         content = ''
           chain local-nat {
             type nat hook postrouting priority srcnat; policy accept
-            iifname != lo oifname {eno1, guest, "shadow-lan"} masquerade
+            iifname != lo oifname {internet, guest, "shadow-lan"} masquerade
           }
         '';
       };
@@ -167,7 +167,7 @@ in
         }
         protocol bgp orion {
           local as 65002;
-          neighbor fe80::7006:83ff:feff:5d0b%eno1 as 65001;
+          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
           local role customer;
           require roles on;
           ipv4 {
@@ -278,7 +278,7 @@ in
             import where net.len != 128;
             preference 70;
           };
-          interface "eno1", "guest", "shadow-lan";
+          interface "internet", "guest", "shadow-lan";
         }
         protocol kernel {
           ipv4 {
@@ -614,8 +614,6 @@ in
           linkConfig = {
             NamePolicy = "keep kernel database onboard slot path";
             AlternativeNamesPolicy = "database onboard slot path";
-            GenericReceiveOffload = false;
-            GenericSegmentationOffload = false;
             TCPSegmentationOffload = false;
           };
         };
@@ -627,6 +625,13 @@ in
             Name = "guest";
           };
           vlanConfig.Id = 10;
+        };
+        "10-internet" = {
+          netdevConfig = {
+            Kind = "vlan";
+            Name = "internet";
+          };
+          vlanConfig.Id = 1;
         };
         "10-shadow-lan" = {
           netdevConfig = {
@@ -648,16 +653,22 @@ in
       };
       networks = {
         "10-eno1" = {
-          DHCP = "yes";
-          matchConfig.Name = "eno1";
-          networkConfig.IPv6AcceptRA = true;
-          vlan = [ "guest" "shadow-lan" ];
+          linkConfig.ARP = false;
+          name = "eno1";
+          vlan = [ "guest" "internet" "shadow-lan" ];
         };
         "10-guest" = {
           DHCP = "yes";
           dhcpV4Config.RouteMetric = 1536;
           ipv6AcceptRAConfig.RouteMetric = 2048;
+          linkConfig.ARP = true;
           name = "guest";
+          networkConfig.IPv6AcceptRA = true;
+        };
+        "10-internet" = {
+          DHCP = "yes";
+          linkConfig.ARP = true;
+          name = "internet";
           networkConfig.IPv6AcceptRA = true;
         };
         "10-lo" = {
@@ -669,6 +680,7 @@ in
           DHCP = "yes";
           dhcpV4Config.RouteMetric = 1536;
           ipv6AcceptRAConfig.RouteMetric = 2048;
+          linkConfig.ARP = true;
           name = "shadow-lan";
           networkConfig.IPv6AcceptRA = true;
         };
