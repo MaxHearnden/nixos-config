@@ -25,11 +25,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1774666183,
-        "narHash": "sha256-3DNpGXzkyuIu3/gXNtLvB2oSqKY5z1QP5ajy3VZjVV0=",
+        "lastModified": 1774754558,
+        "narHash": "sha256-0BmAweYRGLnfDtngAM//GeinbTUi3o3Tlp2U1DAH6Ck=",
         "owner": "Infinidoge",
         "repo": "nix-minecraft",
-        "rev": "7bcbe84d765e7fce5e267c569c718d8246336f3b",
+        "rev": "1ee061a6a553b796504087fc172a536381c5ffe4",
         "type": "github"
       },
       "original": {
@@ -118,11 +118,11 @@
         "rtf-tokenize": "rtf-tokenize"
       },
       "locked": {
-        "lastModified": 1774588858,
-        "narHash": "sha256-YM0FLIYO4rq2uLzQTBf1jyU0n5ChoIqP7nNSAaE6fiY=",
+        "lastModified": 1774761768,
+        "narHash": "sha256-PUXtDmWC65u5zlr8ByHkWWIWK5VexqSOxVlvxaiVNY8=",
         "owner": "opensteno",
         "repo": "plover-flake",
-        "rev": "d367a87ed570d3a74a121b2a7a551a558fb21f01",
+        "rev": "0773fd266b6b911ae330aed2aabd4a153b9046a8",
         "type": "github"
       },
       "original": {
