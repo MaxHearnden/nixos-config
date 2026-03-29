@@ -652,9 +652,9 @@ in
         };
       };
       networks = {
-        "10-enp2s0f3" = {
+        "10-enp2s0f2" = {
           linkConfig.ARP = false;
-          name = "enp2s0f3";
+          name = "enp2s0f2";
           vlan = [ "guest" "internet" "shadow-lan" ];
         };
         "10-guest" = {
