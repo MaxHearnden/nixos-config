@@ -223,7 +223,7 @@
         iiftype ipip6 oiftype ipip6 udp dport != {41641, 40000} accept
       '';
       extraInputRules = ''
-        iifname tailscale0 meta l4proto {ipv4, ipv6} accept
+        iifname tailscale0 meta l4proto {ipv4, ipv6, mpls-in-ip} accept
       '';
       filterForward = true;
       allowedUDPPorts = [
