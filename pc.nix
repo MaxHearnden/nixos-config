@@ -149,6 +149,13 @@ in
         roa4 table r4;
         roa6 table r6;
         aspa table at;
+        mpls domain mdom;
+        mpls table mtab;
+        vpn4 table vtab4;
+        vpn6 table vtab6;
+        function is_downstream() -> bool {
+          return false;
+        }
         function peer_in_v4(bool upstream) {
           if (roa_check(r4) = ROA_INVALID) then {
             reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
@@ -165,107 +172,76 @@ in
             reject "Ignore ASPA invalid ", net, " for ASNs ", bgp_path;
           }
         }
-        protocol bgp orion {
+        filter peer_in_v4_filter {
+          peer_in_v4(is_downstream());
+          accept;
+        }
+        filter peer_in_v6_filter {
+          peer_in_v6(is_downstream());
+          accept;
+        }
+        template bgp {
           local as 65002;
-          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
-          local role customer;
           require roles on;
-          ipv4 {
+          mpls {label policy aggregate;};
+          ipv4 mpls {
             export all;
             extended next hop on;
-            import filter {
-              peer_in_v4(false);
-              accept;
-            };
+            import filter peer_in_v4_filter;
             import table on;
           };
-          ipv6 {
+          ipv6 mpls {
             export all;
-            import filter {
-              peer_in_v6(false);
-              accept;
-            };
+            import filter peer_in_v6_filter;
             import table on;
+          };
+          vpn4 mpls {
+            export all;
+            extended next hop on;
+            import all;
+          };
+          vpn6 mpls {
+            export all;
+            import all;
           };
         }
-        protocol bgp orion_shadow {
-          local as 65002;
+        protocol bgp orion from bgp1 {
+          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
+          local role customer;
+        }
+        protocol bgp orion_shadow from bgp1 {
           neighbor fe80::7006:83ff:feff:5d0b as 65001;
           interface "shadow-lan";
           local role customer;
-          require roles on;
-          ipv4 {
-            export all;
-            extended next hop on;
-            import filter {
-              peer_in_v4(false);
-              accept;
-            };
-            import table on;
-            preference 90;
-          };
-          ipv6 {
-            export all;
-            import filter {
-              peer_in_v6(false);
-              accept;
-            };
-            import table on;
-            preference 90;
-          };
+          ipv4 mpls {preference 90;};
+          ipv6 mpls {preference 90;};
         }
-        protocol bgp orion_guest {
-          local as 65002;
+        protocol bgp orion_guest from bgp1 {
           neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
           local role customer;
-          require roles on;
-          ipv4 {
-            export all;
-            extended next hop on;
-            import filter {
-              peer_in_v4(false);
-              accept;
-            };
-            import table on;
-            preference 80;
-          };
-          ipv6 {
-            export all;
-            import filter {
-              peer_in_v6(false);
-              accept;
-            };
-            import table on;
-            preference 80;
-          };
+          ipv4 mpls {preference 80;};
+          ipv6 mpls {preference 80;};
         }
-        protocol bgp workstation {
+        protocol bgp workstation from bgp1 {
           local fe80::5 as 65002;
           neighbor fe80::2 as 65000;
           interface "workstation-tnl";
           local role peer;
-          require roles on;
-          ipv6 {
+          ipv6 mpls {
             export all;
             import filter {
               peer_in_v6(false);
               krt_prefsrc = fd09:a389:7c1e:6::5;
               accept;
             };
-            import table on;
           };
-          ipv4 {
-            export all;
-            extended next hop on;
+          ipv4 mpls {
             import filter {
               peer_in_v4(false);
               krt_prefsrc = 192.168.11.5;
               accept;
             };
-            import table on;
-            require extended next hop on;
           };
-
         }
         protocol device {
 
@@ -289,6 +265,9 @@ in
           ipv6 {
             export where source !~ [RTS_DEVICE];
           };
+        }
+        protocol kernel {
+          mpls {export all;};
         }
         protocol rpki {
           roa4 { table r4; };
