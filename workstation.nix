@@ -228,6 +228,8 @@ in
         roa4 table r4;
         roa6 table r6;
         aspa table at;
+        mpls domain mdom;
+        mpls table mtab;
         ipv6 table radv_routes;
         function peer_in_v4(bool upstream) {
           if (roa_check(r4) = ROA_INVALID) then {
@@ -251,7 +253,7 @@ in
           interface "orion-tnl";
           local role customer;
           require roles on;
-          ipv6 {
+          ipv6 mpls {
             export all;
             import filter {
               peer_in_v6(false);
@@ -259,7 +261,7 @@ in
             };
             import table on;
           };
-          ipv4 {
+          ipv4 mpls {
             export all;
             extended next hop on;
             import filter {
@@ -269,14 +271,15 @@ in
             import table on;
             require extended next hop on;
           };
+          mpls {label policy aggregate;};
         }
         protocol bgp pc {
           local fe80::2 as 65000;
           neighbor fe80::5 as 65002;
           interface "pc-tnl";
-          local role peer;
+          local role customer;
           require roles on;
-          ipv6 {
+          ipv6 mpls {
             export all;
             import filter {
               peer_in_v6(false);
@@ -284,7 +287,7 @@ in
             };
             import table on;
           };
-          ipv4 {
+          ipv4 mpls {
             export all;
             extended next hop on;
             import filter {
@@ -294,6 +297,7 @@ in
             import table on;
             require extended next hop on;
           };
+          mpls {label policy aggregate;};
         }
         protocol device {
 
@@ -321,6 +325,9 @@ in
               accept;
             };
           };
+        }
+        protocol kernel {
+          mpls {export all;};
         }
         protocol pipe {
           table master6;
