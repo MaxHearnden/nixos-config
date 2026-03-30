@@ -153,6 +153,8 @@ in
         mpls table mtab;
         vpn4 table vtab4;
         vpn6 table vtab6;
+        ipv4 table local4;
+        ipv6 table local6;
         function is_downstream() -> bool {
           return false;
         }
@@ -225,19 +227,19 @@ in
         protocol bgp workstation from bgp1 {
           local fe80::5 as 65002;
           neighbor fe80::2 as 65000;
+          local role provider;
+          require roles on;
           interface "workstation-tnl";
-          local role peer;
           ipv6 mpls {
-            export all;
             import filter {
-              peer_in_v6(false);
+              peer_in_v6(true);
               krt_prefsrc = fd09:a389:7c1e:6::5;
               accept;
             };
           };
           ipv4 mpls {
             import filter {
-              peer_in_v4(false);
+              peer_in_v4(true);
               krt_prefsrc = 192.168.11.5;
               accept;
             };
@@ -248,21 +250,47 @@ in
         }
         protocol direct {
           ipv4 {
-            preference 70;
+            table local4;
           };
           ipv6 {
             import where net.len != 128;
-            preference 70;
+            table local6;
           };
           interface "internet", "guest", "shadow-lan";
         }
+        protocol pipe {
+          table master4;
+          peer table local4;
+          import filter {
+            preference = 70;
+            accept;
+          };
+          export filter {
+            preference = 70;
+            accept;
+          };
+        }
+        protocol pipe {
+          table master6;
+          peer table local6;
+          import filter {
+            preference = 70;
+            accept;
+          };
+          export filter {
+            preference = 70;
+            accept;
+          };
+        }
         protocol kernel {
           ipv4 {
+            table local4;
             export where source !~ [RTS_DEVICE];
           };
         }
         protocol kernel {
           ipv6 {
+            table local6;
             export where source !~ [RTS_DEVICE];
           };
         }
@@ -639,6 +667,10 @@ in
         "10-guest" = {
           DHCP = "yes";
           dhcpV4Config.RouteMetric = 1536;
+          extraConfig = ''
+            [Network]
+            MPLSRouting = true
+          '';
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
           name = "guest";
@@ -646,6 +678,10 @@ in
         };
         "10-internet" = {
           DHCP = "yes";
+          extraConfig = ''
+            [Network]
+            MPLSRouting = true
+          '';
           linkConfig.ARP = true;
           name = "internet";
           networkConfig.IPv6AcceptRA = true;
@@ -658,6 +694,10 @@ in
         "10-shadow-lan" = {
           DHCP = "yes";
           dhcpV4Config.RouteMetric = 1536;
+          extraConfig = ''
+            [Network]
+            MPLSRouting = true
+          '';
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
           name = "shadow-lan";
