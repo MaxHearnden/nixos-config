@@ -18,6 +18,10 @@
     };
   };
   config = {
+    boot = {
+      kernel.sysctl."net.mpls.platform_labels" = 1048575;
+      kernelModules = [ "mpls_router" "mpls_iptunnel" "mpls_gro" ];
+    };
     networking.firewall.interfaces = lib.mapAttrs' (name: _: {
       name = "${name}-tnl";
       value.allowedTCPPorts = [ 179 ];
@@ -42,6 +46,10 @@
         name = "50-${name}-tnl";
         value = {
           address = config.services.ip-mesh.self-tunnel-addresses;
+          extraConfig = ''
+            [Network]
+            MPLSRouting = true
+          '';
           name = "${name}-tnl";
           linkConfig = {
             MTUBytes = "1302";
