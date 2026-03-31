@@ -121,7 +121,7 @@ in
         content = ''
           chain local-nat {
             type nat hook postrouting priority srcnat; policy accept
-            iifname != lo oifname {internet, guest, "shadow-lan"} masquerade
+            fib saddr . mark type != local oifname {internet, guest, "shadow-lan"} masquerade
           }
         '';
       };
@@ -233,14 +233,12 @@ in
           ipv6 mpls {
             import filter {
               peer_in_v6(true);
-              krt_prefsrc = fd09:a389:7c1e:6::5;
               accept;
             };
           };
           ipv4 mpls {
             import filter {
               peer_in_v4(true);
-              krt_prefsrc = 192.168.11.5;
               accept;
             };
           };
@@ -285,13 +283,23 @@ in
         protocol kernel {
           ipv4 {
             table local4;
-            export where source !~ [RTS_DEVICE];
+            export filter {
+              if source = RTS_DEVICE then
+                reject;
+              krt_prefsrc = 192.168.11.5;
+              accept;
+            };
           };
         }
         protocol kernel {
           ipv6 {
             table local6;
-            export where source !~ [RTS_DEVICE];
+            export filter {
+              if source = RTS_DEVICE then
+                reject;
+              krt_prefsrc = fd09:a389:7c1e:6::5;
+              accept;
+            };
           };
         }
         protocol kernel {
