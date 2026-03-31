@@ -204,12 +204,12 @@ in
           if defined(bgp_otc) then {
             reject;
           }
-          bgp_otc = 65001;
+          bgp_otc = 65002;
           accept;
         }
         filter customer_out {
           if !defined(bgp_otc) then {
-            bgp_otc = 65001;
+            bgp_otc = 65002;
           }
           accept;
         }
