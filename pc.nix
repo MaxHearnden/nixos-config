@@ -100,6 +100,7 @@ in
         };
         guest.allowedTCPPorts = [ 179 ];
         "shadow-lan".allowedTCPPorts = [ 179 ];
+        mpls.allowedTCPPorts = [ 179 ];
         tailscale0.allowedTCPPorts = [ 80 179 443 8000 ];
         tailscale0.allowedUDPPorts = [ 443 ];
       };
@@ -213,7 +214,26 @@ in
           }
           accept;
         }
-        template bgp {
+        template bgp routed {
+          local as 65002;
+          require roles on;
+          enforce first as on;
+          ipv4 {
+            export all;
+            extended next hop on;
+            import all;
+            import table on;
+            require extended next hop on;
+            table local4;
+          };
+          ipv6 {
+            export all;
+            import all;
+            import table on;
+            table local6;
+          };
+        }
+        template bgp bgp_mpls {
           local as 65002;
           require roles on;
           enforce first as on;
@@ -233,17 +253,33 @@ in
             import table on;
           };
         }
-        template bgp orion from bgp1 {
+        template bgp orion_untrusted from routed {
           local role customer;
-          ipv4 mpls {
-            export filter provider_out;
-            import filter provider_in;
-          };
+        }
+        protocol bgp orion_internet from orion_untrusted {
+          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
+        }
+        protocol bgp orion_shadow from orion_untrusted {
+          neighbor fe80::7006:83ff:feff:5d0b as 65001;
+          interface "shadow-lan";
+          ipv4 {preference 90;};
+          ipv6 {preference 90;};
+        }
+        protocol bgp orion_guest from orion_untrusted {
+          neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
+          ipv4 {preference 80;};
+          ipv6 {preference 80;};
+        }
+        protocol bgp orion_mpls from bgp_mpls {
+          local fe80::5;
+          neighbor fe80::1 as 65001;
+          interface "mpls";
+          local role customer;
           ipv6 mpls {
             export filter provider_out;
             import filter provider_in;
           };
-          vpn4 mpls {
+          ipv4 mpls {
             export filter provider_out;
             import filter provider_in;
           };
@@ -251,27 +287,12 @@ in
             export filter provider_out;
             import filter provider_in;
           };
+          vpn4 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
         }
-        protocol bgp orion_internet from orion {
-          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
-          interface "internet";
-        }
-        protocol bgp orion_shadow from orion {
-          neighbor fe80::7006:83ff:feff:5d0b as 65001;
-          interface "shadow-lan";
-          ipv4 mpls {preference 90;};
-          ipv6 mpls {preference 90;};
-          vpn4 mpls {preference 90;};
-          vpn6 mpls {preference 90;};
-        }
-        protocol bgp orion_guest from orion {
-          neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
-          ipv4 mpls {preference 80;};
-          ipv6 mpls {preference 80;};
-          vpn4 mpls {preference 80;};
-          vpn6 mpls {preference 80;};
-        }
-        protocol bgp workstation from bgp1 {
+        protocol bgp workstation from bgp_mpls {
           local fe80::5 as 65002;
           neighbor fe80::2 as 65000;
           local role provider;
@@ -699,6 +720,13 @@ in
           };
           vlanConfig.Id = 1;
         };
+        "10-mpls" = {
+          netdevConfig = {
+            Kind = "vlan";
+            Name = "mpls";
+          };
+          vlanConfig.Id = 2;
+        };
         "10-shadow-lan" = {
           netdevConfig = {
             Kind = "vlan";
@@ -721,15 +749,11 @@ in
         "10-enp2s0f2" = {
           linkConfig.ARP = false;
           name = "enp2s0f2";
-          vlan = [ "guest" "internet" "shadow-lan" ];
+          vlan = [ "guest" "internet" "mpls" "shadow-lan" ];
         };
         "10-guest" = {
           DHCP = "yes";
           dhcpV4Config.RouteMetric = 1536;
-          extraConfig = ''
-            [Network]
-            MPLSRouting = true
-          '';
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
           name = "guest";
@@ -737,13 +761,18 @@ in
         };
         "10-internet" = {
           DHCP = "yes";
+          linkConfig.ARP = true;
+          name = "internet";
+          networkConfig.IPv6AcceptRA = true;
+        };
+        "10-mpls" = {
+          address = [ "fe80::5/64" ];
           extraConfig = ''
             [Network]
             MPLSRouting = true
           '';
           linkConfig.ARP = true;
-          name = "internet";
-          networkConfig.IPv6AcceptRA = true;
+          name = "mpls";
         };
         "10-lo" = {
           address = [ "192.168.11.5/32" "fd09:a389:7c1e:6::5/128" ];
@@ -753,10 +782,6 @@ in
         "10-shadow-lan" = {
           DHCP = "yes";
           dhcpV4Config.RouteMetric = 1536;
-          extraConfig = ''
-            [Network]
-            MPLSRouting = true
-          '';
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
           name = "shadow-lan";
