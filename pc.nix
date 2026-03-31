@@ -155,74 +155,117 @@ in
         vpn6 table vtab6;
         ipv4 table local4;
         ipv6 table local6;
-        function is_downstream() -> bool {
-          return false;
-        }
-        function peer_in_v4(bool upstream) {
-          if (roa_check(r4) = ROA_INVALID) then {
-            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+        function verify_in(bool upstream) {
+          case net.type {
+            NET_IP4: {
+              if (roa_check(r4) = ROA_INVALID) then {
+                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+              }
+            }
+            NET_IP6: {
+              if (roa_check(r6) = ROA_INVALID) then {
+                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+              }
+            }
           }
           if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
-            reject "Ignore ASPA invalid ", net, " for ASNs ", bgp_path;
+            reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
         }
-        function peer_in_v6(bool upstream) {
-          if (roa_check(r6) = ROA_INVALID) then {
-            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+        filter provider_in {
+          if !defined(bgp_otc) then {
+            bgp_otc = bgp_path.first;
           }
-          if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
-            reject "Ignore ASPA invalid ", net, " for ASNs ", bgp_path;
-          }
-        }
-        filter peer_in_v4_filter {
-          peer_in_v4(is_downstream());
+          verify_in(false);
           accept;
         }
-        filter peer_in_v6_filter {
-          peer_in_v6(is_downstream());
+        filter peer_in {
+          if !defined(bgp_otc) then {
+            bgp_otc = bgp_path.first;
+          }
+          if bgp_otc != bgp_path.first then reject;
+          verify_in(true);
           accept;
+        }
+        filter customer_in {
+          if defined(bgp_otc) then {
+            reject;
+          }
+          verify_in(true);
+          accept;
+        }
+        filter provider_out {
+          if defined(bgp_otc) then {
+            reject;
+          }
+          accept;
+        }
+        filter peer_out {
+          if defined(bgp_otc) then {
+            reject;
+          }
+          bgp_otc = 65001;
+          accept;
+        }
+        filter customer_out {
+          if !defined(bgp_otc) then {
+            bgp_otc = 65001;
+          }
         }
         template bgp {
           local as 65002;
           require roles on;
+          enforce first as on;
           mpls {label policy aggregate;};
           ipv4 mpls {
-            export all;
             extended next hop on;
-            import filter peer_in_v4_filter;
             import table on;
           };
           ipv6 mpls {
-            export all;
-            import filter peer_in_v6_filter;
             import table on;
           };
           vpn4 mpls {
-            export all;
             extended next hop on;
-            import all;
           };
           vpn6 mpls {
-            export all;
-            import all;
           };
         }
-        protocol bgp orion from bgp1 {
-          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
+        template bgp orion from bgp1 {
+          neighbor fe80::7006:83ff:feff:5d0b as 65001;
           local role customer;
+          ipv4 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          }
+          ipv6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          }
+          vpn4 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          }
+          vpn6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          }
+        }
+        protocol bgp orion_internet from orion {
+          interface "internet";
         }
         protocol bgp orion_shadow from bgp1 {
-          neighbor fe80::7006:83ff:feff:5d0b as 65001;
           interface "shadow-lan";
-          local role customer;
           ipv4 mpls {preference 90;};
           ipv6 mpls {preference 90;};
+          vpn4 mpls {preference 90;};
+          vpn6 mpls {preference 90;};
         }
         protocol bgp orion_guest from bgp1 {
-          neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
-          local role customer;
+          interface "guest";
           ipv4 mpls {preference 80;};
           ipv6 mpls {preference 80;};
+          vpn4 mpls {preference 80;};
+          vpn6 mpls {preference 80;};
         }
         protocol bgp workstation from bgp1 {
           local fe80::5 as 65002;
@@ -231,16 +274,20 @@ in
           require roles on;
           interface "workstation-tnl";
           ipv6 mpls {
-            import filter {
-              peer_in_v6(true);
-              accept;
-            };
+            export filter customer_out;
+            import filter customer_in;
           };
           ipv4 mpls {
-            import filter {
-              peer_in_v4(true);
-              accept;
-            };
+            export filter customer_out;
+            import filter customer_in;
+          };
+          vpn6 mpls {
+            export filter customer_out;
+            import filter customer_in;
+          };
+          vpn4 mpls {
+            export filter customer_out;
+            import filter customer_in;
           };
         }
         protocol device {

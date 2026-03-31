@@ -230,21 +230,64 @@ in
         aspa table at;
         mpls domain mdom;
         mpls table mtab;
+        vpn4 table vtab4;
+        vpn6 table vtab6;
         ipv6 table radv_routes;
-        function peer_in_v4(bool upstream) {
-          if (roa_check(r4) = ROA_INVALID) then {
-            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+        function verify_in(bool upstream) {
+          case net.type {
+            NET_IP4: {
+              if (roa_check(r4) = ROA_INVALID) then {
+                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+              }
+            }
+            NET_IP6: {
+              if (roa_check(r6) = ROA_INVALID) then {
+                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+              }
+            }
           }
           if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
             reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
           }
         }
-        function peer_in_v6(bool upstream) {
-          if (roa_check(r6) = ROA_INVALID) then {
-            reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
+        filter provider_in {
+          if !defined(bgp_otc) then {
+            bgp_otc = bgp_path.first;
           }
-          if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
-            reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
+          verify_in(false);
+          accept;
+        }
+        filter peer_in {
+          if !defined(bgp_otc) then {
+            bgp_otc = bgp_path.first;
+          }
+          if bgp_otc != bgp_path.first then reject;
+          verify_in(true);
+          accept;
+        }
+        filter customer_in {
+          if defined(bgp_otc) then {
+            reject;
+          }
+          verify_in(true);
+          accept;
+        }
+        filter provider_out {
+          if defined(bgp_otc) then {
+            reject;
+          }
+          accept;
+        }
+        filter peer_out {
+          if defined(bgp_otc) then {
+            reject;
+          }
+          bgp_otc = 65000;
+          accept;
+        }
+        filter customer_out {
+          if !defined(bgp_otc) then {
+            bgp_otc = 65000;
           }
         }
         protocol bgp orion {
@@ -253,25 +296,32 @@ in
           interface "orion-tnl";
           local role customer;
           require roles on;
+          enforce first as on;
           ipv6 mpls {
-            export all;
-            import filter {
-              peer_in_v6(false);
-              accept;
-            };
+            export filter provider_out;
+            import filter provider_in;
             import table on;
           };
           ipv4 mpls {
-            export all;
+            export filter provider_out;
             extended next hop on;
-            import filter {
-              peer_in_v4(false);
-              accept;
-            };
+            import filter provider_in;
             import table on;
             require extended next hop on;
           };
           mpls {label policy aggregate;};
+          vpn6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+            import table on;
+          };
+          vpn4 mpls {
+            export filter provider_out;
+            extended next hop on;
+            import filter provider_in;
+            import table on;
+            require extended next hop on;
+          };
         }
         protocol bgp pc {
           local fe80::2 as 65000;
@@ -279,25 +329,32 @@ in
           interface "pc-tnl";
           local role customer;
           require roles on;
+          enforce first as on;
           ipv6 mpls {
-            export all;
-            import filter {
-              peer_in_v6(false);
-              accept;
-            };
+            export filter provider_out;
+            import filter provider_in;
             import table on;
           };
           ipv4 mpls {
-            export all;
+            export filter provider_out;
             extended next hop on;
-            import filter {
-              peer_in_v4(false);
-              accept;
-            };
+            import filter provider_in;
             import table on;
             require extended next hop on;
           };
           mpls {label policy aggregate;};
+          vpn6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+            import table on;
+          };
+          vpn4 mpls {
+            export filter provider_out;
+            extended next hop on;
+            import filter provider_in;
+            import table on;
+            require extended next hop on;
+          };
         }
         protocol device {
 
