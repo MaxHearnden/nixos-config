@@ -211,6 +211,7 @@ in
           if !defined(bgp_otc) then {
             bgp_otc = 65001;
           }
+          accept;
         }
         template bgp {
           local as 65002;
@@ -226,42 +227,45 @@ in
           };
           vpn4 mpls {
             extended next hop on;
+            import table on;
           };
           vpn6 mpls {
+            import table on;
           };
         }
         template bgp orion from bgp1 {
-          neighbor fe80::7006:83ff:feff:5d0b as 65001;
           local role customer;
           ipv4 mpls {
             export filter provider_out;
             import filter provider_in;
-          }
+          };
           ipv6 mpls {
             export filter provider_out;
             import filter provider_in;
-          }
+          };
           vpn4 mpls {
             export filter provider_out;
             import filter provider_in;
-          }
+          };
           vpn6 mpls {
             export filter provider_out;
             import filter provider_in;
-          }
+          };
         }
         protocol bgp orion_internet from orion {
+          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
           interface "internet";
         }
-        protocol bgp orion_shadow from bgp1 {
+        protocol bgp orion_shadow from orion {
+          neighbor fe80::7006:83ff:feff:5d0b as 65001;
           interface "shadow-lan";
           ipv4 mpls {preference 90;};
           ipv6 mpls {preference 90;};
           vpn4 mpls {preference 90;};
           vpn6 mpls {preference 90;};
         }
-        protocol bgp orion_guest from bgp1 {
-          interface "guest";
+        protocol bgp orion_guest from orion {
+          neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
           ipv4 mpls {preference 80;};
           ipv6 mpls {preference 80;};
           vpn4 mpls {preference 80;};

@@ -289,6 +289,7 @@ in
           if !defined(bgp_otc) then {
             bgp_otc = 65000;
           }
+          accept;
         }
         protocol bgp orion {
           local fe80::2 as 65000;
