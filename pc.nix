@@ -769,6 +769,7 @@ in
           '';
           linkConfig.ARP = true;
           name = "mpls";
+          networkConfig.LinkLocalAddressing = false;
         };
         "10-lo" = {
           address = [ "192.168.11.5/32" "fd09:a389:7c1e:6::5/128" ];
