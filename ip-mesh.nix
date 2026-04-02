@@ -103,7 +103,7 @@ in
                 extended next hop on;
                 import filter complex_in;
                 import table on;
-                require extended next hop;
+                require extended next hop on;
               };
               ipv6 mpls {
                 export all;
@@ -116,7 +116,7 @@ in
                 extended next hop on;
                 import filter complex_in;
                 import table on;
-                require extended next hop;
+                require extended next hop on;
               };
               vpn6 mpls {
                 export all;
