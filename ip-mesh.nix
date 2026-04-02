@@ -177,7 +177,7 @@ in
           name = "50-ip-mesh-${name}";
           value.text = ''
             protocol bgp ip_mesh_${name} from ip_tunnel {
-              neighbor ${value.address} as ${toString value.asn};
+              neighbor ${value.tunnel-address} as ${toString value.asn};
               interface "${name}-tnl";
             }
           '';
