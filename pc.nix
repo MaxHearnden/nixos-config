@@ -138,257 +138,143 @@ in
     };
   };
   services = {
-    bird = {
-      enable = true;
-      package =
-        inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3.overrideAttrs
-        ({ patches ? [], ... }: {
-          patches = patches ++ [ ./bird-aspa.patch ];
-        });
-      config = ''
-        router id 192.168.11.5;
-        roa4 table r4;
-        roa6 table r6;
-        aspa table at;
-        mpls domain mdom;
-        mpls table mtab;
-        vpn4 table vtab4;
-        vpn6 table vtab6;
-        ipv4 table local4;
-        ipv6 table local6;
-        function verify_in(bool upstream) {
-          case net.type {
-            NET_IP4: {
-              if (roa_check(r4) = ROA_INVALID) then {
-                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
-              }
-            }
-            NET_IP6: {
-              if (roa_check(r6) = ROA_INVALID) then {
-                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
-              }
-            }
-          }
-          if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
-            reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
-          }
-        }
-        filter provider_in {
-          if !defined(bgp_otc) then {
-            bgp_otc = bgp_path.first;
-          }
-          verify_in(false);
-          accept;
-        }
-        filter peer_in {
-          if !defined(bgp_otc) then {
-            bgp_otc = bgp_path.first;
-          }
-          if bgp_otc != bgp_path.first then reject;
-          verify_in(true);
-          accept;
-        }
-        filter customer_in {
-          if defined(bgp_otc) then {
-            reject;
-          }
-          verify_in(true);
-          accept;
-        }
-        filter provider_out {
-          if defined(bgp_otc) then {
-            reject;
-          }
-          accept;
-        }
-        filter peer_out {
-          if defined(bgp_otc) then {
-            reject;
-          }
-          bgp_otc = 65002;
-          accept;
-        }
-        filter customer_out {
-          if !defined(bgp_otc) then {
-            bgp_otc = 65002;
-          }
-          accept;
-        }
-        template bgp routed {
-          local as 65002;
-          require roles on;
-          enforce first as on;
-          ipv4 {
-            export all;
-            extended next hop on;
-            import all;
-            import table on;
-            require extended next hop on;
-            table local4;
-          };
-          ipv6 {
-            export all;
-            import all;
-            import table on;
-            table local6;
-          };
-        }
-        template bgp bgp_mpls {
-          local as 65002;
-          require roles on;
-          enforce first as on;
-          mpls {label policy aggregate;};
-          ipv4 mpls {
-            extended next hop on;
-            import table on;
-          };
-          ipv6 mpls {
-            import table on;
-          };
-          vpn4 mpls {
-            extended next hop on;
-            import table on;
-          };
-          vpn6 mpls {
-            import table on;
-          };
-        }
-        template bgp orion_untrusted from routed {
-          local role customer;
-        }
-        protocol bgp orion_internet from orion_untrusted {
-          neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
-          ipv4 {preference 90;};
-          ipv6 {preference 90;};
-        }
-        protocol bgp orion_shadow from orion_untrusted {
-          neighbor fe80::7006:83ff:feff:5d0b as 65001;
-          interface "shadow-lan";
-          ipv4 {preference 80;};
-          ipv6 {preference 80;};
-        }
-        protocol bgp orion_guest from orion_untrusted {
-          neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
-          ipv4 {preference 70;};
-          ipv6 {preference 70;};
-        }
-        protocol bgp orion_mpls from bgp_mpls {
-          local fe80::5;
-          neighbor fe80::1 as 65001;
-          interface "mpls";
-          local role customer;
-          ipv6 mpls {
-            export filter provider_out;
-            import filter provider_in;
-          };
-          ipv4 mpls {
-            export filter provider_out;
-            import filter provider_in;
-          };
-          vpn6 mpls {
-            export filter provider_out;
-            import filter provider_in;
-          };
-          vpn4 mpls {
-            export filter provider_out;
-            import filter provider_in;
-          };
-        }
-        protocol bgp workstation from bgp_mpls {
-          local fe80::5 as 65002;
-          neighbor fe80::2 as 65000;
-          local role provider;
-          require roles on;
-          interface "workstation-tnl";
-          ipv6 mpls {
-            export filter customer_out;
-            import filter customer_in;
-          };
-          ipv4 mpls {
-            export filter customer_out;
-            import filter customer_in;
-          };
-          vpn6 mpls {
-            export filter customer_out;
-            import filter customer_in;
-          };
-          vpn4 mpls {
-            export filter customer_out;
-            import filter customer_in;
-          };
-        }
-        protocol device {
-
-        }
-        protocol direct {
-          ipv4 {
-            table local4;
-          };
-          ipv6 {
-            import where net.len != 128;
-            table local6;
-          };
-          interface "internet", "guest", "shadow-lan";
-        }
-        protocol pipe {
-          table master4;
-          peer table local4;
-          import filter {
-            preference = 70;
+    bird.config = ''
+      ipv4 table local4;
+      ipv6 table local6;
+      template bgp routed {
+        local as 65002;
+        require roles on;
+        enforce first as on;
+        ipv4 {
+          export all;
+          extended next hop on;
+          import all;
+          import table on;
+          require extended next hop on;
+          table local4;
+        };
+        ipv6 {
+          export all;
+          import all;
+          import table on;
+          table local6;
+        };
+      }
+      template bgp bgp_mpls {
+        local as 65002;
+        require roles on;
+        enforce first as on;
+        mpls {label policy aggregate;};
+        ipv4 mpls {
+          extended next hop on;
+          import table on;
+        };
+        ipv6 mpls {
+          import table on;
+        };
+        vpn4 mpls {
+          extended next hop on;
+          import table on;
+        };
+        vpn6 mpls {
+          import table on;
+        };
+      }
+      template bgp orion_untrusted from routed {
+        local role customer;
+      }
+      protocol bgp orion_internet from orion_untrusted {
+        neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
+        ipv4 {preference 90;};
+        ipv6 {preference 90;};
+      }
+      protocol bgp orion_shadow from orion_untrusted {
+        neighbor fe80::7006:83ff:feff:5d0b as 65001;
+        interface "shadow-lan";
+        ipv4 {preference 80;};
+        ipv6 {preference 80;};
+      }
+      protocol bgp orion_guest from orion_untrusted {
+        neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
+        ipv4 {preference 70;};
+        ipv6 {preference 70;};
+      }
+      protocol bgp orion_mpls from bgp_mpls {
+        local fe80::5;
+        neighbor fe80::1 as 65001;
+        interface "mpls";
+        local role customer;
+        ipv6 mpls {
+          export filter provider_out;
+          import filter provider_in;
+        };
+        ipv4 mpls {
+          export filter provider_out;
+          import filter provider_in;
+        };
+        vpn6 mpls {
+          export filter provider_out;
+          import filter provider_in;
+        };
+        vpn4 mpls {
+          export filter provider_out;
+          import filter provider_in;
+        };
+      }
+      protocol direct {
+        ipv4 {
+          table local4;
+        };
+        ipv6 {
+          import where net.len != 128;
+          table local6;
+        };
+        interface "internet", "guest", "shadow-lan";
+      }
+      protocol kernel {
+        ipv4 {
+          table local4;
+          export filter {
+            if source = RTS_DEVICE then
+              reject;
+            krt_prefsrc = self_loopback_v4;
             accept;
           };
-          export all;
-        }
-        protocol pipe {
-          table master6;
-          peer table local6;
-          import filter {
-            preference = 70;
+        };
+      }
+      protocol kernel {
+        ipv6 {
+          table local6;
+          export filter {
+            if source = RTS_DEVICE then
+              reject;
+            krt_prefsrc = self_loopback_v6;
             accept;
           };
-          export all;
-        }
-        protocol kernel {
-          ipv4 {
-            table local4;
-            export filter {
-              if source = RTS_DEVICE then
-                reject;
-              krt_prefsrc = 192.168.11.5;
-              accept;
-            };
-          };
-        }
-        protocol kernel {
-          ipv6 {
-            table local6;
-            export filter {
-              if source = RTS_DEVICE then
-                reject;
-              krt_prefsrc = fd09:a389:7c1e:6::5;
-              accept;
-            };
-          };
-        }
-        protocol kernel {
-          mpls {export all;};
-        }
-        protocol rpki {
-          roa4 { table r4; };
-          roa6 { table r6; };
-          aspa { table at; };
-
-          remote "localhost";
-        }
-        protocol static {
-          ipv4;
-          route 192.168.11.5/32 via "lo";
-        }
-        protocol static {
-          ipv6;
-          route fd09:a389:7c1e:6::5/128 via "lo";
-        }
-      '';
+        };
+      }
+      protocol pipe {
+        table master4;
+        peer table local4;
+        import filter {
+          preference = 70;
+          accept;
+        };
+        export all;
+      }
+      protocol pipe {
+        table master6;
+        peer table local6;
+        import filter {
+          preference = 70;
+          accept;
+        };
+        export all;
+      }
+    '';
+    bird-cfg.files = {
+      "50-kernel-ip".text = lib.mkForce "";
+      "50-ip-mesh-orion".text = lib.mkForce "";
     };
     bird-lg.proxy = {
       enable = true;
@@ -472,7 +358,6 @@ in
       '';
     };
     displayManager.gdm.autoSuspend = false;
-    ip-mesh.self-tunnel-addresses = [ "fe80::5/64" ];
     knot = {
       enable = true;
       keyFiles = [
@@ -589,20 +474,6 @@ in
     };
     ratbagd = {
       enable = true;
-    };
-    routinator = {
-      enable = true;
-      package =
-        pkgs.routinator.overrideAttrs (
-          { patches ? [], ... }: {
-            patches = patches ++ [ ./routinator.patch ];
-          });
-      settings = {
-        enable-aspa = true;
-        extra-tals-dir = ./tals;
-        no-rir-tals = true;
-        systemd-listen = true;
-      };
     };
     unbound.settings = {
       forward-zone = [
@@ -771,11 +642,6 @@ in
           name = "mpls";
           networkConfig.LinkLocalAddressing = false;
         };
-        "10-lo" = {
-          address = [ "192.168.11.5/32" "fd09:a389:7c1e:6::5/128" ];
-          name = "lo";
-          networkConfig.KeepConfiguration = "static";
-        };
         "10-shadow-lan" = {
           DHCP = "yes";
           dhcpV4Config.RouteMetric = 1536;
@@ -929,12 +795,6 @@ in
       unbound = {
         after = [ "zone-home-test.service" ];
         wants = [ "zone-home-test.service" ];
-      };
-    };
-    sockets = {
-      routinator = {
-        listenStreams = [ "[::]:323" ];
-        wantedBy = [ "routinator.service" ];
       };
     };
     tmpfiles = {

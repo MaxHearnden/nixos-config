@@ -3,7 +3,7 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
-  imports = [ ./pcrlock.nix ./ip-mesh.nix ];
+  imports = [ ./bird.nix ./ip-mesh.nix ./pcrlock.nix ];
   boot = {
     binfmt = {
       emulatedSystems = [
@@ -234,7 +234,30 @@
       ];
     };
     nftables = {
+      checkRuleset = false;
       enable = true;
+      extraDeletions = ''
+        table inet services {
+          chain output {
+          }
+        }
+        flush chain inet services output
+        delete chain inet services output
+      '';
+      flushRuleset = false;
+      ruleset = ''
+        table inet services {
+          set bird {
+            type cgroupsv2
+          }
+
+          chain output {
+            type filter hook output priority filter; policy accept;
+            ct state vmap { invalid : drop, established : accept, related : accept }
+            tcp dport 179 socket cgroupv2 level 2 != @bird reject
+          }
+        }
+      '';
       tables.tailscale-enforcement = {
         family = "inet";
         content = ''
@@ -429,12 +452,43 @@
       };
     };
     ip-mesh = {
+      enable = true;
       peers = {
-        pc = "fd7a:115c:a1e0::d2df:ec69";
-        laptop = "fd7a:115c:a1e0::d601:c60";
-        workstation = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
-        orion = "fd7a:115c:a1e0::1a01:5208";
-        chromebook = "fd7a:115c:a1e0::d401:5546";
+        pc = {
+          address = "fd7a:115c:a1e0::d2df:ec69";
+          asn = 65002;
+          tunnel-address = "ff02::5";
+          loopback-v4-address = "192.168.11.5";
+          loopback-v6-address = "fd09:a389:7c1e:6::5";
+        };
+        laptop = {
+          address = "fd7a:115c:a1e0::d601:c60";
+          asn = 65004;
+          tunnel-address = "fe80::4";
+          loopback-v4-address = "192.168.11.4";
+          loopback-v6-address = "fd09:a389:7c1e:6::4";
+        };
+        workstation = {
+          address = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
+          asn = 65000;
+          tunnel-address = "ff02::2";
+          loopback-v4-address = "192.168.11.2";
+          loopback-v6-address = "fd09:a389:7c1e:6::2";
+        };
+        orion = {
+          address = "fd7a:115c:a1e0::1a01:5208";
+          asn = 65001;
+          tunnel-address = "ff02::1";
+          loopback-v4-address = "192.168.11.1";
+          loopback-v6-address = "fd09:a389:7c1e:6::1";
+        };
+        chromebook = {
+          address = "fd7a:115c:a1e0::d401:5546";
+          asn = 65003;
+          tunnel-address = "ff02::3";
+          loopback-v4-address = "192.168.11.3";
+          loopback-v6-address = "fd09:a389:7c1e:6::3";
+        };
       };
       self = lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName;
     };
@@ -594,6 +648,11 @@
       ManageForeignRoutes = false;
     };
     services = {
+      bird = {
+        after = [ "nftables.service" ];
+        serviceConfig.NFTSet = "cgroup:inet:services:bird";
+        wants = [ "nftables.service" ];
+      };
       "btrbk-btrbk" = {
         restartIfChanged = false;
         confinement = {

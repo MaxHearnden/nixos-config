@@ -1,23 +1,62 @@
-{ config, lib, ... }: {
+{ config, inputs, lib, pkgs, ... }:
+
+let
+  cfg = config.services.ip-mesh;
+  types = lib.types;
+  peerModule = types.submodule {
+    options = {
+      address = lib.mkOption {
+        type = types.str;
+      };
+      asn = lib.mkOption {
+        type = types.int;
+      };
+      tunnel-address = lib.mkOption {
+        type = types.str;
+      };
+      loopback-v4-address = lib.mkOption {
+        type = types.str;
+      };
+      loopback-v6-address = lib.mkOption {
+        type = types.str;
+      };
+    };
+  };
+in
+
+{
   options = {
     services.ip-mesh = {
+      enable = lib.mkEnableOption "A ip6tnl based mesh";
       peers = lib.mkOption {
-        type = lib.types.attrsOf lib.types.str;
+        type = lib.types.attrsOf peerModule;
       };
       self = lib.mkOption {
         type = lib.types.str;
       };
-      self-tunnel-addresses = lib.mkOption {
-        default = [];
-        type = lib.types.listOf lib.types.str;
+      self-as = lib.mkOption {
+        default = cfg.peers.${cfg.self}.asn;
+        type = lib.types.int;
+      };
+      self-tunnel-address = lib.mkOption {
+        default = cfg.peers.${cfg.self}.tunnel-address;
+        type = lib.types.str;
       };
       self-address = lib.mkOption {
-        default = config.services.ip-mesh.peers.${config.services.ip-mesh.self};
+        default = cfg.peers.${cfg.self}.address;
+        type = lib.types.str;
+      };
+      self-loopback-v4-address = lib.mkOption {
+        default = cfg.peers.${cfg.self}.loopback-v4-address;
+        type = lib.types.str;
+      };
+      self-loopback-v6-address = lib.mkOption {
+        default = cfg.peers.${cfg.self}.loopback-v6-address;
         type = lib.types.str;
       };
     };
   };
-  config = {
+  config = lib.mkIf cfg.enable {
     boot = {
       kernel.sysctl."net.mpls.platform_labels" = 1048575;
       kernelModules = [ "mpls_router" "mpls_iptunnel" "mpls_gro" ];
@@ -27,49 +66,197 @@
       value.allowedTCPPorts = [ 179 ];
     }) (lib.filterAttrs (name: _: name !=
       config.services.ip-mesh.self) config.services.ip-mesh.peers);
-    systemd.network = {
-      netdevs = lib.mapAttrs' (name: address: {
-        name = "50-${name}-tnl";
-        value = {
-          netdevConfig = {
-            Kind = "ip6tnl";
-            Name = "${name}-tnl";
-          };
-          tunnelConfig = {
-            Local = config.services.ip-mesh.self-address;
-            Remote = address;
-          };
-        };
-      }) (lib.filterAttrs (name: _: name !=
-        config.services.ip-mesh.self) config.services.ip-mesh.peers);
-      networks = lib.mapAttrs' (name: address: {
-        name = "50-${name}-tnl";
-        value = {
-          address = config.services.ip-mesh.self-tunnel-addresses;
-          extraConfig = ''
-            [Network]
-            MPLSRouting = true
+    services = {
+      bird = {
+        enable = true;
+        package =
+          inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3.overrideAttrs
+          ({ patches ? [], ... }: {
+            patches = patches ++ [ ./bird-aspa.patch ];
+          });
+      };
+      bird-cfg = {
+        enable = true;
+        files = {
+          "10-ip-mesh-defines".text = ''
+            router id ${cfg.self-loopback-v4-address};
+            define self_as = ${toString cfg.self-as};
+            define self_loopback_v4 = ${cfg.self-loopback-v4-address};
+            define self_loopback_v6 = ${cfg.self-loopback-v6-address};
           '';
-          name = "${name}-tnl";
-          linkConfig = {
-            MTUBytes = "1302";
-            RequiredForOnline = false;
+          "20-tables".text = ''
+          aspa table at;
+          mpls domain mdom;
+          mpls table mtab;
+          roa4 table r4;
+          roa6 table r6;
+          vpn4 table vtab4;
+          vpn6 table vtab6;
+          '';
+          "25-birdlib".source = ./birdlib.conf;
+          "30-ip-mesh-template".text = ''
+            template bgp ip_tunnel {
+              local ${cfg.self-tunnel-address} as self_as;
+              enforce first as on;
+              ipv4 mpls {
+                export all;
+                extended next hop on;
+                import filter complex_in;
+                import table on;
+                require extended next hop;
+              };
+              ipv6 mpls {
+                export all;
+                import table on;
+                import filter complex_in;
+              };
+              mpls {label policy aggregate;};
+              vpn4 mpls {
+                export all;
+                extended next hop on;
+                import filter complex_in;
+                import table on;
+                require extended next hop;
+              };
+              vpn6 mpls {
+                export all;
+                import table on;
+                import filter complex_in;
+              };
+            }
+          '';
+          "40-device".text = ''
+            protocol device {}
+          '';
+          "50-kernel-ip".text = ''
+            protocol kernel {
+              ipv4 {
+                export filter {
+                  if source = RTS_DEVICE then
+                    reject;
+                  krt_prefsrc = self_loopback_v4;
+                  accept;
+                };
+              };
+            }
+            protocol kernel {
+              ipv6 {
+                export filter {
+                  if source = RTS_DEVICE then
+                    reject;
+                  krt_prefsrc = self_loopback_v6;
+                  accept;
+                };
+              };
+            }
+          '';
+          "50-kernel-mpls".text = ''
+            protocol kernel {
+              mpls {export all;};
+            }
+          '';
+          "60-rpki".text = ''
+            protocol rpki {
+              aspa;
+              roa4;
+              roa6;
+              remote "localhost";
+            }
+          '';
+          "70-static".text = ''
+            protocol static {
+              ipv4;
+              route ${cfg.self-loopback-v4-address}/32 via "lo";
+            }
+            protocol static {
+              ipv6;
+              route ${cfg.self-loopback-v6-address}/128 via "lo";
+            }
+          '';
+        } // lib.mapAttrs' (name: value: {
+          name = "50-ip-mesh-${name}";
+          value.text = ''
+            protocol bgp ip_mesh_${name} from ip_tunnel {
+              neighbor ${value.address} as ${toString value.asn};
+              interface "${name}-tnl";
+            }
+          '';
+        }) (lib.filterAttrs (name: _: name != cfg.self) cfg.peers);
+      };
+      routinator = {
+        enable = true;
+        package =
+          pkgs.routinator.overrideAttrs (
+            { patches ? [], ... }: {
+              patches = patches ++ [ ./routinator.patch ];
+            });
+        settings = {
+          enable-aspa = true;
+          extra-tals-dir = ./tals;
+          no-rir-tals = true;
+          systemd-listen = true;
+        };
+      };
+    };
+    systemd = {
+      network = {
+        netdevs = lib.mapAttrs' (name: peer: {
+          name = "50-${name}-tnl";
+          value = {
+            netdevConfig = {
+              Kind = "ip6tnl";
+              Name = "${name}-tnl";
+            };
+            tunnelConfig = {
+              Local = cfg.self-address;
+              Remote = peer.address;
+            };
+          };
+        }) (lib.filterAttrs (name: _: name !=
+          config.services.ip-mesh.self) config.services.ip-mesh.peers);
+        networks = lib.mapAttrs' (name: _: {
+          name = "50-${name}-tnl";
+          value = {
+            address = ["${config.services.ip-mesh.self-tunnel-address}/64"];
+            extraConfig = ''
+              [Network]
+              MPLSRouting = true
+            '';
+            name = "${name}-tnl";
+            linkConfig = {
+              MTUBytes = "1302";
+              RequiredForOnline = false;
+            };
+          };
+        }) (lib.filterAttrs (name: _: name !=
+          config.services.ip-mesh.self) config.services.ip-mesh.peers)
+        // {
+          "40-lo" = {
+            address = [
+              "${cfg.self-loopback-v4-address}/32"
+              "${cfg.self-loopback-v6-address}/128"
+            ];
+            name = "lo";
+            networkConfig.KeepConfiguration = "static";
+          };
+          "40-tailscale" = {
+            name = "tailscale0";
+            linkConfig.RequiredForOnline = false;
+            networkConfig = {
+              DHCP = false;
+              IPv6AcceptRA = false;
+              KeepConfiguration = "static";
+            };
+            tunnel = lib.map (name: "${name}-tnl")
+              (lib.filter (name: name != config.services.ip-mesh.self)
+              (lib.attrNames config.services.ip-mesh.peers));
           };
         };
-      }) (lib.filterAttrs (name: _: name !=
-        config.services.ip-mesh.self) config.services.ip-mesh.peers)
-      // {
-        "40-tailscale" = {
-          name = "tailscale0";
-          linkConfig.RequiredForOnline = false;
-          networkConfig = {
-            DHCP = false;
-            IPv6AcceptRA = false;
-            KeepConfiguration = "static";
-          };
-          tunnel = lib.map (name: "${name}-tnl")
-            (lib.filter (name: name != config.services.ip-mesh.self)
-            (lib.attrNames config.services.ip-mesh.peers));
+      };
+      sockets = {
+        routinator = {
+          listenStreams = [ "[::]:323" ];
+          wantedBy = [ "routinator.service" ];
         };
       };
     };

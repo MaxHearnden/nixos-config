@@ -217,175 +217,11 @@ in
   };
   services = {
     bird = {
-      enable = true;
-      package =
-        inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3.overrideAttrs
-        ({ patches ? [], ... }: {
-          patches = patches ++ [ ./bird-aspa.patch ];
-        });
       config = ''
-        router id 192.168.11.2;
-        roa4 table r4;
-        roa6 table r6;
-        aspa table at;
-        mpls domain mdom;
-        mpls table mtab;
-        vpn4 table vtab4;
-        vpn6 table vtab6;
         ipv6 table radv_routes;
-        function verify_in(bool upstream) {
-          case net.type {
-            NET_IP4: {
-              if (roa_check(r4) = ROA_INVALID) then {
-                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
-              }
-            }
-            NET_IP6: {
-              if (roa_check(r6) = ROA_INVALID) then {
-                reject "Ignore RPKI invalid ", net, " for ASN ", bgp_path.last;
-              }
-            }
-          }
-          if (aspa_check(at, bgp_path, upstream) = ASPA_INVALID) then {
-            reject "Ignore ASPA invalid ", net, " for ASN ", bgp_path.last;
-          }
-        }
-        filter provider_in {
-          if !defined(bgp_otc) then {
-            bgp_otc = bgp_path.first;
-          }
-          verify_in(false);
-          accept;
-        }
-        filter peer_in {
-          if !defined(bgp_otc) then {
-            bgp_otc = bgp_path.first;
-          }
-          if bgp_otc != bgp_path.first then reject;
-          verify_in(true);
-          accept;
-        }
-        filter customer_in {
-          if defined(bgp_otc) then {
-            reject;
-          }
-          verify_in(true);
-          accept;
-        }
-        filter provider_out {
-          if defined(bgp_otc) then {
-            reject;
-          }
-          accept;
-        }
-        filter peer_out {
-          if defined(bgp_otc) then {
-            reject;
-          }
-          bgp_otc = 65000;
-          accept;
-        }
-        filter customer_out {
-          if !defined(bgp_otc) then {
-            bgp_otc = 65000;
-          }
-          accept;
-        }
-        protocol bgp orion {
-          local fe80::2 as 65000;
-          neighbor fe80::1 as 65001;
-          interface "orion-tnl";
-          local role customer;
-          require roles on;
-          enforce first as on;
-          ipv6 mpls {
-            export filter provider_out;
-            import filter provider_in;
-            import table on;
-          };
-          ipv4 mpls {
-            export filter provider_out;
-            extended next hop on;
-            import filter provider_in;
-            import table on;
-            require extended next hop on;
-          };
-          mpls {label policy aggregate;};
-          vpn6 mpls {
-            export filter provider_out;
-            import filter provider_in;
-            import table on;
-          };
-          vpn4 mpls {
-            export filter provider_out;
-            extended next hop on;
-            import filter provider_in;
-            import table on;
-            require extended next hop on;
-          };
-        }
-        protocol bgp pc {
-          local fe80::2 as 65000;
-          neighbor fe80::5 as 65002;
-          interface "pc-tnl";
-          local role customer;
-          require roles on;
-          enforce first as on;
-          ipv6 mpls {
-            export filter provider_out;
-            import filter provider_in;
-            import table on;
-          };
-          ipv4 mpls {
-            export filter provider_out;
-            extended next hop on;
-            import filter provider_in;
-            import table on;
-            require extended next hop on;
-          };
-          mpls {label policy aggregate;};
-          vpn6 mpls {
-            export filter provider_out;
-            import filter provider_in;
-            import table on;
-          };
-          vpn4 mpls {
-            export filter provider_out;
-            extended next hop on;
-            import filter provider_in;
-            import table on;
-            require extended next hop on;
-          };
-        }
-        protocol device {
-
-        }
         protocol direct {
           ipv4;
           interface "enp2s0";
-        }
-        protocol kernel {
-          ipv4 {
-            export filter {
-              if source ~ [RTS_DEVICE, RTS_STATIC] then
-                reject;
-              krt_prefsrc = 192.168.11.2;
-              accept;
-            };
-          };
-        }
-        protocol kernel {
-          ipv6 {
-            export filter {
-              if source ~ [RTS_DEVICE, RTS_STATIC] then
-                reject;
-              krt_prefsrc = fd27:6be8:399c:2::1;
-              accept;
-            };
-          };
-        }
-        protocol kernel {
-          mpls {export all;};
         }
         protocol pipe {
           table master6;
@@ -409,22 +245,6 @@ in
             domain "int.zandoodle.me.uk";
             domain "zandoodle.me.uk";
           };
-        }
-        protocol rpki {
-          roa4 { table r4; };
-          roa6 { table r6; };
-          aspa { table at; };
-
-          remote "localhost";
-        }
-        protocol static {
-          ipv4;
-          route 192.168.11.2/32 via "lo";
-        }
-        protocol static {
-          ipv6;
-          route fd27:6be8:399c::/48 unreachable;
-          route fd09:a389:7c1e:6::2/128 via "lo";
         }
         protocol static {
           ipv6 {
@@ -651,7 +471,6 @@ in
         priority = 50;
       };
     };
-    ip-mesh.self-tunnel-addresses = [ "fe80::2/64" ];
     kerberos_server = {
       enable = true;
       settings = {
@@ -866,20 +685,6 @@ in
     ratbagd = {
       enable = true;
     };
-    routinator = {
-      enable = true;
-      package =
-        pkgs.routinator.overrideAttrs (
-          { patches ? [], ... }: {
-            patches = patches ++ [ ./routinator.patch ];
-          });
-      settings = {
-        enable-aspa = true;
-        extra-tals-dir = ./tals;
-        no-rir-tals = true;
-        systemd-listen = true;
-      };
-    };
     unbound = {
       resolveLocalQueries = false;
       settings = {
@@ -985,11 +790,7 @@ in
           ];
           DHCP = "no";
         };
-        "10-lo" = {
-          address = [ "fd09:a389:7c1e:6::2/128" "fd27:6be8:399c:2::1/128" "192.168.11.2/32" ];
-          name = "lo";
-          networkConfig.KeepConfiguration = "static";
-        };
+        "40-lo".address = [ "fd09:a389:7c1e:6::2/128"];
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];
           matchConfig.Name = "tayga";
@@ -1697,10 +1498,6 @@ in
           FreeBind = true;
         };
         wantedBy = [ "minecraft-server.target" ];
-      };
-      routinator = {
-        listenStreams = [ "[::]:323" ];
-        wantedBy = [ "routinator.service" ];
       };
       sshd.enable = false;
       "sshd@lo" = {
