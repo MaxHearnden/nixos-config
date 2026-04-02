@@ -457,7 +457,7 @@
         pc = {
           address = "fd7a:115c:a1e0::d2df:ec69";
           asn = 65002;
-          tunnel-address = "ff02::5";
+          tunnel-address = "fe80::5";
           loopback-v4-address = "192.168.11.5";
           loopback-v6-address = "fd09:a389:7c1e:6::5";
         };
@@ -471,21 +471,21 @@
         workstation = {
           address = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
           asn = 65000;
-          tunnel-address = "ff02::2";
+          tunnel-address = "fe80::2";
           loopback-v4-address = "192.168.11.2";
           loopback-v6-address = "fd09:a389:7c1e:6::2";
         };
         orion = {
           address = "fd7a:115c:a1e0::1a01:5208";
           asn = 65001;
-          tunnel-address = "ff02::1";
+          tunnel-address = "fe80::1";
           loopback-v4-address = "192.168.11.1";
           loopback-v6-address = "fd09:a389:7c1e:6::1";
         };
         chromebook = {
           address = "fd7a:115c:a1e0::d401:5546";
           asn = 65003;
-          tunnel-address = "ff02::3";
+          tunnel-address = "fe80::3";
           loopback-v4-address = "192.168.11.3";
           loopback-v6-address = "fd09:a389:7c1e:6::3";
         };
