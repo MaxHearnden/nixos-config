@@ -28,6 +28,7 @@ in
   };
   config = {
     environment.etc."bird.d".source = cfg.configDir;
+    entworking.firewall.tailscale0.allowedTCPPorts = [ 8000 ];
     services = {
       bird.config = "include \"${cfg.configDir}/*.conf\";";
       bird-cfg.configDir = pkgs.linkFarm "bird.d" (
@@ -36,6 +37,10 @@ in
             name = "${name}.conf";
             value = file.source;
           }) cfg.files);
+      bird-lg.proxy = {
+        enable = true;
+        listenAddresses = [ "[::]:8000" ];
+      };
     };
   };
 }

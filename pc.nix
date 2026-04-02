@@ -101,7 +101,7 @@ in
         guest.allowedTCPPorts = [ 179 ];
         "shadow-lan".allowedTCPPorts = [ 179 ];
         mpls.allowedTCPPorts = [ 179 ];
-        tailscale0.allowedTCPPorts = [ 80 179 443 8000 ];
+        tailscale0.allowedTCPPorts = [ 80 179 443 ];
         tailscale0.allowedUDPPorts = [ 443 ];
       };
     };
@@ -275,10 +275,6 @@ in
     bird-cfg.files = {
       "50-kernel-ip".text = lib.mkForce "";
       "50-ip-mesh-orion".text = lib.mkForce "";
-    };
-    bird-lg.proxy = {
-      enable = true;
-      listenAddresses = [ "[::]:8000" ];
     };
     btrbk = {
       instances = {
