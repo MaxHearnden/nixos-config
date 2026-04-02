@@ -28,7 +28,7 @@ in
   };
   config = {
     environment.etc."bird.d".source = cfg.configDir;
-    networking.firewall.tailscale0.allowedTCPPorts = [ 8000 ];
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 8000 ];
     services = {
       bird.config = "include \"${cfg.configDir}/*.conf\";";
       bird-cfg.configDir = pkgs.linkFarm "bird.d" (
