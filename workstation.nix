@@ -247,6 +247,10 @@ in
           };
         }
         protocol static {
+          ipv6;
+          route fd27:6be8:399c::/48 unreachable;
+        }
+        protocol static {
           ipv6 {
             table radv_routes;
           };
