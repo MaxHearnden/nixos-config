@@ -467,7 +467,7 @@ in
         priority = 50;
       };
     };
-    ip-mesh = {
+    ip-mesh.peers = {
       chromebook.role = lib.mkForce "provider";
       laptop.role = lib.mkForce "provider";
     };
