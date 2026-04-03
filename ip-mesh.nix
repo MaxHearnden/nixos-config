@@ -72,7 +72,7 @@ in
         package =
           inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3.overrideAttrs
           ({ patches ? [], ... }: {
-            patches = patches ++ [ ./bird-aspa.patch ];
+            patches = patches ++ [ ./bird-aspa.patch ./bird-mpls-fix.patch ];
           });
       };
       bird-cfg = {
