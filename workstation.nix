@@ -467,6 +467,10 @@ in
         priority = 50;
       };
     };
+    ip-mesh = {
+      chromebook.role = lib.mkForce "provider";
+      laptop.role = lib.mkForce "provider";
+    };
     kerberos_server = {
       enable = true;
       settings = {

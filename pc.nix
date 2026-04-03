@@ -354,6 +354,12 @@ in
       '';
     };
     displayManager.gdm.autoSuspend = false;
+    ip-mesh.peers = {
+      laptop.role = lib.mkForce "provider";
+      workstation.role = lib.mkForce "provider";
+      chromebook.role = lib.mkForce "provider";
+      orion.role = lib.mkForce "peer";
+    };
     knot = {
       enable = true;
       keyFiles = [

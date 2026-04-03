@@ -3,13 +3,28 @@
 let
   cfg = config.services.ip-mesh;
   types = lib.types;
-  peerModule = types.submodule {
+  ingress_filters = {
+    "complex" = "filter complex_in";
+    "customer" = "filter provider_in";
+    "peer" = "filter peer_in";
+    "provider" = "filter customer_in";
+  };
+  egress_filters = {
+    "complex" = "all";
+    "customer" = "filter provider_out";
+    "peer" = "filter peer_out";
+    "provider" = "filter customer_out";
+  };
+  peerModule = types.submodule ({config, ...}: {
     options = {
       address = lib.mkOption {
         type = types.str;
       };
       asn = lib.mkOption {
         type = types.int;
+      };
+      enable = lib.mkEnableOption "The protocol to the peer" // {
+        default = true;
       };
       tunnel-address = lib.mkOption {
         type = types.str;
@@ -20,8 +35,20 @@ let
       loopback-v6-address = lib.mkOption {
         type = types.str;
       };
+      role = lib.mkOption {
+        default = null;
+        type = types.nullOr types.str;
+      };
+      ingress_filter = lib.mkOption {
+        default = ingress_filters.${config.role or "complex"};
+        type = types.str;
+      };
+      egress_filter = lib.mkOption {
+        default = egress_filters.${config.role or "complex"};
+        type = types.str;
+      };
     };
-  };
+  });
 in
 
 {
@@ -173,12 +200,32 @@ in
               route ${cfg.self-loopback-v6-address}/128 via "lo";
             }
           '';
-        } // lib.mapAttrs' (name: value: {
+        } // lib.mapAttrs' (name: peer: {
           name = "50-ip-mesh-${name}";
           value.text = ''
             protocol bgp ip_mesh_${name} from ip_tunnel {
-              neighbor ${value.tunnel-address} as ${toString value.asn};
+              neighbor ${peer.tunnel-address} as ${toString peer.asn};
               interface "${name}-tnl";
+              ${lib.optionalString (!isNull peer.role) ''
+                local role ${peer.role};
+              ''}
+              ${lib.optionalString (!peer.enable) "disabled;"}
+              ipv4 mpls {
+                import ${peer.ingress_filter};
+                export ${peer.egress_filter};
+              };
+              ipv6 mpls {
+                import ${peer.ingress_filter};
+                export ${peer.egress_filter};
+              };
+              vpn4 mpls {
+                import ${peer.ingress_filter};
+                export ${peer.egress_filter};
+              };
+              vpn6 mpls {
+                import ${peer.ingress_filter};
+                export ${peer.egress_filter};
+              };
             }
           '';
         }) (lib.filterAttrs (name: _: name != cfg.self) cfg.peers);

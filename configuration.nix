@@ -460,6 +460,7 @@
           tunnel-address = "fe80::5";
           loopback-v4-address = "192.168.11.5";
           loopback-v6-address = "fd09:a389:7c1e:6::5";
+          role = "customer";
         };
         laptop = {
           address = "fd7a:115c:a1e0::d601:c60";
@@ -467,6 +468,7 @@
           tunnel-address = "fe80::4";
           loopback-v4-address = "192.168.11.4";
           loopback-v6-address = "fd09:a389:7c1e:6::4";
+          role = "peer";
         };
         workstation = {
           address = "fd7a:115c:a1e0:ab12:4843:cd96:625b:e016";
@@ -474,6 +476,7 @@
           tunnel-address = "fe80::2";
           loopback-v4-address = "192.168.11.2";
           loopback-v6-address = "fd09:a389:7c1e:6::2";
+          role = "customer";
         };
         orion = {
           address = "fd7a:115c:a1e0::1a01:5208";
@@ -481,6 +484,7 @@
           tunnel-address = "fe80::1";
           loopback-v4-address = "192.168.11.1";
           loopback-v6-address = "fd09:a389:7c1e:6::1";
+          role = "customer";
         };
         chromebook = {
           address = "fd7a:115c:a1e0::d401:5546";
@@ -488,6 +492,7 @@
           tunnel-address = "fe80::3";
           loopback-v4-address = "192.168.11.3";
           loopback-v6-address = "fd09:a389:7c1e:6::3";
+          role = "peer";
         };
       };
       self = lib.substring 10 (lib.stringLength config.networking.hostName) config.networking.hostName;
