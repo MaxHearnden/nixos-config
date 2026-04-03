@@ -205,20 +205,20 @@ in
         interface "mpls";
         local role peer;
         ipv6 mpls {
-          export filter provider_out;
-          import filter provider_in;
+          export filter peer_out;
+          import filter peer_in;
         };
         ipv4 mpls {
-          export filter provider_out;
-          import filter provider_in;
+          export filter peer_out;
+          import filter peer_in;
         };
         vpn6 mpls {
-          export filter provider_out;
-          import filter provider_in;
+          export filter peer_out;
+          import filter peer_in;
         };
         vpn4 mpls {
-          export filter provider_out;
-          import filter provider_in;
+          export filter peer_out;
+          import filter peer_in;
         };
       }
       protocol direct {
