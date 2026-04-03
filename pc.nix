@@ -181,7 +181,7 @@ in
         };
       }
       template bgp orion_untrusted from routed {
-        local role customer;
+        local role peer;
       }
       protocol bgp orion_internet from orion_untrusted {
         neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
@@ -203,7 +203,7 @@ in
         local fe80::5;
         neighbor fe80::1 as 65001;
         interface "mpls";
-        local role customer;
+        local role peer;
         ipv6 mpls {
           export filter provider_out;
           import filter provider_in;
