@@ -12,6 +12,10 @@ in
     ./zone.nix
   ];
   boot = {
+    kernel.sysctl = {
+      "net.ipv4.tcp_l3mdev_accept" = 1;
+      "net.ipv4.udp_l3mdev_accept" = 1;
+    };
     kernelPackages = lib.mkForce pkgs.linuxPackages;
     kernelParams = [
       "console=ttyS0,115200"
@@ -106,6 +110,11 @@ in
       };
     };
     hostName = "max-nixos-pc";
+    localCommands = ''
+      # Remove the priority 0 local rule
+      ip rule del priority 0 || true
+      ip -6 rule del priority 0 || true
+    '';
     networkmanager.enable = false;
     nftables.tables = {
       tayga-nat66 = {
@@ -232,6 +241,7 @@ in
         interface "internet", "guest", "shadow-lan";
       }
       protocol kernel {
+        kernel table 10;
         ipv4 {
           table local4;
           export filter {
@@ -243,6 +253,7 @@ in
         };
       }
       protocol kernel {
+        kernel table 10;
         ipv6 {
           table local6;
           export filter {
@@ -613,6 +624,13 @@ in
             User = "tayga";
           };
         };
+        "10-external" = {
+          netdevConfig = {
+            Kind = "vrf";
+            Name = "external";
+          };
+          vrfConfig.Table = 10;
+        };
       };
       networks = {
         "10-enp2s0f2" = {
@@ -627,12 +645,37 @@ in
           linkConfig.ARP = true;
           name = "guest";
           networkConfig.IPv6AcceptRA = true;
+          vrf = [ "external" ];
         };
         "10-internet" = {
           DHCP = "yes";
           linkConfig.ARP = true;
           name = "internet";
           networkConfig.IPv6AcceptRA = true;
+          vrf = [ "external" ];
+        };
+        "40-lo" = {
+          routes = [
+            {
+              Destination =
+                "${config.services.ip-mesh.self-loopback-v4-address}/32";
+              Table = 10;
+              Type = "local";
+            }
+            {
+              Destination =
+                "${config.services.ip-mesh.self-loopback-v6-address}/128";
+              Table = 10;
+              Type = "local";
+            }
+          ];
+          routingPolicyRules = [
+            {
+              Family = "both";
+              Priority = 2000;
+              Table = "local";
+            }
+          ];
         };
         "10-mpls" = {
           address = [ "fe80::5/64" ];
@@ -651,6 +694,7 @@ in
           linkConfig.ARP = true;
           name = "shadow-lan";
           networkConfig.IPv6AcceptRA = true;
+          vrf = [ "external" ];
         };
         "10-tayga" = {
           address = [ "192.0.0.1/30" "fd64::/64" ];
@@ -660,6 +704,17 @@ in
               Destination = "0.0.0.0/0";
               Metric = 2048;
               MTUBytes = 1480;
+            }
+          ];
+        };
+        "10-external" = {
+          name = "external";
+          routes = [
+            {
+              Destination = "0.0.0.0/0";
+            }
+            {
+              Destination = "::/0";
             }
           ];
         };
