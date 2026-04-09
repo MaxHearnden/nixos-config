@@ -9,7 +9,7 @@
       url = "git+https://gitea.workstation.zandoodle.me.uk/zandoodle/nixos-kexec";
     };
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11-small";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     plover-flake = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:opensteno/plover-flake";
