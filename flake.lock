@@ -25,11 +25,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1775703388,
-        "narHash": "sha256-q2OBj67rcfKFSuUB1OApJdseF75T7cOpUjPJkZCYN7M=",
+        "lastModified": 1775752089,
+        "narHash": "sha256-+psXqZ1SvQw7L8HgCQINmob9zLnvK433b2k080lBPH0=",
         "owner": "Infinidoge",
         "repo": "nix-minecraft",
-        "rev": "fffe21e97a9cb0a1ebcf1baa17a423d2517bb1f7",
+        "rev": "1beacd3bdadabfac884dedd56176966c141214d8",
         "type": "github"
       },
       "original": {
@@ -60,16 +60,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1775610697,
-        "narHash": "sha256-fw3+p16ZokENxpWPCLR7ngHUPz5lPvZZzKpQUwRgiXE=",
+        "lastModified": 1775595990,
+        "narHash": "sha256-OEf7YqhF9IjJFYZJyuhAypgU+VsRB5lD4DuiMws5Ltc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "4f9024bce4025dc9a16d9fb27dd258d6cdf52862",
+        "rev": "4e92bbcdb030f3b4782be4751dc08e6b6cb6ccf2",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-25.11-small",
+        "ref": "nixos-25.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -93,11 +93,11 @@
     "plover": {
       "flake": false,
       "locked": {
-        "lastModified": 1774841439,
-        "narHash": "sha256-QF/tf4OD7lwD/BD5s1tSJytlqttoA5bgwK8HKrZoj6U=",
+        "lastModified": 1775711817,
+        "narHash": "sha256-fczGe+PH59HvIfCjlV+F0ATWEK9FQqNoqMqf4WN/uw0=",
         "owner": "openstenoproject",
         "repo": "plover",
-        "rev": "126e37725b8f1a91c63e515315d1388c5ee0e2d4",
+        "rev": "0630b4d7fce5540aa3c8fd2e08e14b1124747c35",
         "type": "github"
       },
       "original": {
@@ -118,11 +118,11 @@
         "rtf-tokenize": "rtf-tokenize"
       },
       "locked": {
-        "lastModified": 1775539385,
-        "narHash": "sha256-vIBU1Q2BcJWvz0fMb6+PCdW2sCB1KhFP92XYUw6BgJk=",
+        "lastModified": 1775712334,
+        "narHash": "sha256-kIeo+o8tO6ru2AWW8H0PmzfWyeW/CkXwbugfvJuNvKQ=",
         "owner": "opensteno",
         "repo": "plover-flake",
-        "rev": "ea4aac1e1032ffeef7e5d8d4ff972baa9211913a",
+        "rev": "a21abbd58b8a056f80909d28f0d6fccbbf999b0c",
         "type": "github"
       },
       "original": {
