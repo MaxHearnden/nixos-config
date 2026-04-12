@@ -100,7 +100,7 @@ in
       interfaces = {
         external.allowedTCPPorts = [ 179 ];
         external-local = {
-          allowedTCPPorts = [ 9943 9944 ];
+          allowedTCPPorts = [ 179 9943 9944 ];
           allowedUDPPorts = [ 9943 9944 ];
         };
         mpls.allowedTCPPorts = [ 179 ];
@@ -242,11 +242,9 @@ in
         neighbor fe80::1;
         interface "external-local";
         ipv4 {
-          preference 90;
           table local4;
         };
         ipv6 {
-          preference 90;
           table local6;
         };
       }
@@ -303,11 +301,11 @@ in
       }
       protocol direct {
         ipv4 {
-          table local4;
+          table external4;
         };
         ipv6 {
           import where net.len != 128;
-          table local6;
+          table external6;
         };
         interface "internet", "guest", "shadow-lan";
       }
