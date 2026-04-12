@@ -93,6 +93,9 @@ in
         iiftype ipip6 oifname {external-local, internet, guest, "shadow-lan"} accept
         meta sdifname "external-vrf" oifname {internet, guest, "shadow-lan"} accept
       '';
+      extraReversePathFilterRules = ''
+        iifname external meta nfproto ipv6 accept
+      '';
       filterForward = true;
       interfaces = {
         external.allowedTCPPorts = [ 179 ];
@@ -146,12 +149,12 @@ in
         content = ''
           chain zoning-prerouting {
             type filter hook prerouting priority raw; policy accept;
-            ct zone set meta iifname map {guest: 1, internet: 1, "shadow-lan": 1, "external-vrf": 1}
+            ct zone set meta iifname map {guest: 1, internet: 1, "shadow-lan": 1, external: 1, "external-vrf": 1}
           }
 
           chain zoning-output {
             type filter hook output priority raw; policy accept;
-            ct zone set meta oifname map {guest: 1, internet: 1, "shadow-lan": 1, "external-vrf": 1}
+            ct zone set meta oifname map {guest: 1, internet: 1, "shadow-lan": 1, external: 1, "external-vrf": 1}
           }
         '';
       };
@@ -179,14 +182,14 @@ in
         ipv4 {
           export all;
           extended next hop on;
-          import all;
+          import filter complex_in;
           import table on;
           require extended next hop on;
           table local4;
         };
         ipv6 {
           export all;
-          import all;
+          import filter complex_in;
           import table on;
           table local6;
         };
