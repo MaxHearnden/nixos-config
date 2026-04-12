@@ -12,6 +12,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     plover-flake = {
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
       url = "github:opensteno/plover-flake";
     };
     vscode-extensions = {
