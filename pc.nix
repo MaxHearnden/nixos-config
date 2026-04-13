@@ -263,19 +263,16 @@ in
       }
       protocol bgp orion_internet from orion_untrusted {
         neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
-        ipv4 {preference 90;};
-        ipv6 {preference 90;};
+        default bgp_local_pref 90;
       }
       protocol bgp orion_shadow from orion_untrusted {
         neighbor fe80::7006:83ff:feff:5d0b as 65001;
         interface "shadow-lan";
-        ipv4 {preference 80;};
-        ipv6 {preference 80;};
+        default bgp_local_pref 80;
       }
       protocol bgp orion_guest from orion_untrusted {
         neighbor fe80::7006:83ff:feff:5d0c%guest as 65001;
-        ipv4 {preference 70;};
-        ipv6 {preference 70;};
+        default bgp_local_pref 70;
       }
       protocol bgp orion_mpls from bgp_mpls {
         local fe80::5;
