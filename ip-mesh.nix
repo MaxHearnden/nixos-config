@@ -232,11 +232,6 @@ in
       };
       routinator = {
         enable = true;
-        package =
-          pkgs.routinator.overrideAttrs (
-            { patches ? [], ... }: {
-              patches = patches ++ [ ./routinator.patch ];
-            });
         settings = {
           enable-aspa = true;
           extra-tals-dir = ./tals;
@@ -300,6 +295,7 @@ in
           };
         };
       };
+      services.routinator.serviceConfig.NonBlocking = true;
       sockets = {
         routinator = {
           listenStreams = [ "[::]:323" ];
