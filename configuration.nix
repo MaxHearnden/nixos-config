@@ -971,6 +971,7 @@
           texliveFull
           thunderbird
           tpm2-tools
+          tpm2-tss.man
           typst
           ungoogled-chromium
           usbutils
