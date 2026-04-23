@@ -966,6 +966,7 @@
           slang
           slirp4netns
           sshfs
+          swtpm
           tea
           teams-for-linux
           texliveFull
