@@ -463,7 +463,7 @@
           role = "customer";
         };
         laptop = {
-          address = "fd7a:115c:a1e0::d601:c60";
+          address = "fd7a:115c:a1e0::d601:c604";
           asn = 65004;
           tunnel-address = "fe80::4";
           loopback-v4-address = "192.168.11.4";
