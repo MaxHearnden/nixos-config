@@ -119,11 +119,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1777010002,
-        "narHash": "sha256-vJqto1vdQ7RNQRiDHTM3u3h7yZOlDvKddIRZHgi3aUI=",
+        "lastModified": 1777094690,
+        "narHash": "sha256-5mwcMqK0NC2As20xyCg3ksj7RQV5IM6CYVS6xCYk0d8=",
         "owner": "opensteno",
         "repo": "plover-flake",
-        "rev": "cb22fb093ad5f2a7207c877f3f4884c8f4954aec",
+        "rev": "41054b36b016c12fd9c740d44490de98fdb4faa9",
         "type": "github"
       },
       "original": {
