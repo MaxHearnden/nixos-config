@@ -24,7 +24,4 @@
     logind.settings.Login.HandleLidSwitch = "ignore";
     xserver.videoDrivers = [ "nvidia" ];
   };
-  time = {
-    hardwareClockInLocalTime = true;
-  };
 }
