@@ -161,6 +161,14 @@ in
     };
     useNetworkd = true;
   };
+  nix.sshServe = {
+    enable = true;
+    trusted = true;
+    keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMOOXDYG4WHUe1VqYHwYC9VVrdErJ2XpPYt/x8k7QM38 root@max-nixos-workstation"
+    ];
+    protocol = "ssh-ng";
+  };
   security = {
     tpm2 = {
       enable = true;
