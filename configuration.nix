@@ -313,6 +313,10 @@
             .virtfs_metadata
           '';
         };
+        pull = {
+          rebase = true;
+          autostash = true;
+        };
         user = {
           email = "maxoscarhearnden@gmail.com";
           name = "MaxHearnden";
