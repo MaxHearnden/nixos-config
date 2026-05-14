@@ -1340,8 +1340,7 @@ in
 
           if config_all="$(nix build \
             git+file:///run/nixos-upgrade-all/nixos-config#systems-with-zone \
-            --no-link --print-out-paths --refresh --no-write-lock-file \
-            --option store daemon)"; then
+            --no-link --print-out-paths --refresh --no-write-lock-file)"; then
             git checkout main
             git merge --ff update
             git -c \
@@ -1352,8 +1351,7 @@ in
             git checkout main
             config_all="$(nix build \
               git+file:///run/nixos-upgrade-all/nixos-config#systems-with-zone \
-              --no-link --print-out-paths --refresh --no-write-lock-file \
-              --option store daemon)"
+              --no-link --print-out-paths --refresh --no-write-lock-file)"
             update_failed=yes
             echo "Failed to update lock file" >&2
           fi

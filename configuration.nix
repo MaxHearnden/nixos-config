@@ -197,7 +197,6 @@
       ];
       flake-registry = null;
       store = "daemon";
-      use-cgroups = true;
     };
   };
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) ([
@@ -738,7 +737,7 @@
           DeviceAllow = "/dev/kvm";
           ExecStart = [
             ""
-            "@${lib.getExe' config.nix.package "nix-daemon"} nix-daemon --daemon --option store local"
+            "@${lib.getExe' config.nix.package "nix-daemon"} nix-daemon --daemon --store local --use-cgroups"
           ];
           NoNewPrivileges = true;
           PrivateDevices = true;
