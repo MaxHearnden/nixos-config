@@ -128,7 +128,23 @@ in
       options = [ "nofail" "defaults" "compress=zstd" "nosuid" "nodev" "noatime" ];
     };
   };
-  nix.settings.keep-outputs = true;
+  nix = {
+    buildMachines = [
+      {
+        hostName = "pc.int.zandoodle.me.uk";
+        maxJobs = 8;
+        protocol = "ssh-ng";
+        sshUser = "nix-ssh";
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+        systems = [
+          "x86_64-linux" "armv7l-linux" "aarch64-linux" "mips-linux"
+          "mipsel-linux" "mips64-linux" "mips64el-linux" "riscv32-linux"
+          "riscv64-linux" "i686-linux"
+        ];
+      }
+    ];
+    settings.keep-outputs = true;
+  };
   networking = {
     firewall = {
       filterForward = true;
