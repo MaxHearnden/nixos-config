@@ -1,14 +1,26 @@
 diff --git a/src/libstore/build/derivation-building-goal.cc b/src/libstore/build/derivation-building-goal.cc
-index 60ca5492c..7f90406ff 100644
+index 60ca5492c..8b02973d8 100644
 --- a/src/libstore/build/derivation-building-goal.cc
 +++ b/src/libstore/build/derivation-building-goal.cc
-@@ -365,8 +365,11 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -266,6 +266,8 @@ static BuildError reject(const LocalBuildRejection & rejection, std::string_view
+ 
+ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+ {
++    auto strBuildMode = buildMode == bmNormal ? "bmNormal" : buildMode == bmLocal ? "bmLocal" : "other";
++    debug("Building with build mode %s", strBuildMode);
+     auto drvOptions = [&] {
+         DerivationOptions<SingleDerivedPath> temp;
+         try {
+@@ -365,8 +367,14 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
          return LocalBuildCapability{*localStoreP, ext};
      }();
  
 -    auto acquireResources = [&](bool & done, PathLocks & outputLocks) -> Goal::Co {
 -        trace("trying to build");
 +    auto acquireResources = [&](bool & done, bool remote, PathLocks & outputLocks) -> Goal::Co {
++        // Enable split locks if build hooks are used for all applicable builds
++        if (!worker.settings.avoidLocal)
++            remote = false;
 +        if (remote)
 +            trace("trying to build remotely");
 +        else
@@ -16,7 +28,7 @@ index 60ca5492c..7f90406ff 100644
  
          /**
           * Output paths to acquire locks on, if known a priori.
-@@ -382,17 +385,20 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -382,17 +390,20 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
          if (auto * localStore = dynamic_cast<LocalStore *>(&worker.store)) {
              /* If we aren't a local store, we might need to use the local store as
                 a build remote, but that would cause a deadlock. */
@@ -42,7 +54,7 @@ index 60ca5492c..7f90406ff 100644
                      lockFiles.insert(std::move(lockPath));
                  }
              }
-@@ -448,7 +454,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -448,7 +459,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
      auto tryHookLoop = [&](bool & valid) -> Goal::Co {
          {
              PathLocks outputLocks;
@@ -51,7 +63,7 @@ index 60ca5492c..7f90406ff 100644
              if (valid)
                  co_return doneSuccess(BuildResult::Success::AlreadyValid, checkPathValidity(initialOutputs).second);
  
-@@ -481,7 +487,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -481,7 +492,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
  
              while (true) {
                  co_await waitForAWhile();
@@ -60,7 +72,7 @@ index 60ca5492c..7f90406ff 100644
                  if (valid)
                      break;
  
-@@ -515,7 +521,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -515,7 +526,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
      auto tryBuildLocally = [&](bool & valid) -> Goal::Co {
          if (auto * cap = std::get_if<LocalBuildCapability>(&localBuildResult)) {
              PathLocks outputLocks;
@@ -69,7 +81,7 @@ index 60ca5492c..7f90406ff 100644
              if (valid)
                  co_return doneSuccess(BuildResult::Success::AlreadyValid, checkPathValidity(initialOutputs).second);
  
-@@ -1124,8 +1130,10 @@ HookReply DerivationBuildingGoal::tryBuildHook(const DerivationOptions<StorePath
+@@ -1124,8 +1135,10 @@ HookReply DerivationBuildingGoal::tryBuildHook(const DerivationOptions<StorePath
  
      try {
  
@@ -227,15 +239,53 @@ index 49ab4c36b..4b14dab07 100644
          assert(false);
      };
 diff --git a/src/nix/build-remote/build-remote.cc b/src/nix/build-remote/build-remote.cc
-index d46f3011a..45da1440a 100644
+index d46f3011a..88f85cb7e 100644
 --- a/src/nix/build-remote/build-remote.cc
 +++ b/src/nix/build-remote/build-remote.cc
-@@ -340,7 +340,7 @@ static int main_build_remote(int argc, char ** argv)
+@@ -94,6 +94,10 @@ static int main_build_remote(int argc, char ** argv)
+         std::shared_ptr<Store> sshStore;
+         AutoCloseFD bestSlotLock;
+ 
++        // Whether to force local building on the target store bypassing build
++        // hooks
++        bool forceLocal = false;
++
+         auto machines = Machine::parseConfig({settings.thisSystem}, settings.getWorkerSettings().builders);
+         debug("got %d remote builders", machines.size());
+ 
+@@ -236,6 +240,8 @@ static int main_build_remote(int argc, char ** argv)
+ 
+                     sshStore = bestMachine->openStore();
+                     sshStore->connect();
++
++                    forceLocal = bestMachine->forceLocal;
+                 } catch (std::exception & e) {
+                     auto msg = chomp(drainFD(5, {.block = false}));
+                     printError("cannot build on '%s': %s%s", storeUri, e.what(), msg.empty() ? "" : ": " + msg);
+@@ -305,6 +311,8 @@ static int main_build_remote(int argc, char ** argv)
+             !trusted || *trusted;
+         });
+ 
++        auto buildMode = forceLocal ? bmLocal : bmNormal;
++
+         // See the very large comment in `case WorkerProto::Op::BuildDerivation:` in
+         // `src/libstore/daemon.cc` that explains the trust model here.
+         //
+@@ -322,7 +330,7 @@ static int main_build_remote(int argc, char ** argv)
+             //    output ids, which break CA derivations
+             if (!drv.inputDrvs.map.empty())
+                 drv.inputSrcs = store->parseStorePathSet(inputs);
+-            optResult = sshStore->buildDerivation(*drvPath, static_cast<const BasicDerivation &>(drv));
++            optResult = sshStore->buildDerivation(*drvPath, static_cast<const BasicDerivation &>(drv), buildMode);
+             auto & result = *optResult;
+             if (auto * failureP = result.tryGetFailure()) {
+                 if (settings.keepFailed) {
+@@ -340,7 +348,7 @@ static int main_build_remote(int argc, char ** argv)
              auto res = sshStore->buildPathsWithResults({DerivedPath::Built{
                  .drvPath = makeConstantStorePathRef(*drvPath),
                  .outputs = OutputsSpec::All{},
 -            }});
-+            }}, bmLocal);
++            }}, buildMode);
              // One path to build should produce exactly one build result
              assert(res.size() == 1);
              optResult = std::move(res[0]);
