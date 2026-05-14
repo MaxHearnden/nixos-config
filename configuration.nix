@@ -33,7 +33,10 @@
     kernelPatches = [
       {
         name = "krb5-aes-sha2";
-        structuredExtraConfig.RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2 = lib.kernel.yes;
+        structuredExtraConfig = {
+          RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2 = lib.kernel.yes;
+          RPCSEC_GSS_KRB5_ENCTYPES_CAMELLIA = lib.kernel.yes;
+        };
         patch = null;
       }
     ];
