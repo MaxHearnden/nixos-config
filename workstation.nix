@@ -1309,6 +1309,7 @@ in
           RuntimeDirectoryMode = "0700";
           StateDirectory = "nixos-upgrade-all";
           StateDirectoryMode = "0755";
+          Type = "oneshot";
         };
         path = with pkgs; [
           coreutils
