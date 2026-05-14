@@ -143,6 +143,7 @@ in
         ];
       }
     ];
+    distributedBuilds = true;
     settings.keep-outputs = true;
   };
   networking = {
