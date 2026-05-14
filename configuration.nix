@@ -182,6 +182,9 @@
       persistent = true;
     };
     nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
+    package =
+      (inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixVersions.nixComponents_2_34.appendPatches
+        [ ./nix-lock.patch ]).nix-everything;
     registry = lib.mapAttrs (_: flake: {
       inherit flake;
     }) inputs;

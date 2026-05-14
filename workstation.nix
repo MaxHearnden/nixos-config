@@ -142,9 +142,24 @@ in
           "riscv64-linux" "i686-linux"
         ];
       }
+      {
+        hostName = "local";
+        protocol = null;
+        maxJobs = 8;
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+        systems = [
+          "x86_64-linux" "armv7l-linux" "aarch64-linux" "mips-linux"
+          "mipsel-linux" "mips64-linux" "mips64el-linux" "riscv32-linux"
+          "riscv64-linux" "i686-linux"
+        ];
+        publicHostKey = "- true";
+      }
     ];
     distributedBuilds = true;
-    settings.keep-outputs = true;
+    settings = {
+      avoid-local = true;
+      keep-outputs = true;
+    };
   };
   networking = {
     firewall = {
