@@ -158,8 +158,9 @@ in
     ];
     distributedBuilds = true;
     settings = {
-      builders-use-substitutes = true;
+      allowed-users = [ "nix-ssh" ];
       avoid-local = true;
+      builders-use-substitutes = true;
       keep-outputs = true;
     };
     sshServe = {
