@@ -1,17 +1,36 @@
+commit 9d91c10aa68399cde4475769e4377dd2b4e6310a
+Author: MaxHearnden <maxoscarhearnden@gmail.com>
+Date:   Thu May 14 20:54:21 2026 +0100
+
+    Use dedicated lock files for builds which will use build hooks for
+    building
+    
+    This allows the build hook to use the local store.
+    
+    In order for the split locks to be used, derivations must either only
+    use the build hook (avoid-local) or only be built locally
+    (forceLocal/bmLocal).
+
+diff --git a/doc/manual/rl-next/split-locks.md b/doc/manual/rl-next/split-locks.md
+new file mode 100644
+index 000000000..79798c426
+--- /dev/null
++++ b/doc/manual/rl-next/split-locks.md
+@@ -0,0 +1,9 @@
++---
++synopsis: Split locks
++issues: 10740 2589 2029
++prs: 15856
++---
++
++New remote only locks are used when [`avoid-local`]{#conf-avoid-local} is true.
++To further aid recursive setups, a new builder parameter is added which when
++true, disable build hooks (remote builds) on the builder.
 diff --git a/src/libstore/build/derivation-building-goal.cc b/src/libstore/build/derivation-building-goal.cc
-index 60ca5492c..8b02973d8 100644
+index 248ef7507..ccef1d715 100644
 --- a/src/libstore/build/derivation-building-goal.cc
 +++ b/src/libstore/build/derivation-building-goal.cc
-@@ -266,6 +266,8 @@ static BuildError reject(const LocalBuildRejection & rejection, std::string_view
- 
- Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
- {
-+    auto strBuildMode = buildMode == bmNormal ? "bmNormal" : buildMode == bmLocal ? "bmLocal" : "other";
-+    debug("Building with build mode %s", strBuildMode);
-     auto drvOptions = [&] {
-         DerivationOptions<SingleDerivedPath> temp;
-         try {
-@@ -365,8 +367,14 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -430,8 +430,14 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
          return LocalBuildCapability{*localStoreP, ext};
      }();
  
@@ -28,7 +47,7 @@ index 60ca5492c..8b02973d8 100644
  
          /**
           * Output paths to acquire locks on, if known a priori.
-@@ -382,17 +390,20 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -447,17 +453,20 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
          if (auto * localStore = dynamic_cast<LocalStore *>(&worker.store)) {
              /* If we aren't a local store, we might need to use the local store as
                 a build remote, but that would cause a deadlock. */
@@ -54,7 +73,7 @@ index 60ca5492c..8b02973d8 100644
                      lockFiles.insert(std::move(lockPath));
                  }
              }
-@@ -448,7 +459,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -513,7 +522,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
      auto tryHookLoop = [&](bool & valid) -> Goal::Co {
          {
              PathLocks outputLocks;
@@ -63,7 +82,7 @@ index 60ca5492c..8b02973d8 100644
              if (valid)
                  co_return doneSuccess(BuildResult::Success::AlreadyValid, checkPathValidity(initialOutputs).second);
  
-@@ -481,7 +492,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -546,7 +555,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
  
              while (true) {
                  co_await waitForAWhile();
@@ -72,7 +91,7 @@ index 60ca5492c..8b02973d8 100644
                  if (valid)
                      break;
  
-@@ -515,7 +526,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
+@@ -580,7 +589,7 @@ Goal::Co DerivationBuildingGoal::tryToBuild(StorePathSet inputPaths)
      auto tryBuildLocally = [&](bool & valid) -> Goal::Co {
          if (auto * cap = std::get_if<LocalBuildCapability>(&localBuildResult)) {
              PathLocks outputLocks;
@@ -81,32 +100,35 @@ index 60ca5492c..8b02973d8 100644
              if (valid)
                  co_return doneSuccess(BuildResult::Success::AlreadyValid, checkPathValidity(initialOutputs).second);
  
-@@ -1124,8 +1135,10 @@ HookReply DerivationBuildingGoal::tryBuildHook(const DerivationOptions<StorePath
+@@ -1198,9 +1207,11 @@ HookReply DerivationBuildingGoal::tryBuildHook(const DerivationOptions<StorePath
  
      try {
  
-+        auto canBuildLocally = (worker.getNrLocalBuilds() < worker.settings.maxBuildJobs) && !worker.settings.avoidLocal;
++        auto canBuildLocally =
++            (worker.getNrLocalBuilds() < worker.settings.maxBuildJobs) && !worker.settings.avoidLocal;
 +
          /* Send the request to the hook. */
 -        worker.hook->sink << "try" << (worker.getNrLocalBuilds() < worker.settings.maxBuildJobs ? 1 : 0)
-+        worker.hook->sink << "try" << (canBuildLocally ? 1 : 0)
-                           << drv->platform << worker.store.printStorePath(drvPath)
+-                          << drv->platform << worker.store.printStorePath(drvPath)
++        worker.hook->sink << "try" << (canBuildLocally ? 1 : 0) << drv->platform << worker.store.printStorePath(drvPath)
                            << drvOptions.getRequiredSystemFeatures(*drv);
          worker.hook->sink.flush();
+ 
 diff --git a/src/libstore/build/derivation-goal.cc b/src/libstore/build/derivation-goal.cc
-index 4f99928d7..321cbb834 100644
+index fc4c8a5bb..f2f43fafc 100644
 --- a/src/libstore/build/derivation-goal.cc
 +++ b/src/libstore/build/derivation-goal.cc
-@@ -91,7 +91,7 @@ Goal::Co DerivationGoal::haveDerivation(bool storeDerivation)
+@@ -75,7 +75,8 @@ Goal::Co DerivationGoal::haveDerivation(bool storeDerivation)
          auto checkResult = checkPathValidity();
  
          /* If they are all valid, then we're done. */
 -        if (checkResult && checkResult->second == PathStatus::Valid && buildMode == bmNormal) {
-+        if (checkResult && checkResult->second == PathStatus::Valid && (buildMode == bmNormal || buildMode == bmLocal)) {
++        if (checkResult && checkResult->second == PathStatus::Valid
++            && (buildMode == bmNormal || buildMode == bmLocal)) {
              co_return doneSuccess(BuildResult::Success::AlreadyValid, checkResult->first);
          }
  
-@@ -146,7 +146,7 @@ Goal::Co DerivationGoal::haveDerivation(bool storeDerivation)
+@@ -134,7 +135,7 @@ Goal::Co DerivationGoal::haveDerivation(bool storeDerivation)
  
          bool allValid = checkResult && checkResult->second == PathStatus::Valid;
  
@@ -116,7 +138,7 @@ index 4f99928d7..321cbb834 100644
          }
          if (buildMode == bmRepair && allValid) {
 diff --git a/src/libstore/include/nix/store/machines.hh b/src/libstore/include/nix/store/machines.hh
-index 6b3484699..2dffffe9b 100644
+index a3e9353c8..9f446e826 100644
 --- a/src/libstore/include/nix/store/machines.hh
 +++ b/src/libstore/include/nix/store/machines.hh
 @@ -23,6 +23,7 @@ struct Machine
@@ -138,7 +160,7 @@ index 6b3484699..2dffffe9b 100644
      /**
       * Elaborate `storeUri` into a complete store reference,
 diff --git a/src/libstore/include/nix/store/store-api.hh b/src/libstore/include/nix/store/store-api.hh
-index b5a6f6c49..334bd8203 100644
+index b6114cce6..9ed166840 100644
 --- a/src/libstore/include/nix/store/store-api.hh
 +++ b/src/libstore/include/nix/store/store-api.hh
 @@ -50,7 +50,7 @@ enum CheckSigsFlag : bool { NoCheckSigs = false, CheckSigs = true };
@@ -151,29 +173,40 @@ index b5a6f6c49..334bd8203 100644
  enum TrustedFlag : bool { NotTrusted = false, Trusted = true };
  
 diff --git a/src/libstore/include/nix/store/worker-settings.hh b/src/libstore/include/nix/store/worker-settings.hh
-index 13fa0261d..efdda2abf 100644
+index 13fa0261d..997b56e17 100644
 --- a/src/libstore/include/nix/store/worker-settings.hh
 +++ b/src/libstore/include/nix/store/worker-settings.hh
-@@ -270,6 +270,14 @@ public:
+@@ -198,6 +198,8 @@ public:
+ 
+              The value for this field can be obtained via `base64 -w0`.
+ 
++          9. A boolean which if true, forces the build to not use builders on the remote store
++
+           > **Example**
+           >
+           > Multiple builders specified on the command line:
+@@ -270,6 +272,16 @@ public:
            This can drastically reduce build times if the network connection between the local machine and the remote build host is slow.
          )"};
  
-+    Setting<bool> avoidLocal {
++    Setting<bool> avoidLocal{
 +        this,
 +        false,
 +        "avoid-local",
 +        R"(
 +          If set to `true`, Nix will not build derivations locally which can be built by the [`builders`]{#conf-builders}. This does not include derivations with preferLocalBuild set for which [`max-jobs`]{#conf-max-jobs} still applies.
++
++          This enables remote only locks which are not used by local builds
 +        )"};
 +
      Setting<bool> useSubstitutes{
          this,
          true,
 diff --git a/src/libstore/machines.cc b/src/libstore/machines.cc
-index 3b11ec902..590230a4a 100644
+index 17864ca5a..e3ee41d07 100644
 --- a/src/libstore/machines.cc
 +++ b/src/libstore/machines.cc
-@@ -15,7 +15,8 @@ Machine::Machine(
+@@ -14,7 +14,8 @@ Machine::Machine(
      decltype(speedFactor) speedFactor,
      decltype(supportedFeatures) supportedFeatures,
      decltype(mandatoryFeatures) mandatoryFeatures,
@@ -183,7 +216,7 @@ index 3b11ec902..590230a4a 100644
      : storeUri(
            StoreReference::parse(
                // Backwards compatibility: if the URI is schemeless, is not a path,
-@@ -33,6 +34,7 @@ Machine::Machine(
+@@ -32,6 +33,7 @@ Machine::Machine(
      , supportedFeatures(supportedFeatures)
      , mandatoryFeatures(mandatoryFeatures)
      , sshPublicHostKey(sshPublicHostKey)
@@ -191,7 +224,7 @@ index 3b11ec902..590230a4a 100644
  {
      if (speedFactor < 0.0)
          throw UsageError("speed factor must be >= 0");
-@@ -189,7 +191,9 @@ static Machine parseBuilderLine(const StringSet & defaultSystems, const std::str
+@@ -188,7 +190,9 @@ static Machine parseBuilderLine(const StringSet & defaultSystems, const std::str
          // `mandatoryFeatures`
          isSet(6) ? tokenizeString<StringSet>(tokens[6], ",") : StringSet{},
          // `sshPublicHostKey`
@@ -203,10 +236,10 @@ index 3b11ec902..590230a4a 100644
  
  static Machines parseBuilderLines(const StringSet & defaultSystems, const std::vector<std::string> & builders)
 diff --git a/src/libstore/unix/build/chroot-derivation-builder.cc b/src/libstore/unix/build/chroot-derivation-builder.cc
-index eb95c3aeb..2e5808902 100644
+index 157d9e319..a384fc81a 100644
 --- a/src/libstore/unix/build/chroot-derivation-builder.cc
 +++ b/src/libstore/unix/build/chroot-derivation-builder.cc
-@@ -160,7 +160,7 @@ struct ChrootDerivationBuilder : virtual DerivationBuilderImpl
+@@ -114,7 +114,7 @@ struct ChrootDerivationBuilder : virtual DerivationBuilderImpl
  
          /* Move paths out of the chroot for easier debugging of
             build failures. */
@@ -216,10 +249,10 @@ index eb95c3aeb..2e5808902 100644
                  if (!status.known)
                      continue;
 diff --git a/src/libstore/worker-protocol.cc b/src/libstore/worker-protocol.cc
-index 49ab4c36b..4b14dab07 100644
+index 37aa4e31b..32aaeb1bb 100644
 --- a/src/libstore/worker-protocol.cc
 +++ b/src/libstore/worker-protocol.cc
-@@ -57,6 +57,8 @@ BuildMode WorkerProto::Serialise<BuildMode>::read(const StoreDirConfig & store,
+@@ -67,6 +67,8 @@ BuildMode WorkerProto::Serialise<BuildMode>::read(const StoreDirConfig & store,
          return bmRepair;
      case 2:
          return bmCheck;
@@ -228,7 +261,7 @@ index 49ab4c36b..4b14dab07 100644
      default:
          throw Error("Invalid build mode");
      }
-@@ -75,6 +77,9 @@ void WorkerProto::Serialise<BuildMode>::write(
+@@ -85,6 +87,9 @@ void WorkerProto::Serialise<BuildMode>::write(
      case bmCheck:
          conn.to << uint8_t{2};
          break;
@@ -239,10 +272,10 @@ index 49ab4c36b..4b14dab07 100644
          assert(false);
      };
 diff --git a/src/nix/build-remote/build-remote.cc b/src/nix/build-remote/build-remote.cc
-index d46f3011a..88f85cb7e 100644
+index e5ebf948d..d5589aa1c 100644
 --- a/src/nix/build-remote/build-remote.cc
 +++ b/src/nix/build-remote/build-remote.cc
-@@ -94,6 +94,10 @@ static int main_build_remote(int argc, char ** argv)
+@@ -110,6 +110,10 @@ static int main_build_remote(int argc, char ** argv)
          std::shared_ptr<Store> sshStore;
          AutoCloseFD bestSlotLock;
  
@@ -253,7 +286,7 @@ index d46f3011a..88f85cb7e 100644
          auto machines = Machine::parseConfig({settings.thisSystem}, settings.getWorkerSettings().builders);
          debug("got %d remote builders", machines.size());
  
-@@ -236,6 +240,8 @@ static int main_build_remote(int argc, char ** argv)
+@@ -252,6 +256,8 @@ static int main_build_remote(int argc, char ** argv)
  
                      sshStore = bestMachine->openStore();
                      sshStore->connect();
@@ -262,7 +295,7 @@ index d46f3011a..88f85cb7e 100644
                  } catch (std::exception & e) {
                      auto msg = chomp(drainFD(5, {.block = false}));
                      printError("cannot build on '%s': %s%s", storeUri, e.what(), msg.empty() ? "" : ": " + msg);
-@@ -305,6 +311,8 @@ static int main_build_remote(int argc, char ** argv)
+@@ -321,6 +327,8 @@ static int main_build_remote(int argc, char ** argv)
              !trusted || *trusted;
          });
  
@@ -271,7 +304,7 @@ index d46f3011a..88f85cb7e 100644
          // See the very large comment in `case WorkerProto::Op::BuildDerivation:` in
          // `src/libstore/daemon.cc` that explains the trust model here.
          //
-@@ -322,7 +330,7 @@ static int main_build_remote(int argc, char ** argv)
+@@ -338,7 +346,7 @@ static int main_build_remote(int argc, char ** argv)
              //    output ids, which break CA derivations
              if (!drv.inputDrvs.map.empty())
                  drv.inputSrcs = store->parseStorePathSet(inputs);
@@ -280,12 +313,34 @@ index d46f3011a..88f85cb7e 100644
              auto & result = *optResult;
              if (auto * failureP = result.tryGetFailure()) {
                  if (settings.keepFailed) {
-@@ -340,7 +348,7 @@ static int main_build_remote(int argc, char ** argv)
-             auto res = sshStore->buildPathsWithResults({DerivedPath::Built{
-                 .drvPath = makeConstantStorePathRef(*drvPath),
-                 .outputs = OutputsSpec::All{},
+@@ -353,10 +361,12 @@ static int main_build_remote(int argc, char ** argv)
+             }
+         } else {
+             copyClosure(*store, *sshStore, StorePathSet{*drvPath}, NoRepair, NoCheckSigs, substitute);
+-            auto res = sshStore->buildPathsWithResults({DerivedPath::Built{
+-                .drvPath = makeConstantStorePathRef(*drvPath),
+-                .outputs = OutputsSpec::All{},
 -            }});
-+            }}, buildMode);
++            auto res = sshStore->buildPathsWithResults(
++                {DerivedPath::Built{
++                    .drvPath = makeConstantStorePathRef(*drvPath),
++                    .outputs = OutputsSpec::All{},
++                }},
++                buildMode);
              // One path to build should produce exactly one build result
              assert(res.size() == 1);
              optResult = std::move(res[0]);
+@@ -392,9 +402,10 @@ static int main_build_remote(int argc, char ** argv)
+ 
+         if (!missingPaths.empty()) {
+             Activity act(*logger, lvlTalkative, actUnknown, fmt("copying outputs from '%s'", storeUri));
+-            if (auto localStore = store.dynamic_pointer_cast<LocalStore>())
+-                for (auto & path : missingPaths)
+-                    localStore->locksHeld.insert(store->printStorePath(path)); /* FIXME: ugly */
++            if (!settings.getWorkerSettings().avoidLocal)
++                if (auto localStore = store.dynamic_pointer_cast<LocalStore>())
++                    for (auto & path : missingPaths)
++                        localStore->locksHeld.insert(store->printStorePath(path)); /* FIXME: ugly */
+             copyPaths(*sshStore, *store, missingPaths, NoRepair, NoCheckSigs, NoSubstitute);
+         }
+         // XXX: Should be done as part of `copyPaths`
