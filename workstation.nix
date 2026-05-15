@@ -162,6 +162,14 @@ in
       avoid-local = true;
       keep-outputs = true;
     };
+    sshServe = {
+      enable = true;
+      keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0xIHDrOgIr59CL8yepsWZcfSZRnTXG+3+51m1Srp2x root@max-nixos-pc"
+      ];
+      protocol = "ssh-ng";
+      write = true;
+    };
   };
   networking = {
     firewall = {
