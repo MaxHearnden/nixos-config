@@ -157,6 +157,7 @@ in
     ];
     distributedBuilds = true;
     settings = {
+      builders-use-substitutes = true;
       avoid-local = true;
       keep-outputs = true;
     };
