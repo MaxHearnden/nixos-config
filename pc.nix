@@ -161,13 +161,34 @@ in
     };
     useNetworkd = true;
   };
-  nix.sshServe = {
-    enable = true;
-    trusted = true;
-    keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMOOXDYG4WHUe1VqYHwYC9VVrdErJ2XpPYt/x8k7QM38 root@max-nixos-workstation"
+  nix = {
+    buildMachines = [
+      {
+        hostName = "workstation.zandoodle.me.uk";
+        maxJobs = 16;
+        protocol = "ssh-ng";
+        sshUser = "nix-ssh";
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+        systems = [
+          "x86_64-linux" "armv7l-linux" "aarch64-linux" "mips-linux"
+          "mipsel-linux" "mips64-linux" "mips64el-linux" "riscv32-linux"
+          "riscv64-linux" "i686-linux"
+        ];
+      }
     ];
-    protocol = "ssh-ng";
+    distributedBuilds = true;
+    settings = {
+      avoid-local = true;
+      builders-use-substitutes = true;
+    };
+    sshServe = {
+      enable = true;
+      trusted = true;
+      keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMOOXDYG4WHUe1VqYHwYC9VVrdErJ2XpPYt/x8k7QM38 root@max-nixos-workstation"
+      ];
+      protocol = "ssh-ng";
+    };
   };
   security = {
     tpm2 = {
