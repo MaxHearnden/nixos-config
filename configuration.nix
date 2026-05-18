@@ -975,6 +975,7 @@
           slang
           slirp4netns
           sshfs
+          superTuxKart
           swtpm
           tea
           teams-for-linux
