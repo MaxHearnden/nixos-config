@@ -49,7 +49,7 @@
         extraEntries."ipxe.conf" = ''
           title iPXE
           efi /efi/ipxe/ipxe.efi
-          sortkey z_ipxe
+          sort-key z_ipxe
         '';
         extraFiles."efi/ipxe/ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
       };
