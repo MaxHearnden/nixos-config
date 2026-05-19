@@ -671,6 +671,7 @@
         restartIfChanged = false;
         confinement = {
           enable = true;
+          packages = [ config.i18n.glibcLocales ];
         };
         serviceConfig = {
           BindPaths = ["/nexus"];
