@@ -45,6 +45,14 @@
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot";
       };
+      systemd-boot = {
+        extraEntries."ipxe.conf" = ''
+          title iPXE
+          efi /efi/ipxe/ipxe.efi
+          sortkey z_ipxe
+        '';
+        extraFiles."efi/ipxe/ipxe.efi" = "${pkgs.ipxe}/ipxe.efi";
+      };
     };
   };
   console = {
