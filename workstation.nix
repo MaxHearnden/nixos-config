@@ -1325,6 +1325,7 @@ in
         after = [ "network-online.target" "gitea.service" ];
         description = "NixOS upgrade all";
         onFailure = [
+          "nixos-upgrade-all-fallback.service"
           "knot-reload.target"
         ];
         onSuccess = [
@@ -1360,33 +1361,23 @@ in
 
           cd nixos-config
 
-          git checkout -b update
-
           nix flake update --commit-lock-file
 
-          if config_all="$(nix build \
+          config_all=$(nix build \
             git+file:///run/nixos-upgrade-all/nixos-config#systems-with-zone \
-            --no-link --print-out-paths --no-write-lock-file)"; then
-            git checkout main
-            git merge --ff update
-            git -c \
-              "core.sshCommand=ssh -i /var/lib/nixos-upgrade-all/id_ed25519" \
-              push
-            update_failed=no
-          else
-            git checkout main
-            config_all="$(nix build \
-              git+file:///run/nixos-upgrade-all/nixos-config#systems-with-zone \
-              --no-link --print-out-paths --no-write-lock-file)"
-            update_failed=yes
-            echo "Failed to update lock file" >&2
-          fi
+            -o /run/nixos-upgrade-all/all --print-out-paths)
 
-          nix-env -p /nix/var/nix/profiles/all --set "''${config_all}"
+          git -c \
+            "core.sshCommand=ssh -i /var/lib/nixos-upgrade-all/id_ed25519" \
+            push
 
-          config="$(readlink -e \
-            "''${config_all}/systems/${config.networking.hostName}")"
-          nix-env -p /nix/var/nix/profiles/system --set "''${config}"
+          nix-env -p /nix/var/nix/profiles/all --set \
+            "$config_all"
+
+          config=$(readlink \
+            /run/nixos-upgrade-all/all/systems/${config.networking.hostName})
+
+          nix-env -p /nix/var/nix/profiles/system --set "$config"
 
           booted=$(readlink /run/booted-system/{kernel,kernel-modules})
           current=$(readlink "''${config}/kernel" "''${config}/kernel-modules")
@@ -1403,16 +1394,80 @@ in
               "''${config}/bin/switch-to-configuration" switch
             fi
           fi
-          if [ "''${update_failed}" = yes ]; then
-            echo "Failed to update lock file" >&2
-            # Temporary failure
-            exit 75
-          fi
         '';
         startAt = "04:15";
         unitConfig = {
           X-StopOnRemoval = false;
         };
+        wants = [ "network-online.target" "gitea.service" ];
+      };
+      nixos-upgrade-all-fallback = {
+        after = [ "network-online.target" "gitea.service" ];
+        description = "NixOS upgrade all falback";
+        onFailure = [
+          "knot-reload.target"
+        ];
+        onSuccess = [
+          "knot-reload.target"
+        ];
+        path = with pkgs; [
+          coreutils
+          gnutar
+          xz.bin
+          gzip
+          gitMinimal
+          config.nix.package.out
+          config.programs.ssh.package
+          systemd
+          kexec-tools
+          inputs.nixos-kexec.packages.x86_64-linux.default
+        ];
+        script = ''
+          cd /run/nixos-upgrade-all-fallback
+
+          git -c \
+            "core.sshCommand=ssh -i /var/lib/nixos-upgrade-all/id_ed25519" \
+            clone --single-branch -b main \
+            gitea@workstation.zandoodle.me.uk:zandoodle/nixos-config
+
+          cd nixos-config
+
+          config_all=$(nix build \
+            git+file:///run/nixos-upgrade-all-fallback/nixos-config#systems-with-zone \
+            -o /run/nixos-upgrade-all-fallback/all --print-out-paths)
+
+          nix-env -p /nix/var/nix/profiles/all --set \
+            "$config_all"
+
+          config=$(readlink \
+            /run/nixos-upgrade-all-fallback/all/systems/${config.networking.hostName})
+
+          nix-env -p /nix/var/nix/profiles/system --set "$config"
+
+          booted=$(readlink /run/booted-system/{kernel,kernel-modules})
+          current=$(readlink "''${config}/kernel" "''${config}/kernel-modules")
+          if [ "''${booted}" != "''${current}" ]
+          then
+            "''${config}/bin/switch-to-configuration" boot
+            nixos-kexec --when "1 hour left"
+          else
+            if [ "$1" = --specialisation ]
+            then
+              "''${config}/bin/switch-to-configuration" boot
+              "''${config}/specialisation/$2/switch-to-configuration" test
+            else
+              "''${config}/bin/switch-to-configuration" switch
+            fi
+          fi
+        '';
+        serviceConfig = {
+          RuntimeDirectory = "nixos-upgrade-all-fallback";
+          RuntimeDirectoryMode = "0700";
+          StateDirectory = "nixos-upgrade-all";
+          StateDirectoryMode = "0755";
+          Type = "oneshot";
+        };
+        unitConfig.X-StopOnRemoval = false;
         wants = [ "network-online.target" "gitea.service" ];
       };
       postgresql = {
