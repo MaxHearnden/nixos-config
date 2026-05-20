@@ -168,6 +168,7 @@ in
       keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII0xIHDrOgIr59CL8yepsWZcfSZRnTXG+3+51m1Srp2x root@max-nixos-pc"
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAFTPrrGG61+3umPd113Zu6Q416MEmLEDNvrCEDCygRT root@max-nixos-chromebooksd2"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDn6lhNP9OlgAhlnddXXigUrN5FRcq/PFBYlPqQxGeRi root@max-nixos-laptop"
       ];
       protocol = "ssh-ng";
       write = true;
