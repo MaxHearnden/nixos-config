@@ -684,8 +684,7 @@ in
         enable = true;
         exports = ''
           /Big/shared -mp=/Big,sec=krb5p,rw *
-          /Big/shared/riscv/star64_root 192.168.3.0/24(rw,no_root_squash,mp=/Big)
-          /nix 192.168.3.0/24(ro,no_root_squash)
+          /nix 192.168.3.0/24(ro,all_squash,subtree_check)
         '';
       };
     };
