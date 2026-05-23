@@ -485,7 +485,10 @@ in
         dhcp-rapid-commit = true;
         domain = "workstation.home.arpa";
         interface = [ "enp2s0" ];
-        interface-name = [ "workstation.home.arpa,enp2s0" ];
+        interface-name = [
+          "workstation.home.arpa,enp2s0"
+          "nix-store.workstation.home.arpa,enp2s0"
+        ];
         port = "56";
         no-hosts = true;
       };
