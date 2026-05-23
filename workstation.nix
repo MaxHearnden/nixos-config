@@ -687,7 +687,7 @@ in
         enable = true;
         exports = ''
           /Big/shared -mp=/Big,sec=krb5p,rw *
-          /nix 192.168.3.0/24(ro,all_squash,subtree_check)
+          /nix/store -ro,all_squash,subtree_check 192.168.3.0/24 fd27:6be8:399c:1::/64
         '';
       };
     };
