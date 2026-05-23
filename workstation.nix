@@ -186,8 +186,8 @@ in
           allowedUDPPorts = [ 53 54 88 443 464 24454 ];
         };
         enp2s0 = {
-          allowedTCPPorts = [ 53 80 443 ];
-          allowedUDPPorts = [ 53 69 443 ];
+          allowedTCPPorts = [ 53 80 443 2049 ];
+          allowedUDPPorts = [ 53 69 443 4011 ];
         };
       };
       extraForwardRules = ''
