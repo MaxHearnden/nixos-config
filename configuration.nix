@@ -649,13 +649,6 @@
       };
     };
   };
-  specialisation.nox.configuration = {
-    boot = {
-      kernelParams = [
-        "systemd.unit=multi-user.target"
-      ];
-    };
-  };
   system = {
     configurationRevision = inputs.self.rev or "dirty";
     stateVersion = "25.11";
