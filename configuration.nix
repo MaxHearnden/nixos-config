@@ -908,6 +908,7 @@
           dig
           dino
           discord
+          dmidecode
           dnsmasq
           dwarf-fortress
           elinks
