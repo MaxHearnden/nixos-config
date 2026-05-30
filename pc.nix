@@ -616,7 +616,7 @@ in
     ollama = {
       enable = true;
       host = "[::1]";
-      acceleration = "cuda";
+      package = pkgs.ollama-cuda;
     };
     ratbagd = {
       enable = true;

@@ -98,12 +98,6 @@ in
           pc AAAA fd7a:115c:a1e0::d2df:ec69
           $INCLUDE /nix/var/nix/profiles/all/zonefile
         '';
-        "resolv.conf".text = ''
-          nameserver ::1
-          nameserver 127.0.0.1
-          options edns0 trust-ad
-          search int.zandoodle.me.uk zandoodle.me.uk max.home.arpa home.arpa workstation.home.arpa orion.home.arpa
-        '';
         "tayga/tayga.conf".text = ''
           tun-device tayga
           ipv4-addr 192.0.0.2
@@ -511,7 +505,7 @@ in
         };
       };
     };
-    harmonia = {
+    harmonia.cache = {
       enable = true;
       signKeyPaths = ["/etc/nix/storekey"];
       settings = {

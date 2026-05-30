@@ -75,6 +75,12 @@
           max.home.arpa. initial-ds 5629 14 4 "663b18a6e58159ea67190937115450b87c60222a4f8d13395acf3b091cf6155e4be365d636452e9427c7818866be9d65";
         };
       '';
+      "resolv.conf".text = ''
+        nameserver ::1
+        nameserver 127.0.0.1
+        options edns0 trust-ad
+        search int.zandoodle.me.uk zandoodle.me.uk max.home.arpa home.arpa workstation.home.arpa orion.home.arpa
+      '';
       "xdg/neomutt/neomuttrc".text = ''
         source ${pkgs.neomutt}/etc/neomuttrc
         set imap_user = max@zandoodle.me.uk
@@ -282,6 +288,7 @@
         '';
       };
     };
+    resolvconf.enable = false;
   };
   programs = {
     _1password = {
@@ -654,10 +661,6 @@
     stateVersion = "25.11";
   };
   systemd = {
-    additionalUpstreamSystemUnits = [
-      "soft-reboot.target"
-      "systemd-soft-reboot.service"
-    ];
     network.config.networkConfig = {
       ManageForeignRoutingPolicyRules = false;
       ManageForeignRoutes = false;
@@ -933,6 +936,7 @@
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
           inputs.plover-flake.packages.x86_64-linux.plover
+          karere
           keepassxc
           ldns
           ldns.examples
@@ -978,7 +982,7 @@
           slang
           slirp4netns
           sshfs
-          superTuxKart
+          supertuxkart
           swtpm
           tea
           teams-for-linux
@@ -1007,10 +1011,9 @@
               };
             })
           w3m
-          wasistlos
           watchexec
           whois
-          wineWowPackages.full
+          wineWow64Packages.full
           winetricks
           wireshark
           wl-clipboard
@@ -1018,7 +1021,7 @@
             OLLAMA_HOST=https://pc.int.zandoodle.me.uk/ exec ${lib.getExe ollama} "$@"
           '')
           xclip
-          xorg.xhost
+          xhost
           zgrviewer
         ];
         shell = pkgs.fish;
