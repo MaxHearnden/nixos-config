@@ -225,6 +225,7 @@
     "discord"
     "dwarf-fortress"
     "steam"
+    "steamcmd"
     "steam-unwrapped"
   ] ++ lib.optionals (builtins.elem config.networking.hostName [ "max-nixos-pc"
   "max-nixos-laptop"]) [
@@ -982,6 +983,7 @@
           slang
           slirp4netns
           sshfs
+          steamcmd
           supertuxkart
           swtpm
           tea
