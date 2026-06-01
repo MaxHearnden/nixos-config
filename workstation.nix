@@ -509,7 +509,7 @@ in
       enable = true;
       signKeyPaths = ["/etc/nix/storekey"];
       settings = {
-        bind = "[::1]:8080";
+        bind = "unix:///run/harmonia.sock";
         priority = 50;
       };
     };
@@ -1071,49 +1071,9 @@ in
           fi
         '';
       };
-      harmonia = {
-        serviceConfig = {
-          IPAddressAllow = "::1";
-          IPAddressDeny = "any";
-          PrivateNetwork = lib.mkForce true;
-          RestrictSUIDSGID = true;
-          RemoveIPC = true;
-        };
-        unitConfig = {
-          StopWhenUnneeded = true;
-        };
-        wantedBy = lib.mkForce [];
-      };
-      harmonia-proxy = {
-        after = [ "harmonia.service" "harmonia-proxy.socket" ];
-        confinement.enable = true;
-        requires = [ "harmonia.service" "harmonia-proxy.socket" ];
-        serviceConfig = {
-          CapabilityBoundingSet = "";
-          DynamicUser = true;
-          ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ::1:8080 --exit-idle-time=5min";
-          IPAddressAllow = "::1";
-          IPAddressDeny = "any";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          PrivateNetwork = true;
-          PrivateTmp = true;
-          PrivateUsers = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectProc = "invisible";
-          SystemCallArchitectures = "native";
-          RestrictAddressFamilies = "AF_INET6";
-          RestrictNamespaces = true;
-          RestrictNetworkInterfaces = "lo";
-          RestrictRealtime = true;
-          SystemCallFilter = ["@system-service" "~@resources @privileged"];
-          UMask = "0077";
-        };
-        unitConfig.JoinsNamespaceOf = "harmonia.service";
+      harmonia.serviceConfig = {
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
       };
       kadmind = {
         after = [ "kadmind.socket" ];
@@ -1567,10 +1527,6 @@ in
       };
     };
     sockets = {
-      harmonia-proxy = {
-        listenStreams = [ "/run/harmonia.sock" ];
-        wantedBy = [ "sockets.target" ];
-      };
       kadmind = {
         listenDatagrams = [ "[::]:464" ];
         listenStreams = [ "[::]:464" "[::]:749" ];
