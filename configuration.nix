@@ -1025,6 +1025,7 @@
           '')
           xclip
           xhost
+          xwayland-satellite
           zgrviewer
         ];
         shell = pkgs.fish;
