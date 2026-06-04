@@ -1014,6 +1014,7 @@
             })
           w3m
           watchexec
+          waypipe
           whois
           wineWow64Packages.full
           winetricks
