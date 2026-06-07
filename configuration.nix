@@ -813,6 +813,7 @@
           ProtectHostname = true;
           ProtectSystem = lib.mkForce "strict";
           LockPersonality = true;
+          LogNamespace = "tailscale";
           RestrictAddressFamilies = "AF_NETLINK AF_UNIX AF_INET AF_INET6";
           ProtectClock = true;
           ProtectKernelLogs = true;
