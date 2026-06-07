@@ -659,7 +659,7 @@
   };
   system = {
     configurationRevision = inputs.self.rev or "dirty";
-    stateVersion = "25.11";
+    stateVersion = "26.05";
   };
   systemd = {
     network.config.networkConfig = {
