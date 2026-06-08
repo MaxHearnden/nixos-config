@@ -465,9 +465,6 @@
     };
     desktopManager.gnome.enable = true;
     displayManager.gdm.enable = true;
-    fwupd = {
-      enable = true;
-    };
     gnome = {
       core-developer-tools = {
         enable = true;
@@ -525,7 +522,15 @@
     libinput = {
       enable = true;
     };
-    nfs.idmapd.settings.General.Domain = "workstation.zandoodle.me.uk";
+    nfs = {
+      idmapd.settings.General.Domain = "workstation.zandoodle.me.uk";
+      server = {
+        enable = true;
+        exports = ''
+          /nix/store -ro,all_squash,subtree_check,sec=krb5i:krb5p *
+        '';
+      };
+    };
     openssh = {
       openFirewall = false;
       settings = {
