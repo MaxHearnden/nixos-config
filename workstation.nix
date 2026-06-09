@@ -477,6 +477,17 @@ in
           "fd27:6be8:399c:1::,fd27:6be8:399c:1:ffff:ffff:ffff:ffff"
         ];
         dhcp-rapid-commit = true;
+        dhcp-script = lib.getExe (pkgs.writeShellApplication {
+          name = "dnsmasq-notify";
+          text = ''
+            action=$1
+            case "$action" in
+              add|del|old)
+                ${lib.getExe' pkgs.knot-dns "kdig"} NOTIFY workstation.home.arpa @::1 -p 54
+                ;;
+            esac
+          '';
+        });
         domain = "workstation.home.arpa";
         interface = [ "enp2s0" ];
         interface-name = [
