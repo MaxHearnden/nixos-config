@@ -941,7 +941,6 @@
           htop
           inputs.nixos-kexec.packages.x86_64-linux.default
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
-          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.snis
           inputs.plover-flake.packages.x86_64-linux.plover
           karere
           keepassxc
@@ -988,6 +987,7 @@
           simutrans
           slang
           slirp4netns
+          snis
           sshfs
           steamcmd
           supertuxkart
