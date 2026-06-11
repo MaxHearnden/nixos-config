@@ -497,7 +497,6 @@ in
         }
       '';
     };
-    displayManager.gdm.autoSuspend = false;
     ip-mesh.peers = {
       laptop.role = lib.mkForce "provider";
       workstation.role = lib.mkForce "provider";

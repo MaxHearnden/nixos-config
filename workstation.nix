@@ -450,7 +450,6 @@ in
         '')
       ];
     };
-    displayManager.gdm.autoSuspend = false;
     dnsmasq = {
       enable = true;
       package = pkgs.dnsmasq.overrideAttrs (
