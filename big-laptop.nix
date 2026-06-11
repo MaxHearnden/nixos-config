@@ -41,6 +41,10 @@
       builders-use-substitutes = true;
     };
   };
+  security.tpm2 = {
+    enable = true;
+    tctiEnvironment.enable = true;
+  };
   services = {
     logind.settings.Login.HandleLidSwitch = "ignore";
     xserver.videoDrivers = [ "nvidia" ];
