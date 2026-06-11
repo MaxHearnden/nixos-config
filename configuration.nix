@@ -528,15 +528,7 @@
     libinput = {
       enable = true;
     };
-    nfs = {
-      idmapd.settings.General.Domain = "workstation.zandoodle.me.uk";
-      server = {
-        enable = true;
-        exports = ''
-          /nix/store -ro,all_squash,subtree_check,sec=krb5i:krb5p *
-        '';
-      };
-    };
+    nfs.idmapd.settings.General.Domain = "workstation.zandoodle.me.uk";
     openssh = {
       openFirewall = false;
       settings = {

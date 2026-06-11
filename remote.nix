@@ -47,6 +47,12 @@
         };
       };
     };
+    nfs.server = {
+      enable = true;
+      exports = ''
+        /nix/store -ro,all_squash,subtree_check,sec=krb5i:krb5p *
+      '';
+    };
     unbound.settings = {
       stub-zone = lib.mkIf (config.networking.hostName != "max-nixos-pc") [
         {
