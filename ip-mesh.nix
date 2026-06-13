@@ -97,10 +97,7 @@ in
       bird = {
         enable = true;
         package =
-          inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3.overrideAttrs
-          ({ patches ? [], ... }: {
-            patches = patches ++ [ ./bird-mpls-fix.patch ];
-          });
+          inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.bird3;
       };
       bird-cfg = {
         enable = true;
