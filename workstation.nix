@@ -731,6 +731,17 @@ in
           domain = "conference.workstation.zandoodle.me.uk";
         }
       ];
+      package =
+        inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.prosody.override ({lua, ...}: {
+          lua = lua.override {
+            packageOverrides = self: super: {
+              luasec = super.luasec.overrideAttrs (
+                { patches ? [], ... }: {
+                  patches = patches ++ [./210.patch];
+                });
+            };
+          };
+        });
       s2sSecureAuth = true;
       virtualHosts = {
         default = {
