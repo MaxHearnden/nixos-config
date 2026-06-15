@@ -931,7 +931,7 @@ in
     packages = [
       inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist
     ];
-    paths = {
+    paths.prosody-reload = {
       pathConfig.PathChanged = "/var/lib/caddy/certs/prosody-reload";
       wantedBy = [ "multi-user.target" ];
     };
