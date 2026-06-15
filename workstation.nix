@@ -8,11 +8,13 @@ let
         install -Dm0440 -t /var/lib/caddy/certs \
           "/var/lib/caddy/.local/share/caddy/$2/wildcard_.workstation.zandoodle.me.uk.crt" \
           "/var/lib/caddy/.local/share/caddy/$2/wildcard_.workstation.zandoodle.me.uk.key"
+        touch /var/lib/caddy/certs/prosody-reload
       fi
       if [ "$1" = "workstation.zandoodle.me.uk" ]; then
         install -Dm0440 -t /var/lib/caddy/certs \
           "/var/lib/caddy/.local/share/caddy/$2/$1.crt" \
           "/var/lib/caddy/.local/share/caddy/$2/$1.key"
+        touch /var/lib/caddy/certs/prosody-reload
       fi
     '';
   };
@@ -918,6 +920,10 @@ in
     packages = [
       inputs.nixpkgs-unstable.legacyPackages.${config.nixpkgs.system}.dnsdist
     ];
+    paths = {
+      pathConfig.PathChanged = "/var/lib/caddy/certs/prosody-reload";
+      wantedBy = [ "multi-user.target" ];
+    };
     services = {
       btrbk-btrbk = {
         serviceConfig = {
@@ -1534,6 +1540,22 @@ in
           User = "knot";
         };
         wantedBy = [ "multi-user.target" ];
+      };
+      prosody.serviceConfig.UMask = "027";
+      prosody-reload.serviceConfig = {
+        CapabilityBoundingSet = "";
+        ExecStart =
+          "${lib.getExe' config.services.prosody.package "prosodyctl"} reload";
+        Group = "prosody";
+        IPAddressDeny = "any";
+        MemoryDenyWriteExecute = true;
+        RemoveIPC = true;
+        RestrictSUIDSGID = true;
+        RuntimeDirectory = "prosody";
+        RuntimeDirectoryPreserve = true;
+        StateDirectory = "prosody";
+        User = "prosody";
+        UMask = "027";
       };
     };
     sockets = {
