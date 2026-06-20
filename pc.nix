@@ -833,7 +833,12 @@ in
           DHCP = "yes";
           dhcpV4Config = {
             Hostname = "max-guest";
+            IAID = 2;
             RouteMetric = 1536;
+          };
+          dhcpV6Config = {
+            Hostname = "max-guest";
+            IAID = 2;
           };
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
@@ -869,7 +874,12 @@ in
           DHCP = "yes";
           dhcpV4Config = {
             Hostname = "max-shadow";
+            IAID = 1;
             RouteMetric = 1536;
+          };
+          dhcpV6Config = {
+            Hostname = "max-shadow";
+            IAID = 1;
           };
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
