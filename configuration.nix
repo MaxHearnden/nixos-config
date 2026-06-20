@@ -202,9 +202,9 @@
     package =
       (inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixVersions.nixComponents_2_34.appendPatches
         [ ./nix-lock.patch ]).nix-everything;
-    registry = lib.mapAttrs (_: flake: {
+    registry = lib.removeAttrs (lib.mapAttrs (_: flake: {
       inherit flake;
-    }) inputs;
+    }) inputs) ["self"];
     settings = {
       allowed-users = [ "max" "nix-gc" ];
       auto-optimise-store = true;
