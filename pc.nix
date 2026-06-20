@@ -831,7 +831,10 @@ in
         };
         "10-guest" = {
           DHCP = "yes";
-          dhcpV4Config.RouteMetric = 1536;
+          dhcpV4Config = {
+            Hostname = "max-nixos-pc-guest";
+            RouteMetric = 1536;
+          };
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
           name = "guest";
@@ -864,7 +867,10 @@ in
         };
         "10-shadow-lan" = {
           DHCP = "yes";
-          dhcpV4Config.RouteMetric = 1536;
+          dhcpV4Config = {
+            Hostname = "max-nixos-pc-shadow";
+            RouteMetric = 1536;
+          };
           ipv6AcceptRAConfig.RouteMetric = 2048;
           linkConfig.ARP = true;
           name = "shadow-lan";
