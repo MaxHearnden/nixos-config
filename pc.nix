@@ -325,6 +325,28 @@ in
           import filter peer_in;
         };
       }
+      protocol bgp workstation_mpls from bgp_mpls {
+        local fe80::5;
+        neighbor fe80::2 as 65000;
+        interface "mpls";
+        local role provider;
+        ipv6 mpls {
+          export filter customer_out;
+          import filter customer_in;
+        };
+        ipv4 mpls {
+          export filter customer_out;
+          import filter customer_in;
+        };
+        vpn6 mpls {
+          export filter customer_out;
+          import filter customer_in;
+        };
+        vpn4 mpls {
+          export filter customer_out;
+          import filter customer_in;
+        };
+      }
       protocol direct {
         ipv4 {
           table external4;

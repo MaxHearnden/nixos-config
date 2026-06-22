@@ -185,6 +185,8 @@ in
           allowedTCPPorts = [ 53 80 443 2049 ];
           allowedUDPPorts = [ 53 69 443 4011 ];
         };
+        mpls.allowedTCPPorts = [ 179 ];
+        shadow.allowedTCPPorts = [ 179 ];
       };
       extraForwardRules = ''
         iifname tayga oifname tailscale0 accept
@@ -297,6 +299,68 @@ in
           };
           route fd27:6be8:399c::/48 unreachable;
           route fd09:a389:7c1e::/48 unreachable;
+        }
+        template bgp bgp_mpls {
+          local fe80::2;
+          local as 65000;
+          require roles on;
+          enforce first as on;
+          interface "mpls";
+          mpls {label policy aggregate;};
+          ipv4 mpls {
+            extended next hop on;
+            import table on;
+          };
+          ipv6 mpls {
+            import table on;
+          };
+          vpn4 mpls {
+            extended next hop on;
+            import table on;
+          };
+          vpn6 mpls {
+            import table on;
+          };
+        }
+        protocol bgp orion_mpls from bgp_mpls {
+          neighbor fe80::1 as 65001;
+          local role customer;
+          ipv6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
+          ipv4 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
+          vpn6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
+          vpn4 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
+        }
+        protocol bgp pc_mpls from bgp_mpls {
+          neighbor fe80::5 as 65005;
+          local role customer;
+          ipv6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
+          ipv4 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
+          vpn6 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
+          vpn4 mpls {
+            export filter provider_out;
+            import filter provider_in;
+          };
         }
       '';
     };
@@ -831,6 +895,7 @@ in
             UseDomains = false;
             DNSDefaultRoute = false;
           };
+          vlan = [ "shadow" "mpls" ];
         };
         "10-enp2s0" = {
           address = ["192.168.3.1/24" "fd27:6be8:399c:1:a236:9fff:fec3:d4c1/64"];
@@ -859,6 +924,32 @@ in
           DHCP = "no";
         };
         "40-lo".address = [ "fd09:a389:7c1e:6::2/128"];
+        "10-mpls" = {
+          address = [ "fe80::2/64" ];
+          extraConfig = ''
+            [Network]
+            MPLSRouting = true
+          '';
+          linkConfig.ARP = true;
+          name = "mpls";
+          networkConfig.LinkLocalAddressing = false;
+        };
+        "10-shadow" = {
+          DHCP = "yes";
+          dhcpV4Config = {
+            Hostname = "shadow-work";
+            IAID = 1;
+            RouteMetric = 1536;
+          };
+          dhcpV6Config = {
+            Hostname = "shadow-work";
+            IAID = 1;
+          };
+          ipv6AcceptRAConfig.RouteMetric = 2048;
+          linkConfig.ARP = true;
+          name = "shadow";
+          networkConfig.IPv6AcceptRA = true;
+        };
         "10-tayga" = {
           address = [ "192.0.0.1/31" "fd64::/64" ];
           matchConfig.Name = "tayga";
@@ -925,6 +1016,20 @@ in
               User = "tayga";
               Group = "tayga";
             };
+          };
+          "10-mpls" = {
+            netdevConfig = {
+              Kind = "vlan";
+              Name = "mpls";
+            };
+            vlanConfig.Id = 2;
+          };
+          "10-shadow" = {
+            netdevConfig = {
+              Kind = "vlan";
+              Name = "shadow";
+            };
+            vlanConfig.Id = 20;
           };
         };
     };
