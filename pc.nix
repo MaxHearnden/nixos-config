@@ -441,6 +441,7 @@ in
     bird-cfg.files = {
       "50-kernel-ip".text = lib.mkForce "";
       "50-ip-mesh-orion".text = lib.mkForce "";
+      "50-ip-mesh-workstation".text = lib.mkForce "";
     };
     btrbk = {
       instances = {
