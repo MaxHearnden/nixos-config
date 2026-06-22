@@ -343,7 +343,7 @@ in
           };
         }
         protocol bgp pc_mpls from bgp_mpls {
-          neighbor fe80::5 as 65005;
+          neighbor fe80::5 as 65002;
           local role customer;
           ipv6 mpls {
             export filter provider_out;
@@ -363,6 +363,10 @@ in
           };
         }
       '';
+    };
+    bird-cfg.files = {
+      "50-ip-mesh-orion".text = lib.mkForce "";
+      "50-ip-mesh-pc".text = lib.mkForce "";
     };
     btrbk = {
       instances = {
