@@ -192,7 +192,7 @@ in
         iifname tayga oifname tailscale0 accept
         iiftype ipip6 oifname enp2s0 meta l4proto != udp accept
         oiftype ipip6 iifname enp2s0 meta l4proto != udp accept
-        iiftype ipip6 oifname enp2s0 udp dport != {41641, 40000} accept
+        iiftype ipip6 oifname {enp2s0, eno1, shadow} udp dport != {41641, 40000} accept
         oiftype ipip6 iifname enp2s0 udp dport != {41641, 40000} accept
       '';
       extraInputRules = ''
@@ -248,6 +248,15 @@ in
           }
         '';
       };
+      local-nat = {
+        family = "inet";
+        content = ''
+          chain local-nat {
+            type nat hook postrouting priority srcnat; policy accept;
+            fib saddr . oif . mark type != local oifname {eno1, shadow} masquerade
+          }
+        '';
+      };
     };
   };
   security = {
@@ -261,10 +270,62 @@ in
   services = {
     bird = {
       config = ''
+        ipv4 table local4;
+        ipv6 table local6;
         ipv6 table radv_routes;
         protocol direct {
           ipv4;
           interface "enp2s0";
+        }
+        protocol direct {
+          ipv4 {
+            table local4;
+          };
+          ipv6 {
+            import where net.len != 128;
+            table local6;
+          };
+          interface "eno1", "shadow";
+        }
+        protocol kernel {
+          ipv4 {
+            table local4;
+            export filter {
+              if source = RTS_DEVICE then
+                reject;
+              krt_prefsrc = self_loopback_v4;
+              accept;
+            };
+          };
+        }
+        protocol kernel {
+          ipv6 {
+            table local6;
+            export filter {
+              if source = RTS_DEVICE then
+                reject;
+              krt_prefsrc = self_loopback_v6;
+              accept;
+            };
+          };
+        }
+        protocol pipe {
+          table master4;
+          peer table local4;
+          import filter {
+            preference = 70;
+            accept;
+          };
+          export all;
+        }
+        protocol pipe {
+          table master6;
+          peer table local6;
+          import filter {
+            preference = 70;
+            accept;
+          };
+          export all;
         }
         protocol pipe {
           table master6;
@@ -365,6 +426,7 @@ in
       '';
     };
     bird-cfg.files = {
+      "50-kernel-ip".text = lib.mkForce "";
       "50-ip-mesh-orion".text = lib.mkForce "";
       "50-ip-mesh-pc".text = lib.mkForce "";
     };
