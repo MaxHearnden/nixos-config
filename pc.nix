@@ -89,17 +89,12 @@ in
       allowedTCPPorts = [ 53 54 55 8053 ];
       allowedUDPPorts = [ 53 54 55 8053 ];
       extraForwardRules = ''
-        iifname tayga oifname {"external", shadow-lan} accept
-        iiftype ipip6 oifname {external-local, internet, guest, "shadow-lan"} accept
-        meta sdifname "external-vrf" oifname {internet, guest, "shadow-lan"} accept
-      '';
-      extraReversePathFilterRules = ''
-        iifname external meta nfproto ipv6 accept
+        iifname tayga oifname @routed_interfaces accept
+        iiftype ipip6 oifname @routed_interfaces accept
       '';
       filterForward = true;
       interfaces = {
-        external.allowedTCPPorts = [ 179 ];
-        external-local = {
+        "@routed_interfaces" = {
           allowedTCPPorts = [ 179 9943 9944 ];
           allowedUDPPorts = [ 9943 9944 ];
         };
@@ -131,33 +126,16 @@ in
             type nat hook postrouting priority srcnat; policy accept
             fib saddr . oif . mark type != local oifname {internet, guest, "shadow-lan"} masquerade
           }
-
-          chain natted {
-            dnat ip to 192.168.11.5
-            dnat ip6 to fd09:a389:7c1e:6::5
-          }
-
-          chain local-service-nat {
-            type nat hook prerouting priority dstnat; policy accept
-            fib daddr . mark type local iifname {guest, internet, "shadow-lan"} tcp dport {53, 54, 55, 8053, 9943, 9944} jump natted
-            fib daddr . mark type local iifname {guest, internet, "shadow-lan"} udp dport {53, 54, 55, 8053, 9943, 9944, 41641} jump natted
-          }
         '';
       };
-      zoning = {
-        family = "inet";
-        content = ''
-          chain zoning-prerouting {
-            type filter hook prerouting priority raw; policy accept;
-            ct zone set meta iifname map {guest: 1, internet: 1, "shadow-lan": 1, external: 1, "external-vrf": 1}
+      nixos-fw.content = ''
+        set routed_interfaces {
+          typeof iifname; flags constant;
+          elements = {
+            guest, "shadow-lan", "internet"
           }
-
-          chain zoning-output {
-            type filter hook output priority raw; policy accept;
-            ct zone set meta oifname map {guest: 1, internet: 1, "shadow-lan": 1, external: 1, "external-vrf": 1}
-          }
-        '';
-      };
+        }
+      '';
     };
     useNetworkd = true;
   };
@@ -202,8 +180,6 @@ in
     bird.config = ''
       ipv4 table local4;
       ipv6 table local6;
-      ipv4 table external4;
-      ipv6 table external6;
       template bgp routed {
         local as 65002;
         require roles on;
@@ -246,49 +222,8 @@ in
       template bgp orion_untrusted from routed {
         local role peer;
         router id 192.168.1.93;
-        vrf "external";
-        ipv4 { table external4; };
-        ipv6 { table external6; };
-      }
-      template bgp external_ibgp {
-        local as 65002;
-        neighbor as 65002;
-        direct;
-        ipv4 {
-          extended next hop on;
-          import table on;
-          import all;
-          export all;
-        };
-        ipv6 {
-          import table on;
-          import all;
-          export all;
-        };
-      }
-      protocol bgp internal_local from external_ibgp {
-        local fe80::5;
-        neighbor fe80::1;
-        interface "external-local";
-        ipv4 {
-          table local4;
-        };
-        ipv6 {
-          table local6;
-        };
-      }
-      protocol bgp internal_vrf from external_ibgp {
-        local fe80::1;
-        router id 192.168.1.93;
-        neighbor fe80::5;
-        interface "external-vrf";
-        vrf "external";
-        ipv4 {
-          table external4;
-        };
-        ipv6 {
-          table external6;
-        };
+        ipv4 { table local4; };
+        ipv6 { table local6; };
       }
       protocol bgp orion_internet from orion_untrusted {
         neighbor fe80::7006:83ff:feff:5d0b%internet as 65001;
@@ -349,11 +284,11 @@ in
       }
       protocol direct {
         ipv4 {
-          table external4;
+          table local4;
         };
         ipv6 {
           import where net.len != 128;
-          table external6;
+          table local6;
         };
         interface "internet", "guest", "shadow-lan";
       }
@@ -379,28 +314,6 @@ in
           };
         };
       }
-      protocol kernel {
-        kernel table 10;
-        ipv4 {
-          table external4;
-          export filter {
-            if source = RTS_DEVICE then
-              reject;
-            accept;
-          };
-        };
-      }
-      protocol kernel {
-        kernel table 10;
-        ipv6 {
-          table external6;
-          export filter {
-            if source = RTS_DEVICE then
-              reject;
-            accept;
-          };
-        };
-      }
       protocol pipe {
         table master4;
         peer table local4;
@@ -419,24 +332,6 @@ in
         };
         export all;
       }
-      # protocol pipe {
-      #   table external4;
-      #   peer table local4;
-      #   import all;
-      #   export filter {
-      #     ifname = "external";
-      #     accept;
-      #   };
-      # }
-      # protocol pipe {
-      #   table external6;
-      #   peer table local6;
-      #   import all;
-      #   export filter {
-      #     ifname = "external";
-      #     accept;
-      #   };
-      # }
     '';
     bird-cfg.files = {
       "50-kernel-ip".text = lib.mkForce "";
@@ -741,20 +636,6 @@ in
         };
       };
       netdevs = {
-        "10-external" = {
-          netdevConfig = {
-            Kind = "vrf";
-            Name = "external";
-          };
-          vrfConfig.Table = 10;
-        };
-        "10-external-local" = {
-          netdevConfig = {
-            Kind = "veth";
-            Name = "external-local";
-          };
-          peerConfig.Name = "external-vrf";
-        };
         "10-guest" = {
           netdevConfig = {
             Kind = "vlan";
@@ -800,58 +681,6 @@ in
           name = "enp2s0f2";
           vlan = [ "guest" "internet" "mpls" "shadow-lan" ];
         };
-        "10-external" = {
-          name = "external";
-          routes = [
-            {
-              Destination = "::/0";
-              Table = 10;
-              Type = "unreachable";
-              Metric = 32768;
-            }
-            {
-              Destination = "0.0.0.0/0";
-              Table = 10;
-              Type = "unreachable";
-              Metric = 32768;
-            }
-          ];
-        };
-        "10-external-local" = {
-          address = [ "fe80::5/64" ];
-          name = "external-local";
-          routes = [
-            {
-              Destination = "0.0.0.0/0";
-              Gateway = "fe80::1";
-              PreferredSource = "192.168.11.5";
-            }
-            {
-              Destination = "::/0";
-              Gateway = "fe80::1";
-              PreferredSource = "fd09:a389:7c1e:6::5";
-            }
-          ];
-          networkConfig.LinkLocalAddressing = false;
-        };
-        "10-external-vrf" = {
-          address = [ "fe80::1/64" ];
-          name = "external-vrf";
-          routes = [
-            {
-              Destination = "192.168.11.5";
-              Gateway = "fe80::5";
-              Table = 10;
-            }
-            {
-              Destination = "fd09:a389:7c1e:6::5";
-              Gateway = "fe80::5";
-              Table = 10;
-            }
-          ];
-          networkConfig.LinkLocalAddressing = false;
-          vrf = [ "external" ];
-        };
         "10-guest" = {
           DHCP = "yes";
           dhcpV4Config = {
@@ -867,14 +696,12 @@ in
           linkConfig.ARP = true;
           name = "guest";
           networkConfig.IPv6AcceptRA = true;
-          vrf = [ "external" ];
         };
         "10-internet" = {
           DHCP = "yes";
           linkConfig.ARP = true;
           name = "internet";
           networkConfig.IPv6AcceptRA = true;
-          vrf = [ "external" ];
         };
         "40-lo".routingPolicyRules = [
           {
@@ -908,7 +735,6 @@ in
           linkConfig.ARP = true;
           name = "shadow-lan";
           networkConfig.IPv6AcceptRA = true;
-          vrf = [ "external" ];
         };
         "10-tayga" = {
           address = [ "192.0.0.1/30" "fd64::/64" ];
