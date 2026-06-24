@@ -1,0 +1,78 @@
+diff --git a/src/nix/build-remote/build-remote.cc b/src/nix/build-remote/build-remote.cc
+index c0c63f84c..ec17f7a0e 100644
+--- a/src/nix/build-remote/build-remote.cc
++++ b/src/nix/build-remote/build-remote.cc
+@@ -292,13 +292,6 @@ static int main_build_remote(int argc, char ** argv)
+ 
+         auto substitute = settings.getWorkerSettings().buildersUseSubstitutes ? Substitute : NoSubstitute;
+ 
+-        {
+-            Activity act(*logger, lvlTalkative, actUnknown, fmt("copying dependencies to '%s'", storeUri));
+-            copyPaths(*store, *sshStore, store->parseStorePathSet(inputs), NoRepair, NoCheckSigs, substitute);
+-        }
+-
+-        uploadLock = -1;
+-
+         auto drv = store->readDerivation(*drvPath);
+ 
+         std::optional<BuildResult> optResult;
+@@ -319,6 +312,13 @@ static int main_build_remote(int argc, char ** argv)
+         // This condition mirrors that: that code enforces the "rules" outlined there;
+         // we do the best we can given those "rules".
+         if (trustedOrLegacy || drv.type().isCA()) {
++            {
++                Activity act(*logger, lvlTalkative, actUnknown, fmt("copying dependencies to '%s'", storeUri));
++                copyPaths(*store, *sshStore, store->parseStorePathSet(inputs), NoRepair, NoCheckSigs, substitute);
++            }
++
++            uploadLock = -1;
++
+             // Hijack the inputs paths of the derivation to include all
+             // the paths that come from the `inputDrvs` set. We don’t do
+             // that for the derivations whose `inputDrvs` is empty
+@@ -344,7 +344,13 @@ static int main_build_remote(int argc, char ** argv)
+                     "build of '%s' on '%s' failed: %s", store->printStorePath(*drvPath), storeUri, failureP->message());
+             }
+         } else {
+-            copyClosure(*store, *sshStore, StorePathSet{*drvPath}, NoRepair, NoCheckSigs, substitute);
++            {
++                Activity act(*logger, lvlTalkative, actUnknown, fmt("copying closure to '%s'", storeUri));
++                copyClosure(*store, *sshStore, StorePathSet{*drvPath}, NoRepair, NoCheckSigs, substitute);
++            }
++
++            uploadLock = -1;
++
+             auto res = sshStore->buildPathsWithResults(
+                 {DerivedPath::Built{
+                     .drvPath = makeConstantStorePathRef(*drvPath),
+diff --git a/tests/functional/build-remote-trustless-should-fail-0.sh b/tests/functional/build-remote-trustless-should-pass-4.sh
+similarity index 79%
+rename from tests/functional/build-remote-trustless-should-fail-0.sh
+rename to tests/functional/build-remote-trustless-should-pass-4.sh
+index e79527d72..6732a286b 100755
+--- a/tests/functional/build-remote-trustless-should-fail-0.sh
++++ b/tests/functional/build-remote-trustless-should-pass-4.sh
+@@ -33,5 +33,8 @@ prog=$(readlink -e ./nix-daemon-untrusting.sh)
+ # shellcheck disable=SC2034
+ proto=ssh-ng
+ 
+-expectStderr 1 source build-remote-trustless.sh \
+-    | grepQuiet "cannot add path '[^ ]*' because it lacks a signature by a trusted key"
++# expectStderr 1 source build-remote-trustless.sh \
++#     | grepQuiet "cannot add path '[^ ]*' because it lacks a signature by a trusted key"
++
++source build-remote-trustless.sh
++source build-remote-trustless-after.sh
+diff --git a/tests/functional/meson.build b/tests/functional/meson.build
+index bc4d2643e..08bfcec59 100644
+--- a/tests/functional/meson.build
++++ b/tests/functional/meson.build
+@@ -108,7 +108,7 @@ suites = [
+       'build-remote-trustless-should-pass-1.sh',
+       'build-remote-trustless-should-pass-2.sh',
+       'build-remote-trustless-should-pass-3.sh',
+-      'build-remote-trustless-should-fail-0.sh',
++      'build-remote-trustless-should-pass-4.sh',
+       'build-remote-with-mounted-ssh-ng.sh',
+       'nar-access.sh',
+       'impure-eval.sh',

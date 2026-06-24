@@ -201,7 +201,7 @@
     nixPath = [ "nixpkgs=${inputs.nixpkgs-unstable}" "nixos=${inputs.nixpkgs}" ];
     package =
       (inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.nixVersions.nixComponents_2_34.appendPatches
-        [ ./nix-lock.patch ]).nix-everything;
+        [ ./nix-lock.patch ./nix-untrusted-remote.patch ]).nix-everything;
     registry = lib.removeAttrs (lib.mapAttrs (_: flake: {
       inherit flake;
     }) inputs) ["self"];
