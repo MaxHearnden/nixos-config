@@ -1578,6 +1578,7 @@ in
           kexec-tools
           inputs.nixos-kexec.packages.x86_64-linux.default
         ];
+        restartIfChanged = false;
         script = ''
           cd /run/nixos-upgrade-all-fallback
 
