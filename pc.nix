@@ -104,10 +104,6 @@ in
       };
     };
     hostName = "max-nixos-pc";
-    localCommands = ''
-      ip rule delete priority 0 || true
-      ip -6 rule delete priority 0 || true
-    '';
     networkmanager.enable = false;
     nftables.tables = {
       tayga-nat66 = {
@@ -703,13 +699,6 @@ in
           name = "internet";
           networkConfig.IPv6AcceptRA = true;
         };
-        "40-lo".routingPolicyRules = [
-          {
-            Family = "both";
-            Table = "local";
-            Priority = 2000;
-          }
-        ];
         "10-mpls" = {
           address = [ "fe80::5/64" ];
           extraConfig = ''
