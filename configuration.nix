@@ -969,6 +969,7 @@
           pkgsCross.riscv32.buildPackages.gdb
           pkgsCross.riscv64.buildPackages.gcc
           pkgsCross.riscv64.buildPackages.gdb
+          plus42
           podman-compose
           powertop
           prismlauncher
