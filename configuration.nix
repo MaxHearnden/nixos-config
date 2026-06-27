@@ -418,7 +418,7 @@
           permitted_enctypes = "aes256-sha2";
           spake_preauth_groups = "edwards25519";
           rdns = false;
-          rewnewal_lifetime = "7d";
+          rewnewal_lifetime = "7d 0h 0m 0s";
         };
         realms = {
           "ZANDOODLE.ME.UK" = {
