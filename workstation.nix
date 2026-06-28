@@ -1478,7 +1478,12 @@ in
         };
       };
       nixos-upgrade-all = {
-        after = [ "network-online.target" "gitea.service" ];
+        after = [
+          "network-online.target"
+          "gitea.service"
+          "nixos-upgrade-all-fallback.service"
+        ];
+        conflicts = [ "nixos-upgrade-all-fallback.service" ];
         description = "NixOS upgrade all";
         onFailure = [
           "nixos-upgrade-all-fallback.service"
