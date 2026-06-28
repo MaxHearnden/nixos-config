@@ -983,7 +983,7 @@
           rustup
           shellcheck
           sidequest
-          signal-desktop
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.signal-desktop
           simutrans
           slang
           slirp4netns
