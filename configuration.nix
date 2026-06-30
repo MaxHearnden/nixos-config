@@ -929,6 +929,7 @@
           firmware-manager
           gcc
           gdb
+          ghc
           ghex
           glslang
           gnome-tweaks
