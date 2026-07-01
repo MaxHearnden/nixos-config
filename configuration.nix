@@ -927,6 +927,7 @@
           file
           file-roller
           firmware-manager
+          free42
           gcc
           gdb
           ghc
