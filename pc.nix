@@ -608,7 +608,7 @@ in
             "root-servers.net"
             "zandoodle.me.uk"
           ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64
-          ++ lib.genList (i: "${toString (i+224)}.in-addr.arpa") 16);
+          ++ lib.genList (i: "${toString (i+224)}.in-addr.arpa") 16));
     };
     xserver = {
       videoDrivers = [
