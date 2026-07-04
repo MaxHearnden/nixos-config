@@ -944,13 +944,6 @@ in
             ];
           }
           {
-            name = ".";
-            forward-addr =
-              "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
-            forward-first = true;
-            forward-tls-upstream = true;
-          }
-          {
             name = "arpa";
             forward-addr =
               "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
