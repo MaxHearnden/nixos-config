@@ -602,10 +602,13 @@ in
             "in-addr.arpa"
             "int.zandoodle.me.uk"
             "ip6.arpa"
+            "ip6-servers.arpa"
             "ipv4only.arpa"
+            "mcast.net"
             "root-servers.net"
             "zandoodle.me.uk"
-          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64));
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64
+          ++ lib.genList (i: "${toString (i+224)}.in-addr.arpa") 16);
     };
     xserver = {
       videoDrivers = [
