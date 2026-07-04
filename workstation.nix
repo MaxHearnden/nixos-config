@@ -891,6 +891,7 @@ in
         auth-zone = map (name: {
           inherit name;
           primary = "::1@54";
+          allow-notify = "::1";
           fallback-enabled = true;
           for-downstream = false;
           zonefile = "/var/lib/unbound/${name}.zone";

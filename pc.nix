@@ -541,6 +541,7 @@ in
     unbound.settings = {
       auth-zone = map (name: {
         inherit name;
+        allow-notify = "::1";
         primary = "::1@54";
         fallback-enabled = true;
         for-downstream = false;
