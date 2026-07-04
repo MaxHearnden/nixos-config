@@ -888,37 +888,54 @@ in
     unbound = {
       resolveLocalQueries = false;
       settings = {
-        auth-zone = map (name: {
-          inherit name;
-          primary = "::1@54";
-          allow-notify = "::1";
-          fallback-enabled = true;
-          for-downstream = false;
-          zonefile = "/var/lib/unbound/${name}.zone";
-          zonemd-check = true;
-        }) ([
-          "."
-          "168.192.in-addr.arpa"
-          "_acme-challenge.pc.int.zandoodle.me.uk"
-          "_acme-challenge.workstation.zandoodle.me.uk"
-          "_acme-challenge.zandoodle.me.uk"
-          "arpa"
-          "compsoc-dev.com"
-          "d.f.ip6.arpa"
-          "home.arpa"
-          "in-addr.arpa"
-          "int.zandoodle.me.uk"
-          "ip6-servers.arpa"
-          "ip6.arpa"
-          "ipv4only.arpa"
-          "max.home.arpa"
-          "mcast.net"
-          "orion.home.arpa"
-          "root-servers.net"
-          "workstation.home.arpa"
-          "zandoodle.me.uk"
-        ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64
-        ++ lib.genList (i: "${toString (i+224)}.in-addr.arpa") 16);
+        auth-zone = [
+          {
+            allow-notify = "::1";
+            name = "bogus.int.zandoodle.me.uk";
+            primary = "::1@54";
+            fallback-enabled = true;
+            for-downstream = false;
+            zonefile = "/var/lib/unbound/bogus.int.zandoodle.me.uk.zone"
+          }
+          {
+            allow-notify = "::1";
+            name = "bogus-exists.int.zandoodle.me.uk";
+            primary = "::1@54";
+            fallback-enabled = true;
+            for-downstream = false;
+            zonefile = "/var/lib/unbound/bogus-exists.int.zandoodle.me.uk.zone"
+          }
+        ] ++ (map (name: {
+            inherit name;
+            allow-notify = "::1";
+            primary = "::1@54";
+            fallback-enabled = true;
+            for-downstream = false;
+            zonefile = "/var/lib/unbound/${name}.zone";
+            zonemd-check = true;
+          }) ([
+            "."
+            "168.192.in-addr.arpa"
+            "_acme-challenge.pc.int.zandoodle.me.uk"
+            "_acme-challenge.workstation.zandoodle.me.uk"
+            "_acme-challenge.zandoodle.me.uk"
+            "arpa"
+            "compsoc-dev.com"
+            "d.f.ip6.arpa"
+            "home.arpa"
+            "in-addr.arpa"
+            "int.zandoodle.me.uk"
+            "ip6-servers.arpa"
+            "ip6.arpa"
+            "ipv4only.arpa"
+            "max.home.arpa"
+            "mcast.net"
+            "orion.home.arpa"
+            "root-servers.net"
+            "workstation.home.arpa"
+            "zandoodle.me.uk"
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64
+          ++ lib.genList (i: "${toString (i+224)}.in-addr.arpa") 16));
         forward-zone = [
           {
             name = "broadband";
@@ -983,6 +1000,8 @@ in
             "_acme-challenge.workstation.zandoodle.me.uk"
             "_acme-challenge.zandoodle.me.uk"
             "arpa"
+            "bogus.int.zandoodle.me.uk"
+            "bogus-exists.int.zandoodle.me.uk"
             "compsoc-dev.com"
             "d.f.ip6.arpa"
             "home.arpa"
