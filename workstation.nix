@@ -737,6 +737,7 @@ in
             address = "fd7a:115c:a1e0::1a01:5208@54";
             key = "workstation";
           };
+          unbound.address = "::1@55";
         };
         server = {
           automatic-acl = true;
