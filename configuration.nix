@@ -604,7 +604,7 @@
             "ts.net"
             "zandoodle.me.uk"
           ];
-          qname-minimisation = config.networking.hostName == "max-nixos-pc";
+          qname-minimisation = true;
           response-ip = [
             "fd09:a389:7c1e:3::/64 redirect"
             "fd09:a389:7c1e:3:c0:0:aa00::/103 always_transparent"
@@ -618,7 +618,8 @@
             name = ".";
             forward-addr =
               "fd7a:115c:a1e0::1a01:5208#local-tailscale.zandoodle.me.uk";
-            forward-first = config.networking.hostName == "max-nixos-pc";
+            forward-first = config.networking.hostName == "max-nixos-pc" ||
+              config.networking.hostName == "max-nixos-workstation";
             forward-tls-upstream = true;
           }
         ];
