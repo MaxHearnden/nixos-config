@@ -895,7 +895,7 @@ in
             primary = "::1@54";
             fallback-enabled = true;
             for-downstream = false;
-            zonefile = "/var/lib/unbound/bogus.int.zandoodle.me.uk.zone"
+            zonefile = "/var/lib/unbound/bogus.int.zandoodle.me.uk.zone";
           }
           {
             allow-notify = "::1";
@@ -903,7 +903,7 @@ in
             primary = "::1@54";
             fallback-enabled = true;
             for-downstream = false;
-            zonefile = "/var/lib/unbound/bogus-exists.int.zandoodle.me.uk.zone"
+            zonefile = "/var/lib/unbound/bogus-exists.int.zandoodle.me.uk.zone";
           }
         ] ++ (map (name: {
             inherit name;
