@@ -503,6 +503,7 @@ in
         };
         zone = {
           catz = {
+            acl = [ "transfer" ];
             master = "orion";
             catalog-role = "interpret";
             catalog-template = ["catalog-zone" "global"];
