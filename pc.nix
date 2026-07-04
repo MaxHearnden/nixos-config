@@ -475,6 +475,7 @@ in
           };
           "robotns2.second-ns.de".address = "2a01:4f8:0:1::5ddc:2";
           "robotns3.second-ns.com".address = "2001:67c:192c::add:a3";
+          "unbound".address = "::1@55";
         };
         server = {
           automatic-acl = true;
@@ -490,12 +491,14 @@ in
             acl = [ "transfer" ];
             master = "orion";
             module = "mod-queryacl/local";
+            notify = "unbound";
             semantic-checks = true;
           };
           global = {
             acl = [ "transfer" ];
             dnssec-validation = true;
             master = "orion";
+            notify = "unbound";
             semantic-checks = true;
             zonemd-verify = true;
           };
@@ -516,7 +519,7 @@ in
               @ soa pc.int.zandoodle.me.uk. hostmaster.zandoodle.me.uk. 0 14400 3600 604800 86400
               @ ns dns.zandoodle.me.uk.
             '';
-            notify = "orion";
+            notify = [ "orion" "unbound" ];
             semantic-checks = true;
             journal-content = "all";
             zonefile-load = "difference-no-serial";

@@ -756,6 +756,7 @@ in
         template.catalog-zone = {
           acl = [ "transfer" ];
           master = "orion";
+          notify = "unbound";
           semantic-checks = true;
         };
         zone = [
@@ -775,7 +776,7 @@ in
               @ soa workstation.zandoodle.me.uk. hostmaster.zandoodle.me.uk. 0 14400 3600 604800 86400
               @ ns dns.zandoodle.me.uk.
             '';
-            notify = "orion";
+            notify = [ "orion" "unbound" ];
             semantic-checks = true;
             journal-content = "all";
             zonefile-load = "difference-no-serial";
@@ -789,7 +790,7 @@ in
             dnssec-policy = "max.home.arpa";
             domain = "max.home.arpa";
             file = "/etc/knot/max.home.arpa.zone";
-            notify = "orion";
+            notify = [ "orion" "unbound" ];
             semantic-checks = true;
             journal-content = "all";
             zonefile-load = "difference-no-serial";
@@ -801,7 +802,7 @@ in
             domain = "workstation.home.arpa";
             ixfr-from-axfr = true;
             master = "dnsmasq";
-            notify = "orion";
+            notify = [ "orion" "unbound" ];
             semantic-checks = true;
           }
         ];
