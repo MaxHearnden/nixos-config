@@ -563,6 +563,7 @@
     unbound = {
       enable = true;
       enableRootTrustAnchor = false;
+      checkconf = true;
       localControlSocketPath = "/run/unbound/unbound.ctl";
       package = pkgs.unbound-full;
       # Pc is on an unblocked network
@@ -610,7 +611,8 @@
             "fd09:a389:7c1e:3:c0:0:aa00::/103 always_transparent"
             "fd09:a389:7c1e:3:c0:a800::/88 always_transparent"
           ];
-          trust-anchor-file = "/etc/dnssec-trust-anchors.d/home.positive";
+          trust-anchor-file =
+            toString config.environment.etc."dnssec-trust-anchors.d/home.positive".source;
           val-log-level = 2;
         };
         forward-zone = [
