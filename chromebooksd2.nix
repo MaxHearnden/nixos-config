@@ -39,8 +39,11 @@
       builders-use-substitutes = true;
     };
   };
-  services.ip-mesh = {
-    self = lib.mkForce "chromebook";
+  services = {
+    ip-mesh = {
+      self = lib.mkForce "chromebook";
+    };
+    logind.settings.Login.HandleLidSwitch = "ignore";
   };
   swapDevices = [
     {
