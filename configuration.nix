@@ -343,6 +343,10 @@
           name = "MaxHearnden";
         };
       };
+      lfs = {
+        enable = true;
+        enablePureSSHTransfer = true;
+      };
     };
     java = {
       binfmt = true;
