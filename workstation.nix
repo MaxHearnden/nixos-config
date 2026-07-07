@@ -632,6 +632,7 @@ in
     gitea = {
       database.type = "postgres";
       enable = true;
+      lfs.enable = true;
       settings = {
         security = {
           DISABLE_GIT_HOOKS = true;
@@ -641,6 +642,7 @@ in
           HTTP_ADDR = "/run/gitea/gitea.sock";
           PROTOCOL = "http+unix";
           ROOT_URL = "https://gitea.workstation.zandoodle.me.uk";
+          LFS_ALLOW_PURE_SSH = true;
         };
         service = {
           DISABLE_REGISTRATION = true;
