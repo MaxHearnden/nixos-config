@@ -124,6 +124,10 @@ in
       options = [ "nofail" "defaults" "compress=zstd" "nosuid" "nodev" "noatime" ];
     };
   };
+  hardware.display = {
+    edid.linuxhw.VS248 = [ "VS248" "2019" ];
+    outputs.HDMI-A-1.edid = "VS248.bin";
+  };
   nix = {
     buildMachines = [
       {
