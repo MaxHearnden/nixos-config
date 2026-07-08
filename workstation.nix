@@ -130,19 +130,19 @@ in
   };
   nix = {
     buildMachines = [
-      {
-        hostName = "pc.int.zandoodle.me.uk";
-        maxJobs = 8;
-        protocol = "ssh-ng";
-        publicHostKey = "- true";
-        sshUser = "nix-ssh";
-        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-        systems = [
-          "x86_64-linux" "armv7l-linux" "aarch64-linux" "mips-linux"
-          "mipsel-linux" "mips64-linux" "mips64el-linux" "riscv32-linux"
-          "riscv64-linux" "i686-linux"
-        ];
-      }
+      # {
+      #   hostName = "pc.int.zandoodle.me.uk";
+      #   maxJobs = 8;
+      #   protocol = "ssh-ng";
+      #   publicHostKey = "- true";
+      #   sshUser = "nix-ssh";
+      #   supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+      #   systems = [
+      #     "x86_64-linux" "armv7l-linux" "aarch64-linux" "mips-linux"
+      #     "mipsel-linux" "mips64-linux" "mips64el-linux" "riscv32-linux"
+      #     "riscv64-linux" "i686-linux"
+      #   ];
+      # }
       {
         hostName = "local";
         protocol = null;
