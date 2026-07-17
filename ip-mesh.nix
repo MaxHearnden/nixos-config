@@ -153,7 +153,7 @@ in
             protocol device {}
           '';
           "50-kernel-ip".text = ''
-            protocol kernel {
+            template kernel ip4 {
               ipv4 {
                 export filter {
                   if source = RTS_DEVICE then
