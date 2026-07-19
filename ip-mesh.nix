@@ -109,19 +109,21 @@ in
             define self_loopback_v6 = ${cfg.self-loopback-v6-address};
           '';
           "20-tables".text = ''
-          aspa table at;
-          mpls domain mdom;
-          mpls table mtab;
-          roa4 table r4;
-          roa6 table r6;
-          vpn4 table vtab4;
-          vpn6 table vtab6;
+            aspa table at;
+            evpn table evpntab;
+            mpls domain mdom;
+            mpls table mtab;
+            roa4 table r4;
+            roa6 table r6;
+            vpn4 table vtab4;
+            vpn6 table vtab6;
           '';
           "25-birdlib".source = ./birdlib.conf;
           "30-ip-mesh-template".text = ''
             template bgp ip_tunnel {
               local ${cfg.self-tunnel-address} as self_as;
               enforce first as on;
+              evpn;
               ipv4 mpls {
                 export all;
                 extended next hop on;

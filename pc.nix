@@ -199,6 +199,7 @@ in
         local as 65002;
         require roles on;
         enforce first as on;
+        evpn;
         mpls {label policy aggregate;};
         ipv4 mpls {
           extended next hop on;

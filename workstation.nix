@@ -371,6 +371,7 @@ in
           require roles on;
           enforce first as on;
           interface "mpls";
+          evpn;
           mpls {label policy aggregate;};
           ipv4 mpls {
             extended next hop on;
