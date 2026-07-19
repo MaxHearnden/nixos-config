@@ -971,19 +971,7 @@ in
             forward-tls-upstream = true;
           }
         ];
-        server = {
-          domain-insecure = [
-            "home.arpa"
-            "168.192.in-addr.arpa"
-            "d.f.ip6.arpa"
-            "root-servers.net"
-          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa") 64;
-          local-zone = [
-            "168.192.in-addr.arpa nodefault"
-            "d.f.ip6.arpa nodefault"
-          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa nodefault") 64;
-          interface = ["0.0.0.0@55" "::@55"];
-        };
+        server.interface = ["0.0.0.0@55" "::@55"];
         stub-zone = map (zone:
           {
             name = zone;

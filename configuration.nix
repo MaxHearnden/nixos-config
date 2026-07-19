@@ -575,14 +575,24 @@
         server = {
           auto-trust-anchor-file = "/var/lib/unbound/root.key";
           dns64-prefix = "fd09:a389:7c1e:3::/64";
-          dns64-ignore-aaaa = "vodafone.broadband";
+          dns64-ignore-aaaa = "vodafone.broadband.";
           do-not-query-localhost = false;
-          domain-insecure = ["broadband" "test."];
+          domain-insecure = [
+            "168.192.in-addr.arpa."
+            "broadband."
+            "d.f.ip6.arpa."
+            "ipv4only.arpa."
+            "home.arpa."
+            "root-servers.net."
+            "test."
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa.") 64;
           ede = true;
           local-zone = [
+            "168.192.in-addr.arpa. nodefault"
+            "d.f.ip6.arpa. nodefault"
             "home.arpa. nodefault"
             "test. nodefault"
-          ];
+          ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa. nodefault") 64;
           module-config = "\"respip dns64 validator iterator\"";
           private-address = [
             "10.0.0.0/8"
