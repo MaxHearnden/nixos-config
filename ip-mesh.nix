@@ -123,7 +123,9 @@ in
             template bgp ip_tunnel {
               local ${cfg.self-tunnel-address} as self_as;
               enforce first as on;
-              evpn;
+              evpn {
+                import all; export all;
+              };
               ipv4 mpls {
                 export all;
                 extended next hop on;
