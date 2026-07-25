@@ -371,9 +371,7 @@ in
           require roles on;
           enforce first as on;
           interface "mpls";
-          evpn {
-            import all; export all;
-          };
+          evpn;
           mpls {label policy aggregate;};
           ipv4 mpls {
             extended next hop on;
@@ -393,6 +391,10 @@ in
         protocol bgp orion_mpls from bgp_mpls {
           neighbor fe80::1 as 65001;
           local role customer;
+          evpn {
+            export filter provider_out;
+            import filter provider_in;
+          };
           ipv6 mpls {
             export filter provider_out;
             import filter provider_in;
@@ -413,6 +415,10 @@ in
         protocol bgp pc_mpls from bgp_mpls {
           neighbor fe80::5 as 65002;
           local role customer;
+          evpn {
+            export filter provider_out;
+            import filter provider_in;
+          };
           ipv6 mpls {
             export filter provider_out;
             import filter provider_in;
@@ -434,8 +440,6 @@ in
     };
     bird-cfg.files = {
       "50-kernel-ip".text = lib.mkForce "";
-      "50-ip-mesh-orion".text = lib.mkForce "";
-      "50-ip-mesh-pc".text = lib.mkForce "";
     };
     btrbk = {
       instances = {
@@ -664,10 +668,7 @@ in
         priority = 50;
       };
     };
-    ip-mesh.peers = {
-      chromebook.role = lib.mkForce "provider";
-      laptop.role = lib.mkForce "provider";
-    };
+    ip-mesh.mesh-role = "provider";
     kerberos_server = {
       enable = true;
       settings = {

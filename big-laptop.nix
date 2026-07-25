@@ -46,6 +46,7 @@
     tctiEnvironment.enable = true;
   };
   services = {
+    ip-mesh.mesh-role = "customer";
     logind.settings.Login.HandleLidSwitch = "ignore";
     xserver.videoDrivers = [ "nvidia" ];
   };

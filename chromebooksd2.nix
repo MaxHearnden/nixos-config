@@ -41,6 +41,7 @@
   };
   services = {
     ip-mesh = {
+      mesh-role = "customer";
       self = lib.mkForce "chromebook";
     };
     logind.settings.Login.HandleLidSwitch = "ignore";

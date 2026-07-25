@@ -3,17 +3,16 @@
 let
   cfg = config.services.ip-mesh;
   types = lib.types;
-  ingress_filters = {
-    "complex" = "filter complex_in";
-    "customer" = "filter provider_in";
-    "peer" = "filter peer_in";
-    "provider" = "filter customer_in";
+  ingress-filter-fun = {
+    "provider" = "customer_in_fun()";
+    "peer" = "peer_in_fun()";
+    "customer" = "provider_in_fun()";
+    "complex" = "verify_in(false)";
   };
-  egress_filters = {
-    "complex" = "all";
-    "customer" = "filter provider_out";
-    "peer" = "filter peer_out";
-    "provider" = "filter customer_out";
+  egress-filter-fun = {
+    "provider" = "customer_out_fun()";
+    "peer" = "peer_out_fun()";
+    "customer" = "provider_out_fun()";
   };
   peerModule = types.submodule ({config, ...}: {
     options = {
@@ -35,16 +34,13 @@ let
       loopback-v6-address = lib.mkOption {
         type = types.str;
       };
-      role = lib.mkOption {
-        default = null;
-        type = types.nullOr types.str;
-      };
+      rr = lib.mkEnableOption "connecting to the route reflector";
       ingress_filter = lib.mkOption {
-        default = ingress_filters.${config.role or "complex"};
+        default = "all";
         type = types.str;
       };
       egress_filter = lib.mkOption {
-        default = egress_filters.${config.role or "complex"};
+        default = "all";
         type = types.str;
       };
     };
@@ -55,6 +51,21 @@ in
   options = {
     services.ip-mesh = {
       enable = lib.mkEnableOption "A ip6tnl based mesh";
+      egress-filter-fun = lib.mkOption {
+        default = egress-filter-fun.${config.role or "complex"} or null;
+        type = types.nullOr types.str;
+      };
+      ingress-filter-fun = lib.mkOption {
+        default = ingress-filter-fun.${config.role or "complex"} or null;
+        type = types.nullOr types.str;
+      };
+      mesh-asn = lib.mkOption {
+        type = lib.types.int;
+      };
+      mesh-role = lib.mkOption {
+        default = null;
+        type = types.nullOr types.str;
+      };
       peers = lib.mkOption {
         type = lib.types.attrsOf peerModule;
       };
@@ -81,6 +92,10 @@ in
         default = cfg.peers.${cfg.self}.loopback-v6-address;
         type = lib.types.str;
       };
+      self-rr = lib.mkOption {
+        default = cfg.peers.${cfg.self}.rr;
+        type = lib.types.bool;
+      };
     };
   };
   config = lib.mkIf cfg.enable {
@@ -105,6 +120,7 @@ in
           "10-ip-mesh-defines".text = ''
             router id ${cfg.self-loopback-v4-address};
             define self_as = ${toString cfg.self-as};
+            define mesh_as = ${toString cfg.mesh-asn};
             define self_loopback_v4 = ${cfg.self-loopback-v4-address};
             define self_loopback_v6 = ${cfg.self-loopback-v6-address};
           '';
@@ -117,39 +133,101 @@ in
             roa6 table r6;
             vpn4 table vtab4;
             vpn6 table vtab6;
+            ipv6 table mesh_igp;
+            evpn table evpn_mesh;
+            ipv4 table mesh4;
+            ipv6 table mesh6;
+            vpn4 table vpn_mesh4;
+            vpn6 table vpn_mesh6;
           '';
           "25-birdlib".source = ./birdlib.conf;
+          "30-ip-mesh-igp".text = ''
+            protocol static static_mesh_igp {
+              ipv6 {
+                table mesh_igp;
+              };
+          ''
+          + (lib.concatMapAttrsStringSep "" (name: peer: ''
+            route ${peer.address}/128 via "${name}-tnl";
+          '') cfg.peers)
+          + ''
+            }
+          '';
           "30-ip-mesh-template".text = ''
             template bgp ip_tunnel {
-              local ${cfg.self-tunnel-address} as self_as;
-              enforce first as on;
+              local ${cfg.self-address} as mesh_as;
+              neighbor internal;
+              interface "tailscale0";
+              onlink on;
+              ${lib.optionalString (cfg.self-rr) "rr client on;"}
+              default bgp_local_pref 95;
+              direct;
               evpn {
+                gateway recursive;
+                igp table mesh_igp;
                 import all; export all;
+                table evpn_mesh;
               };
               ipv4 mpls {
                 export all;
                 extended next hop on;
-                import filter complex_in;
+                gateway recursive;
+                igp table mesh_igp;
+                import all;
                 import table on;
+                table mesh4;
                 require extended next hop on;
               };
               ipv6 mpls {
                 export all;
+                gateway recursive;
+                igp table mesh_igp;
                 import table on;
-                import filter complex_in;
+                import all;
+                table mesh6;
               };
               mpls {label policy aggregate;};
               vpn4 mpls {
                 export all;
                 extended next hop on;
-                import filter complex_in;
+                gateway recursive;
+                igp table mesh_igp;
+                import all;
                 import table on;
+                table vpn_mesh4;
                 require extended next hop on;
               };
               vpn6 mpls {
                 export all;
+                gateway recursive;
+                igp table mesh_igp;
                 import table on;
-                import filter complex_in;
+                import all;
+                table vpn_mesh6;
+              };
+            }
+          '';
+          "30-pipe-template".text = ''
+            template pipe mesh_pipe {
+              table master4;
+              peer table mesh4;
+              import filter {
+                if source = RTS_BGP then {
+                  if bgp_path ~ [ self_as ] then reject "Loop prevention", net,
+                    bgp_path;
+                  bgp_path.prepend(mesh_as);
+                }
+                ${lib.optionalString (!isNull cfg.ingress-filter-fun)
+                  "${cfg.ingress-filter-fun};"}
+              };
+              export filter {
+                if source = RTS_BGP then {
+                  if bgp_path ~ [ mesh_as ] then reject "Loop prevention", net,
+                    bgp_path;
+                  bgp_path.prepend(self_as);
+                }
+                ${lib.optionalString (!isNull cfg.egress-filter-fun)
+                  "${cfg.egress-filter-fun};"}
               };
             }
           '';
@@ -183,6 +261,25 @@ in
               mpls {export all;};
             }
           '';
+          "50-pipe".text = ''
+            protocol pipe from mesh_pipe { }
+            protocol pipe from mesh_pipe {
+              table master6;
+              peer table mesh6;
+            }
+            protocol pipe from mesh_pipe {
+              table evpntab;
+              peer table evpn_mesh;
+            }
+            protocol pipe from mesh_pipe {
+              table vtab4;
+              peer table vpn_mesh4;
+            }
+            protocol pipe from mesh_pipe {
+              table vtab6;
+              peer table vpn_mesh6;
+            }
+          '';
           "60-rpki".text = ''
             protocol rpki {
               aspa;
@@ -205,28 +302,9 @@ in
           name = "50-ip-mesh-${name}";
           value.text = ''
             protocol bgp ip_mesh_${name} from ip_tunnel {
-              neighbor ${peer.tunnel-address} as ${toString peer.asn};
-              interface "${name}-tnl";
-              ${lib.optionalString (!isNull peer.role) ''
-                local role ${peer.role};
-              ''}
+              neighbor ${peer.address};
               ${lib.optionalString (!peer.enable) "disabled;"}
-              ipv4 mpls {
-                import ${peer.ingress_filter};
-                export ${peer.egress_filter};
-              };
-              ipv6 mpls {
-                import ${peer.ingress_filter};
-                export ${peer.egress_filter};
-              };
-              vpn4 mpls {
-                import ${peer.ingress_filter};
-                export ${peer.egress_filter};
-              };
-              vpn6 mpls {
-                import ${peer.ingress_filter};
-                export ${peer.egress_filter};
-              };
+              ${lib.optionalString (!peer.rr) "passive on;"}
             }
           '';
         }) (lib.filterAttrs (name: _: name != cfg.self) cfg.peers);

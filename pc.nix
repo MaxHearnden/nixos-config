@@ -199,9 +199,7 @@ in
         local as 65002;
         require roles on;
         enforce first as on;
-        evpn {
-          import all; export all;
-        };
+        evpn;
         mpls {label policy aggregate;};
         ipv4 mpls {
           extended next hop on;
@@ -242,6 +240,10 @@ in
         neighbor fe80::1 as 65001;
         interface "mpls";
         local role peer;
+        evpn {
+          export filter peer_out;
+          import filter peer_in;
+        };
         ipv6 mpls {
           export filter peer_out;
           import filter peer_in;
@@ -264,6 +266,10 @@ in
         neighbor fe80::2 as 65000;
         interface "mpls";
         local role provider;
+        evpn {
+          export filter customer_out;
+          import filter customer_in;
+        };
         ipv6 mpls {
           export filter customer_out;
           import filter customer_in;
@@ -334,8 +340,6 @@ in
     '';
     bird-cfg.files = {
       "50-kernel-ip".text = lib.mkForce "";
-      "50-ip-mesh-orion".text = lib.mkForce "";
-      "50-ip-mesh-workstation".text = lib.mkForce "";
     };
     btrbk = {
       instances = {
@@ -414,12 +418,7 @@ in
         }
       '';
     };
-    ip-mesh.peers = {
-      laptop.role = lib.mkForce "provider";
-      workstation.role = lib.mkForce "provider";
-      chromebook.role = lib.mkForce "provider";
-      orion.role = lib.mkForce "peer";
-    };
+    ip-mesh.mesh-role = "provider";
     knot = {
       enable = true;
       keyFiles = [
