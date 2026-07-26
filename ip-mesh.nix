@@ -101,7 +101,7 @@ in
   config = lib.mkIf cfg.enable {
     boot = {
       kernel.sysctl."net.mpls.platform_labels" = 1048575;
-      kernelModules = [ "mpls_router" "mpls_iptunnel" "mpls_gro" ];
+      kernelModules = [ "mpls_router" "mpls_iptunnel" "mpls_gso" ];
     };
     networking.firewall.interfaces = lib.mapAttrs' (name: _: {
       name = "${name}-tnl";
