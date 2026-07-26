@@ -215,6 +215,12 @@ in
                 if source = RTS_BGP then {
                   if bgp_path ~ [ self_as ] then reject "Loop prevention", net,
                     bgp_path;
+                  case bgp_path.first {
+                    ${lib.concatMapAttrsStringSep "\n" (_: peer:
+                      "${toString peer.asn}: if bgp_next_hop != ${peer.address}
+                        then reject;") cfg.peers}
+                    else: reject;
+                  }
                   bgp_path.prepend(mesh_as);
                 }
                 ${lib.optionalString (!isNull cfg.ingress-filter-fun)
@@ -228,6 +234,7 @@ in
                 }
                 ${lib.optionalString (!isNull cfg.egress-filter-fun)
                   "${cfg.egress-filter-fun};"}
+                bgp_next_hop = ${cfg.self-address};
               };
             }
           '';
