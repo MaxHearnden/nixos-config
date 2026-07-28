@@ -225,6 +225,7 @@ in
                 }
                 ${lib.optionalString (!isNull cfg.ingress-filter-fun)
                   "${cfg.ingress-filter-fun};"}
+                accept;
               };
               export filter {
                 if source = RTS_BGP then {
@@ -235,6 +236,7 @@ in
                 ${lib.optionalString (!isNull cfg.egress-filter-fun)
                   "${cfg.egress-filter-fun};"}
                 bgp_next_hop = ${cfg.self-address};
+                accept;
               };
             }
           '';
