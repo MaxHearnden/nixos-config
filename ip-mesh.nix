@@ -52,11 +52,11 @@ in
     services.ip-mesh = {
       enable = lib.mkEnableOption "A ip6tnl based mesh";
       egress-filter-fun = lib.mkOption {
-        default = egress-filter-fun.${config.role or "complex"} or null;
+        default = egress-filter-fun.${cfg.mesh-role or "complex"} or null;
         type = types.nullOr types.str;
       };
       ingress-filter-fun = lib.mkOption {
-        default = ingress-filter-fun.${config.role or "complex"} or null;
+        default = ingress-filter-fun.${cfg.mesh-role or "complex"} or null;
         type = types.nullOr types.str;
       };
       mesh-asn = lib.mkOption {
@@ -235,7 +235,7 @@ in
                 }
                 ${lib.optionalString (!isNull cfg.egress-filter-fun)
                   "${cfg.egress-filter-fun};"}
-                bgp_next_hop = ${cfg.self-address};
+                unset(bgp_next_hop);
                 accept;
               };
             }
