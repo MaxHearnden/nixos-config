@@ -225,6 +225,7 @@ in
                 }
                 ${lib.optionalString (!isNull cfg.ingress-filter-fun)
                   "${cfg.ingress-filter-fun};"}
+                unset(bgp_next_hop);
                 accept;
               };
               export filter {
