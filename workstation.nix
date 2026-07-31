@@ -196,7 +196,7 @@ in
         iifname tayga oifname tailscale0 accept
         iiftype ipip6 oifname enp2s0 meta l4proto != udp accept
         oiftype ipip6 iifname enp2s0 meta l4proto != udp accept
-        iiftype ipip6 oifname {enp2s0, eno1, shadow} udp dport != {41641, 40000} accept
+        iiftype ipip6 oifname {enp2s0, internet, shadow} udp dport != {41641, 40000} accept
         oiftype ipip6 iifname enp2s0 udp dport != {41641, 40000} accept
       '';
       extraInputRules = ''
@@ -213,7 +213,7 @@ in
     '';
     nat = {
       enable = true;
-      externalInterface = "eno1";
+      externalInterface = "internet";
       internalInterfaces = [
         "enp2s0"
       ];
@@ -221,11 +221,14 @@ in
     networkmanager = {
       unmanaged = [
         "eno1"
+        "internet"
         "enp2s0"
         "ens4f0"
         "ens4f1"
         "ens4f2"
         "ens4f3"
+        "shadow"
+        "mpls"
       ];
     };
     nftables.tables = {
@@ -257,7 +260,7 @@ in
         content = ''
           chain local-nat {
             type nat hook postrouting priority srcnat; policy accept;
-            fib saddr . oif . mark type != local oifname {eno1, shadow} masquerade
+            fib saddr . oif . mark type != local oifname {internet, shadow} masquerade
           }
         '';
       };
@@ -289,7 +292,7 @@ in
             import where net.len != 128;
             table local6;
           };
-          interface "eno1", "shadow";
+          interface "internet", "shadow";
         }
         protocol kernel {
           ipv4 {
@@ -1018,9 +1021,33 @@ in
       networks = {
         "10-eno1" = {
           DHCP = "yes";
-          matchConfig = {
-            Name = "eno1";
+          linkConfig.ARP = false;
+          name = "eno1";
+          networkConfig.LLDP = true;
+          vlan = [ "internet" "shadow" "mpls" ];
+        };
+        "10-enp2s0" = {
+          address = ["192.168.3.1/24" "fd27:6be8:399c:1:a236:9fff:fec3:d4c1/64"];
+          name = "enp2s0";
+          linkConfig = {
+            MTUBytes = 9000;
+            RequiredForOnline = false;
           };
+          networkConfig = {
+            ConfigureWithoutCarrier = true;
+            DNSDefaultRoute = false;
+          };
+          routingPolicyRules = [
+            {
+              Family = "both";
+              Priority = 2000;
+              Table = "local";
+            }
+          ];
+          DHCP = "no";
+        };
+        "10-internet" = {
+          DHCP = "yes";
           dhcpV4Config = {
             ClientIdentifier = "mac";
             SendHostname = false;
@@ -1032,43 +1059,10 @@ in
             UseHostname = false;
             DUIDType = "link-layer";
           };
-          ipv6AcceptRAConfig = {
-            UseMTU = true;
-          };
-          networkConfig = {
-            LLDP = true;
-            LLMNR = false;
-            MulticastDNS = false;
-            UseDomains = false;
-            DNSDefaultRoute = false;
-          };
-          vlan = [ "shadow" "mpls" ];
-        };
-        "10-enp2s0" = {
-          address = ["192.168.3.1/24" "fd27:6be8:399c:1:a236:9fff:fec3:d4c1/64"];
-          matchConfig = {
-            Name = "enp2s0";
-          };
-          linkConfig = {
-            MTUBytes = 9000;
-            RequiredForOnline = false;
-          };
-          networkConfig = {
-            ConfigureWithoutCarrier = true;
-            DNSDefaultRoute = false;
-          };
-          dhcpPrefixDelegationConfig = {
-            UplinkInterface = "eno1";
-            SubnetId = 1;
-          };
-          routingPolicyRules = [
-            {
-              Family = "both";
-              Priority = 2000;
-              Table = "local";
-            }
-          ];
-          DHCP = "no";
+          ipv6AcceptRAConfig.UseMTU = true;
+          linkConfig.ARP = true;
+          name = "internet";
+          networkConfig.IPv6AcceptRA = true;
         };
         "40-lo".address = [ "fd09:a389:7c1e:6::2/128"];
         "10-mpls" = {
@@ -1154,6 +1148,13 @@ in
             };
           }) 4)
         // {
+          "10-internet" = {
+            netdevConfig = {
+              Kind = "vlan";
+              Name = "internet";
+            };
+            vlanConfig.Id = 1;
+          };
           "10-tayga" = {
             netdevConfig = {
               Kind = "tun";
