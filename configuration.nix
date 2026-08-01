@@ -573,7 +573,7 @@
         server = {
           auto-trust-anchor-file = "/var/lib/unbound/root.key";
           dns64-prefix = "fd09:a389:7c1e:3::/64";
-          dns64-ignore-aaaa = "vodafone.broadband.";
+          dns64-ignore-aaaa = "broadband.";
           do-not-query-localhost = false;
           domain-insecure = [
             "168.192.in-addr.arpa."
