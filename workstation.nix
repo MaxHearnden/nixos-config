@@ -1020,7 +1020,7 @@ in
       enable = true;
       networks = {
         "10-eno1" = {
-          DHCP = "yes";
+          DHCP = "no";
           linkConfig.ARP = false;
           name = "eno1";
           networkConfig.LLDP = true;
