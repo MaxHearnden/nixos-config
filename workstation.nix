@@ -1023,7 +1023,7 @@ in
           DHCP = "no";
           linkConfig.ARP = false;
           name = "eno1";
-          networkConfig.LLDP = true;
+          networkConfig.IPv6AcceptRA = false;
           vlan = [ "internet" "shadow" "mpls" ];
         };
         "10-enp2s0" = {

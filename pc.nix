@@ -720,6 +720,7 @@ in
         "10-enp2s0f2" = {
           linkConfig.ARP = false;
           name = "enp2s0f2";
+          networkConfig.IPv6AcceptRA = false;
           vlan = [ "guest" "internet" "mpls" "shadow-lan" ];
         };
         "10-guest" = {
