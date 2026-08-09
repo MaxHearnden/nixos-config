@@ -668,6 +668,7 @@ in
       signKeyPaths = ["/etc/nix/storekey"];
       settings = {
         bind = "unix:///run/harmonia.sock";
+        enable_compression = true;
         priority = 50;
       };
     };
