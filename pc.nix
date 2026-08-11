@@ -98,7 +98,7 @@ in
           allowedTCPPorts = [ 179 9943 9944 ];
           allowedUDPPorts = [ 9943 9944 ];
         };
-        mpls.allowedTCPPorts = [ 179 ];
+        mpls.allowedTCPPorts = [ 22 179 ];
         tailscale0.allowedTCPPorts = [ 80 179 443 ];
         tailscale0.allowedUDPPorts = [ 443 ];
       };

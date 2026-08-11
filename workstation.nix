@@ -189,7 +189,7 @@ in
           allowedTCPPorts = [ 53 80 443 2049 ];
           allowedUDPPorts = [ 53 69 443 4011 ];
         };
-        mpls.allowedTCPPorts = [ 179 ];
+        mpls.allowedTCPPorts = [ 22 179 ];
         shadow.allowedTCPPorts = [ 179 ];
       };
       extraForwardRules = ''
