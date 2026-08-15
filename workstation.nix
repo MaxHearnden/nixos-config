@@ -180,10 +180,10 @@ in
       interfaces = {
         tailscale0 = {
           allowedTCPPorts = [
-            22 53 54 80 88 179 443 464 749 2049 5000 5222 5223 5269 5270 5281
+            22 53 54 80 88 179 443 464 749 854 2049 5000 5222 5223 5269 5270 5281
             25565
           ];
-          allowedUDPPorts = [ 53 54 88 443 464 24454 ];
+          allowedUDPPorts = [ 53 54 88 443 464 854 24454 ];
         };
         enp2s0 = {
           allowedTCPPorts = [ 53 80 443 2049 ];
@@ -748,8 +748,10 @@ in
             "127.0.0.1@56"
           ];
           orion = {
-            address = "fd7a:115c:a1e0::1a01:5208@54";
+            address = "fd7a:115c:a1e0::1a01:5208@854";
+            cert-key = "YmDvM4b69qAXy/h4gLV4lTTdQQO3/yvj3c3PeoMrihE=";
             key = "workstation";
+            quic = true;
           };
           unbound.address = "::1@55";
         };
@@ -759,6 +761,14 @@ in
           listen = [
             "0.0.0.0@54"
             "::@54"
+          ];
+          listen-tls = [
+            "0.0.0.0@854"
+            "::@854"
+          ];
+          listen-quic = [
+            "0.0.0.0@854"
+            "::@854"
           ];
           nsid = "workstation.zandoodle.me.uk";
           tcp-fastopen = true;
