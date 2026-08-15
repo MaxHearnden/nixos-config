@@ -86,8 +86,8 @@ in
   };
   networking = {
     firewall = {
-      allowedTCPPorts = [ 53 54 55 8053 ];
-      allowedUDPPorts = [ 53 54 55 8053 ];
+      allowedTCPPorts = [ 53 54 55 854 8053 ];
+      allowedUDPPorts = [ 53 54 55 854 8053 ];
       extraForwardRules = ''
         iifname tayga oifname @routed_interfaces accept
         iiftype ipip6 oifname @routed_interfaces accept
@@ -473,7 +473,9 @@ in
           "ns1.first-ns.de".address = "2a01:4f8:0:a101::a:1";
           orion = {
             address = "fd7a:115c:a1e0::1a01:5208@54";
+            cert-key = "YmDvM4b69qAXy/h4gLV4lTTdQQO3/yvj3c3PeoMrihE=";
             key = "pc";
+            quic = true;
           };
           "robotns2.second-ns.de".address = "2a01:4f8:0:1::5ddc:2";
           "robotns3.second-ns.com".address = "2001:67c:192c::add:a3";
@@ -483,6 +485,8 @@ in
           automatic-acl = true;
           identity = "pc.zandoodle.me.uk";
           listen = [ "0.0.0.0@54" "::@54" ];
+          listen-quic = [ "0.0.0.0@854" "::@854" ];
+          listen-tls = [ "0.0.0.0@854" "::@854" ];
           nsid = "pc.zandoodle.me.uk";
           tcp-fastopen = true;
           tcp-reuseport = true;
