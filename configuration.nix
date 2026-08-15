@@ -623,6 +623,7 @@
             "fd09:a389:7c1e:3:c0:0:aa00::/103 always_transparent"
             "fd09:a389:7c1e:3:c0:a800::/88 always_transparent"
           ];
+          tls-system-cert = true;
           trust-anchor-file =
             toString config.environment.etc."dnssec-trust-anchors.d/home.positive".source;
           val-log-level = 2;
