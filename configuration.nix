@@ -30,16 +30,17 @@
       };
     };
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelPatches = [
-      {
-        name = "krb5-aes-sha2";
-        structuredExtraConfig = {
-          RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2 = lib.kernel.yes;
-          RPCSEC_GSS_KRB5_ENCTYPES_CAMELLIA = lib.kernel.yes;
-        };
-        patch = null;
-      }
-    ];
+    kernelPatches =
+      lib.mkIf (lib.compareVersions config.boot.kernelPackages.kernel.version "7.2" < 0) [
+        {
+          name = "krb5-aes-sha2";
+          structuredExtraConfig = {
+            RPCSEC_GSS_KRB5_ENCTYPES_AES_SHA2 = lib.kernel.yes;
+            RPCSEC_GSS_KRB5_ENCTYPES_CAMELLIA = lib.kernel.yes;
+          };
+          patch = null;
+        }
+      ];
     loader = {
       efi = {
         canTouchEfiVariables = true;
