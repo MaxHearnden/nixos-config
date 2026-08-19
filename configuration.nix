@@ -536,8 +536,8 @@
     openssh = {
       openFirewall = false;
       settings = {
-        GssAuthentication = true;
-        GssStrictAcceptor = false;
+        GSSAPIAuthentication = true;
+        GSSAPIStrictAcceptorCheck = false;
         X11Forwarding = true;
       };
     };
