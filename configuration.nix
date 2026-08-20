@@ -334,6 +334,7 @@
           excludesFile = pkgs.writeText "gitignore" ''
             .virtfs_metadata
           '';
+          sshCommand = lib.getExe config.programs.ssh.package;
         };
         pull = {
           rebase = true;
