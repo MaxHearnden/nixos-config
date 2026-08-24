@@ -385,6 +385,7 @@
     ssh = {
       extraConfig = ''
         VerifyHostKeyDNS yes
+        UpdateHostKeys yes
         Host *.zandoodle.me.uk zandoodle.me.uk
         StrictHostKeyChecking yes
         UserKnownHostsFile /dev/null
