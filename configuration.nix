@@ -388,7 +388,7 @@
         UpdateHostKeys yes
         Host *.zandoodle.me.uk zandoodle.me.uk
         StrictHostKeyChecking yes
-        UserKnownHostsFile /dev/null
+        UserKnownHostsFile ~/.ssh/local_known_hosts
         GSSAPIAuthentication yes
 
         Host localhost
