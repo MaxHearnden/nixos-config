@@ -236,7 +236,8 @@
     "libcublas"
     "nvidia-settings"
     "nvidia-x11"
-  ]);
+  ] ++ lib.optional (config.networking.hostName == "max-nixos-workstation")
+    "cnijfilter2");
   networking = {
     firewall = {
       extraForwardRules = ''
@@ -446,7 +447,7 @@
   };
   services = {
     avahi = {
-      enable = lib.mkIf (config.networking.hostName != "max-nixos-pc") false;
+      enable = lib.mkIf (!lib.elem config.networking.hostName ["max-nixos-pc" "max-nixos-workstation"]) false;
       nssmdns6 = true;
     };
     btrbk = {

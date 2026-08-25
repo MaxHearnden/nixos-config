@@ -854,6 +854,10 @@ in
       };
     };
     openssh.startWhenNeeded = true;
+    printing = {
+      enable = true;
+      drivers = [ pkgs.cnijfilter2 ];
+    };
     prosody = {
       admins = [ "max@workstation.zandoodle.me.uk" ];
       enable = true;
