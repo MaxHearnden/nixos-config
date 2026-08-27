@@ -400,7 +400,7 @@ in
       virtualHosts."pc.int.zandoodle.me.uk".extraConfig = ''
         tls {
           issuer acme {
-            dns
+            dns_challenge_override_domain pc._acme-challenge.zandoodle.me.uk
             profile shortlived
           }
         }
@@ -430,8 +430,9 @@ in
             address = "::1";
             action = "update";
             key = "caddy";
-            update-owner = "zone";
+            update-owner = "name";
             update-owner-match = "equal";
+            update-owner-name = "pc";
             update-type = "TXT";
           };
           transfer = {
@@ -517,22 +518,13 @@ in
             catalog-role = "interpret";
             catalog-template = ["catalog-zone" "global"];
           };
-          "_acme-challenge.pc.int.zandoodle.me.uk" = {
+          "_acme-challenge.zandoodle.me.uk" = {
             acl = [ "caddy" "transfer" ];
-            dnssec-signing = true;
-            dnssec-policy = "acme-challenge";
-            file = builtins.toFile "acme-challenge" ''
-              @ soa pc.int.zandoodle.me.uk. hostmaster.zandoodle.me.uk. 0 14400 3600 604800 86400
-              @ ns dns.zandoodle.me.uk.
-            '';
-            notify = [ "orion" "unbound" ];
+            master = "orion";
+            notify = "unbound";
+            retry-max-interval = 30;
             semantic-checks = true;
-            journal-content = "all";
-            zonefile-load = "difference-no-serial";
-            zonefile-skip = "TXT";
-            zonefile-sync = -1;
-            zonemd-generate = "zonemd-sha512";
-          };
+          }
         };
       };
     };
