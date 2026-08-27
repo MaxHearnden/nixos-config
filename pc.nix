@@ -422,7 +422,6 @@ in
     knot = {
       enable = true;
       keyFiles = [
-        "/etc/knot/pc.tsig"
         "/run/credentials/knot.service/caddy"
       ];
       settings = {
@@ -474,7 +473,6 @@ in
           orion = {
             address = "fd7a:115c:a1e0::1a01:5208@854";
             cert-key = "YmDvM4b69qAXy/h4gLV4lTTdQQO3/yvj3c3PeoMrihE=";
-            key = "pc";
             quic = true;
           };
           "robotns2.second-ns.de".address = "2a01:4f8:0:1::5ddc:2";

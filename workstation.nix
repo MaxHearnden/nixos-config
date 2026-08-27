@@ -701,7 +701,6 @@ in
     knot = {
       enable = true;
       keyFiles = [
-        "/etc/knot/workstation.tsig"
         "/run/credentials/knot.service/caddy"
       ];
       settings = {
@@ -750,7 +749,6 @@ in
           orion = {
             address = "fd7a:115c:a1e0::1a01:5208@854";
             cert-key = "YmDvM4b69qAXy/h4gLV4lTTdQQO3/yvj3c3PeoMrihE=";
-            key = "workstation";
             quic = true;
           };
           unbound.address = "::1@55";
