@@ -498,6 +498,7 @@ in
             master = "orion";
             module = "mod-queryacl/local";
             notify = "unbound";
+            retry-max-interval = 30;
             semantic-checks = true;
           };
           global = {
@@ -505,6 +506,7 @@ in
             dnssec-validation = true;
             master = "orion";
             notify = "unbound";
+            retry-max-interval = 30;
             semantic-checks = true;
             zonemd-verify = true;
           };

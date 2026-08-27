@@ -782,6 +782,7 @@ in
           acl = [ "transfer" ];
           master = "orion";
           notify = "unbound";
+          retry-max-interval = 30;
           semantic-checks = true;
         };
         zone = [
