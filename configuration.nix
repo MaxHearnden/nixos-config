@@ -392,6 +392,15 @@
         UserKnownHostsFile ~/.ssh/local_known_hosts
         GSSAPIAuthentication yes
 
+        Host local-tailscale.zandoodle.me.uk local-shadow.zandoodle.me.uk local-guest.zandoodle.me.uk orion-routed.int.zandoodle.me.uk
+        HostKeyAlias local.zandoodle.me.uk
+
+        Host pc-routed.int.zandoodle.me.uk
+        HostKeyAlias pc.zandoodle.me.uk
+
+        Host workstation-routed.int.zandoodle.me.uk workstation.int.zandoodle.me.uk
+        HostKeyAlias workstation.zandoodle.me.uk
+
         Host localhost
         CanonicalizeHostname no
 
@@ -399,6 +408,7 @@
         CanonicalDomains zandoodle.me.uk int.zandoodle.me.uk
         CanonicalizeFallbackLocal no
         CanonicalizeHostname yes
+        CanonicalizePermittedCNAMEs *.zandoodle.me.uk:*.zandoodle.me.uk
         CanonicalizeMaxDots 0
       '';
       package = pkgs.opensshWithKerberos;
