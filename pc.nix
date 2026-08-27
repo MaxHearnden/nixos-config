@@ -524,7 +524,7 @@ in
             notify = "unbound";
             retry-max-interval = 30;
             semantic-checks = true;
-          }
+          };
         };
       };
     };
