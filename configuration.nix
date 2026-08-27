@@ -634,6 +634,7 @@
             "test."
           ] ++ lib.genList (i: "${toString (i+64)}.100.in-addr.arpa.") 64;
           ede = true;
+          infra-keep-probing = true;
           local-zone = [
             "168.192.in-addr.arpa. nodefault"
             "d.f.ip6.arpa. nodefault"
