@@ -565,8 +565,6 @@ in
         }) ([
           "."
           "168.192.in-addr.arpa"
-          "_acme-challenge.pc.int.zandoodle.me.uk"
-          "_acme-challenge.workstation.zandoodle.me.uk"
           "_acme-challenge.zandoodle.me.uk"
           "arpa"
           "compsoc-dev.com"
@@ -624,8 +622,6 @@ in
           }) ([
             "."
             "168.192.in-addr.arpa"
-            "_acme-challenge.pc.int.zandoodle.me.uk"
-            "_acme-challenge.workstation.zandoodle.me.uk"
             "_acme-challenge.zandoodle.me.uk"
             "arpa"
             "bogus.int.zandoodle.me.uk"
