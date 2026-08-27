@@ -522,7 +522,7 @@ in
         "*.workstation.zandoodle.me.uk".extraConfig = ''
           tls {
             issuer acme {
-              dns
+              dns_challenge_override_domain workstation._acme-challenge.zandoodle.me.uk
               profile shortlived
               resolvers [fd7a:115c:a1e0::1a01:5208]:54
             }
@@ -571,7 +571,7 @@ in
         "workstation.zandoodle.me.uk".extraConfig = ''
           tls {
             issuer acme {
-              dns
+              dns_challenge_override_domain workstation._acme-challenge.zandoodle.me.uk
               profile shortlived
               resolvers [fd7a:115c:a1e0::1a01:5208]:54
             }
@@ -709,8 +709,9 @@ in
             address = "::1";
             action = "update";
             key = "caddy";
-            update-owner = "zone";
+            update-owner = "name";
             update-owner-match = "equal";
+            update-owner-name = "workstation";
             update-type = "TXT";
           };
           transfer = {
@@ -792,23 +793,6 @@ in
             catalog-template = ["catalog-zone"];
           }
           {
-            acl = [ "caddy" "transfer" ];
-            dnssec-signing = true;
-            dnssec-policy = "acme-challenge";
-            domain = "_acme-challenge.workstation.zandoodle.me.uk";
-            file = builtins.toFile "acme-challenge" ''
-              @ soa workstation.zandoodle.me.uk. hostmaster.zandoodle.me.uk. 0 14400 3600 604800 86400
-              @ ns dns.zandoodle.me.uk.
-            '';
-            notify = [ "orion" "unbound" ];
-            semantic-checks = true;
-            journal-content = "all";
-            zonefile-load = "difference-no-serial";
-            zonefile-skip = "TXT";
-            zonefile-sync = -1;
-            zonemd-generate = "zonemd-sha512";
-          }
-          {
             acl = [ "transfer" ];
             dnssec-signing = true;
             dnssec-policy = "max.home.arpa";
@@ -827,6 +811,14 @@ in
             ixfr-from-axfr = true;
             master = "dnsmasq";
             notify = [ "orion" "unbound" ];
+            semantic-checks = true;
+          }
+          {
+            acl = [ "caddy" "transfer" ];
+            domain = "_acme-challenge.zandoodle.me.uk";
+            master = "orion";
+            notify = "unbound";
+            retry-max-interval = 30;
             semantic-checks = true;
           }
         ];
