@@ -362,7 +362,7 @@
           set shiftwidth=2
           set expandtab
           set colorcolumn=80
-          set textwidth=80
+          set textwidth=79
           inoremap {<CR> {<CR>}<Esc>ko
           inoremap [<CR> [<CR>]<Esc>ko
           inoremap (<CR> (<CR>)<Esc>ko
@@ -1025,6 +1025,7 @@
           nodejs
           ollama
           openssl
+          ormolu
           oversteer
           p7zip
           passt
