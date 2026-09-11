@@ -238,6 +238,14 @@
     "nvidia-x11"
   ] ++ lib.optional (config.networking.hostName == "max-nixos-workstation")
     "cnijfilter2");
+  nixpkgs.overlays = [
+    (self: super: {
+      btrbk = super.btrbk.overrideAttrs (
+        { patches ? [], ... }: {
+          patches = patches ++ [ ./btrbk.patch ];
+        });
+    })
+  ];
   networking = {
     firewall = {
       extraForwardRules = ''
