@@ -576,6 +576,8 @@ in
           "ip6.arpa"
           "ipv4only.arpa"
           "max.home.arpa"
+          "maxhearnden.uk"
+          "maxhearnden.me.uk"
           "mcast.net"
           "orion.home.arpa"
           "root-servers.net"
