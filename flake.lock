@@ -119,11 +119,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1789200153,
-        "narHash": "sha256-t9n0ZuU6Dk10BL/J8BudOQBTA+aGZ7g0YX7ygj2vL6o=",
+        "lastModified": 1789288019,
+        "narHash": "sha256-tqDcb96zJcz9knfAMLiWxIsxBzaI3trVkVrDUj0dTqk=",
         "owner": "opensteno",
         "repo": "plover-flake",
-        "rev": "fd8cc5f21595d4346c468519c0ee4dd476d4f349",
+        "rev": "c0fc144bca513457d305087a84ef0b0fd26d6925",
         "type": "github"
       },
       "original": {
@@ -248,11 +248,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1789186092,
-        "narHash": "sha256-rz28W8yY4LyFWA+SVrnTKoerI+XNrU4NbhGCmAFMgn0=",
+        "lastModified": 1789273129,
+        "narHash": "sha256-uZvnQcnbpnlIBeL34bDzVpKAL5jLdMr4AcZ1IqLT+BY=",
         "owner": "nix-community",
         "repo": "nix-vscode-extensions",
-        "rev": "6131d5084e8836d17a4b72a120d228b7dafb44c1",
+        "rev": "522a367553c5dc6c970ed61ddee2b2cf8f8c678e",
         "type": "github"
       },
       "original": {
