@@ -552,7 +552,11 @@ in
 
           @test host test.workstation.zandoodle.me.uk
           handle @test {
-            reverse_proxy [::1]:8080
+            encode
+            route {
+              reverse_proxy /KdcProxy unix//run/kdcproxy
+              reverse_proxy [::1]:8080
+            }
           }
 
           @kdcproxy host kkdcp.workstation.zandoodle.me.uk
