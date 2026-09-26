@@ -177,17 +177,19 @@ in
   networking = {
     firewall = {
       filterForward = true;
+      allowedTCPPorts = [ 80 443 ];
+      allowedUDPPorts = [ 443 ];
       interfaces = {
         tailscale0 = {
           allowedTCPPorts = [
-            22 53 54 80 88 179 443 464 749 854 2049 5000 5222 5223 5269 5270 5281
+            22 53 54 88 179 464 749 854 2049 5000 5222 5223 5269 5270 5281
             25565
           ];
-          allowedUDPPorts = [ 53 54 88 443 464 854 24454 ];
+          allowedUDPPorts = [ 53 54 88 464 854 24454 ];
         };
         enp2s0 = {
-          allowedTCPPorts = [ 53 80 443 2049 ];
-          allowedUDPPorts = [ 53 69 443 4011 ];
+          allowedTCPPorts = [ 53 2049 ];
+          allowedUDPPorts = [ 53 69 4011 ];
         };
         mpls.allowedTCPPorts = [ 22 179 ];
         shadow.allowedTCPPorts = [ 179 ];
@@ -1027,10 +1029,10 @@ in
     network = {
       enable = true;
       networks = {
-        "10-eno1" = {
+        "10-enp3s0f3" = {
           DHCP = "no";
           linkConfig.ARP = false;
-          name = "eno1";
+          name = "enp3s0f3";
           networkConfig.IPv6AcceptRA = false;
           vlan = [ "internet" "shadow" "mpls" ];
         };
@@ -1143,7 +1145,7 @@ in
               Hostname = "max-nixos-workstation-${toString index}";
             };
             vrf = ["vrf-interface-${toString index}"];
-          }) 4);
+          }) 3);
       netdevs = lib.listToAttrs (
         lib.genList (index:
           lib.nameValuePair "20-vrf-interface-${toString index}" {
