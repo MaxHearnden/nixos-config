@@ -557,7 +557,12 @@ in
             encode
             route {
               reverse_proxy /KdcProxy unix//run/kdcproxy
-              reverse_proxy [::1]:8080
+              reverse_proxy /all.js [::1]:8080 {
+                rewrite /all.min.js
+              }
+              reverse_proxy / [::1]:8080 {
+                rewrite /index.html
+              }
             }
           }
 
