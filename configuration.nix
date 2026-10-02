@@ -985,7 +985,9 @@
           blender
           btop
           bun
+          cabal-install
           cargo-watch
+          closurecompiler
           comma
           devcontainer
           dig
@@ -996,6 +998,7 @@
           dwarf-fortress
           elinks
           emacs
+          emscripten
           espup
           ethtool
           file
@@ -1013,6 +1016,7 @@
           graphviz
           gtkterm
           headsetcontrol
+          hpack
           htop
           inputs.nixos-kexec.packages.x86_64-linux.default
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
@@ -1042,6 +1046,7 @@
           pkgsCross.aarch64-multiplatform.buildPackages.gdb
           pkgsCross.armv7l-hf-multiplatform.buildPackages.gcc
           pkgsCross.armv7l-hf-multiplatform.buildPackages.gdb
+          pkgsCross.ghcjs.buildPackages.ghc
           pkgsCross.riscv32.buildPackages.gcc
           pkgsCross.riscv32.buildPackages.gdb
           pkgsCross.riscv64.buildPackages.gcc
