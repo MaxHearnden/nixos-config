@@ -1080,6 +1080,7 @@
           thunderbird
           tpm2-tools
           tpm2-tss.man
+          typescript
           typst
           ungoogled-chromium
           usbutils
