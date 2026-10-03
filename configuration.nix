@@ -1084,6 +1084,7 @@
           typst
           ungoogled-chromium
           usbutils
+          validator-nu
           vdrift
           vim
           vlc
