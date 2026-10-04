@@ -177,6 +177,7 @@
       ];
     };
   };
+  fonts.packages = [ pkgs.vista-fonts ];
   hardware = {
     bluetooth = {
       disabledPlugins = ["input"];
@@ -228,6 +229,7 @@
     "steam"
     "steamcmd"
     "steam-unwrapped"
+    "vista-fonts"
   ] ++ lib.optionals (builtins.elem config.networking.hostName [ "max-nixos-pc"
   "max-nixos-laptop"]) [
     "cuda_cccl"
