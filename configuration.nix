@@ -1023,6 +1023,7 @@
           inputs.nixos-kexec.packages.x86_64-linux.default
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.minimal-bootstrap.mescc-tools
           inputs.plover-flake.packages.x86_64-linux.plover
+          jq
           karere
           keepassxc
           ldns
@@ -1118,6 +1119,7 @@
           xclip
           xhost
           xwayland-satellite
+          yq
           zgrviewer
         ];
         shell = pkgs.fish;
