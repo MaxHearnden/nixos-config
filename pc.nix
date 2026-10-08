@@ -394,7 +394,7 @@ in
         }
       '';
       package = pkgs.caddy.withPlugins {
-        hash = "sha256-i6hgT3ufiVz13f2Ruox7EPLhIDXSomA3T/4IFmoHJUo=";
+        hash = "sha256-gfN1pGUq2HPfKfw073yC3PR+2UHytI9QaqenHP3YIPE=";
         plugins = [ "github.com/caddy-dns/rfc2136@v1.0.0" ];
       };
       virtualHosts."pc.int.zandoodle.me.uk".extraConfig = ''
