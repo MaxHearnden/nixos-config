@@ -1069,6 +1069,7 @@
           shellcheck
           sidequest
           inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.signal-desktop
+          simple-http-server
           simutrans
           slang
           slirp4netns
