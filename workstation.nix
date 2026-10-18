@@ -563,6 +563,9 @@ in
               reverse_proxy / [::1]:8080 {
                 rewrite /index.html
               }
+              handle_path /pentagony/* {
+                reverse_proxy [::]:8082
+              }
             }
           }
 
