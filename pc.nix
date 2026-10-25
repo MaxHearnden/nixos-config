@@ -337,6 +337,10 @@ in
         };
         export all;
       }
+      protocol static {
+        ipv6;
+        route fd09:a389:7c1e:7::5/128 unreachable;
+      }
     '';
     bird-cfg.files = {
       "50-kernel-ip".text = lib.mkForce "";
@@ -765,6 +769,7 @@ in
           name = "shadow-lan";
           networkConfig.IPv6AcceptRA = true;
         };
+        "40-lo".address = [ "fd09:a389:7c1e:7::5/128" ];
         "10-tayga" = {
           address = [ "192.0.0.1/30" "fd64::/64" ];
           matchConfig.Name = "tayga";
