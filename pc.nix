@@ -476,7 +476,10 @@ in
         remote = {
           "ns1.first-ns.de".address = "2a01:4f8:0:a101::a:1";
           orion = {
-            address = "fd7a:115c:a1e0::1a01:5208@854";
+            address = [
+              "fd7a:115c:a1e0::1a01:5208@854"
+              "fd09:a389:7c1e:7::1@854"
+            ];
             cert-key = "YmDvM4b69qAXy/h4gLV4lTTdQQO3/yvj3c3PeoMrihE=";
             quic = true;
           };
