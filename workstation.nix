@@ -1594,6 +1594,7 @@ in
           "knot-reload.target"
         ];
         serviceConfig = {
+          RestartMode = "direct";
           RuntimeDirectory = "nixos-upgrade-all";
           RuntimeDirectoryMode = "0700";
           StateDirectory = "nixos-upgrade-all";
