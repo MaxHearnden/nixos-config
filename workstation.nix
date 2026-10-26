@@ -509,6 +509,7 @@ in
         preferred_chains {
           root_common_name "ISRG Root X2"
         }
+        trusted_proxies static fd09:a389:7c1e:6::1
         events {
           on cert_obtained exec ${lib.getExe cert_obtained} {event.data.identifier} {event.data.storage_path}
         }
