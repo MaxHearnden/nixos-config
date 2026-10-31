@@ -191,6 +191,10 @@ in
           allowedTCPPorts = [ 53 2049 ];
           allowedUDPPorts = [ 53 69 4011 ];
         };
+        internet = {
+          allowedTCPPorts = [ 9943 9944 ];
+          allowedUDPPorts = [ 9943 9944 ];
+        };
         mpls.allowedTCPPorts = [ 22 179 ];
         shadow.allowedTCPPorts = [ 179 ];
       };
