@@ -428,6 +428,9 @@
       dedicatedServer.openFirewall = true;
       remotePlay.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
+      package = pkgs.steam.override {
+        extraLibraries = p: [ p.nss ];
+      };
     };
     wireshark = {
       enable = true;
