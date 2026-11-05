@@ -232,8 +232,8 @@ in
                 if source = RTS_BGP then {
                   if bgp_path ~ [ mesh_as ] then reject "Loop prevention", net,
                     bgp_path;
-                  bgp_path.prepend(self_as);
                 }
+                bgp_path.prepend(self_as);
                 ${lib.optionalString (!isNull cfg.egress-filter-fun)
                   "${cfg.egress-filter-fun};"}
                 unset(bgp_next_hop);
