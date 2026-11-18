@@ -725,9 +725,21 @@
     stateVersion = "26.05";
   };
   systemd = {
-    network.config.networkConfig = {
-      ManageForeignRoutingPolicyRules = false;
-      ManageForeignRoutes = false;
+    network = {
+      config.networkConfig = {
+        ManageForeignRoutingPolicyRules = false;
+        ManageForeignRoutes = false;
+      };
+      networks."40-lo".routes = [
+        {
+          Destination = "192.168.11.0/24";
+          Type = "unreachable";
+        }
+        {
+          Destination = "fd09:a389:7c1e:6::/64";
+          Type = "unreachable";
+        }
+      ];
     };
     services = {
       bird = {
