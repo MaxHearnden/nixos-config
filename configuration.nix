@@ -431,6 +431,7 @@
       package = pkgs.steam.override {
         extraLibraries = p: [ p.nss ];
       };
+      protontricks.enable = true;
     };
     wireshark = {
       enable = true;
