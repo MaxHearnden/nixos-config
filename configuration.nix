@@ -1034,7 +1034,7 @@
           nix-du
           nmap
           nodejs
-          ollama
+          inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.ollama
           openssl
           ormolu
           oversteer

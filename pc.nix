@@ -538,7 +538,7 @@ in
     ollama = {
       enable = true;
       host = "[::1]";
-      package = pkgs.ollama-cuda;
+      package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.ollama-cuda;
     };
     ratbagd = {
       enable = true;
