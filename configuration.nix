@@ -1111,7 +1111,7 @@
           wireshark
           wl-clipboard
           (writeShellScriptBin "ollama-pc" ''
-            OLLAMA_HOST=https://pc.int.zandoodle.me.uk/ exec ${lib.getExe ollama} "$@"
+            OLLAMA_HOST=https://pc.int.zandoodle.me.uk/ exec ${lib.getExe inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.ollama} "$@"
           '')
           xclip
           xhost
